@@ -1,0 +1,300 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Server-side cache &mdash; Xitrum Scala Web Framework Guide 3.13 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.13',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.13 documentation" href="index.html" />
+    <link rel="next" title="I18n" href="i18n.html" />
+    <link rel="prev" title="Action filters" href="filter.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Action filters"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.13 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="server-side-cache">
+<h1>Server-side cache<a class="headerlink" href="#server-side-cache" title="Permalink to this headline">¶</a></h1>
+<p>Also see the chaper about <a class="reference internal" href="cluster.html"><em>clustering</em></a>.</p>
+<p>Xitrum provides extensive client-side and server-side caching for faster responding.
+At the web server layer, small files are cached in memory, big files are sent
+using NIO&#8217;s zero copy. Xitrum&#8217;s static file serving speed is
+<a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.
+At the web framework layer you have can declare page, action, and object cache
+in the Rails style.
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google&#8217;s best practices</a>
+like conditional GET are applied for client-side caching.</p>
+<p>For dynamic content, if the content does not change after created (as if it is
+a static file), you may set headers for clients to cache aggressively.
+In that case, call <tt class="docutils literal"><span class="pre">setClientCacheAggressively()</span></tt> in your action.</p>
+<p>Sometimes you may want to prevent client-side caching.
+In that case, call <tt class="docutils literal"><span class="pre">setNoClientCache()</span></tt> in your action.</p>
+<p>Server-side cache is discussed in more details below.</p>
+<div class="section" id="cache-page-or-action">
+<h2>Cache page or action<a class="headerlink" href="#cache-page-or-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>import xitrum.Action
+import xitrum.annotation.{GET, CacheActionMinute, CachePageMinute}
+
+@GET("articles")
+@CachePageMinute(1)
+class ArticlesIndex extends Action {
+  def execute() {
+    ...
+  }
+}
+
+@GET("articles/:id")
+@CacheActionMinute(1)
+class ArticlesShow extends Action {
+  def execute() {
+    ...
+  }
+}</pre>
+</div>
+<p>The terms &#8220;page cache&#8221; and &#8220;action cache&#8221; came from
+<a class="reference external" href="http://guides.rubyonrails.org/caching_with_rails.html">Ruby on Rails</a>.</p>
+<p>The order of processing a request is designed like this:
+(1) request -&gt; (2) before filter methods -&gt; (3) action&#8217;s execute method -&gt; (4) response</p>
+<p>At the 1st request, Xitrum will cache the response for the time period specified.
+<tt class="docutils literal"><span class="pre">&#64;CachePageMinute(1)</span></tt> or <tt class="docutils literal"><span class="pre">&#64;CacheActionMinute(1)</span></tt> both mean caching for 1 minute.
+Xitrum only caches when the response status is &#8220;200 OK&#8221;. For example, response
+with status &#8220;500 Internal Server Error&#8221; or &#8220;302 Found&#8221; (redirect) will not be cached.</p>
+<p>At the following requests to the same action, if the cached response is still
+within the specified time, Xitrum will just respond the cached response:</p>
+<ul class="simple">
+<li>For page cache, the order is (1) -&gt; (4).</li>
+<li>For action cache, the order is (1) -&gt; (2) -&gt; (4), or just (1) -&gt; (2)
+if one of the before filters return &#8220;false&#8221;.</li>
+</ul>
+<p>So the difference is: For page cache, the before filters are not run.</p>
+<p>Usually, page cache is used when the same response can be used for all users.
+Action cache is used when you want to run a before filter to &#8220;guard&#8221; the cached
+response, like checking if the user has logged in:</p>
+<ul class="simple">
+<li>If the user has logged in, he can use the cached response.</li>
+<li>If the user has not logged in, redirect him to the login page.</li>
+</ul>
+</div>
+<div class="section" id="cache-object">
+<h2>Cache object<a class="headerlink" href="#cache-object" title="Permalink to this headline">¶</a></h2>
+<p>You use methods in <tt class="docutils literal"><span class="pre">xitrum.Config.xitrum.cache</span></tt>, it&#8217;s an instance of
+<a class="reference external" href="http://xitrum-framework.github.io/xitrum/api/index.html#xitrum.Cache">xitrum.Cache</a>.</p>
+<p>Without an explicit TTL (time to live):</p>
+<ul class="simple">
+<li>put(key, value)</li>
+</ul>
+<p>With an explicit TTL:</p>
+<ul class="simple">
+<li>putSecond(key, value, seconds)</li>
+<li>putMinute(key, value, minutes)</li>
+<li>putHour(key, value, hours)</li>
+<li>putDay(key, value, days)</li>
+</ul>
+<p>Only if absent:</p>
+<ul class="simple">
+<li>putIfAbsent(key, value)</li>
+<li>putIfAbsentSecond(key, value, seconds)</li>
+<li>putIfAbsentMinute(key, value, minutes)</li>
+<li>putIfAbsentHour(key, value, hours)</li>
+<li>putIfAbsentDay(key, value, days)</li>
+</ul>
+</div>
+<div class="section" id="remove-cache">
+<h2>Remove cache<a class="headerlink" href="#remove-cache" title="Permalink to this headline">¶</a></h2>
+<p>Remove page or action cache:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">removeAction</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Remove object cache:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Remove all keys that start with a prefix:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">removePrefix</span><span class="p">(</span><span class="n">keyPrefix</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With <tt class="docutils literal"><span class="pre">removePrefix</span></tt>, you have the power to form hierarchical cache based on prefix.
+For example you want to cache things related to an article, then when the article
+changes, you want to remove all those things.</p>
+<div class="highlight-python"><pre>import xitrum.Config.xitrum.cache
+
+// Cache with a prefix
+val prefix = "articles/" + article.id
+cache.put(prefix + "/likes", likes)
+cache.put(prefix + "/comments", comments)
+
+// Later, when something happens and you want to remove all cache related to the article
+cache.remove(prefix)</pre>
+</div>
+</div>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>The cache feature in Xitrum is provided by cache engines. You can choose the
+engine that suits your need.</p>
+<p>In <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a>,
+you can config cache engine in one of the following 2 forms, depending on the engine you choose:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cache</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-python"><pre>cache {
+  "my.cache.EngineClassName" {
+    option1 = value1
+    option2 = value2
+  }
+}</pre>
+</div>
+<p>Xitrum provides this one:</p>
+<div class="highlight-python"><pre>cache {
+  # Simple in-memory cache
+  "xitrum.local.LruCache" {
+    maxElems = 10000
+  }
+}</pre>
+</div>
+<p>If you have a cluster of servers, you can use <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>.</p>
+<p>If you want to create your own cache engine, implement the
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Cache.scala">interface</a>
+<tt class="docutils literal"><span class="pre">xitrum.Cache</span></tt>.</p>
+</div>
+<div class="section" id="how-cache-works">
+<h2>How cache works<a class="headerlink" href="#how-cache-works" title="Permalink to this headline">¶</a></h2>
+<p>Inbound:</p>
+<div class="highlight-python"><pre>               the action response
+               should be cached and
+request        the cache already exists?
+-------------------------+---------------NO---------------&gt;
+                         |
+&lt;---------YES------------+
+  respond from cache</pre>
+</div>
+<p>Outbound:</p>
+<div class="highlight-python"><pre>               the action response
+               should be cached and
+               the cache does not exist?           response
+&lt;---------NO-------------+---------------------------------
+                         |
+&lt;---------YES------------+
+  store response to cache</pre>
+</div>
+</div>
+<div class="section" id="xitrum-util-locallrucache">
+<h2>xitrum.util.LocalLruCache<a class="headerlink" href="#xitrum-util-locallrucache" title="Permalink to this headline">¶</a></h2>
+<p>The above cache is the cache shared by the whole system. If you only want a
+small convenient cache, you can use <tt class="docutils literal"><span class="pre">xitrum.util.LocalLruCache</span></tt>.</p>
+<div class="highlight-python"><pre>import xitrum.util.LocalLruCache
+
+// LRU (Least Recently Used) cache that can contain 1000 elements.
+// Keys and values are both of type String.
+val cache = LocalLruCache[String, String](1000)</pre>
+</div>
+<p>The returned <tt class="docutils literal"><span class="pre">cache</span></tt> is a <a class="reference external" href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html">java.util.LinkedHashMap</a>.
+You can call <tt class="docutils literal"><span class="pre">LinkedHashMap</span></tt> methods from it.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Server-side cache</a><ul>
+<li><a class="reference internal" href="#cache-page-or-action">Cache page or action</a></li>
+<li><a class="reference internal" href="#cache-object">Cache object</a></li>
+<li><a class="reference internal" href="#remove-cache">Remove cache</a></li>
+<li><a class="reference internal" href="#config">Config</a></li>
+<li><a class="reference internal" href="#how-cache-works">How cache works</a></li>
+<li><a class="reference internal" href="#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filter.html"
+                        title="previous chapter">Action filters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="next chapter">I18n</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cache.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Action filters"
+             >previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.13 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>inbound - xitrum.handler.inbound</title>
+          <meta name="description" content="inbound - xitrum.handler.inbound" />
+          <meta name="keywords" content="inbound xitrum.handler.inbound" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'xitrum.handler.inbound.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="xitrum">xitrum</a>.<a href="../package.html" class="extype" name="xitrum.handler">handler</a></p>
+        <h1>inbound</h1> <span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inbound</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="xitrum.handler.inbound.BadClientSilencer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BadClientSilencerextendsSimpleChannelInboundHandler[Any]withLog"></a>
+      <a id="BadClientSilencer:BadClientSilencer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BadClientSilencer.html"><span class="name">BadClientSilencer</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<span class="extype" name="scala.Any">Any</span>] with <a href="../../Log.html" class="extype" name="xitrum.Log">Log</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@BadClientSilencerextendsSimpleChannelInboundHandler[Any]withLog" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This handler should be put at the last position of the inbound pipeline to
+catch all exception caused by bad client (closed connection, malformed request etc.</p><div class="fullcomment"><div class="comment cmt"><p>This handler should be put at the last position of the inbound pipeline to
+catch all exception caused by bad client (closed connection, malformed request etc.).
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.BaseUrlRemover" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BaseUrlRemoverextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]"></a>
+      <a id="BaseUrlRemover:BaseUrlRemover"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BaseUrlRemover.html"><span class="name">BaseUrlRemover</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@BaseUrlRemoverextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.BasicAuth" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="BasicAuthextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]"></a>
+      <a id="BasicAuth:BasicAuth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BasicAuth.html"><span class="name">BasicAuth</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@BasicAuthextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.Dispatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DispatcherextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]"></a>
+      <a id="Dispatcher:Dispatcher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Dispatcher.html"><span class="name">Dispatcher</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@DispatcherextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.FlashSocketPolicyHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FlashSocketPolicyHandlerextendsSimpleChannelInboundHandler[io.netty.buffer.ByteBuf]"></a>
+      <a id="FlashSocketPolicyHandler:FlashSocketPolicyHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FlashSocketPolicyHandler.html"><span class="name">FlashSocketPolicyHandler</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<span class="extype" name="io.netty.buffer.ByteBuf">ByteBuf</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@FlashSocketPolicyHandlerextendsSimpleChannelInboundHandler[io.netty.buffer.ByteBuf]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.inbound.MethodOverrider" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MethodOverriderextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]"></a>
+      <a id="MethodOverrider:MethodOverrider"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MethodOverrider.html"><span class="name">MethodOverrider</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@MethodOverriderextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">If the real request method is POST and &quot;_method&quot; param exists, the &quot;_method&quot;
+param will override the POST method.</p><div class="fullcomment"><div class="comment cmt"><p>If the real request method is POST and &quot;_method&quot; param exists, the &quot;_method&quot;
+param will override the POST method.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.PublicFileServer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PublicFileServerextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]"></a>
+      <a id="PublicFileServer:PublicFileServer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PublicFileServer.html"><span class="name">PublicFileServer</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@PublicFileServerextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Serves static files in &quot;public&quot; directory.</p><div class="fullcomment"><div class="comment cmt"><p>Serves static files in &quot;public&quot; directory.
+See DefaultHttpChannelInitializer, this handler is put after XSendFile.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.Request2Env" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Request2EnvextendsSimpleChannelInboundHandler[io.netty.handler.codec.http.HttpObject]withLog"></a>
+      <a id="Request2Env:Request2Env"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Request2Env.html"><span class="name">Request2Env</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<span class="extype" name="io.netty.handler.codec.http.HttpObject">HttpObject</span>] with <a href="../../Log.html" class="extype" name="xitrum.Log">Log</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@Request2EnvextendsSimpleChannelInboundHandler[io.netty.handler.codec.http.HttpObject]withLog" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This handler converts request with its content body (if any, e.</p><div class="fullcomment"><div class="comment cmt"><p>This handler converts request with its content body (if any, e.g. in case of
+file upload) to HandlerEnv, and send it upstream to the next handler.
+</p></div></div>
+    </li><li name="xitrum.handler.inbound.UriParser" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="UriParserextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]withLog"></a>
+      <a id="UriParser:UriParser"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="UriParser.html"><span class="name">UriParser</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>] with <a href="../../Log.html" class="extype" name="xitrum.Log">Log</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@UriParserextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]withLog" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.WebJarsServer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="WebJarsServerextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]"></a>
+      <a id="WebJarsServer:WebJarsServer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WebJarsServer.html"><span class="name">WebJarsServer</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<a href="../HandlerEnv.html" class="extype" name="xitrum.handler.HandlerEnv">HandlerEnv</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@WebJarsServerextendsSimpleChannelInboundHandler[xitrum.handler.HandlerEnv]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Routes /webjars/xxx URL to resources in classpath: http://www.</p><div class="fullcomment"><div class="comment cmt"><p>Routes /webjars/xxx URL to resources in classpath: http://www.webjars.org/contributing
+See DefaultHttpChannelInitializer, this handler is put after XSendResource.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.inbound.WebSocketEventDispatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="WebSocketEventDispatcherextendsSimpleChannelInboundHandler[io.netty.handler.codec.http.websocketx.WebSocketFrame]withLog"></a>
+      <a id="WebSocketEventDispatcher:WebSocketEventDispatcher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WebSocketEventDispatcher.html"><span class="name">WebSocketEventDispatcher</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.SimpleChannelInboundHandler">SimpleChannelInboundHandler</span>[<span class="extype" name="io.netty.handler.codec.http.websocketx.WebSocketFrame">WebSocketFrame</span>] with <a href="../../Log.html" class="extype" name="xitrum.Log">Log</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@WebSocketEventDispatcherextendsSimpleChannelInboundHandler[io.netty.handler.codec.http.websocketx.WebSocketFrame]withLog" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">See https://github.</p><div class="fullcomment"><div class="comment cmt"><p>See https://github.com/netty/netty/blob/master/example/src/main/java/io/netty/example/http/websocketx/server/WebSocketServerHandler.java</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="xitrum.handler.inbound.BasicAuth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BasicAuth"></a>
+      <a id="BasicAuth:BasicAuth"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="BasicAuth$.html"><span class="name">BasicAuth</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@BasicAuth" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.inbound.Dispatcher" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Dispatcher"></a>
+      <a id="Dispatcher:Dispatcher"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Dispatcher$.html"><span class="name">Dispatcher</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@Dispatcher" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.inbound.FlashSocketPolicyHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FlashSocketPolicyHandler"></a>
+      <a id="FlashSocketPolicyHandler:FlashSocketPolicyHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FlashSocketPolicyHandler$.html"><span class="name">FlashSocketPolicyHandler</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@FlashSocketPolicyHandler" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.inbound.Request2Env" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Request2Env"></a>
+      <a id="Request2Env:Request2Env"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Request2Env$.html"><span class="name">Request2Env</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#xitrum.handler.inbound.package@Request2Env" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
