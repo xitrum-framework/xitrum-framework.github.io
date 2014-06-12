@@ -94,6 +94,9 @@ to respond immediately. Long polling, chunked response (streaming), WebSocket,
 and SockJS are supported.</li>
 <li>Fast built-in HTTP and HTTPS web server based on <a class="reference external" href="http://netty.io/">Netty</a>.
 Xitrum&#8217;s static file serving speed is <a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.</li>
+<li>The server supports <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range requests</a>
+(you can pause/resume file download) for static files. Serving movie files for
+smartphones requires this feature.</li>
 <li>Extensive client-side and server-side caching for faster responding.
 At the web server layer, small files are cached in memory, big files are sent
 using NIO&#8217;s zero copy.
