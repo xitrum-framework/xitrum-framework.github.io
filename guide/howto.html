@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,16 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-    <title>HOWTO &mdash; Xitrum Scala Web Framework Guide 3.13 documentation</title>
-
+    
+    <title>HOWTO &mdash; Xitrum Scala Web Framework Guide 3.14 documentation</title>
+    
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '3.13',
+        URL_ROOT:    './',
+        VERSION:     '3.14',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.13 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.14 documentation" href="index.html" />
     <link rel="next" title="Dependencies" href="deps.html" />
-    <link rel="prev" title="Metrics" href="metrics.html" />
+    <link rel="prev" title="Metrics" href="metrics.html" /> 
   </head>
   <body>
     <div class="related">
@@ -41,15 +40,15 @@
         <li class="right" >
           <a href="metrics.html" title="Metrics"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.13 documentation</a> &raquo;</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.14 documentation</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
-
+            
   <div class="section" id="howto">
 <h1>HOWTO<a class="headerlink" href="#howto" title="Permalink to this headline">¶</a></h1>
 <p>This chapter contains various small tips. Each tip is too small to have its own
@@ -57,21 +56,22 @@ chapter.</p>
 <div class="section" id="link-to-an-action">
 <h2>Link to an action<a class="headerlink" href="#link-to-an-action" title="Permalink to this headline">¶</a></h2>
 <p>Xitrum tries to be typesafe. Don&#8217;t write URL manually. Do like this:</p>
-<div class="highlight-python"><pre>&lt;a href={url[ArticlesShow]("id" -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
+</pre></div>
 </div>
 </div>
 <div class="section" id="redirect-to-another-action">
 <h2>Redirect to another action<a class="headerlink" href="#redirect-to-another-action" title="Permalink to this headline">¶</a></h2>
 <p>Read to know <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">what redirection is</a>.</p>
-<div class="highlight-python"><pre>import xitrum.Action
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 import xitrum.annotation.{GET, POST}
 
-@GET("login")
+@GET(&quot;login&quot;)
 class LoginInput extends Action {
   def execute() {...}
 }
 
-@POST("login")
+@POST(&quot;login&quot;)
 class DoLogin extends Action {
   def execute() {
     ...
@@ -80,14 +80,15 @@ class DoLogin extends Action {
   }
 }
 
-GET("admin")
+GET(&quot;admin&quot;)
 class AdminIndex extends Action {
   def execute() {
     ...
     // Check if the user has not logged in, redirect him to the login page
     redirectTo[LoginInput]()
   }
-}</pre>
+}
+</pre></div>
 </div>
 <p>You can also redirect to the current action with <tt class="docutils literal"><span class="pre">redirecToThis()</span></tt>.</p>
 </div>
@@ -99,12 +100,13 @@ make another request, <tt class="docutils literal"><span class="pre">forwardTo</
 <div class="section" id="determine-is-the-request-is-ajax-request">
 <h2>Determine is the request is Ajax request<a class="headerlink" href="#determine-is-the-request-is-ajax-request" title="Permalink to this headline">¶</a></h2>
 <p>Use <tt class="docutils literal"><span class="pre">isAjax</span></tt>.</p>
-<div class="highlight-python"><pre>// In an action
-val msg = "A message"
+<div class="highlight-python"><div class="highlight"><pre>// In an action
+val msg = &quot;A message&quot;
 if (isAjax)
-  jsRender("alert(" + jsEscape(msg) + ")")
+  jsRender(&quot;alert(&quot; + jsEscape(msg) + &quot;)&quot;)
 else
-  respondText(msg)</pre>
+  respondText(msg)
+</pre></div>
 </div>
 </div>
 <div class="section" id="manipulate-collected-routes">
@@ -113,7 +115,7 @@ else
 If you want to manipulate the routes, you can use
 <a class="reference external" href="http://xitrum-framework.github.io/api/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
 <p>Example:</p>
-<div class="highlight-python"><pre>import xitrum.{Config, Server}
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
 
 object Boot {
   def main(args: Array[String]) {
@@ -125,17 +127,18 @@ object Boot {
 
     if (demoVersion) {
       // Remove routes to actions by a prefix
-      routes.removeByPrefix("/premium/features")
+      routes.removeByPrefix(&quot;premium/features&quot;)
 
       // This also works
-      routes.removeByPrefix("premium/features")
+      routes.removeByPrefix(&quot;/premium/features&quot;)
     }
 
     ...
 
     Server.start()
   }
-}</pre>
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="basic-authentication">
@@ -150,24 +153,26 @@ For better security, you should use HTTPS, which Xitrum has built-in support
 <div class="section" id="config-basic-authentication-for-the-whole-site">
 <h3>Config basic authentication for the whole site<a class="headerlink" href="#config-basic-authentication-for-the-whole-site" title="Permalink to this headline">¶</a></h3>
 <p>In config/xitrum.conf:</p>
-<div class="highlight-python"><pre>"basicAuth": {
-  "realm":    "xitrum",
-  "username": "xitrum",
-  "password": "xitrum"
-}</pre>
+<div class="highlight-python"><div class="highlight"><pre>&quot;basicAuth&quot;: {
+  &quot;realm&quot;:    &quot;xitrum&quot;,
+  &quot;username&quot;: &quot;xitrum&quot;,
+  &quot;password&quot;: &quot;xitrum&quot;
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="add-basic-authentication-to-an-action">
 <h3>Add basic authentication to an action<a class="headerlink" href="#add-basic-authentication-to-an-action" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>import xitrum.Action
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 
 class MyAction extends Action {
   beforeFilter {
-    basicAuth("Realm") { (username, password) =&gt;
-      username == "username" &amp;&amp; password == "password"
+    basicAuth(&quot;Realm&quot;) { (username, password) =&gt;
+      username == &quot;username&quot; &amp;&amp; password == &quot;password&quot;
     }
   }
-}</pre>
+}
+</pre></div>
 </div>
 </div>
 </div>
@@ -186,13 +191,14 @@ class MyAction extends Action {
 <h3>Use trait xitrum.Log<a class="headerlink" href="#use-trait-xitrum-log" title="Permalink to this headline">¶</a></h3>
 <p>If you want to have the information about where (which class) the log has been
 made, you should extend trait xitrum.Log</p>
-<div class="highlight-python"><pre>package my_package
+<div class="highlight-python"><div class="highlight"><pre>package my_package
 
 object MyModel extends xitrum.Log {
-  xitrum.Log.debug("My debug msg")
-  xitrum.Log.info("My info msg")
+  xitrum.Log.debug(&quot;My debug msg&quot;)
+  xitrum.Log.info(&quot;My info msg&quot;)
   ...
-}</pre>
+}
+</pre></div>
 </div>
 <p>In file log/xitrum.log you will see that the log messages comes from <tt class="docutils literal"><span class="pre">MyModel</span></tt>.</p>
 <p>Xitrum actions extend trait xitrum.Log, which provides <tt class="docutils literal"><span class="pre">log</span></tt>.
@@ -210,13 +216,15 @@ to check log level to avoid wasting CPU to do the calculation.</p>
 <p><a class="reference external" href="https://github.com/mattroberts297/slf4s/blob/master/src/main/scala/org/slf4s/Logger.scala">SLF4S automatically does the check</a>,
 so you don&#8217;t have to do the check yourself.</p>
 <p>Before (this code doesn&#8217;t work for the current Xitrum 3.13+ any more):</p>
-<div class="highlight-python"><pre>if (log.isTraceEnabled) {
+<div class="highlight-python"><div class="highlight"><pre>if (log.isTraceEnabled) {
   val result = heavyCalculation()
-  log.trace("Output: {}", result)
-}</pre>
+  log.trace(&quot;Output: {}&quot;, result)
+}
+</pre></div>
 </div>
 <p>Now:</p>
-<div class="highlight-python"><pre>log.trace(s"Output: #{heavyCalculation()}")</pre>
+<div class="highlight-python"><div class="highlight"><pre>log.trace(s&quot;Output: #{heavyCalculation()}&quot;)
+</pre></div>
 </div>
 </div>
 <div class="section" id="config-log-level-log-output-file-etc">
@@ -246,10 +254,11 @@ classpath in development mode by build.sbt and in production mode by script/runn
 </pre></div>
 </div>
 <p>Load it:</p>
-<div class="highlight-python"><pre>import xitrum.util.Loader
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.Loader
 
 case class MyConfig(username: String, password: String, children: List[String])
-val myConfig = Loader.jsonFromClasspath[MyConfig]("myconfig.json")</pre>
+val myConfig = Loader.jsonFromClasspath[MyConfig](&quot;myconfig.json&quot;)
+</pre></div>
 </div>
 <p>Notes:</p>
 <ul class="simple">
@@ -263,15 +272,17 @@ val myConfig = Loader.jsonFromClasspath[MyConfig]("myconfig.json")</pre>
 because it&#8217;s much better. Properties files are not typesafe, do not support UTF-8
 and nested structures etc.</p>
 <p>myconfig.properties:</p>
-<div class="highlight-python"><pre>username = God
+<div class="highlight-python"><div class="highlight"><pre>username = God
 password = Does God need a password?
-children = Adam, Eva</pre>
+children = Adam, Eva
+</pre></div>
 </div>
 <p>Load it:</p>
-<div class="highlight-python"><pre>import xitrum.util.Loader
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.Loader
 
 // Here you get an instance of java.util.Properties
-val properties = Loader.propertiesFromClasspath("myconfig.properties")</pre>
+val properties = Loader.propertiesFromClasspath(&quot;myconfig.properties&quot;)
+</pre></div>
 </div>
 </div>
 <div class="section" id="typesafe-config-file">
@@ -281,27 +292,31 @@ val properties = Loader.propertiesFromClasspath("myconfig.properties")</pre>
 <a class="reference external" href="http://typesafe.com/company">company called Typesafe</a>.
 It may be a better way to load config files.</p>
 <p>myconfig.conf:</p>
-<div class="highlight-python"><pre>username = God
+<div class="highlight-python"><div class="highlight"><pre>username = God
 password = Does God need a password?
-children = ["Adam", "Eva"]</pre>
+children = [&quot;Adam&quot;, &quot;Eva&quot;]
+</pre></div>
 </div>
 <p>Load it:</p>
-<div class="highlight-python"><pre>import com.typesafe.config.{Config, ConfigFactory}
+<div class="highlight-python"><div class="highlight"><pre>import com.typesafe.config.{Config, ConfigFactory}
 
-val config   = ConfigFactory.load("myconfig.conf")
-val username = config.getString("username")
-val password = config.getString("password")
-val children = config.getStringList("children")</pre>
+val config   = ConfigFactory.load(&quot;myconfig.conf&quot;)
+val username = config.getString(&quot;username&quot;)
+val password = config.getString(&quot;password&quot;)
+val children = config.getStringList(&quot;children&quot;)
+</pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="serialize-and-deserialize">
 <h2>Serialize and deserialize<a class="headerlink" href="#serialize-and-deserialize" title="Permalink to this headline">¶</a></h2>
 <p>To serialize to <tt class="docutils literal"><span class="pre">Array[Byte]</span></tt>:</p>
-<div class="highlight-python"><pre>val bytes = SeriDeseri.toBytes("my serializable object")</pre>
+<div class="highlight-python"><div class="highlight"><pre>val bytes = SeriDeseri.toBytes(&quot;my serializable object&quot;)
+</pre></div>
 </div>
 <p>To deserialize bytes back:</p>
-<div class="highlight-python"><pre>val option = SeriDeseri.fromBytes[MyType](bytes)  // Option[MyType]</pre>
+<div class="highlight-python"><div class="highlight"><pre>val option = SeriDeseri.fromBytes[MyType](bytes)  // Option[MyType]
+</pre></div>
 </div>
 </div>
 <div class="section" id="encrypt-data">
@@ -309,24 +324,26 @@ val children = config.getStringList("children")</pre>
 <p>To encrypt data that you don&#8217;t need to decrypt later (one way encryption),
 you can use MD5 or something like that.</p>
 <p>If you want to decrypt later, you can use the utility Xitrum provides:</p>
-<div class="highlight-python"><pre>import xitrum.util.Secure
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.Secure
 
 // Array[Byte]
-val encrypted = Secure.encrypt("my data".getBytes)
+val encrypted = Secure.encrypt(&quot;my data&quot;.getBytes)
 
 // Option[Array[Byte]]
-val decrypted = Secure.decrypt(encrypted)</pre>
+val decrypted = Secure.decrypt(encrypted)
+</pre></div>
 </div>
 <p>You can use <tt class="docutils literal"><span class="pre">xitrum.util.UrlSafeBase64</span></tt> to encode and decode the binary data to
 normal string (to embed to HTML for response etc.).</p>
-<div class="highlight-python"><pre>// String that can be included in URL, cookie etc.
+<div class="highlight-python"><div class="highlight"><pre>// String that can be included in URL, cookie etc.
 val string = UrlSafeBase64.noPaddingEncode(encrypted)
 
 // Option[Array[Byte]]
-val encrypted2 = UrlSafeBase64.autoPaddingDecode(string)</pre>
+val encrypted2 = UrlSafeBase64.autoPaddingDecode(string)
+</pre></div>
 </div>
 <p>If you can combine the above operations in one step:</p>
-<div class="highlight-python"><pre>import xitrum.util.SeriDeseri
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.SeriDeseri
 
 val mySerializableObject = new MySerializableClass
 
@@ -334,16 +351,19 @@ val mySerializableObject = new MySerializableClass
 val encrypted = SeriDeseri.toSecureUrlSafeBase64(mySerializableObject)
 
 // Option[MySerializableClass]
-val decrypted = SeriDeseri.fromSecureUrlSafeBase64[MySerializableClass](encrypted)</pre>
+val decrypted = SeriDeseri.fromSecureUrlSafeBase64[MySerializableClass](encrypted)
+</pre></div>
 </div>
 <p><tt class="docutils literal"><span class="pre">SeriDeseri</span></tt> uses <a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>
 to serialize and deserialize. Your data must be serializable.</p>
 <p>You can specify a key for encryption.</p>
-<div class="highlight-python"><pre>val encrypted = Secure.encrypt("my data".getBytes, "my key")
-val decrypted = Secure.decrypt(encrypted, "my key")</pre>
+<div class="highlight-python"><div class="highlight"><pre>val encrypted = Secure.encrypt(&quot;my data&quot;.getBytes, &quot;my key&quot;)
+val decrypted = Secure.decrypt(encrypted, &quot;my key&quot;)
+</pre></div>
 </div>
-<div class="highlight-python"><pre>val encrypted = SeriDeseri.toSecureUrlSafeBase64(mySerializableObject, "my key")
-val decrypted = SeriDeseri.fromSecureUrlSafeBase64[MySerializableClass](encrypted, "my key")</pre>
+<div class="highlight-python"><div class="highlight"><pre>val encrypted = SeriDeseri.toSecureUrlSafeBase64(mySerializableObject, &quot;my key&quot;)
+val decrypted = SeriDeseri.fromSecureUrlSafeBase64[MySerializableClass](encrypted, &quot;my key&quot;)
+</pre></div>
 </div>
 <p>If no key is specified, <tt class="docutils literal"><span class="pre">secureKey</span></tt> in xitrum.conf file in config directory
 will be used.</p>
@@ -352,8 +372,9 @@ will be used.</p>
 <h2>Multiple sites at the same domain name<a class="headerlink" href="#multiple-sites-at-the-same-domain-name" title="Permalink to this headline">¶</a></h2>
 <p>If you want to use a reverse proxy like Nginx to run multiple different sites
 at the same domain name:</p>
-<div class="highlight-python"><pre>http://example.com/site1/...
-http://example.com/site2/...</pre>
+<div class="highlight-python"><div class="highlight"><pre>http://example.com/site1/...
+http://example.com/site2/...
+</pre></div>
 </div>
 <p>You can config baseUrl in config/xitrum.conf.</p>
 <p>In your JS code, to have the correct URLs for Ajax requests, use <tt class="docutils literal"><span class="pre">withBaseUrl</span></tt>
@@ -368,11 +389,13 @@ in <a class="reference external" href="https://github.com/xitrum-framework/xitru
 <h2>Convert Markdown text to HTML<a class="headerlink" href="#convert-markdown-text-to-html" title="Permalink to this headline">¶</a></h2>
 <p>If you have already configured your project to use <a class="reference internal" href="template_engines.html"><em>Scalate template engine</em></a>,
 you only have to do like this:</p>
-<div class="highlight-python"><pre>import org.fusesource.scalamd.Markdown
-val html = Markdown("input")</pre>
+<div class="highlight-python"><div class="highlight"><pre>import org.fusesource.scalamd.Markdown
+val html = Markdown(&quot;input&quot;)
+</pre></div>
 </div>
 <p>Otherwise, you need to add this dependency to your project&#8217;s build.sbt:</p>
-<div class="highlight-python"><pre>libraryDependencies += "org.fusesource.scalamd" %% "scalamd" % "1.6"</pre>
+<div class="highlight-python"><div class="highlight"><pre>libraryDependencies += &quot;org.fusesource.scalamd&quot; %% &quot;scalamd&quot; % &quot;1.6&quot;
+</pre></div>
 </div>
 </div>
 <div class="section" id="monitor-file-change">
@@ -380,17 +403,18 @@ val html = Markdown("input")</pre>
 <p>You can register callback(s) for
 <a class="reference external" href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/StandardWatchEventKinds.html">StandardWatchEventKinds</a>
 on files or directories.</p>
-<div class="highlight-python"><pre>import java.nio.file.Paths
+<div class="highlight-python"><div class="highlight"><pre>import java.nio.file.Paths
 import xitrum.util.FileMonitor
 
-val target = Paths.get("absolute_path_or_path_relative_to_application_directory").toAbsolutePath
+val target = Paths.get(&quot;absolute_path_or_path_relative_to_application_directory&quot;).toAbsolutePath
 FileMonitor.monitor(FileMonitor.MODIFY, target, { path =&gt;
   // Do some callback with path
-  println(s"File modified: $path")
+  println(s&quot;File modified: $path&quot;)
 
   // And stop monitoring if necessary
   FileMonitor.unmonitor(FileMonitor.MODIFY, target)
-})</pre>
+})
+</pre></div>
 </div>
 <p>Under the hood, <tt class="docutils literal"><span class="pre">FileMonitor</span></tt> uses
 <a class="reference external" href="https://github.com/lloydmeta/schwatcher">Schwatcher</a>.</p>
@@ -478,12 +502,12 @@ FileMonitor.monitor(FileMonitor.MODIFY, target, { path =&gt;
         <li class="right" >
           <a href="metrics.html" title="Metrics"
              >previous</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.13 documentation</a> &raquo;</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.14 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Ngoc Dao.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

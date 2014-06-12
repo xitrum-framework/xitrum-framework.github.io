@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Deploy to production server &mdash; Xitrum Scala Web Framework Guide 3.13 documentation</title>
+    <title>Deploy to production server &mdash; Xitrum Scala Web Framework Guide 3.14 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '3.13',
+        URL_ROOT:    './',
+        VERSION:     '3.14',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.13 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.14 documentation" href="index.html" />
     <link rel="next" title="Clustering with Akka and Hazelcast" href="cluster.html" />
     <link rel="prev" title="I18n" href="i18n.html" /> 
   </head>
@@ -41,7 +40,7 @@
         <li class="right" >
           <a href="i18n.html" title="I18n"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.13 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.14 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,17 +52,19 @@
   <div class="section" id="deploy-to-production-server">
 <h1>Deploy to production server<a class="headerlink" href="#deploy-to-production-server" title="Permalink to this headline">¶</a></h1>
 <p>You may run Xitrum directly:</p>
-<div class="highlight-python"><pre>Browser ------ Xitrum instance</pre>
+<div class="highlight-python"><div class="highlight"><pre>Browser ------ Xitrum instance
+</pre></div>
 </div>
 <p>Or behind a load balancer like HAProxy, or reverse proxy like Apache or Nginx:</p>
-<div class="highlight-python"><pre>Browser ------ Load balancer/Reverse proxy -+---- Xitrum instance1
-                                            +---- Xitrum instance2</pre>
+<div class="highlight-python"><div class="highlight"><pre>Browser ------ Load balancer/Reverse proxy -+---- Xitrum instance1
+                                            +---- Xitrum instance2
+</pre></div>
 </div>
 <div class="section" id="package-directory">
 <h2>Package directory<a class="headerlink" href="#package-directory" title="Permalink to this headline">¶</a></h2>
 <p>Run <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></tt> to prepare <tt class="docutils literal"><span class="pre">target/xitrum</span></tt> directory, ready to
 deploy to production server:</p>
-<div class="highlight-python"><pre>target/xitrum
+<div class="highlight-python"><div class="highlight"><pre>target/xitrum
   config
     [config files]
   public
@@ -75,7 +76,8 @@ deploy to production server:</p>
     runner.bat
     scalive
     scalive.jar
-    scalive.bat</pre>
+    scalive.bat
+</pre></div>
 </div>
 </div>
 <div class="section" id="customize-xitrum-package">
@@ -83,7 +85,8 @@ deploy to production server:</p>
 <p>By default <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></tt> command is configured to copy directories
 <tt class="docutils literal"><span class="pre">config</span></tt>, <tt class="docutils literal"><span class="pre">public</span></tt>, and <tt class="docutils literal"><span class="pre">script</span></tt> to <tt class="docutils literal"><span class="pre">target/xitrum</span></tt>. If you want it to
 copy additional directories or files change <tt class="docutils literal"><span class="pre">build.sbt</span></tt> like this:</p>
-<div class="highlight-python"><pre>XitrumPackage.copy("config", "public, "script", "doc/README.txt", "etc.")</pre>
+<div class="highlight-python"><div class="highlight"><pre>XitrumPackage.copy(&quot;config&quot;, &quot;public, &quot;script&quot;, &quot;doc/README.txt&quot;, &quot;etc.&quot;)
+</pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package homepage</a>
 for more information.</p>
@@ -94,12 +97,13 @@ for more information.</p>
 <a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>
 to connect a Scala console to a running JVM process for live debugging.</p>
 <p>Run <tt class="docutils literal"><span class="pre">scalive</span></tt> in the script directory:</p>
-<div class="highlight-python"><pre>script
+<div class="highlight-python"><div class="highlight"><pre>script
   runner
   runner.bat
   scalive
   scalive.jar
-  scalive.bat</pre>
+  scalive.bat
+</pre></div>
 </div>
 </div>
 <div class="section" id="install-oracle-jdk-on-centos-or-ubuntu-manually">
@@ -107,39 +111,46 @@ to connect a Scala console to a running JVM process for live debugging.</p>
 <p>This guide is here for convenient reference. You can certainly install Java from
 a package manager.</p>
 <p>Check installed alternatives:</p>
-<div class="highlight-python"><pre>sudo update-alternatives --list java</pre>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --list java
+</pre></div>
 </div>
 <p>Output example:</p>
-<div class="highlight-python"><pre>/usr/lib/jvm/jdk1.7.0_15/bin/java
-/usr/lib/jvm/jdk1.7.0_25/bin/java</pre>
+<div class="highlight-python"><div class="highlight"><pre>/usr/lib/jvm/jdk1.7.0_15/bin/java
+/usr/lib/jvm/jdk1.7.0_25/bin/java
+</pre></div>
 </div>
 <p>Check machine environment (32 bit or 64 bit):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span>
 </pre></div>
 </div>
 <p>Output example:</p>
-<div class="highlight-python"><pre>/sbin/init: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c, stripped</pre>
+<div class="highlight-python"><div class="highlight"><pre>/sbin/init: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c, stripped
+</pre></div>
 </div>
 <p>Download JDK from <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Oracle</a>.
 There&#8217;s a <a class="reference external" href="http://stackoverflow.com/questions/10268583/how-to-automate-download-and-instalation-of-java-jdk-on-linux">trick</a>
 to download jdk without browser:</p>
-<div class="highlight-python"><pre>wget --no-cookies --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com" "http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-linux-x64.tar.gz"</pre>
+<div class="highlight-python"><div class="highlight"><pre>wget --no-cookies --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-linux-x64.tar.gz&quot;
+</pre></div>
 </div>
 <p>Unarchive and move it:</p>
-<div class="highlight-python"><pre>tar -xzvf jdk-7u45-linux-x64.tar.gz
-sudo mv jdk1.7.0_45 /usr/lib/jvm/jdk1.7.0_45</pre>
+<div class="highlight-python"><div class="highlight"><pre>tar -xzvf jdk-7u45-linux-x64.tar.gz
+sudo mv jdk1.7.0_45 /usr/lib/jvm/jdk1.7.0_45
+</pre></div>
 </div>
 <p>Register commands as an alternative:</p>
-<div class="highlight-python"><pre>sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.7.0_45/bin/java" 1
-sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.7.0_45/bin/javac" 1
-sudo update-alternatives --install "/usr/bin/javap" "javap" "/usr/lib/jvm/jdk1.7.0_45/bin/javap" 1
-sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.7.0_45/bin/javaws" 1</pre>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --install &quot;/usr/bin/java&quot; &quot;java&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/java&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javac&quot; &quot;javac&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javac&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javap&quot; &quot;javap&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javap&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javaws&quot; 1
+</pre></div>
 </div>
 <p>Chose new path with interactive shell:</p>
-<div class="highlight-python"><pre>sudo update-alternatives --config java</pre>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config java
+</pre></div>
 </div>
 <p>Output example:</p>
-<div class="highlight-python"><pre>There are 3 choices for the alternative java (providing /usr/bin/java).
+<div class="highlight-python"><div class="highlight"><pre>There are 3 choices for the alternative java (providing /usr/bin/java).
 
   Selection    Path                               Priority   Status
 ------------------------------------------------------------
@@ -149,21 +160,24 @@ sudo update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1
   3            /usr/lib/jvm/jdk1.7.0_45/bin/java   1         manual mode
 
 Press enter to keep the current choice[*], or type selection number: 3
-update-alternatives: using /usr/lib/jvm/jdk1.7.0_45/bin/java to provide /usr/bin/java (java) in manual mode</pre>
+update-alternatives: using /usr/lib/jvm/jdk1.7.0_45/bin/java to provide /usr/bin/java (java) in manual mode
+</pre></div>
 </div>
 <p>Check version:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">java</span> <span class="o">-</span><span class="n">version</span>
 </pre></div>
 </div>
 <p>Output example:</p>
-<div class="highlight-python"><pre>java version "1.7.0_45"
+<div class="highlight-python"><div class="highlight"><pre>java version &quot;1.7.0_45&quot;
 Java(TM) SE Runtime Environment (build 1.7.0_45-b18)
-Java HotSpot(TM) 64-Bit Server VM (build 24.45-b08, mixed mode)</pre>
+Java HotSpot(TM) 64-Bit Server VM (build 24.45-b08, mixed mode)
+</pre></div>
 </div>
 <p>Do also:</p>
-<div class="highlight-python"><pre>sudo update-alternatives --config javac
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config javac
 sudo update-alternatives --config javap
-sudo update-alternatives --config javaws</pre>
+sudo update-alternatives --config javaws
+</pre></div>
 </div>
 </div>
 <div class="section" id="start-xitrum-in-production-mode-when-the-system-starts">
@@ -171,7 +185,8 @@ sudo update-alternatives --config javaws</pre>
 <p><tt class="docutils literal"><span class="pre">script/runner</span></tt> (for <a href="#id1"><span class="problematic" id="id2">*</span></a>nix) and <tt class="docutils literal"><span class="pre">script/runner.bat</span></tt> (for Windows) are the script to
 run any object with <tt class="docutils literal"><span class="pre">main</span></tt> method. Use it to start the web server in production
 environment.</p>
-<div class="highlight-python"><pre>script/runner quickstart.Boot</pre>
+<div class="highlight-python"><div class="highlight"><pre>script/runner quickstart.Boot
+</pre></div>
 </div>
 <p>You may want to modify <tt class="docutils literal"><span class="pre">runner</span></tt> (or <tt class="docutils literal"><span class="pre">runner.bat</span></tt>) to tune
 <a class="reference external" href="http://www.oracle.com/technetwork/java/hotspotfaq-138619.html">JVM settings</a>.
@@ -181,7 +196,7 @@ is a very good tool. To install it on CentOS, see
 <a class="reference external" href="http://whomwah.com/2008/11/04/installing-daemontools-on-centos5-x86_64/">this instruction</a>.</p>
 <p>Or use <a class="reference external" href="http://supervisord.org/">Supervisord</a>.
 <tt class="docutils literal"><span class="pre">/etc/supervisord.conf</span></tt> example:</p>
-<div class="highlight-python"><pre>[program:my_app]
+<div class="highlight-python"><div class="highlight"><pre>[program:my_app]
 directory=/path/to/my_app
 command=/path/to/my_app/script/runner quickstart.Boot
 autostart=true
@@ -194,7 +209,8 @@ stdout_logfile_maxbytes=10MB
 stdout_logfile_backups=7
 stdout_capture_maxbytes=1MB
 stdout_events_enabled=false
-environment=PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:~/bin</pre>
+environment=PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:~/bin
+</pre></div>
 </div>
 </div>
 <div class="section" id="set-up-port-forwarding">
@@ -203,7 +219,7 @@ environment=PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/o
 You can change these ports in <tt class="docutils literal"><span class="pre">config/xitrum.conf</span></tt>.</p>
 <p>You can update <tt class="docutils literal"><span class="pre">/etc/sysconfig/iptables</span></tt> with these commands to forward port
 80 to 8000 and 443 to 4430:</p>
-<div class="highlight-python"><pre>sudo su - root
+<div class="highlight-python"><div class="highlight"><pre>sudo su - root
 chmod 700 /etc/sysconfig/iptables
 iptables-restore &lt; /etc/sysconfig/iptables
 iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8000
@@ -211,11 +227,13 @@ iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 4
 iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8000
 iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 4430
 iptables-save -c &gt; /etc/sysconfig/iptables
-chmod 644 /etc/sysconfig/iptables</pre>
+chmod 644 /etc/sysconfig/iptables
+</pre></div>
 </div>
 <p>Of course for example if you have Apache running on port 80 and 443, you have to stop it:</p>
-<div class="highlight-python"><pre>sudo /etc/init.d/httpd stop
-sudo chkconfig httpd off</pre>
+<div class="highlight-python"><div class="highlight"><pre>sudo /etc/init.d/httpd stop
+sudo chkconfig httpd off
+</pre></div>
 </div>
 <p>Good read:</p>
 <ul class="simple">
@@ -237,8 +255,9 @@ sudo chkconfig httpd off</pre>
 <p>Each connection is seen by Linux as an open file.
 The default maximum number of open file is 1024.
 To increase this limit, modify /etc/security/limits.conf:</p>
-<div class="highlight-python"><pre>*  soft  nofile  1024000
-*  hard  nofile  1024000</pre>
+<div class="highlight-python"><div class="highlight"><pre>*  soft  nofile  1024000
+*  hard  nofile  1024000
+</pre></div>
 </div>
 <p>You need to logout and login again for the above config to take effect.
 To confirm, run <tt class="docutils literal"><span class="pre">ulimit</span> <span class="pre">-n</span></tt>.</p>
@@ -248,7 +267,7 @@ To confirm, run <tt class="docutils literal"><span class="pre">ulimit</span> <sp
 <p>As instructed in the article
 <a class="reference external" href="http://www.metabrew.com/article/a-million-user-comet-application-with-mochiweb-part-1">A Million-user Comet Application with Mochiweb</a>,
 modify /etc/sysctl.conf:</p>
-<div class="highlight-python"><pre># General gigabit tuning
+<div class="highlight-python"><div class="highlight"><pre># General gigabit tuning
 net.core.rmem_max = 16777216
 net.core.wmem_max = 16777216
 net.ipv4.tcp_rmem = 4096 87380 16777216
@@ -262,7 +281,8 @@ net.ipv4.tcp_mem = 50576 64768 98152
 net.core.netdev_max_backlog = 2048
 net.core.somaxconn = 1024
 net.ipv4.tcp_max_syn_backlog = 2048
-net.ipv4.tcp_syncookies = 1</pre>
+net.ipv4.tcp_syncookies = 1
+</pre></div>
 </div>
 <p>Run <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">sysctl</span> <span class="pre">-p</span></tt> to apply.
 No need to reboot, now your kernel should be able to handle a lot more open connections.</p>
@@ -292,10 +312,12 @@ but you also need to tune the kernel as above.</p>
 </pre></div>
 </div>
 <p>Or:</p>
-<div class="highlight-python"><pre>sysctl net.core.somaxconn</pre>
+<div class="highlight-python"><div class="highlight"><pre>sysctl net.core.somaxconn
+</pre></div>
 </div>
 <p>To tune temporarily, you can do like this:</p>
-<div class="highlight-python"><pre>sudo sysctl -w net.core.somaxconn=1024</pre>
+<div class="highlight-python"><div class="highlight"><pre>sudo sysctl -w net.core.somaxconn=1024
+</pre></div>
 </div>
 </div>
 </div>
@@ -316,11 +338,12 @@ Nginx 1.2, you must install additional module like
 Nginx 1.3+ supports WebSocket natively.</p>
 <p>Nginx by default uses HTTP 1.0 protocol for reverse proxy. If your backend server
 returns chunked response, you need to tell Nginx to use HTTP 1.1 like this:</p>
-<div class="highlight-python"><pre>location / {
+<div class="highlight-python"><div class="highlight"><pre>location / {
   proxy_http_version 1.1;
-  proxy_set_header Connection "";
+  proxy_set_header Connection &quot;&quot;;
   proxy_pass http://127.0.0.1:8000;
-}</pre>
+}
+</pre></div>
 </div>
 <p>The <a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive">documentation</a> states that for http keepalive, you should also set proxy_set_header Connection &#8220;&#8221;;</p>
 </div>
@@ -336,41 +359,46 @@ sign up and create git repository.</p>
 <h3>Create Procfile<a class="headerlink" href="#create-procfile" title="Permalink to this headline">¶</a></h3>
 <p>Create Procfile and save it at project root directory. Heroku reads this file and
 executes on start. Port number is ginven by Heroku automatically as <tt class="docutils literal"><span class="pre">$PORT</span></tt>.</p>
-<div class="highlight-python"><pre>web: target/xitrum/script/runner &lt;YOUR_PACKAGE.YOUR_MAIN_CLASS&gt; $PORT</pre>
+<div class="highlight-python"><div class="highlight"><pre>web: target/xitrum/script/runner &lt;YOUR_PACKAGE.YOUR_MAIN_CLASS&gt; $PORT
+</pre></div>
 </div>
 </div>
 <div class="section" id="change-port-setting">
 <h3>Change port setting<a class="headerlink" href="#change-port-setting" title="Permalink to this headline">¶</a></h3>
 <p>Because Heroku assigns port automatically, you need to do like this:</p>
 <p>Main (boot) class:</p>
-<div class="highlight-python"><pre>import util.Properties
+<div class="highlight-python"><div class="highlight"><pre>import util.Properties
 
 object Boot {
   def main(args: Array[String]) {
-    val port = Properties.envOrElse("PORT", "8000")
-    System.setProperty("xitrum.port.http", port)
+    val port = Properties.envOrElse(&quot;PORT&quot;, &quot;8000&quot;)
+    System.setProperty(&quot;xitrum.port.http&quot;, port)
     Server.start()
   }
-}</pre>
+}
+</pre></div>
 </div>
 <p>config/xitrum.conf:</p>
-<div class="highlight-python"><pre>port {
+<div class="highlight-python"><div class="highlight"><pre>port {
   http              = 8000
   # https             = 4430
   # flashSocketPolicy = 8430  # flash_socket_policy.xml will be returned
-}</pre>
+}
+</pre></div>
 </div>
 <p>If you want to use SSL, you need <a class="reference external" href="https://addons.heroku.com/ssl">add on</a>.</p>
 </div>
 <div class="section" id="see-log-level">
 <h3>See log level<a class="headerlink" href="#see-log-level" title="Permalink to this headline">¶</a></h3>
 <p>config/logback.xml:</p>
-<div class="highlight-python"><pre>&lt;root level="INFO"&gt;
-  &lt;appender-ref ref="CONSOLE"/&gt;
-&lt;/root&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>&lt;root level=&quot;INFO&quot;&gt;
+  &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;
+&lt;/root&gt;
+</pre></div>
 </div>
 <p>Tail log from Heroku command:</p>
-<div class="highlight-python"><pre>heroku logs -tail</pre>
+<div class="highlight-python"><div class="highlight"><pre>heroku logs -tail
+</pre></div>
 </div>
 </div>
 <div class="section" id="create-alias-for-xitrum-package">
@@ -385,7 +413,8 @@ for <tt class="docutils literal"><span class="pre">xitrum-package</span></tt>.</
 <div class="section" id="push-to-heroku">
 <h3>Push to Heroku<a class="headerlink" href="#push-to-heroku" title="Permalink to this headline">¶</a></h3>
 <p>Deploy process is hooked by git push.</p>
-<div class="highlight-python"><pre>git push heroku master</pre>
+<div class="highlight-python"><div class="highlight"><pre>git push heroku master
+</pre></div>
 </div>
 <p>See also <a class="reference external" href="https://devcenter.heroku.com/articles/getting-started-with-scala">Official document for Scala</a>.</p>
 </div>
@@ -468,12 +497,12 @@ for <tt class="docutils literal"><span class="pre">xitrum-package</span></tt>.</
         <li class="right" >
           <a href="i18n.html" title="I18n"
              >previous</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.13 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.14 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Ngoc Dao.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
