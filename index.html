@@ -92,7 +92,8 @@ and HTTP(S) server fusion<span class="small"> on top of <a class="reference exte
 <li>Async, in the spirit of Netty. Your request proccessing action does not have
 to respond immediately. Long polling, chunked response (streaming), WebSocket,
 and SockJS are supported.</li>
-<li>Fast built-in HTTP and HTTPS web server based on <a class="reference external" href="http://netty.io/">Netty</a>.
+<li>Fast built-in HTTP and HTTPS web server based on <a class="reference external" href="http://netty.io/">Netty</a>
+(HTTPS can use Java engine or native OpenSSL engine).
 Xitrum&#8217;s static file serving speed is <a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.</li>
 <li>The server supports <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range requests</a>
 (you can pause/resume file download) for static files. Serving movie files for
