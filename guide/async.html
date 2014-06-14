@@ -250,15 +250,23 @@ and send them while you generate:</p>
 setChunked()
 
 val generator = new MyCsvGenerator
-val header = generator.getHeader
-respondText(header, &quot;text/csv&quot;)
 
-while (generator.hasNextLine) {
-  val line = generator.nextLine
-  respondText(line)
+generator.onFirstLine { line =&gt;
+  if (channel.isOpen) respondText(header, &quot;text/csv&quot;)
 }
 
-respondLastChunk()
+generator.onNextLine { line =&gt;
+  if (channel.isOpen) respondText(line)
+}
+
+generator.onLastLine { line =&gt;
+  if (channel.isOpen) {
+    respondText(line)
+    respondLastChunk()
+  }
+}
+
+generator.generate()
 </pre></div>
 </div>
 <p>Notes:</p>
