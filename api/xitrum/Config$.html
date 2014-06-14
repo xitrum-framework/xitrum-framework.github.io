@@ -28,9 +28,9 @@
         </head>
         <body class="value">
       <div id="definition">
-        <a href="Config.html" title="Go to companion"><img src="../lib/object_to_class_big.png" /></a>
+        <img src="../lib/object_big.png" />
         <p id="owner"><a href="package.html" class="extype" name="xitrum">xitrum</a></p>
-        <h1><a href="Config.html" title="Go to companion">Config</a></h1> <span class="permalink">
+        <h1>Config</h1> <span class="permalink">
       <a href="../index.html#xitrum.Config$" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
@@ -43,13 +43,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Config</span><span class="result"> extends <a href="Log.html" class="extype" name="xitrum.Log">Log</a></span>
+        <span class="name">Config</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>See config/xitrum.properties</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Log.html" class="extype" name="xitrum.Log">Log</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -67,7 +67,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="xitrum.Config"><span>Config</span></li><li class="in" name="xitrum.Log"><span>Log</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="xitrum.Config"><span>Config</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -202,21 +202,21 @@ http://code.google.com/speed/page-speed/docs/payload.html#GzipCompression</p><p>
       <p class="shortcomment cmt">akka.</p><div class="fullcomment"><div class="comment cmt"><p>akka.actor.ActorSystem(&quot;xitrum&quot;)</p></div></div>
     </li><li name="xitrum.Config#application" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="application:com.typesafe.config.Config"></a>
-      <a id="application:com.typesafe.config.Config"></a>
+      <a id="application:Config"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">application</span><span class="result">: <span class="extype" name="com.typesafe.config.Config">com.typesafe.config.Config</span></span>
+        <span class="name">application</span><span class="result">: <span class="extype" name="com.typesafe.config.Config">Config</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../index.html#xitrum.Config$@application:com.typesafe.config.Config" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">config/application.</p><div class="fullcomment"><div class="comment cmt"><p>config/application.conf</p></div></div>
+      <p class="shortcomment cmt">This represents application.</p><div class="fullcomment"><div class="comment cmt"><p>This represents application.conf.</p></div></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -325,6 +325,23 @@ http://code.google.com/speed/page-speed/docs/payload.html#GzipCompression</p><p>
       </a>
     </span>
       
+    </li><li name="xitrum.Config#exitOnStartupError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="exitOnStartupError(msg:String):Unit"></a>
+      <a id="exitOnStartupError(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exitOnStartupError</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#xitrum.Config$@exitOnStartupError(msg:String):Unit" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -399,23 +416,23 @@ http://code.google.com/speed/page-speed/docs/payload.html#GzipCompression</p><p>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="xitrum.Log#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="log:org.slf4s.Logger"></a>
-      <a id="log:Logger"></a>
+    </li><li name="xitrum.Config#loadRoutes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="loadRoutes(cl:ClassLoader):xitrum.routing.RouteCollection"></a>
+      <a id="loadRoutes(ClassLoader):RouteCollection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">lazy val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">log</span><span class="result">: <span class="extype" name="org.slf4s.Logger">Logger</span></span>
+        <span class="name">loadRoutes</span><span class="params">(<span name="cl">cl: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>)</span><span class="result">: <a href="routing/RouteCollection.html" class="extype" name="xitrum.routing.RouteCollection">RouteCollection</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#xitrum.Config$@log:org.slf4s.Logger" title="Permalink" target="_top">
+      <a href="../index.html#xitrum.Config$@loadRoutes(cl:ClassLoader):xitrum.routing.RouteCollection" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Log name is inferred from name of the class extending this trait.</p><div class="fullcomment"><div class="comment cmt"><p>Log name is inferred from name of the class extending this trait.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Log.html" class="extype" name="xitrum.Log">Log</a></dd></dl></div>
+      <p class="shortcomment cmt">Maybe called multiple times in development mode when reloading routes.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -486,33 +503,13 @@ http://code.google.com/speed/page-speed/docs/payload.html#GzipCompression</p><p>
       <p class="shortcomment cmt">true if &quot;xitrum.</p><div class="fullcomment"><div class="comment cmt"><p>true if &quot;xitrum.mode&quot; system property is set to &quot;production&quot;
 See bin/runner.sh.
 </p></div></div>
-    </li><li name="xitrum.Config#root" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="root:String"></a>
-      <a id="root:String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">root</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#xitrum.Config$@root:String" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Path to the root directory of the current project.</p><div class="fullcomment"><div class="comment cmt"><p>Path to the root directory of the current project.
-If you're familiar with Rails, this is the same as Rails.root.
-See https://github.com/xitrum-framework/xitrum/issues/47
-</p></div></div>
-    </li><li name="xitrum.Config#routes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="xitrum.Config#routes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="routes:xitrum.routing.RouteCollection"></a>
       <a id="routes:RouteCollection"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">lazy val</span>
+        <span class="kind">var</span>
       </span>
       <span class="symbol">
         <span class="name">routes</span><span class="result">: <a href="routing/RouteCollection.html" class="extype" name="xitrum.routing.RouteCollection">RouteCollection</a></span>
@@ -522,27 +519,7 @@ See https://github.com/xitrum-framework/xitrum/issues/47
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">Use lazy to avoid collecting routes if they are not used.</p><div class="fullcomment"><div class="comment cmt"><p>Use lazy to avoid collecting routes if they are not used.
-Sometimes we want to work in SBT console mode and don't like waste several
-seconds collecting routes that we don't use.
-</p></div></div>
-    </li><li name="xitrum.Config#routesReverseMappings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="routesReverseMappings:Map[Class[_],xitrum.routing.ReverseRoute]"></a>
-      <a id="routesReverseMappings:Map[Class[_],ReverseRoute]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">routesReverseMappings</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.Class">Class</span>[_], <a href="routing/ReverseRoute.html" class="extype" name="xitrum.routing.ReverseRoute">ReverseRoute</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../index.html#xitrum.Config$@routesReverseMappings:Map[Class[_],xitrum.routing.ReverseRoute]" title="Permalink" target="_top">
-        <img src="../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">routes.</p><div class="fullcomment"><div class="comment cmt"><p>routes.reverseMappings is used heavily in URL generation, cache it here</p></div></div>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -681,22 +658,22 @@ seconds collecting routes that we don't use.
     </span>
       
     </li><li name="xitrum.Config#xitrum" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="xitrum:xitrum.Config"></a>
-      <a id="xitrum:Config"></a>
+      <a id="xitrum:xitrum.XitrumConfig"></a>
+      <a id="xitrum:XitrumConfig"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">xitrum</span><span class="result">: <a href="Config.html" class="extype" name="xitrum.Config">Config</a></span>
+        <span class="name">xitrum</span><span class="result">: <a href="XitrumConfig.html" class="extype" name="xitrum.XitrumConfig">XitrumConfig</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#xitrum.Config$@xitrum:xitrum.Config" title="Permalink" target="_top">
+      <a href="../index.html#xitrum.Config$@xitrum:xitrum.XitrumConfig" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt">config/xitrum.</p><div class="fullcomment"><div class="comment cmt"><p>config/xitrum.conf</p></div></div>
+      <p class="shortcomment cmt">This represents things in xitrum.</p><div class="fullcomment"><div class="comment cmt"><p>This represents things in xitrum.conf.</p></div></div>
     </li></ol>
             </div>
 
@@ -706,9 +683,7 @@ seconds collecting routes that we don't use.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="xitrum.Log">
-              <h3>Inherited from <a href="Log.html" class="extype" name="xitrum.Log">Log</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

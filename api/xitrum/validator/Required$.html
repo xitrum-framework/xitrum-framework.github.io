@@ -43,13 +43,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Required</span><span class="result"> extends <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></span>
+        <span class="name">Required</span><span class="result"> extends <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a>[<span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -161,6 +161,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="xitrum.validator.Required#check" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="check(value:String):Boolean"></a>
+      <a id="check(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">check</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.validator.Required$@check(value:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns false if validation fails, otherwise true.</p><div class="fullcomment"><div class="comment cmt"><p>Returns false if validation fails, otherwise true.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="xitrum.validator.Required">Required</a> → <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -184,23 +201,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="xitrum.validator.Validator#e" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="e(name:String,value:Any):Unit"></a>
-      <a id="e(String,Any):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">e</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#xitrum.validator.Required$@e(name:String,value:Any):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -235,6 +235,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="xitrum.validator.Validator#exception" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exception(name:String,value:T):Unit"></a>
+      <a id="exception(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exception</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.validator.Required$@exception(name:String,value:T):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Throws exception InvalidInput(error message) if validation fails.</p><div class="fullcomment"><div class="comment cmt"><p>Throws exception InvalidInput(error message) if validation fails.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -309,6 +326,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="xitrum.validator.Required#message" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="message(name:String,value:String):Option[String]"></a>
+      <a id="message(String,String):Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">message</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.validator.Required$@message(name:String,value:String):Option[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns Some(error message) if validation fails, otherwise None.</p><div class="fullcomment"><div class="comment cmt"><p>Returns Some(error message) if validation fails, otherwise None.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="xitrum.validator.Required">Required</a> → <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -394,23 +428,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="xitrum.validator.Required#v" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="v(name:String,value:Any):Option[String]"></a>
-      <a id="v(String,Any):Option[String]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">v</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#xitrum.validator.Required$@v(name:String,value:Any):Option[String]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="xitrum.validator.Required">Required</a> → <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -490,7 +507,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="xitrum.validator.Validator">
-              <h3>Inherited from <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a></h3>
+              <h3>Inherited from <a href="Validator.html" class="extype" name="xitrum.validator.Validator">Validator</a>[<span class="extype" name="scala.Predef.String">String</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

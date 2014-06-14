@@ -43,13 +43,13 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">FileMonitor</span><span class="result"> extends <a href="../Log.html" class="extype" name="xitrum.Log">Log</a></span>
+        <span class="name">FileMonitor</span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../Log.html" class="extype" name="xitrum.Log">Log</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -67,7 +67,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="xitrum.util.FileMonitor"><span>FileMonitor</span></li><li class="in" name="xitrum.Log"><span>Log</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="xitrum.util.FileMonitor"><span>FileMonitor</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -360,25 +360,8 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="xitrum.Log#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="log:org.slf4s.Logger"></a>
-      <a id="log:Logger"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">log</span><span class="result">: <span class="extype" name="org.slf4s.Logger">Logger</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#xitrum.util.FileMonitor$@log:org.slf4s.Logger" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Log name is inferred from name of the class extending this trait.</p><div class="fullcomment"><div class="comment cmt"><p>Log name is inferred from name of the class extending this trait.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Log.html" class="extype" name="xitrum.Log">Log</a></dd></dl></div>
     </li><li name="xitrum.util.FileMonitor#monitor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="monitor(event:java.nio.file.WatchEvent.Kind[java.nio.file.Path],path:java.nio.file.Path,callback:com.beachape.filemanagement.RegistryTypes.Callback*):Unit"></a>
+      <a id="monitor(event:java.nio.file.WatchEvent.Kind[java.nio.file.Path],path:java.nio.file.Path,callbacks:com.beachape.filemanagement.RegistryTypes.Callback*):Unit"></a>
       <a id="monitor(Kind[Path],Path,Callback*):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -386,10 +369,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">monitor</span><span class="params">(<span name="event">event: <span class="extype" name="java.nio.file.WatchEvent.Kind">Kind</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="callback">callback: <span class="extype" name="com.beachape.filemanagement.RegistryTypes.Callback">Callback</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">monitor</span><span class="params">(<span name="event">event: <span class="extype" name="java.nio.file.WatchEvent.Kind">Kind</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>, <span name="path">path: <span class="extype" name="java.nio.file.Path">Path</span></span>, <span name="callbacks">callbacks: <span class="extype" name="com.beachape.filemanagement.RegistryTypes.Callback">Callback</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#xitrum.util.FileMonitor$@monitor(event:java.nio.file.WatchEvent.Kind[java.nio.file.Path],path:java.nio.file.Path,callback:com.beachape.filemanagement.RegistryTypes.Callback*):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#xitrum.util.FileMonitor$@monitor(event:java.nio.file.WatchEvent.Kind[java.nio.file.Path],path:java.nio.file.Path,callbacks:com.beachape.filemanagement.RegistryTypes.Callback*):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
@@ -608,9 +591,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="xitrum.Log">
-              <h3>Inherited from <a href="../Log.html" class="extype" name="xitrum.Log">Log</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

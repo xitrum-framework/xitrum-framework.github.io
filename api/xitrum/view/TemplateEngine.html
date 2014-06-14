@@ -28,9 +28,9 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../lib/trait_big.png" />
+        <a href="TemplateEngine$.html" title="Go to companion"><img src="../../lib/trait_to_object_big.png" /></a>
         <p id="owner"><a href="../package.html" class="extype" name="xitrum">xitrum</a>.<a href="package.html" class="extype" name="xitrum.view">view</a></p>
-        <h1>TemplateEngine</h1> <span class="permalink">
+        <h1><a href="TemplateEngine$.html" title="Go to companion">TemplateEngine</a></h1> <span class="permalink">
       <a href="../../index.html#xitrum.view.TemplateEngine" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
@@ -49,7 +49,10 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Template engines should extend this trait and implement its methods.
 On startup, an instance of the configured template engine is created and used
-for every rendering request. Thus it should be thread-safe.
+for every rendering request. Thus it should be thread-safe.</p><p>In development mode, template engines may use
+xitrum.handler.inbound.Dispatcher.devClassLoader
+every time they render. devClassLoader may be changed in development mode
+every time the directory target/scala-&lt;version&gt;/classes is changed.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -144,7 +147,7 @@ src/main/scalate/myapp/SiteIndex.jade
 </p></div><dl class="paramcmts block"><dt class="param">location</dt><dd class="cmt"><p>the action class used to identify the template location
 </p></dd><dt class="param">options</dt><dd class="cmt"><p>specific to the configured template engine
 </p></dd></dl></div>
-    </li><li name="xitrum.view.TemplateEngine#start" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="xitrum.view.TemplateEngine#start" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="start():Unit"></a>
       <a id="start():Unit"></a>
       <h4 class="signature">
@@ -160,8 +163,10 @@ src/main/scalate/myapp/SiteIndex.jade
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
-    </li><li name="xitrum.view.TemplateEngine#stop" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Called once when Xitrum server starts.</p><div class="fullcomment"><div class="comment cmt"><p>Called once when Xitrum server starts. If necessary the template engine
+should allocate its resources here.
+</p></div></div>
+    </li><li name="xitrum.view.TemplateEngine#stop" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="stop():Unit"></a>
       <a id="stop():Unit"></a>
       <h4 class="signature">
@@ -177,7 +182,9 @@ src/main/scalate/myapp/SiteIndex.jade
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Called once when Xitrum server stops.</p><div class="fullcomment"><div class="comment cmt"><p>Called once when Xitrum server stops. If necessary the template engine
+should release its resources here.
+</p></div></div>
     </li></ol>
             </div>
 
