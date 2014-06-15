@@ -98,9 +98,6 @@ and SockJS are supported.</li>
 <li>Fast built-in HTTP and HTTPS web server based on <a class="reference external" href="http://netty.io/">Netty</a>
 (HTTPS can use Java engine or native OpenSSL engine).
 Xitrum&#8217;s static file serving speed is <a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.</li>
-<li>The server supports <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range requests</a>
-(you can pause/resume file download) for static files. Serving movie files for
-smartphones requires this feature.</li>
 <li>Extensive client-side and server-side caching for faster responding.
 At the web server layer, small files are cached in memory, big files are sent
 using NIO&#8217;s zero copy.
@@ -109,6 +106,10 @@ in the Rails style.
 <a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google&#8217;s best practices</a>
 like conditional GET are applied for client-side caching.
 You can also force browsers to always send request to server to revalidate cache before using.</li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range requests</a>
+for static files. Serving movie files for smartphones requires this feature.
+You can pause/resume file download.</li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> support.</li>
 <li>Routes are automatically collected in the spirit of JAX-RS
 and Rails Engines. You don&#8217;t have to declare all routes in a single place.
 Think of this feature as distributed routes. You can plug an app into another app.
