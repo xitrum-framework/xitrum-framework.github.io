@@ -32,12 +32,12 @@
 
       <div id="top_links" class="span-18 prepend-6 last">
           <ul class="menu">
-            <li class="span-3"><a href="http://107.167.187.67/">&nbsp;&nbsp;Demos</a></li>
-            <li class="span-3"><a href="guide/en/index.html">&nbsp;&nbsp;&nbsp;Guide</a></li>
-            <li class="span-3"><a href="api/index.html">API doc</a></li>
-            <li class="span-3"><a href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">Download</a></li>
-            <li class="span-3"><a href="https://groups.google.com/group/xitrum-framework">&nbsp;&nbsp;&nbsp;Group</a></li>
-            <li class="span-3 last"><a href="consulting.html">Consulting</a></li>
+            <li class="span-3"><a href="http://107.167.187.67/">&nbsp;&nbsp;サンプル</a></li>
+            <li class="span-3"><a href="guide/ja/index.html">&nbsp;&nbsp;&nbsp;ガイド</a></li>
+            <li class="span-3"><a href="api/index.html">Scaladoc</a></li>
+            <li class="span-3"><a href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip"><span class="small">ダウンロード</span></a></li>
+            <li class="span-3"><a href="https://groups.google.com/group/xitrum-framework">&nbsp;&nbsp;&nbsp;掲示板</a></li>
+            <li class="span-3 last"><a href="consulting.html">&nbsp;&nbsp;&nbsp;&nbsp;連絡</a></li>
           </ul>
       </div> <!-- End of div#top_links -->
 
@@ -50,14 +50,14 @@
         <div id="balloon" class="span-16 last">
           <div class="span-11 prepend-3 append-1 last">
             <h2><a class="reference" href="https://xitrum-framework.github.com/xitrum">Xitrum</a>
-is an async and clustered Scala web framework
-and HTTP(S) server fusion<span class="small"> on top of <a class="reference external" href="http://netty.io/">Netty</a>, <a class="reference external" href="http://akka.io/">Akka</a>, and <a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a></span></h2>
+は<span class="small"><a class="reference external" href="http://netty.io/">Netty</a>、<a class="reference external" href="http://akka.io/">Akka</a>、<a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a></span>
+をベースに構築された非同期でスケーラブルなWEBフレームワークです。</h2>
           </div>
           <div class="quote push-2 span-13 last">
             <p>Wow, this is a really impressive body of work, arguably the most complete Scala framework outside of Lift (but much easier to use).
 
             Xitrum is truly a full stack web framework, all the bases are covered, including wtf-am-I-on-the-moon extras like ETags, static file cache identifiers & auto-gzip compression. Tack on built-in JSON converter, before/around/after interceptors, request/session/cookie/flash scopes, integrated validation (server & client-side, nice), built-in cache layer (Hazelcast), i18n a la GNU gettext, Netty (with Nginx, hello blazing fast), etc. and you have, wow.</p>
-            <div class="alt large right append-1">from <a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">a user</a></div>
+            <div class="alt large right append-1"><a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">Xitrum 利用者</a>より</div>
 
           </div> <!-- End of div.quote -->
           <div class="clearfix"></div>
@@ -71,20 +71,9 @@ and HTTP(S) server fusion<span class="small"> on top of <a class="reference exte
         <br/>
         <br/>
 
-        <h2 class="title">Xitrum Guide</h2>
+        <h2 class="title">Xitrum ガイド</h2>
 
         <div class="span-10">
-          <table>
-            <tr>
-              <td><a href="guide/en/xitrum.pdf"><img src="guide/en/xitrum-pdf.png" /></a></td>
-              <td>
-                <ul>
-                  <li><a href="guide/en/index.html">View online HTML</a></li>
-                  <li><a href="guide/en/xitrum.pdf">Download PDF</a></li>
-                </ul>
-              </td>
-            </tr>
-          </table>
           <table>
             <tr>
               <td><a href="guide/ja/xitrum.pdf"><img src="guide/ja/xitrum-pdf.png" /></a></td>
@@ -92,6 +81,17 @@ and HTTP(S) server fusion<span class="small"> on top of <a class="reference exte
                 <ul>
                   <li><a href="guide/ja/index.html">オンライン HTML</a></li>
                   <li><a href="guide/ja/xitrum.pdf">PDF ダウンロード</a></li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+          <table>
+            <tr>
+              <td><a href="guide/en/xitrum.pdf"><img src="guide/en/xitrum-pdf.png" /></a></td>
+              <td>
+                <ul>
+                  <li><a href="guide/en/index.html">View online HTML</a></li>
+                  <li><a href="guide/en/xitrum.pdf">Download PDF</a></li>
                 </ul>
               </td>
             </tr>
@@ -109,66 +109,54 @@ and HTTP(S) server fusion<span class="small"> on top of <a class="reference exte
 
         <div class="clearfix"></div>
 
-        <h2 class="title">Features</h2>
+        <h2 class="title">特徴</h2>
 
 <ul class="simple">
-<li>Typesafe, in the spirit of Scala. All the APIs try to be as typesafe as possible.</li>
-<li>Async, in the spirit of Netty. Your request proccessing action does not have
-to respond immediately. Long polling, chunked response (streaming), WebSocket,
-and SockJS are supported.</li>
-<li>Fast built-in HTTP and HTTPS web server based on <a class="reference external" href="http://netty.io/">Netty</a>
-(HTTPS can use Java engine or native OpenSSL engine).
-Xitrum&#8217;s static file serving speed is <a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.</li>
-<li>Extensive client-side and server-side caching for faster responding.
-At the web server layer, small files are cached in memory, big files are sent
-using NIO&#8217;s zero copy.
-At the web framework layer you have can declare page, action, and object cache
-in the Rails style.
-<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google&#8217;s best practices</a>
-like conditional GET are applied for client-side caching.
-You can also force browsers to always send request to server to revalidate cache before using.</li>
-<li><a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range requests</a>
-for static files. Serving movie files for smartphones requires this feature.
-You can pause/resume file download.</li>
-<li><a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> support.</li>
-<li>Routes are automatically collected in the spirit of JAX-RS
-and Rails Engines. You don&#8217;t have to declare all routes in a single place.
-Think of this feature as distributed routes. You can plug an app into another app.
-If you have a blog engine, you can package it as a JAR file, then you can put
-that JAR file into another app and that app automatically has blog feature!
-Routing is also two-way: you can recreate URLs (reverse routing) in a typesafe way.
-You can document routes using <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
-<li>Classes and routes are automatically reloaded in development mode.</li>
-<li>Views can be written in a separate <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-template file or Scala inline XML. Both are typesafe.</li>
-<li>Sessions can be stored in cookies (more scalable) or clustered <a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a> (more secure).
-Hazelcast is recommended when using continuations-based Actions, since serialized
-continuations are usually too big to store in cookies. Hazelcast also gives
-in-process (thus faster and simpler to use) distribued cache and pubsub, you
-don&#8217;t need separate cache and pubsub servers.</li>
-<li><a class="reference external" href="http://docs.jquery.com/Plugins/validation">jQuery Validation</a> is integrated
-for browser side and server side validation.</li>
-<li>i18n using <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>.
-Translation text extraction is done automatically.
-You don&#8217;t have to manually mess with properties files.
-You can use powerful tools like <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a>
-for translating and merging translations.
-gettext is unlike most other solutions, both singular and plural forms are supported.</li>
-<li>Xitrum tries to fill the spectrum between <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
-and <a class="reference external" href="http://liftweb.net/">Lift</a>: more powerful than Scalatra and easier to
-use than Lift. You can easily create both RESTful APIs and postbacks. <a class="reference external" href="https://xitrum-framework.github.com/xitrum">Xitrum</a>
-is controller-first like Scalatra, not
-<a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> like Lift.
-Most people are familliar with controller-first style.</li>
+<li>Scalaの思想に基づく型安全。 全てのAPIは型安全であるべくデザインされています。</li>
+<li>Nettyの思想に基づく非同期。 リクエストを捌くアクションは直ぐにレスポンスを返す必要はありません。
+ロングポーリング、チャンクレスポンス（ストリーミング）、WebSocket、そしてSockJSをサポートしています。</li>
+<li><a class="reference external" href="http://netty.io/">Netty</a> 上に構築された高速HTTP(S) サーバー。
+(HTTPSはJavaエンジンとOpenSSLエンジン選択できます。)
+Xitrumの静的ファイル配信速度は <a class="reference external" href="https://gist.github.com/3293596">Nginxに匹敵</a> します。</li>
+<li>高速なレスポンスを実現する大規模なサーバサイドおよびクライアントサイド双方のキャッシュシステム。
+サーバーレイヤでは小さなファイルはメモリにキャッシュされ、大きなファイルはNIOのzero copyを使用して送信されます。
+ウェブフレームワークとしてpage、action、そしてobjectをRailsのスタイルでキャッシュすることができます。
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google&#8217;s best practices</a> にあるように、
+条件付きGETに対してはクライアントサイドキャッシュが適用されます。
+もちろんブラウザにリクエストの再送信を強制させることもできます。</li>
+<li>静的ファイルに対する <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range requests</a> サポート。
+この機能により、スマートフォンに対する動画配信や、全てのクライアントに対するファイルダウンロードの停止と再開を実現できます。</li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> 対応。</li>
+<li>JAX-RSとRailsエンジンの思想に基づく自動ルートコレクション。全てのルートを１箇所に宣言する必要はありません。
+この機能は分散ルーティングと捉えることができます。この機能のおかげでアプリケーションを他のアプリケーションに取り込むことが可能になります。
+もしあなたがブログエンジンを作ったならそれをJARにして別のアプリケーションに取り込むだけですぐにブログ機能が使えるようになるでしょう。
+ルーティングには更に2つの特徴があります。
+ルートの作成（リバースルーティング）は型安全に実施され、
+<a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a> を使用したルーティングに関するドキュメント作成も可能となります。</li>
+<li>クラスファイルおよびルートは開発時にはXitrumによって自動的にリロードされます。</li>
+<li>Viewは独立した <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> テンプレートとして、
+またはScalaによるインラインXMLとして、どちらも型安全に記述することが可能です。</li>
+<li>クッキーによる（よりスケーラブルな）、<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> クラスターによる(よりセキュアな)セッション管理。
+Hazelcastは（とても早くて、簡単に）プロセス間分散キャッシュも提供してくれます。
+このため別のキャッシュサーバーを用意する必要はなくなります。これはAkkaのpubsub機能にも言えることです。</li>
+<li><a class="reference external" href="http://docs.jquery.com/Plugins/validation">jQuery Validation</a> によるブラウザー、サーバーサイド双方でのバリデーション。</li>
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a> を使用した国際化対応。
+翻訳テキストの抽出は自動で行われるため、プロパティファイルに煩わされることはなくなるでしょう。
+翻訳とマージ作業には <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a> のようなパワフルなツールが使えます。
+gettextは、他のほとんどのソリューションとは異なり、単数系と複数系の両方の形式をサポートしています。</li>
 </ul>
+<p>Xitrumは <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a> よりパワフルに、
+<a class="reference external" href="http://liftweb.net/">Lift</a> より簡単であることで両者のスペクトルを満たすことを目的としています。
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> はScalatraのようにcontroller-firstであり、Liftのような <a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> ではありません。
+多くの開発者にとって馴染み部会controller-firstスタイルです。</p>
 
-        <p>Scalibility is easy, just throw more nodes to the pool.</p>
+        <p>スケーラビリティが簡単！ノードをクラスタへ追加するだけでいいです。</p>
         <img src="parts/whale_pool.png" alt="Scalability"/>
         <br /><br />
 
         <div class="span-22">
           <div class="span-11">
-            <h2 class="title">Hello World sample</h2>
+            <h2 class="title">Hello World サンプル</h2>
             <pre><code>import xitrum.Action
 import xitrum.annotation.GET
 
@@ -190,7 +178,7 @@ class HelloAction extends Action {
           </div>
 
           <div class="span-10">
-            <h2 class="title">Actor sample</h2>
+            <h2 class="title">Actor サンプル</h2>
             <p>Just annotate your actors and they will be accessible from web!</p>
             <pre><code>import scala.concurrent.duration._
 import akka.actor.ReceiveTimeout
@@ -226,7 +214,7 @@ class HelloActor extends ActorAction {
 
         <div class="span-22">
           <div class="span-11">
-            <h2 class="title">WebSocket sample</h2>
+            <h2 class="title">WebSocket サンプル</h2>
             <pre><code>import xitrum.{
   Action, WebSocketAction,
   WebSocketText, WebSocketBinary,
@@ -263,7 +251,7 @@ class EchoWebSocketActor extends WebSocketAction {
           </div>
 
           <div class="span-10">
-            <h2 class="title">SockJS sample</h2>
+            <h2 class="title">SockJS サンプル</h2>
             <pre><code>import xitrum.{Action, SockJsAction, SockJsText}
 import xitrum.annotation.SOCKJS
 
@@ -291,38 +279,39 @@ class EchoSockJsActor extends SockJsAction {
         <div class="clearfix"></div>
 
         <div class="section" id="create-new-empty-xitrum-project">
-          <h2 class="title">Create a new empty Xitrum project from skeleton</h2>
+          <h2 class="title">スケルトンから新しい空のプロジェクトを作成</h2>
 
-          <p>See <a href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a> project.</p>
+          <p><a href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a> プロジェクトを参照してください。</p>
 
-          <p>Download
-          <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>,
-          unzip, then run:</p>
+          <p>
+          <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>
+          をダウンロード、解凍し、次のコマンドを実行:
+          </p>
           <pre><code>sbt/sbt run</code></pre>
 
-          <p>Now you have a new empty project running at <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a>
-          and <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a></p>
+          <p>空のプロジェクトが <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a>
+          と <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a> で動くことを確認できます。</p>
 
-          <p>To generate Eclipse or IntelliJ project:</p>
+          <p>Eclipse、IntelliJ プロジェクト生成:</p>
           <pre><code>sbt/sbt eclipse
 sbt/sbt gen-idea</code></pre>
         </div>
 
         <div class="section" id="demo-projects">
-          <h2 class="title">Demo Projects</h2>
+          <h2 class="title">サンプル プロジェクト</h2>
           <ul>
             <li>
-              <a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">Xitrum Demos</a>
-              <a class="reference external" href="http://107.167.187.67/">(online site)</a>
+              <a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">Xitrum 各種デモ</a>
+              <a class="reference external" href="http://107.167.187.67/">(オンライン サイト)</a>
             </li>
-            <li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">Image Placeholder</a></li>
-            <li><a class="reference external" href="https://github.com/xitrum-framework/comy">Simple URL shortener</a></li>
-            <li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">Collecting routes from multiple modules (libs)</a></li>
+            <li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">画像 placeholder</a></li>
+            <li><a class="reference external" href="https://github.com/xitrum-framework/comy">URL短縮</a></li>
+            <li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">複数モジュール・ライブラリからルートの集取</a></li>
           </ul>
         </div>
 
         <div class="section" id="news">
-          <h2 class="title">News</h2>
+          <h2 class="title">ニュース</h2>
 
           <p><a href=https://github.com/xitrum-framework/xitrum/blob/master/CHANGELOG>CHANGELOG</a></p>
 
