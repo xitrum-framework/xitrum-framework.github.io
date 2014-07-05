@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tutorial &mdash; Xitrum Scala Web Framework Guide 3.14 documentation</title>
+    <title>Tutorial &mdash; Xitrum Scala Web Framework Guide 3.15 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.14',
+        VERSION:     '3.15',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.14 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.15 documentation" href="index.html" />
     <link rel="next" title="Action and view" href="action_view.html" />
     <link rel="prev" title="Introduction" href="intro.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="intro.html" title="Introduction"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.14 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.15 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -140,6 +140,38 @@ project source code. Run in a console window other than the console window for
 </pre></div>
 </div>
 <p>You can also use Eclipse or IntelliJ to edit and compile your project.</p>
+<div class="section" id="specify-classes-that-shouldn-t-be-reloaded">
+<h3>Specify classes that shouldn&#8217;t be reloaded<a class="headerlink" href="#specify-classes-that-shouldn-t-be-reloaded" title="Permalink to this headline">¶</a></h3>
+<p>Because Xitrum creates new a class loader each time it reloads classes, by default
+all classes will be reloaded and all Scala objects will be reinitialized in the
+new class loader. To avoid that, you may tell Xitrum to use the old ones in the
+parent class loader (system class loader) of the new class loader.</p>
+<p>There are cases you may want to do that. For example: Heavy classes that take
+time to initialize or rarely modified during development.</p>
+<p>Another example: Scala objects that contain actors with unique names. Reloading
+the objects will cause them to be initialized again, thus cause
+<tt class="docutils literal"><span class="pre">akka.actor.InvalidActorNameException:</span> <span class="pre">actor</span> <span class="pre">name</span> <span class="pre">[name</span> <span class="pre">goes</span> <span class="pre">here]</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">unique!</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+
+object WorkerPool {
+  val numWorkers = Runtime.getRuntime.availableProcessors * 2
+  val workers    = Seq.tabulate() { i =&gt;
+    val name = getClass.getName + &quot;-&quot; + i
+    xitrum.Config.actorSystem.actorOf(Props[Worker], name)
+  }
+}
+</pre></div>
+</div>
+<p>To specify that the above shouldn&#8217;t be reloaded:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">DevClassLoader</span><span class="o">.</span><span class="n">ignorePattern</span> <span class="o">=</span> <span class="s">&quot;mypackage</span><span class="se">\\</span><span class="s">.WorkerPool&quot;</span><span class="o">.</span><span class="n">r</span>
+</pre></div>
+</div>
+<p>If you want to disable the autoreload feature, set this before starting
+Xitrum server:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">autoreloadInDevMode</span> <span class="o">=</span> <span class="n">false</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="import-the-project-to-eclipse">
 <h2>Import the project to Eclipse<a class="headerlink" href="#import-the-project-to-eclipse" title="Permalink to this headline">¶</a></h2>
@@ -186,7 +218,10 @@ target
 <li><a class="reference internal" href="#">Tutorial</a><ul>
 <li><a class="reference internal" href="#create-a-new-empty-xitrum-project">Create a new empty Xitrum project</a></li>
 <li><a class="reference internal" href="#run">Run</a></li>
-<li><a class="reference internal" href="#autoreload">Autoreload</a></li>
+<li><a class="reference internal" href="#autoreload">Autoreload</a><ul>
+<li><a class="reference internal" href="#specify-classes-that-shouldn-t-be-reloaded">Specify classes that shouldn&#8217;t be reloaded</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#import-the-project-to-eclipse">Import the project to Eclipse</a></li>
 <li><a class="reference internal" href="#import-the-project-to-intellij">Import the project to IntelliJ</a></li>
 <li><a class="reference internal" href="#ignore-files">Ignore files</a></li>
@@ -234,7 +269,7 @@ target
         <li class="right" >
           <a href="intro.html" title="Introduction"
              >previous</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.14 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.15 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
