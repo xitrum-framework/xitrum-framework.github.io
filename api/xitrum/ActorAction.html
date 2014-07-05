@@ -1710,7 +1710,7 @@ has been sent to the client.
               
         </dd></dl></div>
     </li><li name="xitrum.action.Url#publicUrl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="publicUrl(directory:String,devFile:String,prodFile:String):String"></a>
+      <a id="publicUrl(directory:String,devPath:String,prodPath:String):String"></a>
       <a id="publicUrl(String,String,String):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -1718,15 +1718,34 @@ has been sent to the client.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">publicUrl</span><span class="params">(<span name="directory">directory: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="devFile">devFile: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="prodFile">prodFile: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">publicUrl</span><span class="params">(<span name="directory">directory: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="devPath">devPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="prodPath">prodPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../index.html#xitrum.ActorAction@publicUrl(directory:String,devFile:String,prodFile:String):String" title="Permalink" target="_top">
+      <a href="../index.html#xitrum.ActorAction@publicUrl(directory:String,devPath:String,prodPath:String):String" title="Permalink" target="_top">
         <img src="../lib/permalink.png" />
       </a>
     </span>
       <p class="shortcomment cmt">Ex: publicUrl(&quot;jquery/2.</p><div class="fullcomment"><div class="comment cmt"><p>Ex: publicUrl(&quot;jquery/2.1.1&quot;, &quot;jquery.js&quot;, &quot;jquery.min.js&quot;)
-</p></div><dl class="paramcmts block"><dt class="param">devFile</dt><dd class="cmt"><p>File to use in development mode</p></dd><dt class="param">prodFile</dt><dd class="cmt"><p>File to use in production mode
+</p></div><dl class="paramcmts block"><dt class="param">directory</dt><dd class="cmt"><p>Relative to the &quot;public&quot; directory, without leading &quot;/&quot;</p></dd><dt class="param">devPath</dt><dd class="cmt"><p>File path to use in development mode, relative to &quot;directory&quot; above</p></dd><dt class="param">prodPath</dt><dd class="cmt"><p>File path to use in production mode, relative to &quot;directory&quot; above
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="action/Url.html" class="extype" name="xitrum.action.Url">Url</a></dd></dl></div>
+    </li><li name="xitrum.action.Url#publicUrl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="publicUrl(devPath:String,prodPath:String):String"></a>
+      <a id="publicUrl(String,String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">publicUrl</span><span class="params">(<span name="devPath">devPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="prodPath">prodPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../index.html#xitrum.ActorAction@publicUrl(devPath:String,prodPath:String):String" title="Permalink" target="_top">
+        <img src="../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Ex: publicUrl(&quot;jquery.</p><div class="fullcomment"><div class="comment cmt"><p>Ex: publicUrl(&quot;jquery.js&quot;, &quot;jquery.min.js&quot;)
+</p></div><dl class="paramcmts block"><dt class="param">devPath</dt><dd class="cmt"><p>File path to use in development mode, relative to the &quot;public&quot; directory, without leading &quot;/&quot;</p></dd><dt class="param">prodPath</dt><dd class="cmt"><p>File path to use in production mode, relative to the &quot;public&quot; directory, without leading &quot;/&quot;
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="action/Url.html" class="extype" name="xitrum.action.Url">Url</a></dd></dl></div>
     </li><li name="xitrum.action.Url#publicUrl" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="publicUrl(path:String):String"></a>
@@ -1744,7 +1763,9 @@ has been sent to the client.
         <img src="../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Relative to the &quot;public&quot; directory, without leading &quot;/&quot;</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="action/Url.html" class="extype" name="xitrum.action.Url">Url</a></dd></dl></div>
+      <p class="shortcomment cmt">Ex: publicUrl(&quot;jquery/2.</p><div class="fullcomment"><div class="comment cmt"><p>Ex: publicUrl(&quot;jquery/2.1.1/jquery.js&quot;)
+</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Relative to the &quot;public&quot; directory, without leading &quot;/&quot;
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="action/Url.html" class="extype" name="xitrum.action.Url">Url</a></dd></dl></div>
     </li><li name="xitrum.scope.request.RequestEnv#queryParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="queryParams:xitrum.scope.request.Params"></a>
       <a id="queryParams:Params"></a>

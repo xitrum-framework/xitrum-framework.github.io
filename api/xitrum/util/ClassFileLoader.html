@@ -94,7 +94,7 @@ development.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="xitrum.util.ClassFileLoader#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(classesDirectory:String,fallback:ClassLoader):xitrum.util.ClassFileLoader"></a>
+      <a id="&lt;init&gt;(classesDirectory:String):xitrum.util.ClassFileLoader"></a>
       <a id="&lt;init&gt;:ClassFileLoader"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -102,15 +102,14 @@ development.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ClassFileLoader</span><span class="params">(<span name="classesDirectory">classesDirectory: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fallback">fallback: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>)</span>
+        <span class="name">ClassFileLoader</span><span class="params">(<span name="classesDirectory">classesDirectory: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#xitrum.util.ClassFileLoader@&lt;init&gt;(classesDirectory:String,fallback:ClassLoader):xitrum.util.ClassFileLoader" title="Permalink" target="_top">
+      <a href="../../index.html#xitrum.util.ClassFileLoader@&lt;init&gt;(classesDirectory:String):xitrum.util.ClassFileLoader" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">classesDirectory</dt><dd class="cmt"><p>Example: target/scala-2.11/classes</p></dd><dt class="param">fallback</dt><dd class="cmt"><p>Class loader for loading other classes, not inside classesDirectory
-</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">classesDirectory</dt><dd class="cmt"><p>Example: target/scala-2.11/classes</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -188,6 +187,40 @@ development.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="xitrum.util.ClassFileLoader#cache" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cache:scala.collection.mutable.Map[String,Class[_]]"></a>
+      <a id="cache:Map[String,Class[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">cache</span><span class="result">: <span class="extype" name="scala.collection.mutable.Map">Map</span>[<span class="extype" name="java.lang.String">String</span>, <span class="extype" name="java.lang.Class">Class</span>[_]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.util.ClassFileLoader@cache:scala.collection.mutable.Map[String,Class[_]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="xitrum.util.ClassFileLoader#classNameToFilePath" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="classNameToFilePath(name:String):Option[String]"></a>
+      <a id="classNameToFilePath(String):Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">classNameToFilePath</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.util.ClassFileLoader@classNameToFilePath(name:String):Option[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>None to use the fallback ClassLoader</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="java.lang.ClassLoader#clearAssertionStatus" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clearAssertionStatus():Unit"></a>
       <a id="clearAssertionStatus():Unit"></a>
@@ -354,6 +387,26 @@ development.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="xitrum.util.ClassFileLoader#fallback" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fallback:ClassLoader"></a>
+      <a id="fallback:ClassLoader"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fallback</span><span class="result">: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.util.ClassFileLoader@fallback:ClassLoader" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fallback ClassLoader used when the class file couldn't be found or when
+class name matches ignorePattern.</p><div class="fullcomment"><div class="comment cmt"><p>Fallback ClassLoader used when the class file couldn't be found or when
+class name matches ignorePattern. Default: current ClassLoader.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -653,6 +706,26 @@ development.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="xitrum.util.ClassFileLoader#ignorePattern" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ignorePattern:scala.util.matching.Regex"></a>
+      <a id="ignorePattern:Regex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ignorePattern</span><span class="result">: <span class="extype" name="scala.util.matching.Regex">Regex</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.util.ClassFileLoader@ignorePattern:scala.util.matching.Regex" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Ignoring to reload classes that should be reloaded may cause exceptions like:
+java.</p><div class="fullcomment"><div class="comment cmt"><p>Ignoring to reload classes that should be reloaded may cause exceptions like:
+java.lang.ClassCastException: demos.action.Article cannot be cast to demos.action.Article
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
