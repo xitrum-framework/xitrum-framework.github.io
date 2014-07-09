@@ -94,7 +94,7 @@ development.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="xitrum.util.ClassFileLoader#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(classesDirectory:String):xitrum.util.ClassFileLoader"></a>
+      <a id="&lt;init&gt;(dirs:Seq[java.nio.file.Path]):xitrum.util.ClassFileLoader"></a>
       <a id="&lt;init&gt;:ClassFileLoader"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -102,14 +102,15 @@ development.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ClassFileLoader</span><span class="params">(<span name="classesDirectory">classesDirectory: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">ClassFileLoader</span><span class="params">(<span name="dirs">dirs: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.nio.file.Path">Path</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#xitrum.util.ClassFileLoader@&lt;init&gt;(classesDirectory:String):xitrum.util.ClassFileLoader" title="Permalink" target="_top">
+      <a href="../../index.html#xitrum.util.ClassFileLoader@&lt;init&gt;(dirs:Seq[java.nio.file.Path]):xitrum.util.ClassFileLoader" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" />
       </a>
     </span>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">classesDirectory</dt><dd class="cmt"><p>Example: target/scala-2.11/classes</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">dirs</dt><dd class="cmt"><p>Directories to search for .class files, example: Seq(&quot;target/scala-2.11/classes&quot;)
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -405,7 +406,7 @@ development.
     </span>
       <p class="shortcomment cmt">Fallback ClassLoader used when the class file couldn't be found or when
 class name matches ignorePattern.</p><div class="fullcomment"><div class="comment cmt"><p>Fallback ClassLoader used when the class file couldn't be found or when
-class name matches ignorePattern. Default: current ClassLoader.
+class name matches ignorePattern. Default: Thread.currentThread.getContextClassLoader.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
