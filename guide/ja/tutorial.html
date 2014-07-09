@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>チュートリアル &mdash; Xitrum Scala Web Framework Guide 3.15 ドキュメント</title>
+    <title>チュートリアル &mdash; Xitrum Scala Web Framework Guide 3.16 ドキュメント</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.15',
+        VERSION:     '3.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.15 ドキュメント" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.16 ドキュメント" href="index.html" />
     <link rel="next" title="Action と view" href="action_view.html" />
     <link rel="prev" title="はじめに" href="intro.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="intro.html" title="はじめに"
              accesskey="P">前へ</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.15 ドキュメント</a> &raquo;</li> 
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.16 ドキュメント</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -136,6 +136,37 @@ Xitrumは既にインスタンスとして生成されたクラスはリロー�
 </pre></div>
 </div>
 <p>EclipseやIntelliJを使用してソースコードの編集やコンパイルを行うことも可能です。</p>
+<div class="section" id="id5">
+<h3>自動リロード対象外クラスの設定<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>デフォルトではクラスファイルリロード時にXitrumは新しいクラスローダーを生成し、
+生成されたクラスローダーでは、全てのクラスがリロードされ、Scalaオブジェクトが初期化されます。</p>
+<p>しかしプロジェクトには
+例えば、重厚で初期化に時間がかかるクラスや、めったに変更されることのないクラスなど、
+再ロードの対象外としたいファイルがいくつかあります。
+また、以下の例のように、ユニークな名前を保持するScalaオブジェクトが再ロードによって初期化されてしまった場合、
+<tt class="docutils literal"><span class="pre">akka.actor.InvalidActorNameException:</span> <span class="pre">actor</span> <span class="pre">name</span> <span class="pre">[name</span> <span class="pre">goes</span> <span class="pre">here]</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">unique!</span></tt> が発生してしまいます。</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+
+object WorkerPool {
+  val numWorkers = Runtime.getRuntime.availableProcessors * 2
+  val workers    = Seq.tabulate() { i =&gt;
+    val name = getClass.getName + &quot;-&quot; + i
+    xitrum.Config.actorSystem.actorOf(Props[Worker], name)
+  }
+}
+</pre></div>
+</div>
+<p>自動リロード対象外のクラスを指定することで、親クラスローダー（システムクラスローダー）がロードしたクラスを
+新しいクラスローダーから使用することができるようになります。</p>
+<p>再ロードの対象外を指定するには:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">DevClassLoader</span><span class="o">.</span><span class="n">ignorePattern</span> <span class="o">=</span> <span class="s">&quot;mypackage</span><span class="se">\\</span><span class="s">.WorkerPool&quot;</span><span class="o">.</span><span class="n">r</span>
+</pre></div>
+</div>
+<p>もし、自動リロード機能自体を無効にする場合、Xitrum serverを起動する前にいかの1行を加えます:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">autoreloadInDevMode</span> <span class="o">=</span> <span class="n">false</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="eclipse">
 <h2>Eclipseプロジェクトの作成<a class="headerlink" href="#eclipse" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -182,7 +213,10 @@ target
 <li><a class="reference internal" href="#">チュートリアル</a><ul>
 <li><a class="reference internal" href="#xitrum">Xitrumプロジェクトの作成</a></li>
 <li><a class="reference internal" href="#id2">起動</a></li>
-<li><a class="reference internal" href="#id4">自動リロード</a></li>
+<li><a class="reference internal" href="#id4">自動リロード</a><ul>
+<li><a class="reference internal" href="#id5">自動リロード対象外クラスの設定</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#eclipse">Eclipseプロジェクトの作成</a></li>
 <li><a class="reference internal" href="#intellij-idea">IntelliJ IDEAプロジェクトの作成</a></li>
 <li><a class="reference internal" href="#ignore">ignoreファイルの設定</a></li>
@@ -230,7 +264,7 @@ target
         <li class="right" >
           <a href="intro.html" title="はじめに"
              >前へ</a> |</li>
-        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.15 ドキュメント</a> &raquo;</li> 
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.16 ドキュメント</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
