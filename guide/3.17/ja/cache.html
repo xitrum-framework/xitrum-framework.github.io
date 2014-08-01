@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>サーバーサイドキャッシュ &mdash; Xitrum Scala Web Framework Guide 3.17 ドキュメント</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.17',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.17 ドキュメント" href="index.html" />
+    <link rel="next" title="I18n" href="i18n.html" />
+    <link rel="prev" title="アクションフィルター" href="filter.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="アクションフィルター"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.17 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>サーバーサイドキャッシュ<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><a class="reference internal" href="cluster.html"><em>クラスタリング</em></a> の章についても参照してください。</p>
+<p>より高速なレスポンスの実現のために、Xitrumはクライアントサイドとサーバーサイドにおける広範なキャッシュ機能を提供します。</p>
+<p>サーバーサイドレイヤーでは、小さなファイルはメモリ上にキャッシュされ、大きなファイルはNIOのゼロコピーを使用して送信されます。
+Xitrumの静的ファイルの配信速度は <a class="reference external" href="https://gist.github.com/3293596">Nginxと同等</a> です。</p>
+<p>Webフレームワークのレイヤーでは、Railsのスタイルでページやアクション、オブジェクトをキャッシュすることができます。</p>
+<p><a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google&#8217;s best practices（英語）</a>
+にあるように、条件付きGETリクエストはクライアントサイドでキャッシュされます。</p>
+<p>動的なコンテンツに対しては、もしファイルが作成されてから変更されない場合、クライアントに積極的にキャッシュするように
+ヘッダーをセットする必要があります。
+このケースでは、<tt class="docutils literal"><span class="pre">setClientCacheAggressively()</span></tt> をアクションにて呼び出すことで実現できます。</p>
+<p>クライアントにキャッシュさせたくない場合もあるでしょう、
+そういったケースでは、 <tt class="docutils literal"><span class="pre">setNoClientCache()</span></tt> をアクションにて呼び出すことで実現できます。</p>
+<p>サーバーサイドキャッシュについては以下のサンプルでより詳しく説明します。</p>
+<div class="section" id="id2">
+<h2>ページまたはアクションのキャッシュ<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{GET, CacheActionMinute, CachePageMinute}
+
+@GET(&quot;articles&quot;)
+@CachePageMinute(1)
+class ArticlesIndex extends Action {
+  def execute() {
+    ...
+  }
+}
+
+@GET(&quot;articles/:id&quot;)
+@CacheActionMinute(1)
+class ArticlesShow extends Action {
+  def execute() {
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>&#8220;page cache&#8221; と &#8220;acation cache&#8221; の期間設定は <a class="reference external" href="http://guides.rubyonrails.org/caching_with_rails.html">Ruby on Rails</a> を参考にしています。</p>
+<p>リクエスト処理プロセスの順番は以下のようになります。</p>
+<ol class="arabic simple">
+<li>リクエスト -&gt; (2) Beforeフィルター -&gt; (3) アクション execute method -&gt; (4) レスポンス</li>
+</ol>
+<p>初回のリクエスト時に、Xitrumはレスポンスを指定された期間だけキャッシュします。
+<tt class="docutils literal"><span class="pre">&#64;CachePageMinute(1)</span></tt> や <tt class="docutils literal"><span class="pre">&#64;CacheActionMinute(1)</span></tt> は1分間キャッシュすることを意味します。
+Xitrumはレスポンスステータスが &#8220;200 OK&#8221; の場合のみキャッシュします。
+そのため、レスポンスステータスが &#8220;500 Internal Server Error&#8221; や &#8220;302 Found&#8221; (リダイレクト) となるレスポンスはキャッシュされせん。</p>
+<p>同じアクションに対する2回目以降のリクエストは、もし、キャッシュされたレスポンスが有効期間内の場合、
+Xitrumはすぐにキャッシュされたレスポンスを返却します:</p>
+<ul class="simple">
+<li>ページキャッシュの場合、 処理プロセスは、　(1) -&gt; (4) となります。</li>
+<li>アクションキャッシュの場合、 (1) -&gt; (2) -&gt; (4), またはBeforeフィルターが&#8221;false&#8221;を返した場合 (1) -&gt; (2) となります。</li>
+</ul>
+<p>すなわち、actionキャッシュとpageキャッシュとの違いは、Beforeフィルターを実施するか否かになります。</p>
+<p>一般に、ページキャッシュは全てのユーザーに共通なレスポンスの場合に使用します。
+アクションキャッシュは、Beforeフィルターを通じて、例えばユーザーのログイン状態チェックなどを行い、キャッシュされたレスポンスを &#8220;ガード&#8221; する場合に用います:</p>
+<ul class="simple">
+<li>ログインしている場合、キャッシュされたレスポンスにアクセス可能。</li>
+<li>ログインしていない場合、ログインページヘリダイレクト。</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>オブジェクトのキャッシュ<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="http://xitrum-framework.github.io/api/index.html#xitrum.Cache">xitrum.Cache</a> のインスタンスである、
+<tt class="docutils literal"><span class="pre">xitrum.Config.xitrum.cache</span></tt> を使用することができます。</p>
+<p>明示的な有効期限を設定しない場合:</p>
+<ul class="simple">
+<li>put(key, value)</li>
+</ul>
+<p>有効期限を設定する場合:</p>
+<ul class="simple">
+<li>putSecond(key, value, seconds)</li>
+<li>putMinute(key, value, minutes)</li>
+<li>putHour(key, value, hours)</li>
+<li>putDay(key, value, days)</li>
+</ul>
+<p>存在しない場合のみキャッシュする方法:</p>
+<ul class="simple">
+<li>putIfAbsent(key, value)</li>
+<li>putIfAbsentSecond(key, value, seconds)</li>
+<li>putIfAbsentMinute(key, value, minutes)</li>
+<li>putIfAbsentHour(key, value, hours)</li>
+<li>putIfAbsentDay(key, value, days)</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>キャッシュの削除<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ページまたはアクションキャッシュの削除:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">removeAction</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>オブジェクトキャッシュの削除:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>指定したプレフィックスで始まるキー全てを削除:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">removePrefix</span><span class="p">(</span><span class="n">keyPrefix</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">removePrefix</span></tt> を使用することで、プレフィックスを使用した階層的なキャッシュを構築することができます。</p>
+<p>例えば、記事に関連する要素をキャッシュしたい場合、記事が変更された時に関連するキャッシュは以下の方法で全てクリアできます。</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Config.xitrum.cache
+
+// prefixを使用してキャッシュします。
+val prefix = &quot;articles/&quot; + article.id
+cache.put(prefix + &quot;/likes&quot;, likes)
+cache.put(prefix + &quot;/comments&quot;, comments)
+
+// articleに関連する全てのキャッシュを削除したい場合は以下のようにします。
+cache.remove(prefix)
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>キャッシュエンジンの設定<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Xitrumのキャッシュ機能はキャッシュエンジンによって提供されます。
+キャッシュエンジンはプロジェクトの必要に応じて選択することができます。
+キャッシュエンジンの設定は、<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a> において、使用するエンジンに応じて以下の2通りの記載方法で設定できます。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cache</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>または:</p>
+<div class="highlight-python"><div class="highlight"><pre>cache {
+  &quot;my.cache.EngineClassName&quot; {
+    option1 = value1
+    option2 = value2
+  }
+}
+</pre></div>
+</div>
+<p>Xitrumは以下のエンジンを内包しています:</p>
+<div class="highlight-python"><div class="highlight"><pre>cache {
+  # Simple in-memory cache
+  &quot;xitrum.local.LruCache&quot; {
+    maxElems = 10000
+  }
+}
+</pre></div>
+</div>
+<p>もし、クラスタリングされたサーバーを使用する場合、キャッシュエンジンには、<a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a> を使用することができます。</p>
+<p>独自のキャッシュエンジンを使用する場合、<tt class="docutils literal"><span class="pre">xitrum.Cache</span></tt> の <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Cache.scala">interface</a> を実装してください。</p>
+</div>
+<div class="section" id="id6">
+<h2>キャッシュ動作の仕組み<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>入力方向（Inbound）:</p>
+<div class="highlight-python"><div class="highlight"><pre>               アクションのレスポンスが
+               キャッシュ対象かつ
+request        キャッシュが存在している
+-------------------------+---------------NO---------------&gt;
+                         |
+&lt;---------YES------------+
+  キャッシュからレスポンス
+</pre></div>
+</div>
+<p>出力方向（Outbound）:</p>
+<div class="highlight-python"><div class="highlight"><pre>               アクションのレスポンスが
+               キャッシュ対象かつ
+               キャッシュがまだ存在していない 　          response
+&lt;---------NO-------------+---------------------------------
+                         |
+&lt;---------YES------------+
+  store response to cache
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum-util-locallrucache">
+<h2>xitrum.util.LocalLruCache<a class="headerlink" href="#xitrum-util-locallrucache" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>上記で述べたキャッシュエンジンは、システム全体で共有されるキャッシュとなります。
+もし小さくで簡易なキャッシュエンジンのみ必要な場合、<tt class="docutils literal"><span class="pre">xitrum.util.LocalLruCache</span></tt> を使用します。</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.LocalLruCache
+
+// LRU (Least Recently Used) キャッシュは1000要素まで保存できます
+// キーとバリューは両方String型となります
+val cache = LocalLruCache[String, String](1000)
+</pre></div>
+</div>
+<p>使用できる <tt class="docutils literal"><span class="pre">cache</span></tt> は <a class="reference external" href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html">java.util.LinkedHashMap</a> のインスタンスであるため、
+<tt class="docutils literal"><span class="pre">LinkedHashMap</span></tt> のメソッドを使用して扱う事ができます。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">サーバーサイドキャッシュ</a><ul>
+<li><a class="reference internal" href="#id2">ページまたはアクションのキャッシュ</a></li>
+<li><a class="reference internal" href="#id3">オブジェクトのキャッシュ</a></li>
+<li><a class="reference internal" href="#id4">キャッシュの削除</a></li>
+<li><a class="reference internal" href="#id5">キャッシュエンジンの設定</a></li>
+<li><a class="reference internal" href="#id6">キャッシュ動作の仕組み</a></li>
+<li><a class="reference internal" href="#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="filter.html"
+                        title="前の章へ">アクションフィルター</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="次の章へ">I18n</a></p>
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cache.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="アクションフィルター"
+             >前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.17 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2 で生成しました。
+    </div>
+  </body>
+</html>

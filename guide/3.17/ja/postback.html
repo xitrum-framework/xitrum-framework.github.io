@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ポストバック &mdash; Xitrum Scala Web Framework Guide 3.17 ドキュメント</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.17',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.17 ドキュメント" href="index.html" />
+    <link rel="next" title="XML" href="xml.html" />
+    <link rel="prev" title="テンプレートエンジン" href="template_engines.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="template_engines.html" title="テンプレートエンジン"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.17 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>ポストバック<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>Webアプリケーションには主に以下の2つのユースケースが考えられます。</p>
+<ul class="simple">
+<li>機械向けのサーバー機能: スマートフォンや他のWebサイトのためのWebサービスとしてRESTfulなAPIを作成する必要があるケース</li>
+<li>人間向けのサーバー機能: インタラクティブなWebページを作成する必要があるケース</li>
+</ul>
+<p>WebフレームワークとしてXitrumはこれら2つのユースケースを簡単に解決することを目指しています。
+1つ目のユースケースには、<a class="reference internal" href="restful.html"><em>RESTful actions</em></a> を適用することで対応し、
+2つ目のユースケースには、Ajaxフォームポストバックを適用することで対応します。
+ポストバックのアイデアについては以下のリンク（英語）を参照することを推奨します。</p>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></li>
+<li><a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></li>
+</ul>
+<p>Xitrumのポストバック機能は <a class="reference external" href="http://nitrogenproject.com/">Nitrogen</a> を参考にしています。</p>
+<div class="section" id="id2">
+<h2>レイアウト<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>AppAction.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>フォーム<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Articles.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, POST, First}
+import xitrum.validator._
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends AppAction {
+  def execute() {
+    val id      = param(&quot;id&quot;)
+    val article = Article.find(id)
+    respondInlineView(
+      &lt;h1&gt;{article.title}&lt;/h1&gt;
+      &lt;div&gt;{article.body}&lt;/div&gt;
+    )
+  }
+}
+
+@First  // Force this route to be matched before &quot;show&quot;
+@GET(&quot;articles/new&quot;)
+class ArticlesNew extends AppAction {
+  def execute() {
+    respondInlineView(
+      &lt;form data-postback=&quot;submit&quot; action={url[ArticlesCreate]}&gt;
+        &lt;label&gt;Title&lt;/label&gt;
+        &lt;input type=&quot;text&quot; name=&quot;title&quot; class=&quot;required&quot; /&gt;&lt;br /&gt;
+
+        &lt;label&gt;Body&lt;/label&gt;
+        &lt;textarea name=&quot;body&quot; class=&quot;required&quot;&gt;&lt;/textarea&gt;&lt;br /&gt;
+
+        &lt;input type=&quot;submit&quot; value=&quot;Save&quot; /&gt;
+      &lt;/form&gt;
+    )
+  }
+}
+
+@POST(&quot;articles&quot;)
+class ArticlesCreate extends AppAction {
+  def execute() {
+    val title   = param(&quot;title&quot;)
+    val body    = param(&quot;body&quot;)
+    val article = Article.save(title, body)
+
+    flash(&quot;Article has been saved.&quot;)
+    jsRedirectTo(show, &quot;id&quot; -&gt; article.id)
+  }
+}
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">submit</span></tt> イベントがJavaScript上で実行された時、フォームの内容は <tt class="docutils literal"><span class="pre">ArticlesCreate</span></tt> へポストバックされます。
+<tt class="docutils literal"><span class="pre">&lt;form&gt;</span></tt> の <tt class="docutils literal"><span class="pre">action</span></tt> 属性は暗号化され、暗号化されたURLはCSRF対策トークンとして機能します。</p>
+</div>
+<div class="section" id="form">
+<h2>formエレメント以外への適用<a class="headerlink" href="#form" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ポストバックはform以外のHTMLエレメントにも適用することができます。</p>
+<p>リンク要素への適用例:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot; data-postback=&quot;click&quot; action={url[LogoutAction]}&gt;Logout&lt;/a&gt;
+</pre></div>
+</div>
+<p>リンク要素をクリックした場合LogoutActionへポストバックが行われます。</p>
+</div>
+<div class="section" id="id4">
+<h2>コンファームダイアログ<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>コンファームダイアログを表する場合:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot; data-postback=&quot;click&quot;
+            action={url[LogoutAction]}
+            data-confirm=&quot;Do you want to logout?&quot;&gt;Logout&lt;/a&gt;
+</pre></div>
+</div>
+<p>&#8220;キャンセル&#8221;がクリックされた場合、ポストバックの送信は行われません。</p>
+</div>
+<div class="section" id="id5">
+<h2>パラメーターの追加<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>formエレメントに対して  <tt class="docutils literal"><span class="pre">&lt;input</span> <span class="pre">type=&quot;hidden&quot;...</span></tt> を追加することで追加パラメーターをポストバックリクエストに付与することができます。</p>
+<p>formエレメント以外に対しては、以下のように指定します:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot;
+   data-postback=&quot;click&quot;
+   action={url[ArticlesDestroy](&quot;id&quot; -&gt; item.id)}
+   data-extra=&quot;_method=delete&quot;
+   data-confirm={&quot;Do you want to delete %s?&quot;.format(item.name)}&gt;Delete&lt;/a&gt;
+</pre></div>
+</div>
+<p>または以下のように別のエレメントに指定することも可能です:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;form id=&quot;myform&quot; data-postback=&quot;submit&quot; action={url[SiteSearch]}&gt;
+  Search:
+  &lt;input type=&quot;text&quot; name=&quot;keyword&quot; /&gt;
+
+  &lt;a class=&quot;pagination&quot;
+     href=&quot;#&quot;
+     data-postback=&quot;click&quot;
+     data-extra=&quot;#myform&quot;
+     action={url[SiteSearch](&quot;page&quot; -&gt; page)}&gt;{page}&lt;/a&gt;
+&lt;/form&gt;
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">#myform</span></tt> はJQueryのセレクタ形式で追加パラメーターを含むエレメントを指定します。</p>
+</div>
+<div class="section" id="id6">
+<h2>ローディングイメージの表示<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下の様なローディングイメージをAjax通信中に表示する場合、</p>
+<img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
+<p>テンプレート内で、<tt class="docutils literal"><span class="pre">jsDefault</span></tt> (これは <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a> をインクルードするための関数です) の後に次の1行を追加します。</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">ajaxLoadingImg</span> <span class="o">=</span> <span class="s">&#39;path/to/your/image&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ポストバック</a><ul>
+<li><a class="reference internal" href="#id2">レイアウト</a></li>
+<li><a class="reference internal" href="#id3">フォーム</a></li>
+<li><a class="reference internal" href="#form">formエレメント以外への適用</a></li>
+<li><a class="reference internal" href="#id4">コンファームダイアログ</a></li>
+<li><a class="reference internal" href="#id5">パラメーターの追加</a></li>
+<li><a class="reference internal" href="#id6">ローディングイメージの表示</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="前の章へ">テンプレートエンジン</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="xml.html"
+                        title="次の章へ">XML</a></p>
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/postback.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="template_engines.html" title="テンプレートエンジン"
+             >前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.17 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2 で生成しました。
+    </div>
+  </body>
+</html>

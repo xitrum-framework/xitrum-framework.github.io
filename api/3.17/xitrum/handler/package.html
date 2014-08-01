@@ -1,0 +1,320 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>handler - xitrum.handler</title>
+          <meta name="description" content="handler - xitrum.handler" />
+          <meta name="keywords" content="handler xitrum.handler" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'xitrum.handler.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="xitrum">xitrum</a></p>
+        <h1>handler</h1> <span class="permalink">
+      <a href="../../index.html#xitrum.handler.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handler</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="xitrum.handler.DefaultHttpChannelInitializer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DefaultHttpChannelInitializerextendsChannelInitializer[io.netty.channel.socket.SocketChannel]"></a>
+      <a id="DefaultHttpChannelInitializer:DefaultHttpChannelInitializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultHttpChannelInitializer.html"><span class="name">DefaultHttpChannelInitializer</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.ChannelInitializer">ChannelInitializer</span>[<span class="extype" name="io.netty.channel.socket.SocketChannel">SocketChannel</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@DefaultHttpChannelInitializerextendsChannelInitializer[io.netty.channel.socket.SocketChannel]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.handler.HandlerEnv" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HandlerEnvextendsHashMap[Any,Any]"></a>
+      <a id="HandlerEnv:HandlerEnv"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HandlerEnv.html"><span class="name">HandlerEnv</span></a><span class="result"> extends <span class="extype" name="scala.collection.mutable.HashMap">HashMap</span>[<span class="extype" name="scala.Any">Any</span>, <span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@HandlerEnvextendsHashMap[Any,Any]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Env is basically a map for sharing data between handlers.</p><div class="fullcomment"><div class="comment cmt"><p>Env is basically a map for sharing data between handlers. But for more
+typesafe, fixed data variables are put inside.
+</p></div></div>
+    </li><li name="xitrum.handler.SslChannelInitializer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SslChannelInitializerextendsChannelInitializer[io.netty.channel.socket.SocketChannel]"></a>
+      <a id="SslChannelInitializer:SslChannelInitializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SslChannelInitializer.html"><span class="name">SslChannelInitializer</span></a><span class="result"> extends <span class="extype" name="io.netty.channel.ChannelInitializer">ChannelInitializer</span>[<span class="extype" name="io.netty.channel.socket.SocketChannel">SocketChannel</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@SslChannelInitializerextendsChannelInitializer[io.netty.channel.socket.SocketChannel]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This is a wrapper.</p><div class="fullcomment"><div class="comment cmt"><p>This is a wrapper. It prepends SSL handler to the non-SSL pipeline.</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Sharable</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="xitrum.handler.AccessLog" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AccessLog"></a>
+      <a id="AccessLog:AccessLog"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="AccessLog$.html"><span class="name">AccessLog</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@AccessLog" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.DefaultHttpChannelInitializer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DefaultHttpChannelInitializer"></a>
+      <a id="DefaultHttpChannelInitializer:DefaultHttpChannelInitializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultHttpChannelInitializer$.html"><span class="name">DefaultHttpChannelInitializer</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@DefaultHttpChannelInitializer" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sharable handlers are put here so that they can be easily picked up by apps
+that want to use custom pipeline.</p><div class="fullcomment"><div class="comment cmt"><p>Sharable handlers are put here so that they can be easily picked up by apps
+that want to use custom pipeline. Those apps may only want a subset of
+default handlers.</p><p>When an app uses its own dispatcher (not Xitrum's routing/dispatcher) and
+only needs Xitrum's fast static file serving, it may use only these handlers:</p><p>Inbound:
+  HttpRequestDecoder
+  Request2Env
+  PublicFileServer
+  Its own dispatcher</p><p>Outbound:
+  HttpResponseEncoder
+  ChunkedWriteHandler
+  XSendFile
+</p></div></div>
+    </li><li name="xitrum.handler.FlashSocketPolicyServer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FlashSocketPolicyServer"></a>
+      <a id="FlashSocketPolicyServer:FlashSocketPolicyServer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FlashSocketPolicyServer$.html"><span class="name">FlashSocketPolicyServer</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@FlashSocketPolicyServer" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.NetOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NetOption"></a>
+      <a id="NetOption:NetOption"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NetOption$.html"><span class="name">NetOption</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@NetOption" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.NoRealPipelining" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NoRealPipelining"></a>
+      <a id="NoRealPipelining:NoRealPipelining"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoRealPipelining$.html"><span class="name">NoRealPipelining</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@NoRealPipelining" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">http://en.wikipedia.org/wiki/HTTP_pipelining</p><div class="fullcomment"><div class="comment cmt"><p>http://en.wikipedia.org/wiki/HTTP_pipelining</p><p>Xitrum does not support real pipelining. A client may send multiple requests,
+but Xitrum will not process them at concurrently. Xitrum will process one
+by one.</p><p>From Mongrel2 doc: http://mongrel2.org/manual/book-finalch6.html</p><p>&quot;Where problems come in is with pipe-lined requests, meaning a browser sends
+a bunch of requests in a big blast, then hangs out for all the responses.
+This was such a horrible stupid idea that pretty much everone gets it wrong
+and doesn't support it fully, if at all. The reason is it's much too easy to
+blast a server with a ton of request, wait a bit so they hit proxied backends,
+and then close the socket. The web server and the backends are now screwed
+having to handle these requests which will go nowhere.&quot;
+</p></div></div>
+    </li><li name="xitrum.handler.SslChannelInitializer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SslChannelInitializer"></a>
+      <a id="SslChannelInitializer:SslChannelInitializer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SslChannelInitializer$.html"><span class="name">SslChannelInitializer</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@SslChannelInitializer" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.inbound" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="inbound"></a>
+      <a id="inbound:inbound"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="inbound/package.html"><span class="name">inbound</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@inbound" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.handler.outbound" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="outbound"></a>
+      <a id="outbound:outbound"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="outbound/package.html"><span class="name">outbound</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.handler.package@outbound" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
