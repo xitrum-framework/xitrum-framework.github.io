@@ -353,9 +353,9 @@ store {
 スティッキーセッションをサポートしたロードバランサーを使用する必要があります。</p>
 <p>一般的に、上記のデフォルトセッションストアのいずれかで事足りることですが、
 もし特殊なセッションストアを独自に実装する場合
-<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/session/SessionStore.scala">SessionStore</a>
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/SessionStore.scala">SessionStore</a>
 または
-<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/session/ServerSessionStore.scala">ServerSessionStore</a>
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/ServerSessionStore.scala">ServerSessionStore</a>
 を継承し、抽象メソッドを実装してください。</p>
 <p>スケーラブルにする場合、できるだけセッションはクライアントサイドのクッキーに保存しましょう。
 サーバーサイド（メモリ上やDB）には必要なときだけセッションを保存しましょう。</p>

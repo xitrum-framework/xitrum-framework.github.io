@@ -356,9 +356,9 @@ store {
 При использовании <tt class="docutils literal"><span class="pre">LruSessionStore</span></tt> вы можете кластеризовать сессии используя load balancer и sticky sessions.</p>
 <p>Эти три типа хранилища сессии обычно покрывают все необходимые случаи. Существует
 возможность определить свою реализацию хранилища сессии, используйте наследование от
-<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/session/SessionStore.scala">SessionStore</a>
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/SessionStore.scala">SessionStore</a>
 или
-<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/session/ServerSessionStore.scala">ServerSessionStore</a> и реализуйте абстрактные методы.</p>
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/ServerSessionStore.scala">ServerSessionStore</a> и реализуйте абстрактные методы.</p>
 <p>Используйте куки когда это возможно, поскольку они более масштабируемы.
 Храните сессии на сервере (в памяти или базе данных) если это необходимо.</p>
 <p>Дальнейшее чтение:
