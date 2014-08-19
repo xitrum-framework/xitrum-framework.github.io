@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Асинхронная обработка запросов &mdash; Документация Xitrum Scala Web Framework Guide 3.18</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.18',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.18" href="index.html" />
+    <link rel="next" title="Статичные файлы" href="static.html" />
+    <link rel="prev" title="JavaScript и JSON" href="js.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="static.html" title="Статичные файлы"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript и JSON"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.18</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Асинхронная обработка запросов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Основные методы для отправки ответа сервером:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">respondView</span></tt>: при ответе использует шаблон ассоциированный с контроллером</li>
+<li><tt class="docutils literal"><span class="pre">respondInlineView</span></tt>: при ответе использует шаблон переданный как аргумент</li>
+<li><tt class="docutils literal"><span class="pre">respondText(&quot;hello&quot;)</span></tt>: ответ строкой &#8220;plain/text&#8221;</li>
+<li><tt class="docutils literal"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></tt>: ответ строкой &#8220;text/html&#8221;</li>
+<li><tt class="docutils literal"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></tt>: преобразовать Scala объект в JSON и ответить</li>
+<li><tt class="docutils literal"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></tt>: совмещение предыдущих двух</li>
+<li><tt class="docutils literal"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondBinary</span></tt>: ответ массивом байт</li>
+<li><tt class="docutils literal"><span class="pre">respondFile</span></tt>: переслать файл с использованием техники <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a>  (aka send-file)</li>
+<li><tt class="docutils literal"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></tt></li>
+</ul>
+<p>Xitrum автоматически не осуществляет отправку ответа клиенту. Вы должны явно вызвать один из методов <tt class="docutils literal"><span class="pre">respondXXX</span></tt>
+что бы отправить ответ клиенту. Если вы не вызовете метод``respondXXX``, Xitrum будет поддерживать HTTP соединение,
+до тех пор пока не будет вызван метод <tt class="docutils literal"><span class="pre">respondXXX</span></tt>.</p>
+<p>Что бы убедиться что соединение открыта используйте метод <tt class="docutils literal"><span class="pre">channel.isOpen</span></tt>.
+Вы можете использовать добавить слушателя используя метод <tt class="docutils literal"><span class="pre">addConnectionClosedListener</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>addConnectionClosedListener {
+  // Соединение было закрыто
+  // Необходимо освободить ресурсы
+}
+</pre></div>
+</div>
+<p>Ввиду асинхронной природы, ответ сервера не посылается немедленно.
+<tt class="docutils literal"><span class="pre">respondXXX</span></tt> возвращает экземпляр <a class="reference external" href="http://netty.io/4.0/api/io/netty/channel/ChannelFuture.html">ChannelFuture</a>.
+Его можно использовать для выполнения действий в момент кода ответ будет действительно отправлен.</p>
+<p>Например, если вы хотите закрыть подключение сразу после отправки запроса:</p>
+<div class="highlight-python"><div class="highlight"><pre>import io.netty.channel.{ChannelFuture, ChannelFutureListener}
+
+val future = respondText(&quot;Hello&quot;)
+future.addListener(new ChannelFutureListener {
+  def operationComplete(future: ChannelFuture) {
+    future.getChannel.close()
+  }
+})
+</pre></div>
+</div>
+<p>Или проще:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">respondText</span><span class="p">(</span><span class="s">&quot;Hello&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">ChannelFutureListener</span><span class="o">.</span><span class="n">CLOSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="websocket">
+<h2>WebSocket<a class="headerlink" href="#websocket" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import scala.runtime.ScalaRunTime
+import xitrum.annotation.WEBSOCKET
+import xitrum.{WebSocketAction, WebSocketBinary, WebSocketText, WebSocketPing, WebSocketPong}
+
+@WEBSOCKET(&quot;echo&quot;)
+class EchoWebSocketActor extends WebSocketAction {
+  def execute() {
+    // Here you can extract session data, request headers etc.
+    // but do not use respondText, respondView etc.
+    // To respond, use respondWebSocketXXX like below.
+
+    log.debug(&quot;onOpen&quot;)
+
+    context.become {
+      case WebSocketText(text) =&gt;
+        log.info(&quot;onTextMessage: &quot; + text)
+        respondWebSocketText(text.toUpperCase)
+
+      case WebSocketBinary(bytes) =&gt;
+        log.info(&quot;onBinaryMessage: &quot; + ScalaRunTime.stringOf(bytes))
+        respondWebSocketBinary(bytes)
+
+      case WebSocketPing =&gt;
+        log.debug(&quot;onPing&quot;)
+
+      case WebSocketPong =&gt;
+        log.debug(&quot;onPong&quot;)
+    }
+  }
+
+  override def postStop() {
+    log.debug(&quot;onClose&quot;)
+    super.postStop()
+  }
+}
+</pre></div>
+</div>
+<p>Актор будет создан при открытии подключения. И остановлен когда:</p>
+<ul class="simple">
+<li>Соединение будет разорвано</li>
+<li>WebSocket закроет подключение</li>
+</ul>
+<p>Используйте следующие методы для отправки WebSocket сообщений (frame):</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">respondWebSocketText</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondWebSocketBinary</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondWebSocketPing</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondWebSocketClose</span></tt></li>
+</ul>
+<p>Метод respondWebSocketPong не предусмотрен, потому что Xitrum автоматически отправляет &#8220;pong&#8221; сообщение в ответ на &#8220;ping&#8221;.</p>
+<p>Для получения ссылки на контроллер:</p>
+<div class="highlight-python"><div class="highlight"><pre>val url = webSocketAbsUrl[EchoWebSocketActor]
+</pre></div>
+</div>
+</div>
+<div class="section" id="sockjs">
+<h2>SockJS<a class="headerlink" href="#sockjs" title="Ссылка на этот заголовок">¶</a></h2>
+<p><a class="reference external" href="https://github.com/sockjs/sockjs-client">SockJS</a> предоставляет JavaScript объект
+эмитирующий поддержку WebSocket, для браузеров которые не поддерживают этот стандарт.
+SockJS пытается использовать WebSocket если он доступен в браузере. В другом случае
+будет создан эмитирующий объект.</p>
+<p>Если вы хотите использовать WebSocket API во всех браузерах, то следует использовать
+SockJS вместо WebSocket.</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+  var sock = new SockJS(&#39;http://mydomain.com/path_prefix&#39;);
+  sock.onopen = function() {
+    console.log(&#39;open&#39;);
+  };
+  sock.onmessage = function(e) {
+    console.log(&#39;message&#39;, e.data);
+  };
+  sock.onclose = function() {
+    console.log(&#39;close&#39;);
+  };
+&lt;/script&gt;
+</pre></div>
+</div>
+<p>Xitrum включает файл SockJS по умолчанию.
+В шаблоне следует написать:</p>
+<div class="highlight-python"><div class="highlight"><pre>...
+html
+  head
+    != jsDefaults
+...
+</pre></div>
+</div>
+<p>SockJS подразумевает наличие части реализации <a class="reference external" href="https://github.com/sockjs/sockjs-protocol">на сервере</a>.
+Xitrum автоматически ее реализует:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SockJsAction, SockJsText}
+import xitrum.annotation.SOCKJS
+
+@SOCKJS(&quot;echo&quot;)
+class EchoSockJsActor extends SockJsAction {
+  def execute() {
+    // To respond, use respondSockJsXXX like below
+
+    log.info(&quot;onOpen&quot;)
+
+    context.become {
+      case SockJsText(text) =&gt;
+        log.info(&quot;onMessage: &quot; + text)
+        respondSockJsText(text)
+    }
+  }
+
+  override def postStop() {
+    log.info(&quot;onClose&quot;)
+    super.postStop()
+  }
+}
+</pre></div>
+</div>
+<p>Актор будет создан при открытии новой SockJS сессии. И остановлен когда сессия будет закрыта.</p>
+<p>Для отправки SockJS сообщений используйте методы:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">respondSockJsText</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">respondSockJsClose</span></tt></li>
+</ul>
+<p><a class="reference external" href="https://github.com/sockjs/sockjs-node#various-issues-and-design-considerations">Рекомендации по реализации</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>Обычно использование кук не подходит для SockJS. Если вам нужна авторизация внутри сессии, то
+для каждой страницы присвойте токен и используйте его в SockJS сессии, для валидации на серверной стороне.
+В сущности это повторение механизма куки для SockJS.
+</pre></div>
+</div>
+<p>Подробнее о настройке кластера SockJS, смотрите раздел <a class="reference internal" href="cluster.html"><em>Кластерезация с Akka</em></a>.</p>
+</div>
+<div class="section" id="chunked">
+<h2>Chunked ответ<a class="headerlink" href="#chunked" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для отправки <a class="reference external" href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">chunked ответа</a>:</p>
+<ol class="arabic simple">
+<li>Вызовите метод <tt class="docutils literal"><span class="pre">setChunked</span></tt></li>
+<li>Отправляйте данные методами <tt class="docutils literal"><span class="pre">respondXXX</span></tt>, столько раз сколько нужно</li>
+<li>Последний ответ отправьте методом <tt class="docutils literal"><span class="pre">respondLastChunk</span></tt></li>
+</ol>
+<p>Chunked ответы имеют множество применений. Например, когда нужно генерировать большой
+документ который не помещается в памяти, вы можете генерировать этот документ частями
+и отправлять их последовательно:</p>
+<div class="highlight-python"><div class="highlight"><pre>// &quot;Cache-Control&quot; загаловок будет установлен в:
+// &quot;no-store, no-cache, must-revalidate, max-age=0&quot;
+//
+// Важно &quot;Pragma: no-cache&quot; привязывается к запросу, а не к ответу:
+// http://palizine.plynt.com/issues/2008Jul/cache-control-attributes/
+setChunked()
+
+val generator = new MyCsvGenerator
+
+generator.onFirstLine { line =&gt;
+  if (channel.isOpen) respondText(header, &quot;text/csv&quot;)
+}
+
+generator.onNextLine { line =&gt;
+  if (channel.isOpen) respondText(line)
+}
+
+generator.onLastLine { line =&gt;
+  if (channel.isOpen) {
+    respondText(line)
+    respondLastChunk()
+  }
+}
+
+generator.generate()
+</pre></div>
+</div>
+<p>Замечания:</p>
+<ul class="simple">
+<li>Заголовки отправляются при первом вызове <tt class="docutils literal"><span class="pre">respondXXX</span></tt>.</li>
+<li>Опционально, вы можете отправить дополнительные заголовки с вызовом метода <tt class="docutils literal"><span class="pre">respondLastChunk</span></tt></li>
+<li><a class="reference internal" href="cache.html"><em>Кэш страницы и контроллера</em></a> не может быть использован совместно с chunked ответами.</li>
+</ul>
+<p>Используя chunked ответ вместе с <tt class="docutils literal"><span class="pre">ActorAction</span></tt>, легко реализовать
+<a class="reference external" href="http://www.cubrid.org/blog/dev-platform/faster-web-page-loading-with-facebook-bigpipe/">Facebook BigPipe</a>.</p>
+<div class="section" id="iframe">
+<h3>Бесконечный iframe<a class="headerlink" href="#iframe" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Chunked ответ <a class="reference external" href="http://www.shanison.com/2010/05/10/stop-the-browser-%E2%80%9Cthrobber-of-doom%E2%80%9D-while-loading-comet-forever-iframe/">может быть использован</a>
+для реализации <a class="reference external" href="http://en.wikipedia.org/wiki/Comet_%28programming%29">Comet</a>.</p>
+<p>Страница которая включает iframe:</p>
+<div class="highlight-python"><div class="highlight"><pre>...
+&lt;script&gt;
+  var functionForForeverIframeSnippetsToCall = function() {...}
+&lt;/script&gt;
+...
+&lt;iframe width=&quot;1&quot; height=&quot;1&quot; src=&quot;path/to/forever/iframe&quot;&gt;&lt;/iframe&gt;
+...
+</pre></div>
+</div>
+<p>Контроллер который последовательно отправляет <tt class="docutils literal"><span class="pre">&lt;script&gt;</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>// Подготовка к вечному iframe
+
+setChunked()
+
+// Необходимо отправить например &quot;123&quot; для некоторых браузеров
+respondText(&quot;&lt;html&gt;&lt;body&gt;123&quot;, &quot;text/html&quot;)
+
+// Большинство клиентов (даже curl!) не выполняют тело &lt;script&gt; немедленно,
+// необходимо отправить около 2KB данных что бы обойти эту проблему
+for (i &lt;- 1 to 100) respondText(&quot;&lt;script&gt;&lt;/script&gt;\n&quot;)
+</pre></div>
+</div>
+<p>Позднее, когда вам нужно отправить данные браузеру, просто используйте шаблон:</p>
+<div class="highlight-python"><div class="highlight"><pre>if (channel.isOpen)
+  respondText(&quot;&lt;script&gt;parent.functionForForeverIframeSnippetsToCall()&lt;/script&gt;\n&quot;)
+else
+  // Соединение было закрыто, необходимо освободить ресурсы
+  // Вы можете использовать так же ``addConnectionClosedListener``.
+</pre></div>
+</div>
+</div>
+<div class="section" id="event-source">
+<h3>Event Source<a class="headerlink" href="#event-source" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Смотри <a class="reference external" href="http://dev.w3.org/html5/eventsource/">http://dev.w3.org/html5/eventsource/</a></p>
+<p>Event Source ответ, это специальный тип chunked ответа.
+Данные должны быть в кодировке UTF-8.</p>
+<p>Для ответа в формате event source, используйте метод <tt class="docutils literal"><span class="pre">respondEventSource</span></tt> столько раз сколько нужно.</p>
+<div class="highlight-python"><div class="highlight"><pre>respondEventSource(&quot;data1&quot;, &quot;event1&quot;)  // Имя события &quot;event1&quot;
+respondEventSource(&quot;data2&quot;)            // Имя события устанавливается в &quot;message&quot; по умолчанию
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Асинхронная обработка запросов</a><ul>
+<li><a class="reference internal" href="#websocket">WebSocket</a></li>
+<li><a class="reference internal" href="#sockjs">SockJS</a></li>
+<li><a class="reference internal" href="#chunked">Chunked ответ</a><ul>
+<li><a class="reference internal" href="#iframe">Бесконечный iframe</a></li>
+<li><a class="reference internal" href="#event-source">Event Source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="js.html"
+                        title="предыдущая глава">JavaScript и JSON</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="static.html"
+                        title="следующая глава">Статичные файлы</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/async.txt"
+           rel="nofollow">Исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="static.html" title="Статичные файлы"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript и JSON"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.18</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>依存関係 &mdash; Xitrum Scala Web Framework Guide 3.18 ドキュメント</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.18',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.18 ドキュメント" href="index.html" />
+    <link rel="prev" title="HOWTO" href="howto.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.18 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>依存関係<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id2">
+<h2>依存ライブラリ<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Xitrumは以下のライブラリにが依存しています。
+つまりあなたのXitrumプロジェクトはこれらのライブラリを直接使用することができます。</p>
+<img alt="_images/deps.png" src="_images/deps.png" />
+<p>主な依存ライブラリ:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.scala-lang.org/">Scala</a>:
+XitrumはScalaで書かれています。</li>
+<li><a class="reference external" href="https://netty.io/">Netty</a>:
+WebSocketやゼロコピーファイルサービングなど
+Xitrumの非同期HTTP(S)サーバの多くの機能はNettyの機能を元に実現しています。</li>
+<li><a class="reference external" href="http://akka.io/">Akka</a>:
+主にSockJSのために。Akkaは <a class="reference external" href="https://github.com/typesafehub/config">Typesafe Config</a>
+に依存しており、Xitrumもまたそれを使用しています。</li>
+</ul>
+<p>その他の主な依存ライブラリ:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://commons.apache.org/lang/">Commons Lang</a>:
+JSONデータのエスケープに使用しています。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/glokka">Glokka</a>:
+SockJS アクターのクラスタリングに使用しています。</li>
+<li><a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>:
+JSONのパースと生成のために使用します。
+JSON4Sは <a class="reference external" href="http://paranamer.codehaus.org/">Paranamer</a> を依存ライブラリとして使用しています。</li>
+<li><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Rhino">Rhino</a>:
+Scalate内でCoffeeScriptをJavaScriptにコンパイルするために使用しています。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/sclasner">Sclasner</a>:
+クラスファイルとjarファイルからHTTPルートをスキャンするために使用しています。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/scaposer">Scaposer</a>:
+国際化対応のために使用しています。</li>
+<li><a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>:
+クッキーとセッションのシリアライズ・デシリアライズに使用しています。
+Chillは <a class="reference external" href="http://code.google.com/p/kryo/">Kryo</a> を元にしています。</li>
+<li><a class="reference external" href="http://slf4s.org/">SLF4S</a>, <a class="reference external" href="http://logback.qos.ch/">Logback</a>:
+ロギングに使用しています。</li>
+</ul>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum プロジェクトスケルトン</a> は</p>
+<p>以下のツールを梱包しています:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/scala-xgettext">scala-xgettext</a>:
+コンパイル時に .scala ファイルから <a class="reference internal" href="i18n.html"><em>国際化対応</em></a> 文字列を展開します。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package</a>:
+本番環境へデプロイするために <a class="reference internal" href="deploy.html"><em>プロジェクトをパッケージング</em></a> します。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>:
+ScalaコンソールからJVMプロセスに接続し、動的なデバッギングを可能にします。</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>関連プロジェクト<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>デモ:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a>:
+新規Xitrumプロジェクトのスケルトン。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">xitrum-demos</a>:
+Xitrumの各機能のデモプロジェクト。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">xitrum-placeholder</a>:
+Xitrumによる画像イメージアプリのデモ。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/comy">comy</a>:
+XitrumによるURLショートナーアプリのデモ。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">xitrum-multimodule-demo</a>:
+<a class="reference external" href="http://www.scala-sbt.org/">SBT</a> マルチモジュールプロジェクトのデモ。</li>
+</ul>
+<p>プラグイン:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>:
+Xitrumのデフォルトテンプレートエンジン。<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum プロジェクトスケルトン</a> で使用しています。
+別のテンプレートエンジンを使用することも、また必要がなければプロジェクトから削除してしまうことも可能です。
+xitrum-scalateは <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> と <a class="reference external" href="https://github.com/chirino/scalamd">Scalamd</a> に依存しています。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">xitrum-hazelcast</a>:
+キャッシュとサーバーサイドセッションのクラスタリングを行うプラグイン。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">xitrum-ko</a>:
+<a class="reference external" href="http://knockoutjs.com/">Knockoutjs</a> を簡単に使うためのプラグイン。</li>
+</ul>
+<p>その他のプロジェクト:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-doc">xitrum-doc</a>:
+<a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum Guide</a> のソースコード。</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-framework.github.io">xitrum-hp</a>:
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum Homepage</a> のソースコード。</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">依存関係</a><ul>
+<li><a class="reference internal" href="#id2">依存ライブラリ</a></li>
+<li><a class="reference internal" href="#id3">関連プロジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="howto.html"
+                        title="前の章へ">HOWTO</a></p>
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/deps.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.18 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2 で生成しました。
+    </div>
+  </body>
+</html>
