@@ -169,7 +169,7 @@ class ArticlesCreate extends AppAction {
 <div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot;
    data-postback=&quot;click&quot;
    action={url[ArticlesDestroy](&quot;id&quot; -&gt; item.id)}
-   data-extra=&quot;_method=delete&quot;
+   data-params=&quot;_method=delete&quot;
    data-confirm={&quot;Do you want to delete %s?&quot;.format(item.name)}&gt;Delete&lt;/a&gt;
 </pre></div>
 </div>
@@ -181,7 +181,7 @@ class ArticlesCreate extends AppAction {
   &lt;a class=&quot;pagination&quot;
      href=&quot;#&quot;
      data-postback=&quot;click&quot;
-     data-extra=&quot;#myform&quot;
+     data-form=&quot;#myform&quot;
      action={url[SiteSearch](&quot;page&quot; -&gt; page)}&gt;{page}&lt;/a&gt;
 &lt;/form&gt;
 </pre></div>
