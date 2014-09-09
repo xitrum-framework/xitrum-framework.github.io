@@ -52,8 +52,8 @@
             
   <div class="section" id="id1">
 <h1>Контроллеры и представления<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
-<p>Xitrum располагает двумя видами контроллеров или действий (actions):
-стандартный контроллер (normal action) и актор контроллер (actor action).</p>
+<p>Xitrum располагает тремя видами контроллеров или действий (actions):
+стандартный контроллер <tt class="docutils literal"><span class="pre">Action</span></tt>, <tt class="docutils literal"><span class="pre">FutureAction</span></tt> и актор контроллер <tt class="docutils literal"><span class="pre">ActorAction</span></tt>.</p>
 <div class="section" id="normal-action">
 <h2>Стандартный контроллер (normal action)<a class="headerlink" href="#normal-action" title="Ссылка на этот заголовок">¶</a></h2>
 <p>Реализация данного контроллера синхронная.</p>
@@ -68,16 +68,13 @@ class HelloAction extends Action {
 }
 </pre></div>
 </div>
-<p>Реализация метода execute не должна содержать блокирующих или долгих операций, т.к.
-в синхронном режиме количество конкурентных подключений очень низкое.</p>
+<p>В случае наследования от xitrum.Action, ваш код будет выполнятся в потоке Netty&#8217;s IO.
+Это допустимо только в случае если ваш контроллер очень легковесный и не блокирующий
+(возвращает ответ немедленно). Иначе Netty не сможет принимать новые подключения или
+отправлять запросы клиентам.</p>
 </div>
 <div class="section" id="futureaction">
 <h2>FutureAction<a class="headerlink" href="#futureaction" title="Ссылка на этот заголовок">¶</a></h2>
-<p>В случае наследования от xitrum.Action, ваш код будет выполнятся в потоке Netty&#8217;s IO.
-Это допустимо только в случае если ваш контроллер очень легковесный и не блокирующий
-(возвращает ответ немедленно). В любом другом случае нужно использовать наследование
-от xitrum.FutureAction, тогда код контроллера будет выполнятся в отдельном потоке (из
-пула потоков).</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.FutureAction
 import xitrum.annotation.GET
 
@@ -89,15 +86,11 @@ class HelloAction extends FutureAction {
 }
 </pre></div>
 </div>
+<p>В случае наследования от xitrum.FutureAction, код контроллера будет выполнятся в отдельном потоке (в том же пуле что и <tt class="docutils literal"><span class="pre">ActorAction</span></tt>) не занимая потоки Netty.</p>
 </div>
 <div class="section" id="actor-action">
 <h2>Актор контроллер (actor action)<a class="headerlink" href="#actor-action" title="Ссылка на этот заголовок">¶</a></h2>
-<p>Используется для реализации асинхронной обработки запросов. В случае наследования
-от xitrum.ActorAction контроллер будет обычным актором. С применением акторов система
-может обслуживать огромное число конкурентных запросов, но все они будут обработаны асинхронно.</p>
-<p>Экземпляр актора будет создан на каждый запрос. Актор будет остановлен в момент закрытия подключения
-или когда ответ будет отправлен клиенту. Для chunked запросов актор будет остановлен когда будет
-отправлен последний chunk.</p>
+<p>Если вы хотите что бы контроллер был актором Akka наследуйтесь от <tt class="docutils literal"><span class="pre">ActorAction</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre>import scala.concurrent.duration._
 
 import xitrum.ActorAction
@@ -119,6 +112,10 @@ class HelloAction extends ActorAction with AppAction {
 }
 </pre></div>
 </div>
+<p>Экземпляр актора будет создан на каждый запрос. Актор будет остановлен в момент закрытия подключения
+или когда ответ будет отправлен клиенту. Для chunked запросов актор будет остановлен когда будет
+отправлен последний chunk.</p>
+<p>Актор будет выполняться в пуле потоков Akka в системе с именем &#8220;xitrum&#8221;.</p>
 </div>
 <div class="section" id="id2">
 <h2>Отправка ответа клиенту<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
