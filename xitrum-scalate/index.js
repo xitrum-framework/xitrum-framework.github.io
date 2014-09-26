@@ -1,0 +1,1 @@
+Index.PACKAGES = {"xitrum" : [], "xitrum.view" : [{"class" : "xitrum\/view\/Scalate.html", "name" : "xitrum.view.Scalate"}, {"class" : "xitrum\/view\/ScalateEngine.html", "object" : "xitrum\/view\/ScalateEngine$.html", "name" : "xitrum.view.ScalateEngine"}]};
