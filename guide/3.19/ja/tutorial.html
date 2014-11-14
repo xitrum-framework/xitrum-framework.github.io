@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>チュートリアル &mdash; Xitrum Scala Web Framework Guide 3.19 ドキュメント</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.19',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.19 ドキュメント" href="index.html" />
+    <link rel="next" title="Action と view" href="action_view.html" />
+    <link rel="prev" title="はじめに" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Action と view"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="はじめに"
+             accesskey="P">前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.19 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>チュートリアル<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>本章ではXitrumプロジェクトを作成して実行するところまでを簡単に紹介します。</p>
+<p><strong>このチュートリアルではJavaがインストールされたLinux環境を想定しています。</strong></p>
+<div class="section" id="xitrum">
+<h2>Xitrumプロジェクトの作成<a class="headerlink" href="#xitrum" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>新規のプロジェクトを作成するには
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a> をダウンロードします。</p>
+<div class="highlight-python"><div class="highlight"><pre>wget -O xitrum-new.zip https://github.com/xitrum-framework/xitrum-new/archive/master.zip
+</pre></div>
+</div>
+<p>または:</p>
+<div class="highlight-python"><div class="highlight"><pre>curl -L -o xitrum-new.zip https://github.com/xitrum-framework/xitrum-new/archive/master.zip
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>起動<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Scalaのビルドツールとしてデファクトスタンダードである <a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">SBT</a> を使用します。
+先ほどダウンロードしたプロジェクトには既に SBT 0.13 が <tt class="docutils literal"><span class="pre">sbt</span></tt> ディレクトリに梱包されています。
+SBTを自分でインストールするには、SBTの <a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">セットアップガイド</a> を参照してください。</p>
+<p>作成したプロジェクトのルートディレクトリで <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">run</span></tt> と実行することでXitrumが起動します:</p>
+<div class="highlight-python"><div class="highlight"><pre>unzip xitrum-new.zip
+cd xitrum-new
+sbt/sbt run
+</pre></div>
+</div>
+<p>このコマンドは依存ライブラリ( <a class="reference internal" href="deps.html"><em>dependencies</em></a> )のダウンロード, およびプロジェクトのコンパイルを実行後、
+<tt class="docutils literal"><span class="pre">quickstart.Boot</span></tt> クラスが実行され、WEBサーバーが起動します。
+コンソールには以下の様なルーティング情報が表示されます。</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Load routes.cache or recollect routes...
+[INFO] Normal routes:
+GET  /  quickstart.action.SiteIndex
+[INFO] SockJS routes:
+xitrum/metrics/channel  xitrum.metrics.XitrumMetricsChannel  websocket: true, cookie_needed: false
+[INFO] Error routes:
+404  quickstart.action.NotFoundError
+500  quickstart.action.ServerError
+[INFO] Xitrum routes:
+GET        /webjars/swagger-ui/2.0.17/index                            xitrum.routing.SwaggerUiVersioned
+GET        /xitrum/xitrum.js                                           xitrum.js
+GET        /xitrum/metrics/channel                                     xitrum.sockjs.Greeting
+GET        /xitrum/metrics/channel/:serverId/:sessionId/eventsource    xitrum.sockjs.EventSourceReceive
+GET        /xitrum/metrics/channel/:serverId/:sessionId/htmlfile       xitrum.sockjs.HtmlFileReceive
+GET        /xitrum/metrics/channel/:serverId/:sessionId/jsonp          xitrum.sockjs.JsonPPollingReceive
+POST       /xitrum/metrics/channel/:serverId/:sessionId/jsonp_send     xitrum.sockjs.JsonPPollingSend
+WEBSOCKET  /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocket
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr            xitrum.sockjs.XhrPollingReceive
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr_send       xitrum.sockjs.XhrSend
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr_streaming  xitrum.sockjs.XhrStreamingReceive
+GET        /xitrum/metrics/channel/info                                xitrum.sockjs.InfoGET
+WEBSOCKET  /xitrum/metrics/channel/websocket                           xitrum.sockjs.RawWebSocket
+GET        /xitrum/metrics/viewer                                      xitrum.metrics.XitrumMetricsViewer
+GET        /xitrum/metrics/channel/:iframe                             xitrum.sockjs.Iframe
+GET        /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocketGET
+POST       /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocketPOST
+[INFO] HTTP server started on port 8000
+[INFO] HTTPS server started on port 4430
+[INFO] Xitrum started in development mode
+</pre></div>
+</div>
+<p>初回起動時には、全てのルーティングが収集されログに出力されます。
+この情報はアプリケーションのRESTful APIについてドキュメントを書く場合この情報はとても役立つことでしょう。</p>
+<p>ブラウザで <a class="reference external" href="http://localhost:8000/">http://localhost:8000</a> もしくは <a class="reference external" href="http://localhost:4430/">https://localhost:4430</a> にアクセスしてみましょう。
+次のようなリクエスト情報がコンソールから確認できます。</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] GET quickstart.action.SiteIndex, 1 [ms]
+</pre></div>
+</div>
+</div>
+<div class="section" id="eclipse">
+<h2>Eclipseプロジェクトの作成<a class="headerlink" href="#eclipse" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>開発環境に <a class="reference external" href="http://scala-ide.org/">Eclipse</a> を使用する場合</p>
+<p>プロジェクトディレクトリで以下のコマンドを実行します:</p>
+<div class="highlight-python"><div class="highlight"><pre>sbt/sbt eclipse
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">build.sbt</span></tt> に記載されたプロジェクト設定に応じてEclipse用の <tt class="docutils literal"><span class="pre">.project</span></tt> ファイルが生成されます。
+Eclipseを起動してインポートしてください。</p>
+</div>
+<div class="section" id="intellij-idea">
+<h2>IntelliJ IDEAプロジェクトの作成<a class="headerlink" href="#intellij-idea" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>開発環境に <a class="reference external" href="http://www.jetbrains.com/idea/">IntelliJ IDEA</a> を仕様する場合</p>
+<p>プロジェクトディレクトリで以下のコマンドを実行します:</p>
+<div class="highlight-python"><div class="highlight"><pre>sbt/sbt gen-idea
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">build.sbt</span></tt> に記載されたプロジェクト設定に応じてIntelliJ用の <tt class="docutils literal"><span class="pre">.idea</span></tt> ファイルが生成されます。
+IntelliJを起動してインポートしてください。</p>
+</div>
+<div class="section" id="id6">
+<h2>自動リロード<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>プログラムを再起動することなく .classファイルをリロード（ホットスワップ)することができます。
+ただし、プログラムのパフォーマンスと安定性を維持するため、自動リロード機能は開発時のみ使用することを推奨します。</p>
+<div class="section" id="ide">
+<h3>IDEを使用する場合<a class="headerlink" href="#ide" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>最新のEclipseやIntelliJのようなIDEを使用して開発、起動を行う場合、
+デフォルトでIDEがソースコードの変更を監視して、変更があった場合に自動でコンパイルしてくれます。</p>
+</div>
+<div class="section" id="id7">
+<h3>SBTを使用する場合<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>SBTを使用する場合、2つのコンソールを用意する必要があります:</p>
+<ul class="simple">
+<li>一つ目は <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">run</span></tt> を実行します。 このコマンドはプログラムを起動して、 .classファイルに変更があった場合にリロードを行います。</li>
+<li>もう一方は <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">~compile</span></tt> を実行します。 このコマンドはソースコードの変更を監視して、変更があった場合に .classファイルにコンパイルします。</li>
+</ul>
+<p>sbtディレクトリには <a class="reference external" href="https://github.com/xitrum-framework/agent7">agent7.jar</a> が含まれます。
+このライブラリは、カレントディレクトリ（およびサブディレクトリ)の .classファイルのリロードを担当します。
+<tt class="docutils literal"><span class="pre">sbt/sbt</span></tt> スクリプトの中で <tt class="docutils literal"><span class="pre">-javaagent:agent7.jar</span></tt> として使用されています。</p>
+</div>
+<div class="section" id="dcevm">
+<h3>DCEVM<a class="headerlink" href="#dcevm" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>通常のJVMはクラスファイルがリロードされた際、メソッドのボディのみ変更が反映されます。
+Java HotSpot VM のオープンソース実装である <a class="reference external" href="https://github.com/dcevm/dcevm">DCEVM</a> を使用することで、
+ロードしたクラスの再定義をより柔軟に行うことができるようになります。</p>
+<p>DCEVMは以下の2つの方法でインストールできます:</p>
+<ul class="simple">
+<li>インストール済みのJavaへ <a class="reference external" href="https://github.com/dcevm/dcevm/releases">Patch</a> を行う方法</li>
+<li><a class="reference external" href="http://dcevm.nentjes.com/">prebuilt</a> バージョンのインストール (こちらのほうが簡単です)</li>
+</ul>
+<p>パッチを使用してインストールを行う場合:</p>
+<ul class="simple">
+<li>DCEVMを常に有効にすることができます。</li>
+<li>もしくはDCEVMを&#8221;alternative&#8221; JVMとして適用することができます。
+この場合、<tt class="docutils literal"><span class="pre">java</span></tt> コマンドに <tt class="docutils literal"><span class="pre">-XXaltjvm=dcevm</span></tt> オプションを指定することでDCEVMを使用することができます。
+例えば、 <tt class="docutils literal"><span class="pre">sbt/sbt</span></tt> スクリプトファイルに <tt class="docutils literal"><span class="pre">-XXaltjvm=dcevm</span></tt> を追記する必要があります。</li>
+</ul>
+<p>EclipseやIntelliJのようなIDEを使用している場合、DCEVMをプロジェクトの実行JVMに指定する必要があります。</p>
+<p>SBTを使用している場合は、 <tt class="docutils literal"><span class="pre">java</span></tt> コマンドがDCEVMのものを利用できるように <tt class="docutils literal"><span class="pre">PATH</span></tt> 環境変数を設定する必要があります。
+DCEVM自体はクラスの変更をサポートしますが、リロードは行わないため、DCEVMを使用する場合も前述の <tt class="docutils literal"><span class="pre">javaagent</span></tt> は必要となります。</p>
+<p>詳細は <a class="reference external" href="http://javainformed.blogspot.jp/2014/01/jrebel-free-alternative.html">DCEVM - A JRebel free alternative</a> を参照してください。</p>
+</div>
+</div>
+<div class="section" id="ignore">
+<h2>ignoreファイルの設定<a class="headerlink" href="#ignore" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href=""><em>チュートリアル</em></a> に沿ってプロジェクトを作成した場合 <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/.gitignore">ignored</a> を参考にignoreファイルを作成してください。</p>
+<div class="highlight-python"><div class="highlight"><pre>.*
+log
+project/project
+project/target
+target
+tmp
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">チュートリアル</a><ul>
+<li><a class="reference internal" href="#xitrum">Xitrumプロジェクトの作成</a></li>
+<li><a class="reference internal" href="#id2">起動</a></li>
+<li><a class="reference internal" href="#eclipse">Eclipseプロジェクトの作成</a></li>
+<li><a class="reference internal" href="#intellij-idea">IntelliJ IDEAプロジェクトの作成</a></li>
+<li><a class="reference internal" href="#id6">自動リロード</a><ul>
+<li><a class="reference internal" href="#ide">IDEを使用する場合</a></li>
+<li><a class="reference internal" href="#id7">SBTを使用する場合</a></li>
+<li><a class="reference internal" href="#dcevm">DCEVM</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ignore">ignoreファイルの設定</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="intro.html"
+                        title="前の章へ">はじめに</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="次の章へ">Action と view</a></p>
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Action と view"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="はじめに"
+             >前へ</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.19 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2 で生成しました。
+    </div>
+  </body>
+</html>
