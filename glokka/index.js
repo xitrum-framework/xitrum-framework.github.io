@@ -1,1 +1,0 @@
-Index.PACKAGES = {"glokka" : [{"object" : "glokka\/Registry$.html", "name" : "glokka.Registry"}]};
