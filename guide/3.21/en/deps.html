@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dependencies &mdash; Xitrum Scala Web Framework Guide 3.21 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.21',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.21 documentation" href="index.html" />
+    <link rel="prev" title="HOWTO" href="howto.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.21 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="dependencies">
+<h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dependency-libraries">
+<h2>Dependency libraries<a class="headerlink" href="#dependency-libraries" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum includes some libraries. In your Xitrum project, you can use them
+directly if you want.</p>
+<img alt="_images/deps.png" src="_images/deps.png" />
+<p>Main dependencies:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.scala-lang.org/">Scala</a>:
+Xitrum is written in Scala language.</li>
+<li><a class="reference external" href="https://netty.io/">Netty</a>:
+For async HTTP(S) server. Many features in Xitrum are based on those in Netty,
+like WebSocket and zero copy file serving.</li>
+<li><a class="reference external" href="http://akka.io/">Akka</a>:
+For SockJS. Akka depends on <a class="reference external" href="https://github.com/typesafehub/config">Typesafe Config</a>,
+which is also used by Xitrum.</li>
+</ul>
+<p>Other dependencies:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://commons.apache.org/lang/">Commons Lang</a>:
+For escaping JSON data.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/glokka">Glokka</a>:
+For clustering SockJS actors.</li>
+<li><a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>:
+For parsing and generating JSON data. JSON4S depends on
+<a class="reference external" href="http://paranamer.codehaus.org/">Paranamer</a>.</li>
+<li><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Rhino">Rhino</a>:
+For Scalate to compile CoffeeScript to JavaScript.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/sclasner">Sclasner</a>:
+For scanning HTTP routes in action classes in .class and .jar files.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/scaposer">Scaposer</a>:
+For i18n.</li>
+<li><a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>:
+For serializing and deserializing cookies and sessions.
+Chill is based on <a class="reference external" href="http://code.google.com/p/kryo/">Kryo</a>.</li>
+<li><a class="reference external" href="http://slf4s.org/">SLF4S</a>, <a class="reference external" href="http://logback.qos.ch/">Logback</a>:
+For logging.</li>
+</ul>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum new project skeleton</a>
+includes these tools:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/scala-xgettext">scala-xgettext</a>:
+For <a class="reference internal" href="i18n.html"><em>extracting i18n strings</em></a> from your .scala files when you compile them.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package</a>:
+For <a class="reference internal" href="deploy.html"><em>packaging your project</em></a>, ready to deploy to production server.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>:
+For connecting a Scala console to a running JVM process for live debugging.</li>
+</ul>
+</div>
+<div class="section" id="related-projects">
+<h2>Related projects<a class="headerlink" href="#related-projects" title="Permalink to this headline">¶</a></h2>
+<p>Demos:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a>:
+Xitrum new project skeleton.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">xitrum-demos</a>:
+Demos features in Xitrum.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">xitrum-placeholder</a>:
+Demos APIs that return images.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/comy">comy</a>:
+Demos a simple URL shortening service.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">xitrum-multimodule-demo</a>:
+Example about creating multimodule <a class="reference external" href="http://www.scala-sbt.org/">SBT</a> project.</li>
+</ul>
+<p>Plugins:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>:
+This is the default template engine in Xitrum, preconfigured in
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum new project skeleton</a>.
+You can replace it with other template engines, or totally remove it if your
+project doesn&#8217;t need any template engine. It depends on
+<a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> and
+<a class="reference external" href="https://github.com/chirino/scalamd">Scalamd</a>.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">xitrum-hazelcast</a>:
+For clustering cache and server side sessions.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">xitrum-ko</a>:
+Provides some convenient helpers for <a class="reference external" href="http://knockoutjs.com/">Knockoutjs</a>.</li>
+</ul>
+<p>Other projects:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-doc">xitrum-doc</a>:
+Source code of the <a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum Guide</a>.</li>
+<li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-framework.github.io">xitrum-hp</a>:
+Source code of the <a class="reference external" href="http://xitrum-framework.github.io/">Xitrum Homepage</a>.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dependencies</a><ul>
+<li><a class="reference internal" href="#dependency-libraries">Dependency libraries</a></li>
+<li><a class="reference internal" href="#related-projects">Related projects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto.html"
+                        title="previous chapter">HOWTO</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/deps.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.21 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

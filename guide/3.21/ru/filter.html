@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Фильтры &mdash; Документация Xitrum Scala Web Framework Guide 3.21</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.21',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.21" href="index.html" />
+    <link rel="next" title="Кэш на стороне сервера" href="cache.html" />
+    <link rel="prev" title="Загрузка файлов" href="upload.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Кэш на стороне сервера"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="upload.html" title="Загрузка файлов"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.21</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Фильтры<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="before-filter">
+<h2>Пре-фильтр (before filter)<a class="headerlink" href="#before-filter" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Данные фильтры запускаются до того как контроллер начнет обработку запроса.
+Они не принимают входных параметров и возвращают true или false. Если
+пре-фильтр возвращает false, все остальные фильтры и сам контроллер не будет
+запущен.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;before_filter&quot;)
+class MyAction extends Action {
+  beforeFilter {
+    log.info(&quot;I run therefore I am&quot;)
+    true
+  }
+
+  // метод выполнится после всех фильтров
+  def execute() {
+    respondInlineView(&quot;Пре-фильтр должны быть выполнен, проверьте лог&quot;)
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="after-filter">
+<h2>Пост-фильтры (after filter)<a class="headerlink" href="#after-filter" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Пост-фильтры запускаются после выполнения контроллера.
+Они не принимают аргументов и не возвращают значений.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;after_filter&quot;)
+class MyAction extends Action {
+  afterFilter {
+    log.info(&quot;Время запуска &quot; + System.currentTimeMillis())
+  }
+
+  def execute() {
+    respondText(&quot;Пост-фильтр должен будет запустится, проверьте лог&quot;)
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="around-filter">
+<h2>Внешние фильтры (around filter)<a class="headerlink" href="#around-filter" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;around_filter&quot;)
+class MyAction extends Action {
+  aroundFilter { action =&gt;
+    val begin = System.currentTimeMillis()
+    action()
+    val end   = System.currentTimeMillis()
+    val dt    = end - begin
+    log.info(s&quot;Контролер выполнялся $dt [ms]&quot;)
+  }
+
+  def execute() {
+    respondText(&quot;Внешний фильтр должен выполниться, проверьте лог&quot;)
+  }
+}
+</pre></div>
+</div>
+<p>Если внешних фильтров будет несколько, они будут вложены друг в друга.</p>
+</div>
+<div class="section" id="id2">
+<h2>Порядок выполнения фильтров<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>Вначале выполняются пре-фильтры, затем внешние фильтры, и последними выполняются пост-фильтры.</li>
+<li>Если пре-фильтр возвращает false, остальные фильтры (включая внешние и пост-фильтры) не будут запущены.</li>
+<li>Пост-фильтры выполняются, в том числе, если хотя бы один из внешних фильтров выполнился.</li>
+<li>Если внешний фильтр не вызывает <tt class="docutils literal"><span class="pre">action</span></tt>, вложенные внешние фильтры не будут выполнены.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre>before1 -true-&gt; before2 -true-&gt; +--------------------+ --&gt; after1 --&gt; after2
+                                | around1 (1 of 2)   |
+                                |   around2 (1 of 2) |
+                                |     action         |
+                                |   around2 (2 of 2) |
+                                | around1 (2 of 2)   |
+                                +--------------------+
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Фильтры</a><ul>
+<li><a class="reference internal" href="#before-filter">Пре-фильтр (before filter)</a></li>
+<li><a class="reference internal" href="#after-filter">Пост-фильтры (after filter)</a></li>
+<li><a class="reference internal" href="#around-filter">Внешние фильтры (around filter)</a></li>
+<li><a class="reference internal" href="#id2">Порядок выполнения фильтров</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="upload.html"
+                        title="предыдущая глава">Загрузка файлов</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="cache.html"
+                        title="следующая глава">Кэш на стороне сервера</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/filter.txt"
+           rel="nofollow">Исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Кэш на стороне сервера"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="upload.html" title="Загрузка файлов"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.21</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

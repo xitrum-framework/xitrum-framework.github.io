@@ -1,0 +1,500 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RESTful APIs &mdash; Документация Xitrum Scala Web Framework Guide 3.21</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.21',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.21" href="index.html" />
+    <link rel="next" title="Шаблонизация" href="template_engines.html" />
+    <link rel="prev" title="Контроллеры и представления" href="action_view.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Контроллеры и представления"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.21</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Разработка RESTful APIs с использованием Xitrum.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;articles&quot;)
+class ArticlesIndex extends Action {
+  def execute() {...}
+}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p>Подобным образом описываются POST, PUT, PATCH, DELETE, и OPTIONS запросы.
+Xitrum автоматически обрабатывает HEAD запросы как GET с пустым ответом.</p>
+<p>Для HTTP клиентов не поддерживающих PUT и DELETE (например, обычные браузеры), используется метод POST c параметрами <tt class="docutils literal"><span class="pre">_method=put</span></tt> или <tt class="docutils literal"><span class="pre">_method=delete</span></tt> внутри тела запроса.</p>
+<p>При старте веб приложения, Xitrum сканирует аннотации, создает таблицу маршрутизации
+и печатает ее в лог. Из лога понятно какое API приложение поддерживает на данный момент:</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
+GET /articles     quickstart.action.ArticlesIndex
+GET /articles/:id quickstart.action.ArticlesShow
+</pre></div>
+</div>
+<p>Маршруты (routes) автоматически строятся в духе JAX-RS и Rails. Нет необходимости
+объявлять все маршруты в одном месте. Допускается включать одно приложение в другое.
+Например, движок блога можно упаковать в JAR файл и подключить его в другое приложение,
+после этого у приложения появятся все возможности блога. Маршрутизация осуществляется
+в два направления, можно генерировать URL по контроллеру (обратная маршрутизация).
+Автоматическое документирование ваших маршрутов можно выполнить используя
+<a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
+<div class="section" id="id1">
+<h2>Кэш маршрутов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для более быстро скорости запуска, маршруты кэшируются в файл <tt class="docutils literal"><span class="pre">routes.cache</span></tt>.
+В режиме разработчика, этот файл не используется. В случае изменения зависимостей
+содержащих маршруты, необходимо удалить <tt class="docutils literal"><span class="pre">routes.cache</span></tt>. Этот файл не должен попасть
+в ваши систему контроля версий.</p>
+</div>
+<div class="section" id="id2">
+<h2>Очередность маршрутов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Возможно вам потребуется организовать маршруты в определенном порядке.</p>
+<div class="highlight-python"><div class="highlight"><pre>/articles/:id --&gt; ArticlesShow
+/articles/new --&gt; ArticlesNew
+</pre></div>
+</div>
+<p>В данном случае необходимо что бы второй маршрут был проверен первым.
+Для этих целей нужно использовать аннотацию <tt class="docutils literal"><span class="pre">First</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+
+@First  // This route has higher priority than &quot;ArticlesShow&quot; above
+@GET(&quot;articles/new&quot;)
+class ArticlesNew extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">Last</span></tt> работает помещает маршрут на обработку последним.</p>
+</div>
+<div class="section" id="id3">
+<h2>Несколько маршрутов для одного контроллера<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;image&quot;, &quot;image/:format&quot;)
+class Image extends Action {
+  def execute() {
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;png&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Точка в маршруте<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;, &quot;articles/:id.:format&quot;)
+class ArticlesShow extends Action {
+  def execute() {
+    val id     = param[Int](&quot;id&quot;)
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;html&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>Регулярные выражения в маршруте<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Регулярные выражения могут быть использованы для задания ограничений в маршруте:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>Обработка не стандартных маршрутов<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Использование символа <tt class="docutils literal"><span class="pre">/</span></tt> не допускается в именах параметров. Если есть необходимость в его
+использовании вы можете определить маршрут следующим образом:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Например, данный маршрут будет обрабатывать запросы:</p>
+<div class="highlight-python"><div class="highlight"><pre>/service/123/proxy/http://foo.com/bar
+</pre></div>
+</div>
+<p>Извлечение значение из части <tt class="docutils literal"><span class="pre">:*</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>val url = param(&quot;*&quot;)  // Будет &quot;http://foo.com/bar&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Ссылка на контроллер<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum пытается быть достаточно безопасным. Не пишите ссылки самостоятельно (в явном виде).
+Используйте генератор ссылок:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Редирект на контроллер<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Читайте подробнее про <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">редирект</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{GET, POST}
+
+@GET(&quot;login&quot;)
+class LoginInput extends Action {
+  def execute() {...}
+}
+
+@POST(&quot;login&quot;)
+class DoLogin extends Action {
+  def execute() {
+    ...
+    // After login success
+    redirectTo[AdminIndex]()
+  }
+}
+
+GET(&quot;admin&quot;)
+class AdminIndex extends Action {
+  def execute() {
+    ...
+    // Check if the user has not logged in, redirect him to the login page
+    redirectTo[LoginInput]()
+  }
+}
+</pre></div>
+</div>
+<p>Допускается делать редирект на тот же самый контроллер с помощью метода <tt class="docutils literal"><span class="pre">redirecToThis()</span></tt>.</p>
+</div>
+<div class="section" id="id10">
+<h2>Форвардинг (перенаправление) на контроллер<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Используйте <tt class="docutils literal"><span class="pre">forwardTo[AnotherAction]()</span></tt>. <tt class="docutils literal"><span class="pre">redirectTo</span></tt> заставляет браузер делать новый запрос, в то
+время как <tt class="docutils literal"><span class="pre">forwardTo</span></tt> работает в рамках одного запроса.</p>
+</div>
+<div class="section" id="ajax">
+<h2>Определение Ajax запроса<a class="headerlink" href="#ajax" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Используйте <tt class="docutils literal"><span class="pre">isAjax</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre>// В контроллере
+val msg = &quot;A message&quot;
+if (isAjax)
+  jsRender(&quot;alert(&quot; + jsEscape(msg) + &quot;)&quot;)
+else
+  respondText(msg)
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для запросов отличных от GET Xitrum автоматически защищает приложение от
+<a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Cross-site request forgery</a>  атаки.</p>
+<p>Включите в шаблон <tt class="docutils literal"><span class="pre">antiCsrfMeta</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+<p>Тогда секция <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> будет включать в себя csrf-token:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>Этот токен будет автоматически включен во все Ajax запросы jQuery как заголовок
+<tt class="docutils literal"><span class="pre">X-CSRF-Token</span></tt> если вы подключите <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>. xitrum.js  подключается вызовом <tt class="docutils literal"><span class="pre">jsDefaults</span></tt>. Если вы не хотите
+использовать <tt class="docutils literal"><span class="pre">jsDefaults</span></tt>, вы можете подключить xitrum.js следующим образом (или посылать токен самостоятельно):</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot; src={url[xitrum.js]}&gt;&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-anticsrftoken">
+<h2>antiCsrfInput и antiCsrfToken<a class="headerlink" href="#anticsrfinput-anticsrftoken" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum использует CSRF токен из заголовка запроса с именем <tt class="docutils literal"><span class="pre">X-CSRF-Token</span></tt>. Если заголовок
+не установлен, Xitrum берет значение из параметра <tt class="docutils literal"><span class="pre">csrf-token</span></tt> переданного в теле запроса
+(не из URL).</p>
+<p>Если вы вручную создаете формы, и не используйте мета тэг и xitrum.js как сказано выше,
+то вам нужно использовать методы контроллера <tt class="docutils literal"><span class="pre">antiCsrfInput</span></tt> или <tt class="docutils literal"><span class="pre">antiCsrfToken</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  != antiCsrfInput
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  input(type=&quot;hidden&quot; name=&quot;csrf-token&quot; value={antiCsrfToken})
+</pre></div>
+</div>
+</div>
+<div class="section" id="skipcsrfcheck">
+<h2>SkipCsrfCheck<a class="headerlink" href="#skipcsrfcheck" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для некоторые API не требуется защита от CSRF атак, в этом случае проще всего
+пропустить эту проверку. Для этого дополнительно наследуйте свой контроллер
+от трейта xitrum.SkipCsrfCheck:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.POST
+
+trait Api extends Action with SkipCsrfCheck
+
+@POST(&quot;api/positions&quot;)
+class LogPositionAPI extends Api {
+  def execute() {...}
+}
+
+@POST(&quot;api/todos&quot;)
+class CreateTodoAPI extends Api {
+  def execute() {...}
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>Управление маршрутами<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum автоматически собирает маршруты при запуске.
+Для управления этими маршрутами используйте
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Например:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
+
+object Boot {
+  def main(args: Array[String]) {
+    // Вы можете поправить маршруты до запуска сервера
+    val routes = Config.routes
+
+    // Удаление маршрутов относящихся к конкретному классу
+    routes.removeByClass[MyClass]()
+
+    if (demoVersion) {
+      // Удаление маршрутов начинающихся с префикса
+      routes.removeByPrefix(&quot;premium/features&quot;)
+
+      // Допустимый вариант
+      routes.removeByPrefix(&quot;/premium/features&quot;)
+    }
+
+    ...
+
+    Server.start()
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id12">
+<h2>Получение полных (сырых) данных запроса<a class="headerlink" href="#id12" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Обычно когда mime тип запроса не соответствует <tt class="docutils literal"><span class="pre">application/x-www-form-urlencoded</span></tt>,
+предполагается что содержимое запроса будет обработано в ручном режиме.</p>
+<p>Получение тела запроса в виде строки:</p>
+<div class="highlight-python"><div class="highlight"><pre>val body = requestContentString
+</pre></div>
+</div>
+<p>JSON:</p>
+<div class="highlight-python"><div class="highlight"><pre>val myMap = requestContentJson[Map[String, Int]]
+</pre></div>
+</div>
+<p>Если вам нужно получить полный доступ к запросу, используйте <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Он возвращает <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+</div>
+<div class="section" id="api">
+<h2>Документирование API<a class="headerlink" href="#api" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Из коробки вы можете документировать API и использованием <a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a>.
+Добавьте аннотацию <tt class="docutils literal"><span class="pre">&#64;Swagger</span></tt> к контроллеру который нужно задокументировать
+Xitrum генерирует <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a>.
+Этот файл может быть использован в <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a>
+для генерации интерактивной документации.</p>
+<p>Xitrum включает Swagger UI, по пути <tt class="docutils literal"><span class="pre">/xitrum/swagger-ui</span></tt>,
+например <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p>Рассмотрим <a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">пример</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.{GET, Swagger}
+
+@Swagger(
+  Swagger.Resource(&quot;image&quot;, &quot;APIs to create images&quot;),
+  Swagger.Note(&quot;Dimensions should not be bigger than 2000 x 2000&quot;),
+  Swagger.OptStringQuery(&quot;text&quot;, &quot;Text to render on the image, default: Placeholder&quot;),
+  Swagger.Produces(&quot;image/png&quot;),
+  Swagger.Response(200, &quot;PNG image&quot;),
+  Swagger.Response(400, &quot;Width or height is invalid or too big&quot;)
+)
+trait ImageApi extends Action with SkipCsrfCheck {
+  lazy val text = paramo(&quot;text&quot;).getOrElse(&quot;Placeholder&quot;)
+}
+
+@GET(&quot;image/:width/:height&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Nickname(&quot;rect&quot;),
+  Swagger.Summary(&quot;Generate rectangle image&quot;),
+  Swagger.IntPath(&quot;width&quot;),
+  Swagger.IntPath(&quot;height&quot;)
+)
+class RectImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    val height = param[Int](&quot;height&quot;)
+    // ...
+  }
+}
+
+@GET(&quot;image/:width&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Nickname(&quot;square&quot;),
+  Swagger.Summary(&quot;Generate square image&quot;),
+  Swagger.IntPath(&quot;width&quot;)
+)
+class SquareImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON для Swagger</a>
+будет генерироваться при доступе <tt class="docutils literal"><span class="pre">/xitrum/swagger</span></tt>.</p>
+<p>Swagger UI использует эту информацию для генерации интерактивной документации к API.</p>
+<p>Возможные параметры на подобии Swagger.IntPath определяются шаблоном:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">&lt;Тип</span> <span class="pre">переменной&gt;&lt;Тип</span> <span class="pre">параметра&gt;</span></tt> (обязательный параметр)</li>
+<li><tt class="docutils literal"><span class="pre">Opt&lt;Тип</span> <span class="pre">переменной&gt;&lt;Тип</span> <span class="pre">параметра&gt;</span></tt> (опциональный параметр)</li>
+</ul>
+<p>Типы переменных: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Типы параметров: Path, Query, Body, Header, Form</p>
+<p>Подробнее о <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">типах переменных</a>
+и <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">типах параметров</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#id1">Кэш маршрутов</a></li>
+<li><a class="reference internal" href="#id2">Очередность маршрутов</a></li>
+<li><a class="reference internal" href="#id3">Несколько маршрутов для одного контроллера</a></li>
+<li><a class="reference internal" href="#id4">Точка в маршруте</a></li>
+<li><a class="reference internal" href="#id5">Регулярные выражения в маршруте</a></li>
+<li><a class="reference internal" href="#id6">Обработка не стандартных маршрутов</a></li>
+<li><a class="reference internal" href="#id7">Ссылка на контроллер</a></li>
+<li><a class="reference internal" href="#id8">Редирект на контроллер</a></li>
+<li><a class="reference internal" href="#id10">Форвардинг (перенаправление) на контроллер</a></li>
+<li><a class="reference internal" href="#ajax">Определение Ajax запроса</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-anticsrftoken">antiCsrfInput и antiCsrfToken</a></li>
+<li><a class="reference internal" href="#skipcsrfcheck">SkipCsrfCheck</a></li>
+<li><a class="reference internal" href="#id11">Управление маршрутами</a></li>
+<li><a class="reference internal" href="#id12">Получение полных (сырых) данных запроса</a></li>
+<li><a class="reference internal" href="#api">Документирование API</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="предыдущая глава">Контроллеры и представления</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="следующая глава">Шаблонизация</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/restful.txt"
+           rel="nofollow">Исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Контроллеры и представления"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.21</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
