@@ -59,8 +59,8 @@
 <li>入力: なし</li>
 <li>出力: true/false</li>
 </ul>
-<p>Beforeフィルターを複数設定できます。その中、ーつのbeforeフィルターがfalseを返すとき、その
-フィルターの後ろのフィルターとフィルターの実行が中止されます。</p>
+<p>Beforeフィルターを複数設定できます。その中、ーつのbeforeフィルターが何かrespondするとき、その
+フィルターの後ろのフィルターとアクションの実行が中止されます。</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 import xitrum.annotation.GET
 
@@ -68,7 +68,6 @@ import xitrum.annotation.GET
 class MyAction extends Action {
   beforeFilter {
     log.info(&quot;我行くゆえに我あり&quot;)
-    true
   }
 
   // This method is run after the above filters

@@ -54,9 +54,7 @@
 <h1>Фильтры<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
 <div class="section" id="before-filter">
 <h2>Пре-фильтр (before filter)<a class="headerlink" href="#before-filter" title="Ссылка на этот заголовок">¶</a></h2>
-<p>Данные фильтры запускаются до того как контроллер начнет обработку запроса.
-Они не принимают входных параметров и возвращают true или false. Если
-пре-фильтр возвращает false, все остальные фильтры и сам контроллер не будет
+<p>Если пре-фильтр отправляет ответ сервера (вызывает respond или forwardTo), то все остальные фильтры и сам контроллер не будет
 запущен.</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 import xitrum.annotation.GET
@@ -65,7 +63,6 @@ import xitrum.annotation.GET
 class MyAction extends Action {
   beforeFilter {
     log.info(&quot;I run therefore I am&quot;)
-    true
   }
 
   // метод выполнится после всех фильтров
