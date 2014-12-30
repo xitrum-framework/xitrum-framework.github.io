@@ -80,11 +80,11 @@ div.sphinxsidebar input {
 }
 
 div.sphinxsidebar #searchbox input[type="text"] {
-    width: 170px;
+    width: 140px;  /* 170px; */
 }
 
 div.sphinxsidebar #searchbox input[type="submit"] {
-    width: 30px;
+    /* width: 30px; */
 }
 
 img {
