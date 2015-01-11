@@ -71,8 +71,34 @@
         <br/>
         <br/>
 
-        <h2 class="title">Руководство пользователя</h2>
+        <h2 class="title">Возможности</h2>
 
+<ul class="simple">
+<li>Безопасный относительно типов (typesafe) во всех отношениях где это возможно.</li>
+<li>Полностью асинхронный. Необязательно слать ответ на запрос немедленно, можно запустить сложные вычисления и дать ответ, когда он будет готов. Поддерживаются Long polling, chunked response, WebSockets, SockJs, EventStream.</li>
+<li>Встроенный веб сервер основан на высоко производительном <a class="reference external" href="http://netty.io/">Netty</a>, отдача статических файлов сравнима по производительности с <a class="reference external" href="https://gist.github.com/3293596">Nginx</a>.</li>
+<li>Обширные возможности для кэширования как на серверной так и на клиентской стороне.
+На уровне сервера файлы маленького размера сохраняются в памяти, большие файлы пересылаются с использованием NIO&#8217;s zero copy.
+На уровне фреймворка есть возможность сохранить в кэш страницу, действие (action) или объект в стиле Rails.
+Учтены рекомендации <a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">Google</a>.
+Ревалидация кэша возможна в любой момент.</li>
+<li>Для статических файлов поддерживаются <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range запросы</a>. Эта функция необходима для отдачи видео файлов.</li>
+<li>Поддержка <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</li>
+<li>Автоматический расчет маршрутов (routes) приложения в стиле JAX-RS и Rails. Нет необходимости в объявлении маршрутов в каком-либо файле. Благодаря этому Xitrum позволяет объединять несколько приложений в одно. Все маршруты из jar файлов объединяются и работают как единое приложение.</li>
+<li>Обратная маршрутизация: генерация ссылок на контроллеры и действия.</li>
+<li>Генерация документации на основе <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
+<li>Автоматическая перезагрузка классов и маршрутов при изменении (не требует перезапуска сервера).</li>
+<li>Представления (views) могут быть созданы с использованием <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>, Scala или xml (во всех случаях происходит проверка типов на этапе компиляции).</li>
+<li>Сессии могут хранится в куках или кластеризованны, например, с помощью <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>.</li>
+<li>Встроенная валидация с <a class="reference external" href="http://jqueryvalidation.org/">jQuery</a> (опционально).</li>
+<li>i18n на основе <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>. Автоматическая генерация pot файлов из исходников. gettext поддерживает множественные и единственные формы числа.</li>
+</ul>
+
+        <p>Простое масштабирование, за счет создания новых нод.</p>
+        <img src="parts/whale_pool.png" alt="Scalability"/>
+        <br /><br />
+
+        <h2 class="title">Руководство пользователя</h2>
         <div>
           <table>
             <tr>
@@ -106,11 +132,19 @@
           </table>
         </div>
 
+        <h2 class="title">Презентации</h2>
         <div>
           <table>
             <tr>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/43338762" frameborder="0" allowfullscreen></iframe></td>
               <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/38765630" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+
+          <table>
+            <tr>
               <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/36938480" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/40729551" frameborder="0" allowfullscreen></iframe></td>
             </tr>
           </table>
 
@@ -121,35 +155,6 @@
             </tr>
           </table>
         </div>
-
-        <div class="clearfix"></div>
-
-        <h2 class="title">Возможности</h2>
-
-<ul class="simple">
-<li>Безопасный относительно типов (typesafe) во всех отношениях где это возможно.</li>
-<li>Полностью асинхронный. Необязательно слать ответ на запрос немедленно, можно запустить сложные вычисления и дать ответ, когда он будет готов. Поддерживаются Long polling, chunked response, WebSockets, SockJs, EventStream.</li>
-<li>Встроенный веб сервер основан на высоко производительном <a class="reference external" href="http://netty.io/">Netty</a>, отдача статических файлов сравнима по производительности с <a class="reference external" href="https://gist.github.com/3293596">Nginx</a>.</li>
-<li>Обширные возможности для кэширования как на серверной так и на клиентской стороне.
-На уровне сервера файлы маленького размера сохраняются в памяти, большие файлы пересылаются с использованием NIO&#8217;s zero copy.
-На уровне фреймворка есть возможность сохранить в кэш страницу, действие (action) или объект в стиле Rails.
-Учтены рекомендации <a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">Google</a>.
-Ревалидация кэша возможна в любой момент.</li>
-<li>Для статических файлов поддерживаются <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range запросы</a>. Эта функция необходима для отдачи видео файлов.</li>
-<li>Поддержка <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</li>
-<li>Автоматический расчет маршрутов (routes) приложения в стиле JAX-RS и Rails. Нет необходимости в объявлении маршрутов в каком-либо файле. Благодаря этому Xitrum позволяет объединять несколько приложений в одно. Все маршруты из jar файлов объединяются и работают как единое приложение.</li>
-<li>Обратная маршрутизация: генерация ссылок на контроллеры и действия.</li>
-<li>Генерация документации на основе <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
-<li>Автоматическая перезагрузка классов и маршрутов при изменении (не требует перезапуска сервера).</li>
-<li>Представления (views) могут быть созданы с использованием <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>, Scala или xml (во всех случаях происходит проверка типов на этапе компиляции).</li>
-<li>Сессии могут хранится в куках или кластеризованны, например, с помощью <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>.</li>
-<li>Встроенная валидация с <a class="reference external" href="http://jqueryvalidation.org/">jQuery</a> (опционально).</li>
-<li>i18n на основе <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>. Автоматическая генерация pot файлов из исходников. gettext поддерживает множественные и единственные формы числа.</li>
-</ul>
-
-        <p>Простое масштабирование, за счет создания новых нод.</p>
-        <img src="parts/whale_pool.png" alt="Scalability"/>
-        <br /><br />
 
         <div class="span-22">
           <div class="span-11">
