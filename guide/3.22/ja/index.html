@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Xitrum ガイド &mdash; Xitrum Scala Web Framework Guide 3.22 ドキュメント</title>
+
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.22 ドキュメント" href="#" />
+    <link rel="next" title="はじめに" href="intro.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="intro.html" title="はじめに"
+             accesskey="N">次へ</a> |</li>
+        <li><a href="#">Xitrum Scala Web Framework Guide 3.22 ドキュメント</a> &raquo;</li>
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+
+  <div class="section" id="xitrum">
+<h1>Xitrum ガイド<a class="headerlink" href="#xitrum" title="このヘッドラインへのパーマリンク">¶</a></h1>
+
+<p>
+  <a href="xitrum.pdf" title="PDF" style="float:left"><img src="../../pdf-ja.png"/></a>
+  <a href="xitrum.pdf" title="PDF">PDF ダウンロード</a></p>
+</p>
+<div style="clear:both"></div>
+
+<p><a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum ガイドは英語版とロシア語版もあります。</a></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#id3">特徴</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#id6">貢献者</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">チュートリアル</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#xitrum">Xitrumプロジェクトの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#id2">起動</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#eclipse">Eclipseプロジェクトの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#intellij-idea">IntelliJ IDEAプロジェクトの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#id6">自動リロード</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#ide">IDEを使用する場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#id7">SBTを使用する場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html#dcevm">DCEVM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#ignore">ignoreファイルの設定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="action_view.html">Action と view</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#action">Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#futureaction">FutureAction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#actoraction">ActorAction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#id1">クライアントへのレスポンス送信</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#view">テンプレートViewファイルのレスポンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#currentaction">currentActionのキャスト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#id2">Mustache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#coffeescript">CoffeeScript</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#id4">レイアウト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#id5">独立したレイアウトファイルを使用しないパターン</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#respondview">respondViewにレイアウトを直接指定するパターン</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#respondinlineview">respondInlineView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#renderfragment">renderFragment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#id6">別のアクションに紐付けられたViewをレスポンスする場合</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#id7">ひとつのアクションに複数のViewを紐付ける方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#component">Component</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="restful.html">RESTful APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id1">ルートのキャッシング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#firstlast">ルートの優先順位(first、last)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#action">Actionへの複数パスの関連付け</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id2">ドットを含むルート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id3">正規表現によるルーティング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id4">パスの残り部分の取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id5">アクションへのリンク</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id6">他のアクションへのリダイレクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id8">他のアクションへのフォワード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#ajax">Ajaxリクエストの判定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#csrf">CSRF対策</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#csrfcsrf">CSRF対策インプットとCSRF対策トークン</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id9">CSRFチェックの省略</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id10">ルーティングの操作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id11">リクエストコンテンツの取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#swaggerapi">SwaggerによるAPIドキュメンテーション</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="template_engines.html">テンプレートエンジン</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="template_engines.html#id2">テンプレートエンジンの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="template_engines.html#id3">テンプレートエンジンの削除</a></li>
+<li class="toctree-l2"><a class="reference internal" href="template_engines.html#id4">テンプレートエンジンの作成</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="postback.html">ポストバック</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#id2">レイアウト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#id3">フォーム</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#form">formエレメント以外への適用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#id4">コンファームダイアログ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#id5">パラメーターの追加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#id6">ローディングイメージの表示</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xml.html">XML</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xml.html#id1">XMLのアンエスケープ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html#id2">XMLエレメントのグループ化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html#xhtml">XHTMLの描画</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="js.html">JavaScript と JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="js.html#javascript">JavaScript</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="js.html#javascriptview">JavaScriptフラグメントをViewに追加する方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="js.html#id1">JavaScriptを直接レスポンスする方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="js.html#json">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="js.html#knockout-js">Knockout.jsプラグイン</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="async.html">非同期レスポンス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="async.html#websocket">WebSocket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async.html#sockjs">SockJS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async.html#chunk">Chunkレスポンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="async.html#iframe">無限iframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async.html#event-source">Event Source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static.html">静的ファイル</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static.html#id2">ディスク上の静的ファイルの配信</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html#index-html">index.htmlへのフォールバック</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html#id3">404 と 500</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html#webjar">WebJarによるクラスパス上のリソースファイルの配信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static.html#webjars">WebJars</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static.html#id5">WebJars形式によるリソースの保存</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static.html#id7">クラスパス上の要素をレスポンスする場合</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static.html#etagmax-age">ETagとmax-ageによるクライアントサイドキャッシュ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html#gzip">GZIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html#id10">サーバーサイドキャッシュ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="flash.html">Flashのソケットポリシーファイル</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scopes.html">スコープ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#id2">リクエストスコープ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id3">リクエストパラメーター</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id4">パラメーターへのアクセス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#at">&#8220;at&#8221;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#atjson">&#8220;atJson&#8221;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#requestvar">RequestVar</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#id5">クッキー</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id6">クッキーに使用可能な文字</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#id8">セッション</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#session-clear">session.clear()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#sessionvar">SessionVar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id9">セッションストア</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#object-vs-val">object vs. val</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">バリデーション</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="validation.html#id2">デフォルトバリデーター</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html#id3">カスタムバリデーターの作成</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upload.html">ファイルアップロード</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upload.html#ajax">Ajax風ファイルアップロード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filter.html">アクションフィルター</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filter.html#before">Beforeフィルター</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter.html#after">Afterフィルター</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter.html#around">Aroundフィルター</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter.html#id2">フィルターの実行順番</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cache.html">サーバーサイドキャッシュ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id2">ページまたはアクションのキャッシュ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id3">オブジェクトのキャッシュ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id4">キャッシュの削除</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id5">キャッシュエンジンの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id6">キャッシュ動作の仕組み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="i18n.html">I18n</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#id1">ソースコード内への国際化メッセージの記載</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#pot">potファイルへのメッセージの展開</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#po">po ファイルの保存先</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#id2">言語の設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#id3">バリデーションメッセージ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#id4">複数形への対応</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#id5">日付と数値のフォーマット</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="log.html">ログ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="log.html#xitrum-log">xitrum.Logオブジェクトを直接使用する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html#id2">xitrum.Logトレイトを直接使用する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html#id3">ログレベルをチェックする必要はありません</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html#id5">ログレベル、ログファイル等の設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html#fluentd">Fluentd へのログ出力</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">プロダクション環境へのデプロイ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#id2">ディレクトリのパッケージ化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#xitrum-package">xitrum-packageのカスタマイズ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#jvmscala">稼働中のJVMプロセスに対するScalaコンソール接続</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#centosubuntuoraclejdk">CentOSまたはUbuntuへのOracleJDKインストール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#xitrum">システム起動時にXitrumをスタートさせる</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#id8">ポートフォワーディングの設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#linux">大量コネクションに対するLinux設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id9">ファイルディスクリプタ数の上限設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id10">カーネルのチューニング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id11">バックログについて</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#haproxy-tips">HAProxy tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#nginx-tips">Nginx tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#heroku">Herokuへのデプロイ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id17">サインアップとリポジトリの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#procfile">Procfileの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#port">Port設定の変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id20">ログレベルの設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id21"><tt class="docutils literal"><span class="pre">xitrum-package</span></tt> のエイリアス作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id22">Herokuへのプッシュ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#openshift">OpenShiftへのデプロイ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id24">サインアップとリポジトリの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id26">プロジェクト構成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#action-hooks">action_hooksの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#ip-port">IP:Port設定の変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#sbt">sbt引数の修正</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#openshiftpush">openshiftへのpush</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">AkkaとHazelcastでサーバーをクラスタリングする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler.html">Nettyハンドラ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="handler.html#id3">Nettyハンドラの構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler.html#id4">ハンドラの追加作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler.html#xitrum">Xitrumが提供するハンドラ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">メトリクス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#id2">メトリクスの収集</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#cpu">ヒープメモリとCPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#id3">アクションの実行ステータス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#id4">カスタムメトリクスの収集</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#id6">メトリクスの配信</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#xitrum">Xitrumデフォルトビューア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#jconsole">Jconsoleビューア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#id8">カスタムビューア</a></li>
+<li class="toctree-l3"><a class="reference internal" href="metrics.html#id9">メトリクスの保存</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">HOWTO</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id1">ベーシック認証</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="howto.html#id4">サイト全体のベーシック認証設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="howto.html#id5">特定のアクションのベーシック認証設定</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id6">設定ファイルのロード</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="howto.html#json">JSONファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="howto.html#id7">プロパティファイル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="howto.html#id8">型安全な設定ファイル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id9">シリアライズとデシリアライズ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id10">データの暗号化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id11">同一ドメイン配下における複数サイトの構成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#markdownhtml">MarkdownからHTMLへの変換</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id12">ファイル監視</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id13">一時ディレクトリ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id14">ビデオストリーミング</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deps.html">依存関係</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deps.html#id2">依存ライブラリ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deps.html#id3">関連プロジェクト</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="intro.html"
+                        title="次の章へ">はじめに</a></p>
+  <h3>このページ</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">ソースコードを表示</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="intro.html" title="はじめに"
+             >次へ</a> |</li>
+        <li><a href="#">Xitrum Scala Web Framework Guide 3.22 ドキュメント</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2 で生成しました。
+    </div>
+  </body>
+</html>

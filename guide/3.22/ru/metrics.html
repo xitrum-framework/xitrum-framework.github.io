@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Метрики &mdash; Документация Xitrum Scala Web Framework Guide 3.22</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.22" href="index.html" />
+    <link rel="next" title="HOWTO" href="howto.html" />
+    <link rel="prev" title="Netty handlers" href="handler.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.22</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Метрики<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Xitrum собирает информацию об использовании памяти, CPU и информацию об использовании
+контроллеров каждой ноды вашего Akka кластера. Эти данные публикуются в JSON формате.
+Xitrum так же позволяет публиковать ваши метрики.</p>
+<p>Эти метрики базируются на библиотеке <a class="reference external" href="http://metrics.codahale.com/">Coda Hale Metrics</a>.</p>
+<div class="section" id="id2">
+<h2>Агрегирование метрик<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="section" id="cpu">
+<h3>Память и CPU<a class="headerlink" href="#cpu" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Информация по памяти и CPU собирается с помощью
+<a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
+системы актров каждой ноды.</p>
+<p>Память:</p>
+<img alt="_images/metrics_heapmemory.png" src="_images/metrics_heapmemory.png" />
+<p>CPU: Количество процессоров и средняя загрузка</p>
+<img alt="_images/metrics_cpu.png" src="_images/metrics_cpu.png" />
+</div>
+<div class="section" id="id3">
+<h3>Метрики контроллера<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Xitrum собирает состояния выполнения каждого контроллера в формате
+<a class="reference external" href="http://metrics.codahale.com/getting-started/#histograms">гистограммы</a>.
+Вы можете узнать сколько раз контроллер запускался, время выполнения для
+не асинхронных запросов.</p>
+<img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
+<p>Последнее время выполнения конкретного контроллера:</p>
+<img alt="_images/metrics_action_time.png" src="_images/metrics_action_time.png" />
+</div>
+<div class="section" id="id5">
+<h3>Дополнительные метрики<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Дополнительные метрики вы можете собирать самостоятельно. Подробнее про использование читайте
+<a class="reference external" href="http://metrics.codahale.com/">Coda Hale Metrics</a> и
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">реализация на Scala</a>. Используйте
+пакет <tt class="docutils literal"><span class="pre">xitru.Metrics</span></tt>, в нем <tt class="docutils literal"><span class="pre">gauge</span></tt>, <tt class="docutils literal"><span class="pre">counter</span></tt>, <tt class="docutils literal"><span class="pre">meter</span></tt>, <tt class="docutils literal"><span class="pre">timer</span></tt> и <tt class="docutils literal"><span class="pre">histogram</span></tt>.</p>
+<p>Пример таймера:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, Metrics}
+import xitrum.annotation.GET
+
+object MyAction {
+  lazy val myTimer = Metrics.timer(&quot;myTimer&quot;)
+}
+
+@GET(&quot;my/action&quot;)
+class MyAction extends Action {
+  import MyAction._
+
+  def execute() {
+    myTimer.time {
+      // Задача время выполнения которой вы хотите замерить
+      ...
+    }
+    ...
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Публикация метрик<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum публикует последние значения метрики в JSON формате через определенный интервал времени.
+Этот интервал имеет не постоянное значение и может меняться.</p>
+<p>Информация о памяти:</p>
+<div class="highlight-python"><div class="highlight"><pre>{
+  &quot;TYPE&quot;      : &quot;heapMemory&quot;,
+  &quot;SYSTEM&quot;    : akka.actor.Address.system,
+  &quot;HOST&quot;      : akka.actor.Address.host,
+  &quot;PORT&quot;      : akka.actor.Address.port,
+  &quot;HASH&quot;      : akka.actor.Address.hashCode,
+  &quot;TIMESTAMP&quot; : akka.cluster.NodeMetrics.timestamp,
+  &quot;USED&quot;      : Number as byte,
+  &quot;COMMITTED&quot; : Number as byte,
+  &quot;MAX&quot;       : Number as byte
+}
+</pre></div>
+</div>
+<p>Информация о CPU:</p>
+<div class="highlight-python"><div class="highlight"><pre>{
+  &quot;TYPE&quot;              : &quot;cpu&quot;,
+  &quot;SYSTEM&quot;            : akka.actor.Address.system,
+  &quot;HOST&quot;              : akka.actor.Address.host,
+  &quot;PORT&quot;              : akka.actor.Address.port,
+  &quot;HASH&quot;              : akka.actor.Address.hashCode,
+  &quot;TIMESTAMP&quot;         : akka.cluster.NodeMetrics.timestamp
+  &quot;SYSTEMLOADAVERAGE&quot; : Number,
+  &quot;CPUCOMBINED&quot;       : Number,
+  &quot;PROCESSORS&quot;        : Number
+}
+</pre></div>
+</div>
+<p>MetricsRegistry использует <a class="reference external" href="http://metrics.codahale.com/manual/json/">metrics-json</a> для разбора
+JSON файла.</p>
+<div class="section" id="xitrum">
+<h3>Просмотр метрик через Xitrum<a class="headerlink" href="#xitrum" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Xitrum предоставляет стандартный способ просмотра метрик по ссылке <tt class="docutils literal"><span class="pre">/xitrum/metrics/viewer?api_key=&lt;смотри</span> <span class="pre">xitrum.conf&gt;</span></tt>.
+По этой ссылке доступны графики представленные выше.
+Графики созданы с использованием <a class="reference external" href="http://d3js.org/">D3.js</a>.</p>
+<p>Ссылка может быть сформирована следующим образом:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Config
+import xitrum.metrics.XitrumMetricsViewer
+
+url[XitrumMetricsViewer](&quot;api_key&quot; -&gt; Config.xitrum.metrics.get.apiKey)
+</pre></div>
+</div>
+</div>
+<div class="section" id="jconsole">
+<h3>Jconsole<a class="headerlink" href="#jconsole" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Метрики можно просматривать через <tt class="docutils literal"><span class="pre">jconsole</span></tt> используя <a class="reference external" href="http://metrics.codahale.com/getting-started/#reporting-via-jmx">JVM Reporter</a>.</p>
+<img alt="_images/metrics_jconsole.png" src="_images/metrics_jconsole.png" />
+<p>Запуск:</p>
+<div class="highlight-python"><div class="highlight"><pre>import com.codahale.metrics.JmxReporter
+
+object Boot {
+  def main(args: Array[String]) {
+    Server.start()
+    JmxReporter.forRegistry(xitrum.Metrics).build().start()
+  }
+}
+</pre></div>
+</div>
+<p>Затем используйте <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html">jconsole</a>.</p>
+</div>
+<div class="section" id="id9">
+<h3>Просмотр метрик сторонними средствами<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Метрики публикуются как ссылка SockJS <tt class="docutils literal"><span class="pre">xitrum/metrics/channel</span></tt> в формате JSON.
+<tt class="docutils literal"><span class="pre">jsAddMetricsNameSpace</span></tt> - шаблон JavaScript кода который предоставляет Xitrum
+для установки соединения.</p>
+<p>Реализуйте свой собственный JSON обработчик используя метод <tt class="docutils literal"><span class="pre">initMetricsChannel</span></tt>.</p>
+<p>Пример контроллера:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.GET
+import xitrum.metrics.MetricsViewer
+
+@GET(&quot;my/metrics/viewer&quot;)
+class MySubscriber extends MetricsViewer {
+  def execute() {
+    jsAddMetricsNameSpace(&quot;window&quot;)
+    jsAddToView(&quot;&quot;&quot;
+      function onValue(json) {
+        console.log(json);
+      }
+      function onClose(){
+        console.log(&quot;channel closed&quot;);
+      }
+      window.initMetricsChannel(onValue, onClose);
+    &quot;&quot;&quot;)
+    respondView()
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id10">
+<h3>Хранения метрик<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Для экономии памяти, Xitrum не хранит старые значения метрик. Если вы хотите хранить эти
+значения, вам передается реализовать собственный обработчик.</p>
+<p>Например:</p>
+<div class="highlight-python"><div class="highlight"><pre>import akka.actor.Actor
+import xitrum.metrics.PublisherLookUp
+
+class MySubscriber extends Actor with PublisherLookUp {
+  override def preStart() {
+    lookUpPublisher()
+  }
+
+  def receive = {
+    case _ =&gt;
+  }
+
+  override def doWithPublisher(globalPublisher: ActorRef) = {
+    context.become {
+      // When run in multinode environment
+      case multinodeMetrics: Set[NodeMetrics] =&gt;
+        // Save to DB or write to file.
+
+      // When run in single node environment
+      case nodeMetrics: NodeMetrics =&gt;
+        // Save to DB or write to file.
+
+      case Publish(registryAsJson) =&gt;
+        // Save to DB or write to file.
+
+      case _ =&gt;
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Метрики</a><ul>
+<li><a class="reference internal" href="#id2">Агрегирование метрик</a><ul>
+<li><a class="reference internal" href="#cpu">Память и CPU</a></li>
+<li><a class="reference internal" href="#id3">Метрики контроллера</a></li>
+<li><a class="reference internal" href="#id5">Дополнительные метрики</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Публикация метрик</a><ul>
+<li><a class="reference internal" href="#xitrum">Просмотр метрик через Xitrum</a></li>
+<li><a class="reference internal" href="#jconsole">Jconsole</a></li>
+<li><a class="reference internal" href="#id9">Просмотр метрик сторонними средствами</a></li>
+<li><a class="reference internal" href="#id10">Хранения метрик</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="handler.html"
+                        title="предыдущая глава">Netty handlers</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="howto.html"
+                        title="следующая глава">HOWTO</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/metrics.txt"
+           rel="nofollow">Исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.22</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

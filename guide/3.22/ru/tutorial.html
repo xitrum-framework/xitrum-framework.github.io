@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Как начать &mdash; Документация Xitrum Scala Web Framework Guide 3.22</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.22" href="index.html" />
+    <link rel="next" title="Контроллеры и представления" href="action_view.html" />
+    <link rel="prev" title="Введение" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Контроллеры и представления"
+             accesskey="N">следующий</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Введение"
+             accesskey="P">предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.22</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Как начать<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Эта глава описывает как создать и запустить Xitrum проект.
+<strong>Предполагается что вы знакомы с операционной системой Linux и у вас установлена Java.</strong></p>
+<div class="section" id="xitrum">
+<h2>Создание пустого проекта Xitrum<a class="headerlink" href="#xitrum" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для создания проекта, скачайте файл
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>wget -O xitrum-new.zip https://github.com/xitrum-framework/xitrum-new/archive/master.zip
+</pre></div>
+</div>
+<p>или:</p>
+<div class="highlight-python"><div class="highlight"><pre>curl -L -o xitrum-new.zip https://github.com/xitrum-framework/xitrum-new/archive/master.zip
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Запуск<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Сложившийся стандарт запуска Scala проектов - использование
+<a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">SBT</a>. Проект созданный из шаблона уже включает
+SBT в директории <tt class="docutils literal"><span class="pre">sbt</span></tt>. Если вы хотите установить SBT самостоятельно, воспользуйтесь
+<a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">руководством</a>.</p>
+<p>Перейдите в директорию созданного проекта и выполните команду <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">run</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>unzip xitrum-new.zip
+cd xitrum-new
+sbt/sbt run
+</pre></div>
+</div>
+<p>Данная команда выполнит скачивание всех <a class="reference internal" href="deps.html"><em>зависимостей</em></a>, компиляцию проекта
+и запуск main-класса <tt class="docutils literal"><span class="pre">quickstart.Boot</span></tt>, который запустит сервер. В консоль будут напечатаны все
+маршруты (routes) проекта:</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Load routes.cache or recollect routes...
+[INFO] Normal routes:
+GET  /  quickstart.action.SiteIndex
+[INFO] SockJS routes:
+xitrum/metrics/channel  xitrum.metrics.XitrumMetricsChannel  websocket: true, cookie_needed: false
+[INFO] Error routes:
+404  quickstart.action.NotFoundError
+500  quickstart.action.ServerError
+[INFO] Xitrum routes:
+GET        /webjars/swagger-ui/2.0.17/index                            xitrum.routing.SwaggerUiVersioned
+GET        /xitrum/xitrum.js                                           xitrum.js
+GET        /xitrum/metrics/channel                                     xitrum.sockjs.Greeting
+GET        /xitrum/metrics/channel/:serverId/:sessionId/eventsource    xitrum.sockjs.EventSourceReceive
+GET        /xitrum/metrics/channel/:serverId/:sessionId/htmlfile       xitrum.sockjs.HtmlFileReceive
+GET        /xitrum/metrics/channel/:serverId/:sessionId/jsonp          xitrum.sockjs.JsonPPollingReceive
+POST       /xitrum/metrics/channel/:serverId/:sessionId/jsonp_send     xitrum.sockjs.JsonPPollingSend
+WEBSOCKET  /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocket
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr            xitrum.sockjs.XhrPollingReceive
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr_send       xitrum.sockjs.XhrSend
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr_streaming  xitrum.sockjs.XhrStreamingReceive
+GET        /xitrum/metrics/channel/info                                xitrum.sockjs.InfoGET
+WEBSOCKET  /xitrum/metrics/channel/websocket                           xitrum.sockjs.RawWebSocket
+GET        /xitrum/metrics/viewer                                      xitrum.metrics.XitrumMetricsViewer
+GET        /xitrum/metrics/channel/:iframe                             xitrum.sockjs.Iframe
+GET        /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocketGET
+POST       /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocketPOST
+[INFO] HTTP server started on port 8000
+[INFO] HTTPS server started on port 4430
+[INFO] Xitrum started in development mode
+</pre></div>
+</div>
+<p>Во время запуска, все маршруты будут собраны и напечатаны в лог. Это очень удобно
+иметь список всех маршрутов проекта, если вы планируете написать документацию для своего
+RESTful API.</p>
+<p>Откройте <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> или <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a> в браузере. В консоль будет
+напечатана информация о запросе:</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] GET quickstart.action.SiteIndex, 1 [ms]
+</pre></div>
+</div>
+</div>
+<div class="section" id="eclipse">
+<h2>Импорт проекта в Eclipse<a class="headerlink" href="#eclipse" title="Ссылка на этот заголовок">¶</a></h2>
+<p><a class="reference external" href="http://scala-ide.org/">Использование Eclipse для написания Scala кода</a>.</p>
+<p>Из директории проекта выполните команду:</p>
+<div class="highlight-python"><div class="highlight"><pre>sbt/sbt eclipse
+</pre></div>
+</div>
+<p>Файл Eclipse проекта  <tt class="docutils literal"><span class="pre">.project</span></tt> будет создан из описание проекта <tt class="docutils literal"><span class="pre">build.sbt</span></tt>.
+Откройте Eclipse и импортируйте созданный проект.</p>
+</div>
+<div class="section" id="intellij">
+<h2>Импорт проекта в IntelliJ<a class="headerlink" href="#intellij" title="Ссылка на этот заголовок">¶</a></h2>
+<p><a class="reference external" href="http://www.jetbrains.com/idea/">IntelliJ</a>, поддерживает Scala на очень хорошем уровне.</p>
+<p>Для создания файлов проекта выполните команду:</p>
+<div class="highlight-python"><div class="highlight"><pre>sbt/sbt gen-idea
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>Автоматическая перезагрузка<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum позволяет перезагружать .class файлы (hot swap) без перезапуска программы.
+Однако, что бы избежать проблем с производительностью и получить более стабильное
+приложение, эта функция должна быть использована только в режиме разработчика
+(development mode).</p>
+<div class="section" id="ide">
+<h3>Запуск в IDE<a class="headerlink" href="#ide" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Во время разработки в IDE на подобии Eclipse или IntelliJ, автоматически будет происходить
+перезагрузка кода.</p>
+</div>
+<div class="section" id="id6">
+<h3>Запуск в SBT<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h3>
+<p>При использовании SBT, нужно открыть две консоли:</p>
+<ul class="simple">
+<li>В первой выполните <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">run</span></tt>. Эта команда запустить программу и будет
+перезагружать .class файлы когда они изменятся.</li>
+<li>Во второй <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">~compile</span></tt>. При изменении исходных файлов они будут автоматически
+компилироваться в .class файлы.</li>
+</ul>
+<p>В директории sbt расположен <a class="reference external" href="https://github.com/xitrum-framework/agent7">agent7.jar</a>.
+Его задача заключается в перезагрузке .class файлов в рабочей директории (и под директориях).
+Внутри скрипта <tt class="docutils literal"><span class="pre">sbt/sbt</span></tt>, agent7.jar подключается специальной опцией <tt class="docutils literal"><span class="pre">-javaagent:agent7.jar</span></tt>.</p>
+</div>
+<div class="section" id="dcevm">
+<h3>DCEVM<a class="headerlink" href="#dcevm" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Обычно JVM позволяет перезагружать только тела методов. Вы можете использовать
+<a class="reference external" href="https://github.com/dcevm/dcevm">DCEVM</a> - открытую модификацию Java HotSpot VM,
+которая позволяет полностью перезагружать классы.</p>
+<p>Вы можете установить DCEVM двумя способами:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/dcevm/dcevm/releases">Изменить</a> существующую установку Java.</li>
+<li>Установить <a class="reference external" href="http://dcevm.nentjes.com/">собранную</a> версию (проще).</li>
+</ul>
+<p>В первом варианте:</p>
+<ul class="simple">
+<li>DCEVM будет включен постоянно.</li>
+<li>Или будет установлен в качестве &#8220;альтернативной&#8221; JVM. В этом случае, что бы включить
+DCEVM, при запуске <tt class="docutils literal"><span class="pre">java</span></tt> нужно указывать опцию <tt class="docutils literal"><span class="pre">-XXaltjvm=dcevm</span></tt>.
+Например, вам нужно добавить <tt class="docutils literal"><span class="pre">-XXaltjvm=dcevm</span></tt> в скрипт <tt class="docutils literal"><span class="pre">sbt/sbt</span></tt>.</li>
+</ul>
+<p>Если вы используете IDE (например, Eclipse или IntelliJ), вам нужно настроить
+их на использование DCEVM при работе с вашим проектом.</p>
+<p>Если вы используете SBT, вам нужно настроить переменную окружения <tt class="docutils literal"><span class="pre">PATH</span></tt>
+так что бы команда <tt class="docutils literal"><span class="pre">java</span></tt> была из DCEVM (не из стандартной JVM). Вам
+так же нужен <tt class="docutils literal"><span class="pre">javaagent</span></tt> описанный выше, поскольку DCEVM поддерживает изменения классов,
+но сам их не перезагружает.</p>
+<p>Смотри <a class="reference external" href="http://javainformed.blogspot.jp/2014/01/jrebel-free-alternative.html">DCEVM - бесплатная альтернатива JRebel</a>.</p>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>Список игнорируемых файлов<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h2>
+<p>При создании проекта <a class="reference internal" href=""><em>по шаблону</em></a>, есть ряд файлов которые нужно
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/.gitignore">исключить</a> из системы контроля версий:</p>
+<div class="highlight-python"><div class="highlight"><pre>.*
+log
+project/project
+project/target
+target
+tmp
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Как начать</a><ul>
+<li><a class="reference internal" href="#xitrum">Создание пустого проекта Xitrum</a></li>
+<li><a class="reference internal" href="#id2">Запуск</a></li>
+<li><a class="reference internal" href="#eclipse">Импорт проекта в Eclipse</a></li>
+<li><a class="reference internal" href="#intellij">Импорт проекта в IntelliJ</a></li>
+<li><a class="reference internal" href="#id5">Автоматическая перезагрузка</a><ul>
+<li><a class="reference internal" href="#ide">Запуск в IDE</a></li>
+<li><a class="reference internal" href="#id6">Запуск в SBT</a></li>
+<li><a class="reference internal" href="#dcevm">DCEVM</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">Список игнорируемых файлов</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="intro.html"
+                        title="предыдущая глава">Введение</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="следующая глава">Контроллеры и представления</a></p>
+  <h3>На этой странице</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Исходный текст</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Просмотр</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Контроллеры и представления"
+             >следующий</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Введение"
+             >предыдущий</a> |</li>
+        <li><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.22</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
