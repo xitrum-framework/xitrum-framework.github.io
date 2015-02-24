@@ -1,0 +1,511 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Triển khai ứng dụng web trên server &mdash; Xitrum Scala Web Framework Guide 3.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.22 documentation" href="index.html" />
+    <link rel="next" title="Clustering với Akka và Hazelcast" href="cluster.html" />
+    <link rel="prev" title="Log" href="log.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering với Akka và Hazelcast"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="trien-khai-ung-dung-web-tren-server">
+<h1>Triển khai ứng dụng web trên server<a class="headerlink" href="#trien-khai-ung-dung-web-tren-server" title="Permalink to this headline">¶</a></h1>
+<p>Bạn có thể chạy trực tiếp Xitrum:</p>
+<div class="highlight-python"><div class="highlight"><pre>Browser ------ Xitrum instance
+</pre></div>
+</div>
+<p>Hoăc behind a load balancer như HAProxy, hoặc reverse proxy như Apache hay Nginx:</p>
+<div class="highlight-python"><div class="highlight"><pre>Browser ------ Load balancer/Reverse proxy -+---- Xitrum instance1
+                                            +---- Xitrum instance2
+</pre></div>
+</div>
+<div class="section" id="dong-gi-thu-muc">
+<h2>Đóng gí thư mục<a class="headerlink" href="#dong-gi-thu-muc" title="Permalink to this headline">¶</a></h2>
+<p>Chạy <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></tt> để chuẩn bị cho thư mục <tt class="docutils literal"><span class="pre">target/xitrum</span></tt> sẵn sàng
+triển khai tại server sản phẩm:</p>
+<div class="highlight-python"><div class="highlight"><pre>target/xitrum
+  config
+    [config files]
+  public
+    [static public files]
+  lib
+    [dependencies and packaged project file]
+  script
+    runner
+    runner.bat
+    scalive
+    scalive.jar
+    scalive.bat
+</pre></div>
+</div>
+</div>
+<div class="section" id="customize-xitrum-package">
+<h2>Customize xitrum-package<a class="headerlink" href="#customize-xitrum-package" title="Permalink to this headline">¶</a></h2>
+<p>Mặc định câu lệnh <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></tt> được cấu hình để sao chép các thư mục
+<tt class="docutils literal"><span class="pre">config</span></tt>, <tt class="docutils literal"><span class="pre">public</span></tt>, và <tt class="docutils literal"><span class="pre">script</span></tt> đến <tt class="docutils literal"><span class="pre">target/xitrum</span></tt>. Nếu bạn muốn câu lệnh
+đó sao chép các thư mục hoặc tệp khác sửa tệp <tt class="docutils literal"><span class="pre">build.sbt</span></tt> như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>XitrumPackage.copy(&quot;config&quot;, &quot;public, &quot;script&quot;, &quot;doc/README.txt&quot;, &quot;etc.&quot;)
+</pre></div>
+</div>
+<p>Xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package homepage</a>
+để biết thêm chi tiết.</p>
+</div>
+<div class="section" id="ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay">
+<h2>Kết nối Scala console đến một tiến trình JVM đang chạy<a class="headerlink" href="#ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay" title="Permalink to this headline">¶</a></h2>
+<p>Trong môi trường sản phẩm (production environment), nếu không có khởi tạo, bạn có
+thể sử dụng <a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>
+để kết nối một Scala console đến một tiến trình JVM đang chạy để gỡ lỗi trực tiếp.</p>
+<p>Chạy <tt class="docutils literal"><span class="pre">scalive</span></tt> trong thư mục script:</p>
+<div class="highlight-python"><div class="highlight"><pre>script
+  runner
+  runner.bat
+  scalive
+  scalive.jar
+  scalive.bat
+</pre></div>
+</div>
+</div>
+<div class="section" id="cai-dat-oracle-jdk-tren-centos-hoac-ubuntu">
+<h2>Cài đặt Oracle JDK trên CentOS hoặc Ubuntu<a class="headerlink" href="#cai-dat-oracle-jdk-tren-centos-hoac-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>Dưới đây là hướng dẫn một cách đơn giản để cài đặt Java.Bạn có thể
+cài đặt Java bằng cách sử dụng trình quản lý gói.</p>
+<p>Kiểm tra các phiên bản Java đã được cài đặt:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --list java
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-python"><div class="highlight"><pre>/usr/lib/jvm/jdk1.7.0_15/bin/java
+/usr/lib/jvm/jdk1.7.0_25/bin/java
+</pre></div>
+</div>
+<p>Kiểm tra môi trường (32 bit hay 64 bit):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span>
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-python"><div class="highlight"><pre>/sbin/init: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c, stripped
+</pre></div>
+</div>
+<p>Tải JDK từ <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Oracle</a>.
+Đây là một <a class="reference external" href="http://stackoverflow.com/questions/10268583/how-to-automate-download-and-instalation-of-java-jdk-on-linux">thủ thuật</a>
+để tải jdk mà không dùng trình duyệt:</p>
+<div class="highlight-python"><div class="highlight"><pre>wget --no-cookies --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-linux-x64.tar.gz&quot;
+</pre></div>
+</div>
+<p>Giải nén và di chuyển thư mục</p>
+<div class="highlight-python"><div class="highlight"><pre>tar -xzvf jdk-7u45-linux-x64.tar.gz
+sudo mv jdk1.7.0_45 /usr/lib/jvm/jdk1.7.0_45
+</pre></div>
+</div>
+<p>Cài đặt java:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --install &quot;/usr/bin/java&quot; &quot;java&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/java&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javac&quot; &quot;javac&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javac&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javap&quot; &quot;javap&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javap&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javaws&quot; 1
+</pre></div>
+</div>
+<p>Chọn đường dẫn đến phiên bản Java</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config java
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-python"><div class="highlight"><pre>There are 3 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                               Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/jdk1.7.0_25/bin/java   50001     auto mode
+  1            /usr/lib/jvm/jdk1.7.0_15/bin/java   50000     manual mode
+  2            /usr/lib/jvm/jdk1.7.0_25/bin/java   50001     manual mode
+  3            /usr/lib/jvm/jdk1.7.0_45/bin/java   1         manual mode
+
+Press enter to keep the current choice[*], or type selection number: 3
+update-alternatives: using /usr/lib/jvm/jdk1.7.0_45/bin/java to provide /usr/bin/java (java) in manual mode
+</pre></div>
+</div>
+<p>Kiểm tra phiên bản Java:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">java</span> <span class="o">-</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-python"><div class="highlight"><pre>java version &quot;1.7.0_45&quot;
+Java(TM) SE Runtime Environment (build 1.7.0_45-b18)
+Java HotSpot(TM) 64-Bit Server VM (build 24.45-b08, mixed mode)
+</pre></div>
+</div>
+<p>Tương tự với javac, javap, javaws:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config javac
+sudo update-alternatives --config javap
+sudo update-alternatives --config javaws
+</pre></div>
+</div>
+</div>
+<div class="section" id="chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-doong">
+<h2>Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi đôộng<a class="headerlink" href="#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-doong" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">script/runner</span></tt> (cho các hệ thông Unix-like) và <tt class="docutils literal"><span class="pre">script/runner.bat</span></tt> (cho Windows) là các đoạn script
+để chạy bất cứ đối tượng nào có method <tt class="docutils literal"><span class="pre">main</span></tt>. Sử dụng chúng để khởi động web server trong môi trường
+sản phẩm.</p>
+<div class="highlight-python"><div class="highlight"><pre>script/runner quickstart.Boot
+</pre></div>
+</div>
+<p>Bạn có thể sửa <tt class="docutils literal"><span class="pre">runner</span></tt> (hoặc <tt class="docutils literal"><span class="pre">runner.bat</span></tt>) để chỉnh
+<a class="reference external" href="http://www.oracle.com/technetwork/java/hotspotfaq-138619.html">JVM settings</a>.
+Xem thêm <tt class="docutils literal"><span class="pre">config/xitrum.conf</span></tt>.</p>
+<p>Để khởi động Xitrum ẩn trên Linux khi khởi động hệ thống, cách đơn giản là thêm dòng
+sau vào <tt class="docutils literal"><span class="pre">/etc/rc.local</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>su - user_foo_bar -c /path/to/the/runner/script/above &amp;
+</pre></div>
+</div>
+<p><a class="reference external" href="http://cr.yp.to/daemontools.html">daemontools</a> là một giải pháp khác, để cài đặt trên Centos
+xem <a class="reference external" href="http://whomwah.com/2008/11/04/installing-daemontools-on-centos5-x86_64/">hướng dẫn</a>.</p>
+<p>Hoặc sử dụng <a class="reference external" href="http://supervisord.org/">Supervisord</a>.
+Ví dụ <tt class="docutils literal"><span class="pre">/etc/supervisord.conf</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>[program:my_app]
+directory=/path/to/my_app
+command=/path/to/my_app/script/runner quickstart.Boot
+autostart=true
+autorestart=true
+startsecs=3
+user=my_user
+redirect_stderr=true
+stdout_logfile=/path/to/my_app/log/stdout.log
+stdout_logfile_maxbytes=10MB
+stdout_logfile_backups=7
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+environment=PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:~/bin
+</pre></div>
+</div>
+<p>Các giải pháp khác:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://smarden.org/runit/">runit</a></li>
+<li><a class="reference external" href="http://upstart.ubuntu.com/">upstart</a></li>
+</ul>
+</div>
+<div class="section" id="thiet-lap-cong-chuyen-tiep">
+<h2>Thiết lập cổng chuyển tiếp<a class="headerlink" href="#thiet-lap-cong-chuyen-tiep" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum mặc định giao tiếp trên cổng 8000 và 4430.
+Bạn có thể đổi cổng trong <tt class="docutils literal"><span class="pre">config/xitrum.conf</span></tt>.</p>
+<p>Bạn có thể thay đổi <tt class="docutils literal"><span class="pre">/etc/sysconfig/iptables</span></tt> với các lệnh sau để chuyển tiếp cổng
+80 sang 8000 và 443 sang 4430:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo su - root
+chmod 700 /etc/sysconfig/iptables
+iptables-restore &lt; /etc/sysconfig/iptables
+iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8000
+iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 4430
+iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8000
+iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 4430
+iptables-save -c &gt; /etc/sysconfig/iptables
+chmod 644 /etc/sysconfig/iptables
+</pre></div>
+</div>
+<p>Tất nhiên nếu Apache sử dụng cổng 80 và 443, bạn sẽ cần phải dùng Apache:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo /etc/init.d/httpd stop
+sudo chkconfig httpd off
+</pre></div>
+</div>
+<p>Tham khao:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.frozentux.net/iptables-tutorial/chunkyhtml/">Iptables tutorial</a></li>
+</ul>
+</div>
+<div class="section" id="cau-hinh-linux-de-ket-noi-hang-loat">
+<h2>Cấu hình Linux để kết nối hàng loạt<a class="headerlink" href="#cau-hinh-linux-de-ket-noi-hang-loat" title="Permalink to this headline">¶</a></h2>
+<p>Nhớ rằng trên MacOS,
+<a class="reference external" href="https://groups.google.com/forum/#!topic/spray-user/S-SNR2m0BWU">JDK có vấn đề nghiêm trọng với tốc độ IO (NIO)</a>.</p>
+<p>Tham khảo:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/linux/">Linux Performance Tuning (Riak)</a></li>
+<li><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/aws/">AWS Performance Tuning (Riak)</a></li>
+<li><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/">Ipsysctl tutorial</a></li>
+<li><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/tcpvariables.html">TCP variables</a></li>
+</ul>
+<div class="section" id="tang-so-luong-cac-tep-duoc-mo">
+<h3>Tăng số lượng các tệp được mở<a class="headerlink" href="#tang-so-luong-cac-tep-duoc-mo" title="Permalink to this headline">¶</a></h3>
+<p>Mỗi connection với Linux là một tệp được mở.
+Mặc định số lượng tối đa các tệp được mở là 1024.
+Để tăng giới hạn, sửa tệp <tt class="docutils literal"><span class="pre">/etc/security/limits.conf</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>*  soft  nofile  1024000
+*  hard  nofile  1024000
+</pre></div>
+</div>
+<p>Bạn cần đăng xuất và đăng nhập lại hệ thống để kết thúc việc sửa đổi.
+Để xác nhận chạy <tt class="docutils literal"><span class="pre">ulimit</span> <span class="pre">-n</span></tt>.</p>
+</div>
+<div class="section" id="dieu-chinh-kernel">
+<h3>Điều chỉnh kernel<a class="headerlink" href="#dieu-chinh-kernel" title="Permalink to this headline">¶</a></h3>
+<p>Như được dẫn trong
+<a class="reference external" href="http://www.metabrew.com/article/a-million-user-comet-application-with-mochiweb-part-1">A Million-user Comet Application with Mochiweb</a>,
+sửa tệp /etc/sysctl.conf:</p>
+<div class="highlight-python"><div class="highlight"><pre># General gigabit tuning
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_rmem = 4096 87380 16777216
+net.ipv4.tcp_wmem = 4096 65536 16777216
+
+# This gives the kernel more memory for TCP
+# which you need with many (100k+) open socket connections
+net.ipv4.tcp_mem = 50576 64768 98152
+
+# Backlog
+net.core.netdev_max_backlog = 2048
+net.core.somaxconn = 1024
+net.ipv4.tcp_max_syn_backlog = 2048
+net.ipv4.tcp_syncookies = 1
+
+# If you run clients
+net.ipv4.ip_local_port_range = 1024 65535
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_fin_timeout = 10
+</pre></div>
+</div>
+<p>Chạy <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">sysctl</span> <span class="pre">-p</span></tt> để áp dụng các thay đổi.
+Không cần khởi động lại hệ thống, kernel đã có khả năng xử lý nhiều kết nối hơn.</p>
+</div>
+<div class="section" id="luu-y-ve-backlog">
+<h3>Lưu ý về backlog<a class="headerlink" href="#luu-y-ve-backlog" title="Permalink to this headline">¶</a></h3>
+<p>TCP thực hiện bắt tay 3 bước để thiết lập kết nối.
+Khi một client từ xa kết nối đến máy chủ, client sẽ gửi một gói tin SYN.
+Và hệ điều hành của phía máy chủ sẽ gửi lại các gói tin SYN-ACK.
+Sau đó, khách hàng từ xa thiết lập một kết nối bằng cách gửi một gói tin ACK lại.
+Xitrum sẽ nhận được nó khi kết nối được thiết lập đầy đủ.</p>
+<p>Theo như
+<a class="reference external" href="https://sites.google.com/site/beingroot/articles/apache/socket-backlog-tuning-for-apache">Socket backlog tuning for Apache</a>,
+connection timeout xảy ra khi gói tin SYN bị mất bởi backlog queue của web server bị
+lấp đầy bởi các kết nối gửi SYN-ACK đến các client chậm.</p>
+<p>Theo như
+<a class="reference external" href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/configtuning-kernel-limits.html">FreeBSD Handbook</a>,
+giá trị mặc định của là 128 thường quá thấp để xử lý các kết nối mới trong một server
+có tải lớn. Đối với các máy chủ như vậy, nên tăng giá trị này thành 1024 hoặc hơn.
+Listen queue lớn hơn cũng là cách tốt để chống lại việc tấn công từ chối dịch vụ (Denial of Service - DoS)</p>
+<p>Backlog size của Xitrum được đặt thành 1024 (memcached cũng dùng giá trị này),
+nhưng bạn cũng cần chỉnh kernel như trên.
+The backlog size of Xitrum is set to 1024 (memcached also uses this value),</p>
+<p>Kiểm tra cấu hình backlog:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">somaxconn</span>
+</pre></div>
+</div>
+<p>hoặc:</p>
+<div class="highlight-python"><div class="highlight"><pre>sysctl net.core.somaxconn
+</pre></div>
+</div>
+<p>Để điều chỉnh tạm thời, bạn có thể làm như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo sysctl -w net.core.somaxconn=1024
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="haproxy-tip">
+<h2>HAProxy tip<a class="headerlink" href="#haproxy-tip" title="Permalink to this headline">¶</a></h2>
+<p>Để cấu hình HAProxy cho SockJS, xem <a class="reference external" href="https://github.com/sockjs/sockjs-node/blob/master/examples/haproxy.cfg">ví dụ</a>.</p>
+<p>Để HAProxy tải lại tệp cấu hình mà không cần khởi động lại, xem <a class="reference external" href="http://serverfault.com/questions/165883/is-there-a-way-to-add-more-backend-server-to-haproxy-without-restarting-haproxy">cuộc thảo luận</a>.</p>
+<p>HAProxy thì dễ sử dụng hơn Nginx. Nó phù hợp với Xitrum bởi như được đề cập đến trong
+<a class="reference internal" href="cache.html"><em>the section about caching</em></a>, Các tệp tĩnh trong Xitrum thì
+<a class="reference external" href="https://gist.github.com/3293596">very fast</a>. Bạn không cần sử dụng các tệp tĩnh
+để phục vụ các tĩnh năng của Nginx.</p>
+</div>
+<div class="section" id="nginx-tip">
+<h2>Nginx tip<a class="headerlink" href="#nginx-tip" title="Permalink to this headline">¶</a></h2>
+<p>Nếu bạn sửu dụng tính năng WebSocket hoặc SockJS trong Xitrum và muốn chạy Xitrum ẩn sau
+Nginx 1.2, bạn phải cài đặt thêm module như
+<a class="reference external" href="https://github.com/yaoweibin/nginx_tcp_proxy_module">nginx_tcp_proxy_module</a>.
+Nginx 1.3+ hỗ trợ WebSocket.</p>
+<p>Mặc định Nginx sử dụng giao thức HTTP 1.0 để reverse proxy. Nếu backend server trả về
+chunked response, bạn cần báo Nginx sử dụng HTTP 1.1 như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>location / {
+  proxy_http_version 1.1;
+  proxy_set_header Connection &quot;&quot;;
+  proxy_pass http://127.0.0.1:8000;
+}
+</pre></div>
+</div>
+<p><a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive">Tài liệu này</a> chỉ ra rằng để http keepalive, bạn cũng
+nên đặt proxy_set_header Connection &#8220;&#8221;;</p>
+</div>
+<div class="section" id="trien-khai-tren-heroku">
+<h2>Triển khai trên Heroku<a class="headerlink" href="#trien-khai-tren-heroku" title="Permalink to this headline">¶</a></h2>
+<p>Bạn cũng có thẻ chạy Xitrum trên <a class="reference external" href="https://www.heroku.com/">Heroku</a>.</p>
+<div class="section" id="dang-ky-va-tao-repository">
+<h3>Đăng ký và tạo repository<a class="headerlink" href="#dang-ky-va-tao-repository" title="Permalink to this headline">¶</a></h3>
+<p>Làm theo <a class="reference external" href="https://devcenter.heroku.com/articles/quickstart">Official Document</a>,
+để đăng ký và tạo repository.</p>
+</div>
+<div class="section" id="tao-procfile">
+<h3>Tạo Procfile<a class="headerlink" href="#tao-procfile" title="Permalink to this headline">¶</a></h3>
+<p>Tạo Procfile và lưu tại thư mục gốc của project. Heroku đọc tệp này thực thi khi khởi động.</p>
+<div class="highlight-python"><div class="highlight"><pre>web: target/xitrum/script/runner &lt;YOUR_PACKAGE.YOUR_MAIN_CLASS&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="thay-doi-thiet-lap-cong">
+<h3>Thay đổi thiết lập cổng<a class="headerlink" href="#thay-doi-thiet-lap-cong" title="Permalink to this headline">¶</a></h3>
+<p>Vì Heroku sử dụng cổng một cách tự động, bạn cần làm như sau:</p>
+<p>config/xitrum.conf:</p>
+<div class="highlight-python"><div class="highlight"><pre>port {
+  http              = ${PORT}
+  # https             = 4430
+  # flashSocketPolicy = 8430  # flash_socket_policy.xml will be returned
+}
+</pre></div>
+</div>
+<p>Nếu bạn muốn sử dụng SSL, bạn cần <a class="reference external" href="https://addons.heroku.com/ssl">add on</a>.</p>
+</div>
+<div class="section" id="xem-log-level">
+<h3>Xem log level<a class="headerlink" href="#xem-log-level" title="Permalink to this headline">¶</a></h3>
+<p>config/logback.xml:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;root level=&quot;INFO&quot;&gt;
+  &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;
+&lt;/root&gt;
+</pre></div>
+</div>
+<p>Tail log từ Heroku command:</p>
+<div class="highlight-python"><div class="highlight"><pre>heroku logs -tail
+</pre></div>
+</div>
+</div>
+<div class="section" id="tao-alias-cho-xitrum-package">
+<h3>Tạo alias cho <tt class="docutils literal"><span class="pre">xitrum-package</span></tt><a class="headerlink" href="#tao-alias-cho-xitrum-package" title="Permalink to this headline">¶</a></h3>
+<p>Tại thời điểm triển khai, Heroku chạy <tt class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span> <span class="pre">compile</span> <span class="pre">stage</span></tt>. Vì vậy bạn cần thêm
+alias cho <tt class="docutils literal"><span class="pre">xitrum-package</span></tt>.</p>
+<p>build.sbt:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">addCommandAlias</span><span class="p">(</span><span class="s">&quot;stage&quot;</span><span class="p">,</span> <span class="s">&quot;;xitrum-package&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-len-heroku">
+<h3>Push lên Heroku<a class="headerlink" href="#push-len-heroku" title="Permalink to this headline">¶</a></h3>
+<p>Quá trình triển khai được nối bởi git push.</p>
+<div class="highlight-python"><div class="highlight"><pre>git push heroku master
+</pre></div>
+</div>
+<p>Xem thêm <a class="reference external" href="https://devcenter.heroku.com/articles/getting-started-with-scala">Official document cho Scala</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Triển khai ứng dụng web trên server</a><ul>
+<li><a class="reference internal" href="#dong-gi-thu-muc">Đóng gí thư mục</a></li>
+<li><a class="reference internal" href="#customize-xitrum-package">Customize xitrum-package</a></li>
+<li><a class="reference internal" href="#ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay">Kết nối Scala console đến một tiến trình JVM đang chạy</a></li>
+<li><a class="reference internal" href="#cai-dat-oracle-jdk-tren-centos-hoac-ubuntu">Cài đặt Oracle JDK trên CentOS hoặc Ubuntu</a></li>
+<li><a class="reference internal" href="#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-doong">Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi đôộng</a></li>
+<li><a class="reference internal" href="#thiet-lap-cong-chuyen-tiep">Thiết lập cổng chuyển tiếp</a></li>
+<li><a class="reference internal" href="#cau-hinh-linux-de-ket-noi-hang-loat">Cấu hình Linux để kết nối hàng loạt</a><ul>
+<li><a class="reference internal" href="#tang-so-luong-cac-tep-duoc-mo">Tăng số lượng các tệp được mở</a></li>
+<li><a class="reference internal" href="#dieu-chinh-kernel">Điều chỉnh kernel</a></li>
+<li><a class="reference internal" href="#luu-y-ve-backlog">Lưu ý về backlog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#haproxy-tip">HAProxy tip</a></li>
+<li><a class="reference internal" href="#nginx-tip">Nginx tip</a></li>
+<li><a class="reference internal" href="#trien-khai-tren-heroku">Triển khai trên Heroku</a><ul>
+<li><a class="reference internal" href="#dang-ky-va-tao-repository">Đăng ký và tạo repository</a></li>
+<li><a class="reference internal" href="#tao-procfile">Tạo Procfile</a></li>
+<li><a class="reference internal" href="#thay-doi-thiet-lap-cong">Thay đổi thiết lập cổng</a></li>
+<li><a class="reference internal" href="#xem-log-level">Xem log level</a></li>
+<li><a class="reference internal" href="#tao-alias-cho-xitrum-package">Tạo alias cho <tt class="docutils literal"><span class="pre">xitrum-package</span></tt></a></li>
+<li><a class="reference internal" href="#push-len-heroku">Push lên Heroku</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="log.html"
+                        title="previous chapter">Log</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cluster.html"
+                        title="next chapter">Clustering với Akka và Hazelcast</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/deploy.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering với Akka và Hazelcast"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             >previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

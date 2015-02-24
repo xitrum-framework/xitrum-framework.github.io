@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tải lên tệp &mdash; Xitrum Scala Web Framework Guide 3.22 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.22',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.22 documentation" href="index.html" />
+    <link rel="next" title="Bộ lọc (filter) trong Action" href="filter.html" />
+    <link rel="prev" title="Validation" href="validation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="filter.html" title="Bộ lọc (filter) trong Action"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="validation.html" title="Validation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tai-len-tep">
+<h1>Tải lên tệp<a class="headerlink" href="#tai-len-tep" title="Permalink to this headline">¶</a></h1>
+<p>Xem thêm <a class="reference internal" href="scopes.html"><em>Scopes chapter</em></a>.</p>
+<p>Trong form tải lên (upload form), bạn cần đặt <tt class="docutils literal"><span class="pre">enctype</span></tt> thành <tt class="docutils literal"><span class="pre">multipart/form-data</span></tt>.</p>
+<p>MyUpload.scalate:</p>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[MyUpload]} enctype=&quot;multipart/form-data&quot;)
+  != antiCsrfInput
+
+  label Please select a file:
+  input(type=&quot;file&quot; name=&quot;myFile&quot;)
+
+  button(type=&quot;submit&quot;) Upload
+</pre></div>
+</div>
+<p>Trong <tt class="docutils literal"><span class="pre">MyUpload</span></tt> action:</p>
+<div class="highlight-python"><div class="highlight"><pre>import io.netty.handler.codec.http.multipart.FileUpload
+
+val myFile = param[FileUpload](&quot;myFile&quot;)
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">myFile</span></tt> là một instance của <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>.
+Sử dụng các method của chúng để lấy tên tệp, di chuyển tệp vào một thư mục v.v.</p>
+<p>Các tệp nhỏ (nhỏ hơn 16 KB) sẽ được lưu trong bộ nhớ. Các tệp lớn thường được lưu
+trong hệ thống thư mục lưu trữ tạm (hoặc một thư mục xác định bởi <tt class="docutils literal"><span class="pre">xitrum.request.tmpUploadDir</span></tt>
+trong xitrum.conf), và sẽ được xóa tự động khi đóng kết nối hoặc một respond được
+gửi đi.</p>
+<div class="section" id="ajax-style-upload">
+<h2>Ajax style upload<a class="headerlink" href="#ajax-style-upload" title="Permalink to this headline">¶</a></h2>
+<p>Có rất nhiều thư viện JavaScript hỗ trợ tải lên Ajax style. Chúng sử dụng iframe
+ẩn hoặc Flash để gửi <tt class="docutils literal"><span class="pre">multipart/form-data</span></tt> ở bên trên đến server.
+Nếu bạn không chắc chắn parameter nào của request trong thư viện sử dụng trong form
+để gửi tệp, hãy xem Xitrum access log.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tải lên tệp</a><ul>
+<li><a class="reference internal" href="#ajax-style-upload">Ajax style upload</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="validation.html"
+                        title="previous chapter">Validation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="filter.html"
+                        title="next chapter">Bộ lọc (filter) trong Action</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/upload.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="filter.html" title="Bộ lọc (filter) trong Action"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="validation.html" title="Validation"
+             >previous</a> |</li>
+        <li><a href="index.html">Xitrum Scala Web Framework Guide 3.22 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
