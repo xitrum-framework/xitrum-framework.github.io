@@ -73,14 +73,13 @@
 <a class="reference external" href="http://netty.io/">Netty</a> và <a class="reference external" href="http://akka.io/">Akka</a>.</p>
 <p><a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">Một người dùng Xiturm</a> đã nói rằng:</p>
 <blockquote>
-<div><p>Wow, đây thực sự là một sản phẩm tuyệt vời, có thể coi như một Scala framework
-hoàn chỉnh tới mức có thể so sánh với Lift (nhưng dễ sử dụng hơn nhiều).</p>
-<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> một web framework <cite>full-stack</cite> đúng nghĩa, đáp ứng tất cả các
+<div>Wow, đây thực sự là một sản phẩm tuyệt vời, có thể coi như một Scala framework
+hoàn chỉnh tới mức có thể so sánh với Lift (nhưng dễ sử dụng hơn nhiều).
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> một web framework <cite>full-stack</cite> đúng nghĩa, đáp ứng tất cả các
 chức năng cơ bản của một web framework, ngoài ra còn có những phần mở rộng như ETags, file cache tĩnh, công cụ nén
 Gzip tự động. Tích hợp công cụ chuyển đổi JSON, before/around/after interceptors, request/session/cookie/flash scopes,
 các bộ chuẩn hóa input tích hợp ở cả server và client, tích hợp cả tính năng cache (<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>),
-tính năng đa ngôn ngữ i18n theo phong cách GNU gettext, Netty (nhanh không kém Nginx), v.v . Và bạn có thể sử dụng nhiều tính năng khác nữa.</p>
-</div></blockquote>
+tính năng đa ngôn ngữ i18n theo phong cách GNU gettext, Netty (nhanh không kém Nginx), v.v . Và bạn có thể sử dụng nhiều tính năng khác nữa.</div></blockquote>
 <div class="section" id="tinh-nang">
 <h2>Tính năng<a class="headerlink" href="#tinh-nang" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -110,7 +109,7 @@ Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đư
 Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
 <li>Các lớp và các đường định tuyến được tải lại một cách tự động trong chế độ phát triển (development mode).</li>
 <li>Các View có thể viết bằng các tập tin mẫu <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-một các riêng biệt hoặc bằng Scala inline XML. Cả hai cách đều an toàn.</li>
+một cách riêng biệt hoặc bằng Scala inline XML. Cả hai cách đều typesafe.</li>
 <li>Phiên làm việc(Sessions) có thể lưu trữ ngay trong cookies(đáp ứng đuợc nhiều user cùng lúc hơn) hoặc lưu trữ bằng <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> (tính bảo mật cao hơn).
 Hazelcast cũng chạy ngay trong cùng process với việc sử dụng cache phân tán(do đó nhanh hơn và dễ sử dụng hơn) ,
 vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Điều này cũng đúng trong chức năng pubsub của Akka.</li>
@@ -120,12 +119,9 @@ vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Đ
 Việc trích các chuổi văn bản ra ngoài để thực hiện dịch được thực hiện tự động, bạn sẽ không cần làm thủ công với properties file.
 Bạn cũng có thể sử dụng các công cụ mạnh như <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a> để dịch và hợp nhất các bản dịch.
 gettext, không giống như hầu hết các giải pháp khác, hỗ trợ các định dạng của cả số ít và số nhiều.</li>
+<li>Xitrum cố gắng khắc phục các nhược điểm của <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
+và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh hơn Scalatra và dễ sử dụng hơn Lift. Bạn có thể dễ dàng tạo cả RESTful APIs và postbacks. <a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> là hệ thống controller-first như Scalatra, không phải là <a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> như Lift. Đa số mọi người đã quen thuộc với phong cách controller-first.</li>
 </ul>
-<p>Xitrum cố gắng khắc phục các nhược điểm của <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
-và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh hơn Scalatra và dễ sử dụng hơn Lift. Bạn có thể dễ dàng tạo cả RESTful APIs và postbacks.
-<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> là hệ thống controller-first như Scalatra, không phải là
-<a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> như Lift.
-Đa số mọi người đã quen thuộc với phong cách controller-first.</p>
 <p>Hãy xem <a class="reference internal" href="deps.html"><em>các dự án liên quan</em></a> để có được danh sách các bản demos, plugins v.v.</p>
 </div>
 <div class="section" id="dong-gop">

@@ -57,9 +57,11 @@
 <li>Để phục vụ các người dùng cuối: bạn cần tạo giao diện web.</li>
 </ul>
 <p>Như một web framework thông thường, Xitrum hướng tới việc hỗ trợ giải quyết các use case một cách dễ dàng. Để giải quyết use case đầu tiền, bạn sử dụng <a class="reference internal" href="restful.html"><em>RESTful actions</em></a>. Để giải quyết use case thứ hai, bạn có thể sử dụng tính năng Ajax form postback của Xitrum.
-Bạn có thể xem thêm các trang dưới đây để biết thêm về postback:
-* <a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a>
-* <a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></p>
+Bạn có thể xem thêm các trang dưới đây để biết thêm về postback:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></li>
+<li><a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></li>
+</ul>
 <p>Tính năng postback của Xitrum có liên hệ tới <a class="reference external" href="http://nitrogenproject.com/">Nitrogen</a>.</p>
 <div class="section" id="layout">
 <h2>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
@@ -186,7 +188,7 @@ class ArticlesCreate extends AppAction {
 <div class="section" id="hien-thi-hinh-dong-khi-load-ajax">
 <h2>Hiện thị hình động khi load Ajax<a class="headerlink" href="#hien-thi-hinh-dong-khi-load-ajax" title="Permalink to this headline">¶</a></h2>
 <p>Nếu bạn muốn hiển thị hình ảnh như thế này khi load Ajax</p>
-<img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
+<img alt="_images/ajax_loading.png" src="_images/ajax_loading.png" />
 <p>bạn có thể gọi JS snippet này sau khi đã include <tt class="docutils literal"><span class="pre">jsDefaults</span></tt> (đã include
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>) trong view template của bạn:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">ajaxLoadingImg</span> <span class="o">=</span> <span class="s">&#39;path/to/your/image&#39;</span><span class="p">;</span>

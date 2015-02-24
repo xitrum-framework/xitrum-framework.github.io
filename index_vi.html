@@ -38,9 +38,9 @@
           <li class="span-3"><a href="http://107.167.187.67/">&nbsp;&nbsp;Demos</a></li>
           <li class="span-3"><a href="guide.html">&nbsp;&nbsp;&nbsp;Guide</a></li>
           <li class="span-3"><a href="api.html">&nbsp;Scaladoc</a></li>
-          <li class="span-3"><a href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">Download</a></li>
+          <li class="span-3"><a href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">Tải xuống</a></li>
           <li class="span-3"><a href="https://groups.google.com/group/xitrum-framework">&nbsp;&nbsp;&nbsp;Group</a></li>
-          <li class="span-3 last"><a href="consulting.html">Consulting</a></li>
+          <li class="span-3 last"><a href="consulting.html">&nbsp;&nbsp;&nbsp;Tư vấn</a></li>
         </ul>
       </div>
 
@@ -53,14 +53,13 @@
         <div id="balloon" class="span-16 last">
           <div class="span-11 prepend-3 append-1 last">
             <h2><a class="reference" href="https://xitrum-framework.github.com/">Xitrum</a>
-is an async and clustered Scala web framework
-and HTTP(S) server fusion<span class="small"> on top of <a class="reference external" href="http://netty.io/">Netty</a>, <a class="reference external" href="http://akka.io/">Akka</a>, and <a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a></span></h2>
+là một Scala web framework bất đồng bộ, clustered và cũng là HTTPS(server)<span class="small"> chạy trên nền của<a class="reference external" href="http://netty.io/"> Netty</a>, <a class="reference external" href="http://akka.io/">Akka</a>, và <a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a></span></h2>
           </div>
           <div class="quote push-2 span-13 last">
             <p>Wow, this is a really impressive body of work, arguably the most complete Scala framework outside of Lift (but much easier to use).
 
             Xitrum is truly a full stack web framework, all the bases are covered, including wtf-am-I-on-the-moon extras like ETags, static file cache identifiers & auto-gzip compression. Tack on built-in JSON converter, before/around/after interceptors, request/session/cookie/flash scopes, integrated validation (server & client-side, nice), built-in cache layer (Hazelcast), i18n a la GNU gettext, Netty (with Nginx, hello blazing fast), etc. and you have, wow.</p>
-            <div class="alt large right append-1">from <a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">a user</a></div>
+            <div class="alt large right append-1">from <a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">Một người dùng Xitrum</a></div>
 
           </div> <!-- End of div.quote -->
           <div class="clearfix"></div>
@@ -74,57 +73,30 @@ and HTTP(S) server fusion<span class="small"> on top of <a class="reference exte
         <br/>
         <br/>
 
-        <h2 class="title">Features</h2>
+        <h2 class="title">Tính năng</h2>
 
 <ul class="simple">
-<li>Typesafe, in the spirit of Scala. All the APIs try to be as typesafe as possible.</li>
-<li>Async, in the spirit of Netty. Your request proccessing action does not have
-to respond immediately. Long polling, chunked response (streaming), WebSocket,
-and SockJS are supported.</li>
-<li>Fast built-in HTTP and HTTPS web server based on <a class="reference external" href="http://netty.io/">Netty</a>
-(HTTPS can use Java engine or native OpenSSL engine).
-Xitrum&#8217;s static file serving speed is <a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.</li>
-<li>Extensive client-side and server-side caching for faster responding.
-At the web server layer, small files are cached in memory, big files are sent
-using NIO&#8217;s zero copy.
-At the web framework layer you have can declare page, action, and object cache
-in the Rails style.
-<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google&#8217;s best practices</a>
-like conditional GET are applied for client-side caching.
-You can also force browsers to always send request to server to revalidate cache before using.</li>
-<li><a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range requests</a>
-for static files. Serving movie files for smartphones requires this feature.
-You can pause/resume file download.</li>
-<li><a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> support.</li>
-<li>Routes are automatically collected in the spirit of JAX-RS
-and Rails Engines. You don&#8217;t have to declare all routes in a single place.
-Think of this feature as distributed routes. You can plug an app into another app.
-If you have a blog engine, you can package it as a JAR file, then you can put
-that JAR file into another app and that app automatically has blog feature!
-Routing is also two-way: you can recreate URLs (reverse routing) in a typesafe way.
-You can document routes using <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
-<li>Classes and routes are automatically reloaded in development mode.</li>
-<li>Views can be written in a separate <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-template file or Scala inline XML. Both are typesafe.</li>
-<li>Sessions can be stored in cookies (more scalable) or clustered <a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a> (more secure).
-Hazelcast is recommended when using continuations-based Actions, since serialized
-continuations are usually too big to store in cookies. Hazelcast also gives
-in-process (thus faster and simpler to use) distribued cache and pubsub, you
-don&#8217;t need separate cache and pubsub servers.</li>
-<li><a class="reference external" href="http://jqueryvalidation.org/">jQuery Validation</a> is integrated
-for browser side and server side validation.</li>
-<li>i18n using <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>.
-Translation text extraction is done automatically.
-You don&#8217;t have to manually mess with properties files.
-You can use powerful tools like <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a>
-for translating and merging translations.
-gettext is unlike most other solutions, both singular and plural forms are supported.</li>
-<li>Xitrum tries to fill the spectrum between <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
-and <a class="reference external" href="http://liftweb.net/">Lift</a>: more powerful than Scalatra and easier to
-use than Lift. You can easily create both RESTful APIs and postbacks. Xitrum
-is controller-first like Scalatra, not
-<a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> like Lift.
-Most people are familliar with controller-first style.</li>
+<li>Typesafe, dựa trên tinh thần của Scala. Tất cả các APIs đều được thiết kế an toàn nhất có thể.</li>
+<li>Bất đồng bộ, theo tinh thần của Netty. Việc xử lý các yêu cầu (request) không cần phải đáp ứng (respond) ngay lập lức. Long polling, chunked response (streaming), WebSocket, và SockJS.</li>
+<li>Tích hợp sẵn HTTP và HTTPS server có tốc độ nhanh dựa trên <a class="reference external" href="http://netty.io/">Netty</a>
+(HTTPS có thể sử dụng công nghệ Java hoặc công nghệ mã OpenSSL tự nhiên).
+Tốc độ phục vụ tập tin tĩnh của Xitrum có thể đạt mức <a class="reference external" href="https://gist.github.com/3293596">tương đương Nginx</a>.</li>
+<li>Tối ưu hóa cache cả ở phía máy chủ (server) và máy khách (client) để tăng tốc độ đáp ứng. Ở tầng máy chủ web, các tập tin nhỏ được cache vào bộ nhớ, đối với các tập tin lớn thì sử dụng kỹ thuật zero copy của NIO. Ở tầng web framework bạn có thể khai báo cache ở các mức page, action và object theo phong cách của <a class="reference external" href="http://github.com/rails/rails">Rails framework</a>.
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html"> Tất cả thủ thuật mà Google khuyên nên dùng để tăng tốc trang web</a>
+như method GET có điều kiện được áp dụng để cache phía client. Bạn cũng có thể buộc các trình duyệt để luôn gửi yêu cầu đến máy chủ để kiểm tra lại cache trước khi sử dụng.</li>
+<li>Tính năng <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range requests</a> hỗ trợ các tập tin tĩnh. Tính năng này cần cho việc cung cấp dịch vụ video cho điện thoại thông minh. Bạn có thể tạm dừng/tiếp tục việc tải tập tin video.</li>
+<li>Hỗ trợ <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</li>
+<li>Tính năng định tuyến được thực hiện tự động trên tinh thần của JAX-RS và Rails Engines. Bạn không cần phải được khai báo ở tất cả các tuyến kết nối tại cùng một điểm mà có thể tại nhiều điểm khác nhau. Tính năng này có thể hiểu như định tuyến một cách phân tán. Bạn có thể cài cắm ứng dụng này vào ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog. Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action. Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
+<li>Các lớp và các đường định tuyến được tải lại một cách tự động trong chế độ phát triển (development mode).</li>
+<li>Các View có thể viết bằng các tập tin mẫu <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> một cách riêng biệt hoặc bằng Scala inline XML. Cả hai cách đều typesafe.</li>
+<li>Phiên làm việc(Sessions) có thể lưu trữ ngay trong cookies(đáp ứng đuợc nhiều user cùng lúc hơn) hoặc lưu trữ bằng <a class="reference external" href="http://www.hazelcast.com/">Hazelcast</a> (tính bảo mật cao hơn). Hazelcast cũng chạy ngay trong cùng process với việc sử dụng cache phân tán(do đó nhanh hơn và dễ sử dụng hơn) , vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Điều này cũng đúng trong chức năng pubsub của Akka.</li>
+<li><a class="reference external" href="http://jqueryvalidation.org/">jQuery Validation</a> được tích hợp trong việc chuẩn hóa dữ liệu ở cả máy chủ(server) và máy khách (client).</li>
+<li>i18n theo phong cách <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>.
+TViệc trích các chuổi văn bản ra ngoài để thực hiện dịch được thực hiện tự động, bạn sẽ không cần làm thủ công với properties file. Bạn cũng có thể sử dụng các công cụ mạnh như <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a>
+để dịch và hợp nhất các bản dịch. gettext, không giống như hầu hết các giải pháp khác, hỗ trợ các định dạng của cả số ít và số nhiều.</li>
+<li>Xitrum cố gắng khắc phục các nhược điểm của <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
+và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh hơn Scalatra và dễ sử dụng hơn Lift. Bạn có thể dễ dàng tạo cả RESTful APIs và postbacks. Xitrum là hệ thống controller-first như Scalatra, không phải là
+<a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> như Lift. Đa số mọi người đã quen thuộc với phong cách controller-first.</li>
 </ul>
 
         <p>Scalibility is easy, just throw more nodes to the pool.</p>
@@ -156,12 +128,14 @@ Most people are familliar with controller-first style.</li>
               </td>
             </tr>
             <tr>
-              <td style="vertical-align: text-top">
-                <p><img src="parts/korean.png"></a></p>
+              <td>
+                <p><img src="parts/vietnamese.png"></a></p>
                 <ul>
-                  <li><a href="guide/3.22/html/ko/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ko/index.html">Single page HTML</a></li>
+                  <li><a href="guide/3.22/html/vi/index.html">Multiple page HTML</a></li>
+                  <li><a href="guide/3.22/singlehtml/vi/index.html">Single page HTML</a></li>
+                  <li><a href="guide/3.22/xitrum-vi.pdf">Bản PDF</a></li>
                 </ul>
+                <a href="guide/3.22/xitrum-vi.pdf"><img src="guide/pdf-vi.png" /></a>
               </td>
 
               <td>
@@ -174,10 +148,19 @@ Most people are familliar with controller-first style.</li>
                 <a href="guide/3.22/xitrum-ru.pdf"><img src="guide/pdf-ru.png" /></a>
               </td>
             </tr>
+            <tr>
+              <td style="vertical-align: text-top">
+                <p><img src="parts/korean.png"></a></p>
+                <ul>
+                  <li><a href="guide/3.22/html/ko/index.html">Multiple page HTML</a></li>
+                  <li><a href="guide/3.22/singlehtml/ko/index.html">Single page HTML</a></li>
+                </ul>
+              </td>  
+            </tr>
           </table>
         </div>
 
-        <h2 class="title">Presentations</h2>
+        <h2 class="title">Presentation</h2>
         <div>
           <table>
             <tr>
@@ -203,7 +186,7 @@ Most people are familliar with controller-first style.</li>
 
         <div class="span-22">
           <div class="span-11">
-            <h2 class="title">Hello World sample</h2>
+            <h2 class="title">Ví dụ Hello World</h2>
             <pre><code>import xitrum.Action
 import xitrum.annotation.GET
 
@@ -225,7 +208,7 @@ class HelloAction extends Action {
           </div>
 
           <div class="span-10">
-            <h2 class="title">Actor sample</h2>
+            <h2 class="title">Ví dụ về Actor</h2>
             <p>Just annotate your actors and they will be accessible from web!</p>
             <pre><code>import scala.concurrent.duration._
 import akka.actor.ReceiveTimeout
@@ -261,7 +244,7 @@ class HelloActor extends ActorAction {
 
         <div class="span-22">
           <div class="span-11">
-            <h2 class="title">WebSocket sample</h2>
+            <h2 class="title">Ví dụ về WebSocket</h2>
             <pre><code>import xitrum.{
   Action, WebSocketAction,
   WebSocketText, WebSocketBinary,
@@ -298,7 +281,7 @@ class EchoWebSocketActor extends WebSocketAction {
           </div>
 
           <div class="span-10">
-            <h2 class="title">SockJS sample</h2>
+            <h2 class="title">Ví dụ về SockJS</h2>
             <pre><code>import xitrum.{Action, SockJsAction, SockJsText}
 import xitrum.annotation.SOCKJS
 
@@ -326,25 +309,24 @@ class EchoSockJsActor extends SockJsAction {
         <div class="clearfix"></div>
 
         <div class="section" id="create-new-empty-xitrum-project">
-          <h2 class="title">Create a new empty Xitrum project from skeleton</h2>
+          <h2 class="title">Tạo một project Xitrum mới từ skeleton</h2>
 
-          <p>See <a href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a> project.</p>
+          <p>Xem thêm project <a href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a>.</p>
 
-          <p>Download
-          <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>,
-          unzip, then run:</p>
+          <p>Tải về tệp  
+          <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>, giải nén và chạy lệnh:</p>
           <pre><code>sbt/sbt run</code></pre>
 
-          <p>Now you have a new empty project running at <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a>
-          and <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a></p>
+          <p>Bạn đã có một project Xitrum với địa chỉ <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a>
+          và <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a></p>
 
-          <p>To generate Eclipse or IntelliJ project:</p>
+          <p>Để generate một project trong Eclipse hoặc IntelliJ:</p>
           <pre><code>sbt/sbt eclipse
 sbt/sbt gen-idea</code></pre>
         </div>
 
         <div class="section" id="demo-projects">
-          <h2 class="title">Demo projects</h2>
+          <h2 class="title">Demo project</h2>
           <ul>
             <li>
               <a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">Xitrum Demos</a>

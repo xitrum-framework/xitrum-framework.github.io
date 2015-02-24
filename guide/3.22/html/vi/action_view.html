@@ -112,7 +112,7 @@ class HelloAction extends ActorAction {
 </pre></div>
 </div>
 <p>Một actor instance sẽ được tạo khi có một yêu cầu (request), actor sẽ được dừng khi
-đóng kết nối hoặc response được gửi bởi các method``respondText``, <tt class="docutils literal"><span class="pre">respondView</span></tt>, v.v.
+đóng kết nối hoặc response được gửi bởi các method <tt class="docutils literal"><span class="pre">respondText</span></tt>, <tt class="docutils literal"><span class="pre">respondView</span></tt>, v.v.
 Với chunked response, actor sẽ không dừng lại ngay lập tức mà dừng lại khi chunk cuối cùng
 được gửi đi.</p>
 <p>Actor này sẽ chạy trong thread pool của Akka actor có tên là &#8220;xitrum&#8221;</p>
@@ -121,8 +121,8 @@ Với chunked response, actor sẽ không dừng lại ngay lập tức mà dừ
 <h2>Gửi Respond cho client<a class="headerlink" href="#gui-respond-cho-client" title="Permalink to this headline">¶</a></h2>
 <p>Từ một action để trả về một respond cho phía client bạn có thể sử dụng những method sau:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">respondView</span></tt>: trả về một tệp view template, có hoặc không có layout</li>
-<li><tt class="docutils literal"><span class="pre">respondInlineView</span></tt>: trả về một template được nhúng (không phải một tệp template riêng lẻ), có hoặc không có layout</li>
+<li><tt class="docutils literal"><span class="pre">respondView</span></tt>: trả về một tệp view  , có hoặc không có layout</li>
+<li><tt class="docutils literal"><span class="pre">respondInlineView</span></tt>: trả về một      được nhúng (không phải một tệp          riêng lẻ), có hoặc không có layout</li>
 <li><tt class="docutils literal"><span class="pre">respondText(&quot;hello&quot;)</span></tt>: trả về một chuỗi ký tự không có layout</li>
 <li><tt class="docutils literal"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></tt>: như trên, với content type là &#8220;text/html&#8221;</li>
 <li><tt class="docutils literal"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></tt>: chuyển đối tượng (object) Scala thành đối tượng JSON và trả về client.</li>
@@ -135,10 +135,10 @@ Với chunked response, actor sẽ không dừng lại ngay lập tức mà dừ
 <li><tt class="docutils literal"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></tt> gửi chunk respond</li>
 </ul>
 </div>
-<div class="section" id="gui-tra-mot-template-view-file">
-<h2>Gửi trả một template view file<a class="headerlink" href="#gui-tra-mot-template-view-file" title="Permalink to this headline">¶</a></h2>
-<p>Mỗi action có thể liên kết với <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-template view file. Thay vì gửi tra trực tiếp ngay trong action với các method trên đây, bạn có
+<div class="section" id="gui-tra-mot-view-file">
+<h2>Gửi trả một view file<a class="headerlink" href="#gui-tra-mot-view-file" title="Permalink to this headline">¶</a></h2>
+<p>Mỗi action có thể liên kết với <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> view file. Thay
+vì gửi tra trực tiếp ngay trong action với các method trên đây, bạn có
 thể sử dụng một view file riêng biệt.</p>
 <p>scr/main/scala/mypackage/MyAction.scala:</p>
 <div class="highlight-python"><div class="highlight"><pre>package mypackage
@@ -175,19 +175,20 @@ html
 </pre></div>
 </div>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">xitrumCss</span></tt> bao gồm các tệp CSS mặc định cho Xitrum. Bạn có thể xóa nó nếu bạn không muốn</li>
+<li><tt class="docutils literal"><span class="pre">xitrumCss</span></tt> bao gồm các tệp CSS mặc định cho Xitrum. Bạn có thể xóa nó nếu bạn không muốn
+sử dụng xitrum-framework.</li>
+<li><tt class="docutils literal"><span class="pre">jsDefaults</span></tt> bao gồm các jQuery, jQuery Validate plugin, v.v, bạn nên đặt nó trong thẻ &lt;head&gt;</li>
+<li><tt class="docutils literal"><span class="pre">jsForView</span></tt> bao gồm các đoạn mã JavaScript thêm bởi <tt class="docutils literal"><span class="pre">jsAddToView</span></tt>, nên đặt ở phần cuối.</li>
 </ul>
-<p>sử dụng xitrum-framework.
-* <tt class="docutils literal"><span class="pre">jsDefaults</span></tt> bao gồm các jQuery, jQuery Validate plugin, v.v, bạn nên đặt nó trong thẻ &lt;head&gt;
-* <tt class="docutils literal"><span class="pre">jsForView</span></tt> bao gồm các đoạn mã JavaScript thêm bởi <tt class="docutils literal"><span class="pre">jsAddToView</span></tt>, nên đặt ở phần cuối.</p>
-<p>Trong template bạn có thể sử dụng các method của class <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>.
+<p>Trong    bạn có thể sử dụng các method của class <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>.
 Không những thế bạn có thể sử dụng các utility methods cung cấp bởi Scalate điển hình như <tt class="docutils literal"><span class="pre">unescape</span></tt>.</p>
 <p>Xem thêm <a class="reference external" href="http://scalate.fusesource.org/documentation/index.html">Scalate doc</a>.</p>
-<p>Template mặc định của Scalate là <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a>.
-Bạn cũng có thể sử dụng <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
+<blockquote>
+<div>mặc định của Scalate là <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a>.</div></blockquote>
+<p>Bạn cũng có thể sử dụng <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
 <a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">Scaml</a>, hoặc <a class="reference external" href="http://scalate.fusesource.org/documentation/ssp-reference.html">Ssp</a>.</p>
-<p>Để cấu hình cho template mặc định, bạn có thể xem xitrum.conf tại thư mục config trong ứng dụng Xitrum</p>
-<p>Bạn cũng có thể override template mặc định bằng cách truyền các giá trị &#8220;jade&#8221;, &#8220;mustache&#8221;, &#8220;scaml&#8221;,hoặc &#8220;ssp&#8221; vào tham số &#8220;type&#8221; trong method <cite>respondView</cite>.</p>
+<p>Để cấu hình cho          mặc định, bạn có thể xem xitrum.conf tại thư mục config trong ứng dụng Xitrum</p>
+<p>Bạn cũng có thể override         mặc định bằng cách truyền các giá trị &#8220;jade&#8221;, &#8220;mustache&#8221;, &#8220;scaml&#8221;,hoặc &#8220;ssp&#8221; vào tham số &#8220;type&#8221; trong method <cite>respondView</cite>.</p>
 <div class="highlight-python"><div class="highlight"><pre>val options = Map(&quot;type&quot; -&gt;&quot;mustache&quot;)
 respondView(options)
 </pre></div>
@@ -215,18 +216,18 @@ p= hello(&quot;Xitrum&quot;)
 <li><a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Scalate implementation</a></li>
 </ul>
 <p>Bạn không thể làm một vài điều với Mustache như với Jade bởi vì cú pháp của Mustache khá cứng nhắc và cần tuân thủ nghiêm ngặt.</p>
-<p>Để truyền tham số từ action vào template của Mustache bạn phải sử dụng method <tt class="docutils literal"><span class="pre">at</span></tt>:</p>
+<p>Để truyền tham số từ action vào          của Mustache bạn phải sử dụng method <tt class="docutils literal"><span class="pre">at</span></tt>:</p>
 <p>Action:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">at</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="s">&quot;Jack&quot;</span>
 <span class="n">at</span><span class="p">(</span><span class="s">&quot;xitrumCss&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">xitrumCss</span>
 </pre></div>
 </div>
-<p>Mustache template:</p>
+<p>Mustache        :</p>
 <div class="highlight-python"><div class="highlight"><pre>My name is {{name}}
 {{xitrumCss}}
 </pre></div>
 </div>
-<p>Ghi nhớ rằng bạn không thể sử dụng các từ khóa dưới đây cho method <tt class="docutils literal"><span class="pre">at</span></tt> để truyền tham số cho Scalate template, bởi vì chúng đã được sử dụng từ trước.</p>
+<p>Ghi nhớ rằng bạn không thể sử dụng các từ khóa dưới đây cho method <tt class="docutils literal"><span class="pre">at</span></tt> để truyền tham số cho Scalate         , bởi vì chúng đã được sử dụng từ trước.</p>
 <ul class="simple">
 <li>&#8220;context&#8221;: dùng cho đối tượng (object) Sclate utility, đối tượng này đã bao gồm các method như <tt class="docutils literal"><span class="pre">unescape</span></tt></li>
 <li>&#8220;helper&#8221;: sử dụng cho đối tượng current action</li>
@@ -234,7 +235,7 @@ p= hello(&quot;Xitrum&quot;)
 </div>
 <div class="section" id="coffeescript">
 <h3>CoffeeScript<a class="headerlink" href="#coffeescript" title="Permalink to this headline">¶</a></h3>
-<p>Bạn có thể nhúng CoffeeScript trong Scalate template bằng cách sử dụng:
+<p>Bạn có thể nhúng CoffeeScript trong Scalate      bằng cách sử dụng:
 <a class="reference external" href="http://scalate.fusesource.org/documentation/jade-syntax.html#filters">:coffeescript filter</a>:</p>
 <div class="highlight-python"><div class="highlight"><pre>body
   :coffeescript
@@ -430,7 +431,7 @@ class DoLoginAction extends Action {
 import xitrum.Action
 import xitrum.annotation.GET
 
-// These are non-routed actions, for mapping to view template files:
+// These are non-routed actions, for mapping to view   files:
 // scr/main/scalate/mypackage/HomeAction_NormalUser.jade
 // scr/main/scalate/mypackage/HomeAction_Moderator.jade
 // scr/main/scalate/mypackage/HomeAction_Admin.jade
@@ -452,7 +453,7 @@ class HomeAction extends Action {
 </pre></div>
 </div>
 <p>Sử dụng các non-routed action như trên khá phức tạp, nhưng đó là cách typesafe.</p>
-<p>Bạn cũng có thể sử dụng <a href="#id2"><span class="problematic" id="id3">``</span></a>String``để chỉ ra đường dẫn đến template:</p>
+<p>Bạn cũng có thể sử dụng <tt class="docutils literal"><span class="pre">String</span></tt> để chỉ ra đường dẫn đến      :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_NormalUser&quot;</span><span class="p">)</span>
 <span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_Moderator&quot;</span><span class="p">)</span>
 <span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_Admin&quot;</span><span class="p">)</span>
@@ -461,12 +462,15 @@ class HomeAction extends Action {
 </div>
 </div>
 <div class="section" id="component">
-<h2>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h2>
+<h2>component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h2>
 <p>Bạn có thể tạo và tái sử dụng các component của view.
-Về cơ bản, một component gần giống với một action và có các tính chất sau:
-* Component không có route, do đó không cần đến method <tt class="docutils literal"><span class="pre">execute</span></tt>.
-* Component không trả về một respond hoàn chỉnh, Component chỉ <tt class="docutils literal"><span class="pre">render</span></tt> ra các fragment của view. Do đó trong một component, thay vì sử dụng <tt class="docutils literal"><span class="pre">repondXXX</span></tt>, bạn hãy sử dụng <tt class="docutils literal"><span class="pre">renderXXX</span></tt>.
-* Giống với một action, một component có thể không có, có một, hoặc có nhiều view liên kết với nhau.</p>
+Về cơ bản, một component gần giống với một action và có các tính chất sau:</p>
+<ul class="simple">
+<li>Component không có route, do đó không cần đến method <tt class="docutils literal"><span class="pre">execute</span></tt>.</li>
+<li>Component không trả về một respond hoàn chỉnh, Component chỉ <tt class="docutils literal"><span class="pre">render</span></tt> ra các fragment của view. Do đó
+trong một component, thay vì sử dụng <tt class="docutils literal"><span class="pre">repondXXX</span></tt>, bạn hãy sử dụng <tt class="docutils literal"><span class="pre">renderXXX</span></tt>.</li>
+<li>Giống với một action, một component có thể không có, có một, hoặc có nhiều view liên kết với nhau.</li>
+</ul>
 <div class="highlight-python"><div class="highlight"><pre>package mypackage
 
 import xitrum.{FutureAction, Component}
@@ -474,7 +478,7 @@ import xitrum.annotation.GET
 
 class CompoWithView extends Component {
   def render() = {
-    // Render associated view template, e.g. CompoWithView.jade
+    // Render associated view         , e.g. CompoWithView.jade
     // Note that this is renderView, not respondView!
     renderView()
   }
@@ -517,7 +521,7 @@ class MyAction extends FutureAction {
 <li><a class="reference internal" href="#futureaction">FutureAction</a></li>
 <li><a class="reference internal" href="#actor-action">Actor action</a></li>
 <li><a class="reference internal" href="#gui-respond-cho-client">Gửi Respond cho client</a></li>
-<li><a class="reference internal" href="#gui-tra-mot-template-view-file">Gửi trả một template view file</a><ul>
+<li><a class="reference internal" href="#gui-tra-mot-view-file">Gửi trả một view file</a><ul>
 <li><a class="reference internal" href="#ep-kieu-cho-currentaction">Ép kiểu cho currentAction</a></li>
 <li><a class="reference internal" href="#id1">Mustache</a></li>
 <li><a class="reference internal" href="#coffeescript">CoffeeScript</a></li>
@@ -534,7 +538,7 @@ class MyAction extends FutureAction {
 <li><a class="reference internal" href="#mot-action-nhieu-view">Một action - nhiều view</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#component">Component</a></li>
+<li><a class="reference internal" href="#component">component</a></li>
 </ul>
 </li>
 </ul>

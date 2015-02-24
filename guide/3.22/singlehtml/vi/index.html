@@ -66,14 +66,13 @@
 <a class="reference external" href="http://netty.io/">Netty</a> và <a class="reference external" href="http://akka.io/">Akka</a>.</p>
 <p><a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">Một người dùng Xiturm</a> đã nói rằng:</p>
 <blockquote>
-<div><p>Wow, đây thực sự là một sản phẩm tuyệt vời, có thể coi như một Scala framework
-hoàn chỉnh tới mức có thể so sánh với Lift (nhưng dễ sử dụng hơn nhiều).</p>
-<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> một web framework <cite>full-stack</cite> đúng nghĩa, đáp ứng tất cả các
+<div>Wow, đây thực sự là một sản phẩm tuyệt vời, có thể coi như một Scala framework
+hoàn chỉnh tới mức có thể so sánh với Lift (nhưng dễ sử dụng hơn nhiều).
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> một web framework <cite>full-stack</cite> đúng nghĩa, đáp ứng tất cả các
 chức năng cơ bản của một web framework, ngoài ra còn có những phần mở rộng như ETags, file cache tĩnh, công cụ nén
 Gzip tự động. Tích hợp công cụ chuyển đổi JSON, before/around/after interceptors, request/session/cookie/flash scopes,
 các bộ chuẩn hóa input tích hợp ở cả server và client, tích hợp cả tính năng cache (<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>),
-tính năng đa ngôn ngữ i18n theo phong cách GNU gettext, Netty (nhanh không kém Nginx), v.v . Và bạn có thể sử dụng nhiều tính năng khác nữa.</p>
-</div></blockquote>
+tính năng đa ngôn ngữ i18n theo phong cách GNU gettext, Netty (nhanh không kém Nginx), v.v . Và bạn có thể sử dụng nhiều tính năng khác nữa.</div></blockquote>
 <div class="section" id="tinh-nang">
 <h3>Tính năng<a class="headerlink" href="#tinh-nang" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -103,7 +102,7 @@ Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đư
 Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
 <li>Các lớp và các đường định tuyến được tải lại một cách tự động trong chế độ phát triển (development mode).</li>
 <li>Các View có thể viết bằng các tập tin mẫu <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-một các riêng biệt hoặc bằng Scala inline XML. Cả hai cách đều an toàn.</li>
+một cách riêng biệt hoặc bằng Scala inline XML. Cả hai cách đều typesafe.</li>
 <li>Phiên làm việc(Sessions) có thể lưu trữ ngay trong cookies(đáp ứng đuợc nhiều user cùng lúc hơn) hoặc lưu trữ bằng <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> (tính bảo mật cao hơn).
 Hazelcast cũng chạy ngay trong cùng process với việc sử dụng cache phân tán(do đó nhanh hơn và dễ sử dụng hơn) ,
 vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Điều này cũng đúng trong chức năng pubsub của Akka.</li>
@@ -113,12 +112,9 @@ vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Đ
 Việc trích các chuổi văn bản ra ngoài để thực hiện dịch được thực hiện tự động, bạn sẽ không cần làm thủ công với properties file.
 Bạn cũng có thể sử dụng các công cụ mạnh như <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a> để dịch và hợp nhất các bản dịch.
 gettext, không giống như hầu hết các giải pháp khác, hỗ trợ các định dạng của cả số ít và số nhiều.</li>
+<li>Xitrum cố gắng khắc phục các nhược điểm của <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
+và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh hơn Scalatra và dễ sử dụng hơn Lift. Bạn có thể dễ dàng tạo cả RESTful APIs và postbacks. <a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> là hệ thống controller-first như Scalatra, không phải là <a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> như Lift. Đa số mọi người đã quen thuộc với phong cách controller-first.</li>
 </ul>
-<p>Xitrum cố gắng khắc phục các nhược điểm của <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
-và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh hơn Scalatra và dễ sử dụng hơn Lift. Bạn có thể dễ dàng tạo cả RESTful APIs và postbacks.
-<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> là hệ thống controller-first như Scalatra, không phải là
-<a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> như Lift.
-Đa số mọi người đã quen thuộc với phong cách controller-first.</p>
 <p>Hãy xem <a class="reference internal" href="index.html#document-deps"><em>các dự án liên quan</em></a> để có được danh sách các bản demos, plugins v.v.</p>
 </div>
 <div class="section" id="dong-gop">
@@ -349,7 +345,7 @@ class HelloAction extends ActorAction {
 </pre></div>
 </div>
 <p>Một actor instance sẽ được tạo khi có một yêu cầu (request), actor sẽ được dừng khi
-đóng kết nối hoặc response được gửi bởi các method``respondText``, <tt class="docutils literal"><span class="pre">respondView</span></tt>, v.v.
+đóng kết nối hoặc response được gửi bởi các method <tt class="docutils literal"><span class="pre">respondText</span></tt>, <tt class="docutils literal"><span class="pre">respondView</span></tt>, v.v.
 Với chunked response, actor sẽ không dừng lại ngay lập tức mà dừng lại khi chunk cuối cùng
 được gửi đi.</p>
 <p>Actor này sẽ chạy trong thread pool của Akka actor có tên là &#8220;xitrum&#8221;</p>
@@ -358,8 +354,8 @@ Với chunked response, actor sẽ không dừng lại ngay lập tức mà dừ
 <h3>Gửi Respond cho client<a class="headerlink" href="#gui-respond-cho-client" title="Permalink to this headline">¶</a></h3>
 <p>Từ một action để trả về một respond cho phía client bạn có thể sử dụng những method sau:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">respondView</span></tt>: trả về một tệp view template, có hoặc không có layout</li>
-<li><tt class="docutils literal"><span class="pre">respondInlineView</span></tt>: trả về một template được nhúng (không phải một tệp template riêng lẻ), có hoặc không có layout</li>
+<li><tt class="docutils literal"><span class="pre">respondView</span></tt>: trả về một tệp view  , có hoặc không có layout</li>
+<li><tt class="docutils literal"><span class="pre">respondInlineView</span></tt>: trả về một      được nhúng (không phải một tệp          riêng lẻ), có hoặc không có layout</li>
 <li><tt class="docutils literal"><span class="pre">respondText(&quot;hello&quot;)</span></tt>: trả về một chuỗi ký tự không có layout</li>
 <li><tt class="docutils literal"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></tt>: như trên, với content type là &#8220;text/html&#8221;</li>
 <li><tt class="docutils literal"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></tt>: chuyển đối tượng (object) Scala thành đối tượng JSON và trả về client.</li>
@@ -372,10 +368,10 @@ Với chunked response, actor sẽ không dừng lại ngay lập tức mà dừ
 <li><tt class="docutils literal"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></tt> gửi chunk respond</li>
 </ul>
 </div>
-<div class="section" id="gui-tra-mot-template-view-file">
-<h3>Gửi trả một template view file<a class="headerlink" href="#gui-tra-mot-template-view-file" title="Permalink to this headline">¶</a></h3>
-<p>Mỗi action có thể liên kết với <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-template view file. Thay vì gửi tra trực tiếp ngay trong action với các method trên đây, bạn có
+<div class="section" id="gui-tra-mot-view-file">
+<h3>Gửi trả một view file<a class="headerlink" href="#gui-tra-mot-view-file" title="Permalink to this headline">¶</a></h3>
+<p>Mỗi action có thể liên kết với <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> view file. Thay
+vì gửi tra trực tiếp ngay trong action với các method trên đây, bạn có
 thể sử dụng một view file riêng biệt.</p>
 <p>scr/main/scala/mypackage/MyAction.scala:</p>
 <div class="highlight-python"><div class="highlight"><pre>package mypackage
@@ -412,19 +408,20 @@ html
 </pre></div>
 </div>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">xitrumCss</span></tt> bao gồm các tệp CSS mặc định cho Xitrum. Bạn có thể xóa nó nếu bạn không muốn</li>
+<li><tt class="docutils literal"><span class="pre">xitrumCss</span></tt> bao gồm các tệp CSS mặc định cho Xitrum. Bạn có thể xóa nó nếu bạn không muốn
+sử dụng xitrum-framework.</li>
+<li><tt class="docutils literal"><span class="pre">jsDefaults</span></tt> bao gồm các jQuery, jQuery Validate plugin, v.v, bạn nên đặt nó trong thẻ &lt;head&gt;</li>
+<li><tt class="docutils literal"><span class="pre">jsForView</span></tt> bao gồm các đoạn mã JavaScript thêm bởi <tt class="docutils literal"><span class="pre">jsAddToView</span></tt>, nên đặt ở phần cuối.</li>
 </ul>
-<p>sử dụng xitrum-framework.
-* <tt class="docutils literal"><span class="pre">jsDefaults</span></tt> bao gồm các jQuery, jQuery Validate plugin, v.v, bạn nên đặt nó trong thẻ &lt;head&gt;
-* <tt class="docutils literal"><span class="pre">jsForView</span></tt> bao gồm các đoạn mã JavaScript thêm bởi <tt class="docutils literal"><span class="pre">jsAddToView</span></tt>, nên đặt ở phần cuối.</p>
-<p>Trong template bạn có thể sử dụng các method của class <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>.
+<p>Trong    bạn có thể sử dụng các method của class <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>.
 Không những thế bạn có thể sử dụng các utility methods cung cấp bởi Scalate điển hình như <tt class="docutils literal"><span class="pre">unescape</span></tt>.</p>
 <p>Xem thêm <a class="reference external" href="http://scalate.fusesource.org/documentation/index.html">Scalate doc</a>.</p>
-<p>Template mặc định của Scalate là <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a>.
-Bạn cũng có thể sử dụng <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
+<blockquote>
+<div>mặc định của Scalate là <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a>.</div></blockquote>
+<p>Bạn cũng có thể sử dụng <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
 <a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">Scaml</a>, hoặc <a class="reference external" href="http://scalate.fusesource.org/documentation/ssp-reference.html">Ssp</a>.</p>
-<p>Để cấu hình cho template mặc định, bạn có thể xem xitrum.conf tại thư mục config trong ứng dụng Xitrum</p>
-<p>Bạn cũng có thể override template mặc định bằng cách truyền các giá trị &#8220;jade&#8221;, &#8220;mustache&#8221;, &#8220;scaml&#8221;,hoặc &#8220;ssp&#8221; vào tham số &#8220;type&#8221; trong method <cite>respondView</cite>.</p>
+<p>Để cấu hình cho          mặc định, bạn có thể xem xitrum.conf tại thư mục config trong ứng dụng Xitrum</p>
+<p>Bạn cũng có thể override         mặc định bằng cách truyền các giá trị &#8220;jade&#8221;, &#8220;mustache&#8221;, &#8220;scaml&#8221;,hoặc &#8220;ssp&#8221; vào tham số &#8220;type&#8221; trong method <cite>respondView</cite>.</p>
 <div class="highlight-python"><div class="highlight"><pre>val options = Map(&quot;type&quot; -&gt;&quot;mustache&quot;)
 respondView(options)
 </pre></div>
@@ -452,18 +449,18 @@ p= hello(&quot;Xitrum&quot;)
 <li><a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Scalate implementation</a></li>
 </ul>
 <p>Bạn không thể làm một vài điều với Mustache như với Jade bởi vì cú pháp của Mustache khá cứng nhắc và cần tuân thủ nghiêm ngặt.</p>
-<p>Để truyền tham số từ action vào template của Mustache bạn phải sử dụng method <tt class="docutils literal"><span class="pre">at</span></tt>:</p>
+<p>Để truyền tham số từ action vào          của Mustache bạn phải sử dụng method <tt class="docutils literal"><span class="pre">at</span></tt>:</p>
 <p>Action:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">at</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="s">&quot;Jack&quot;</span>
 <span class="n">at</span><span class="p">(</span><span class="s">&quot;xitrumCss&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">xitrumCss</span>
 </pre></div>
 </div>
-<p>Mustache template:</p>
+<p>Mustache        :</p>
 <div class="highlight-python"><div class="highlight"><pre>My name is {{name}}
 {{xitrumCss}}
 </pre></div>
 </div>
-<p>Ghi nhớ rằng bạn không thể sử dụng các từ khóa dưới đây cho method <tt class="docutils literal"><span class="pre">at</span></tt> để truyền tham số cho Scalate template, bởi vì chúng đã được sử dụng từ trước.</p>
+<p>Ghi nhớ rằng bạn không thể sử dụng các từ khóa dưới đây cho method <tt class="docutils literal"><span class="pre">at</span></tt> để truyền tham số cho Scalate         , bởi vì chúng đã được sử dụng từ trước.</p>
 <ul class="simple">
 <li>&#8220;context&#8221;: dùng cho đối tượng (object) Sclate utility, đối tượng này đã bao gồm các method như <tt class="docutils literal"><span class="pre">unescape</span></tt></li>
 <li>&#8220;helper&#8221;: sử dụng cho đối tượng current action</li>
@@ -471,7 +468,7 @@ p= hello(&quot;Xitrum&quot;)
 </div>
 <div class="section" id="coffeescript">
 <h4>CoffeeScript<a class="headerlink" href="#coffeescript" title="Permalink to this headline">¶</a></h4>
-<p>Bạn có thể nhúng CoffeeScript trong Scalate template bằng cách sử dụng:
+<p>Bạn có thể nhúng CoffeeScript trong Scalate      bằng cách sử dụng:
 <a class="reference external" href="http://scalate.fusesource.org/documentation/jade-syntax.html#filters">:coffeescript filter</a>:</p>
 <div class="highlight-python"><div class="highlight"><pre>body
   :coffeescript
@@ -667,7 +664,7 @@ class DoLoginAction extends Action {
 import xitrum.Action
 import xitrum.annotation.GET
 
-// These are non-routed actions, for mapping to view template files:
+// These are non-routed actions, for mapping to view   files:
 // scr/main/scalate/mypackage/HomeAction_NormalUser.jade
 // scr/main/scalate/mypackage/HomeAction_Moderator.jade
 // scr/main/scalate/mypackage/HomeAction_Admin.jade
@@ -689,7 +686,7 @@ class HomeAction extends Action {
 </pre></div>
 </div>
 <p>Sử dụng các non-routed action như trên khá phức tạp, nhưng đó là cách typesafe.</p>
-<p>Bạn cũng có thể sử dụng <a href="#id2"><span class="problematic" id="id3">``</span></a>String``để chỉ ra đường dẫn đến template:</p>
+<p>Bạn cũng có thể sử dụng <tt class="docutils literal"><span class="pre">String</span></tt> để chỉ ra đường dẫn đến      :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_NormalUser&quot;</span><span class="p">)</span>
 <span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_Moderator&quot;</span><span class="p">)</span>
 <span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_Admin&quot;</span><span class="p">)</span>
@@ -698,12 +695,15 @@ class HomeAction extends Action {
 </div>
 </div>
 <div class="section" id="component">
-<h3>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h3>
+<h3>component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h3>
 <p>Bạn có thể tạo và tái sử dụng các component của view.
-Về cơ bản, một component gần giống với một action và có các tính chất sau:
-* Component không có route, do đó không cần đến method <tt class="docutils literal"><span class="pre">execute</span></tt>.
-* Component không trả về một respond hoàn chỉnh, Component chỉ <tt class="docutils literal"><span class="pre">render</span></tt> ra các fragment của view. Do đó trong một component, thay vì sử dụng <tt class="docutils literal"><span class="pre">repondXXX</span></tt>, bạn hãy sử dụng <tt class="docutils literal"><span class="pre">renderXXX</span></tt>.
-* Giống với một action, một component có thể không có, có một, hoặc có nhiều view liên kết với nhau.</p>
+Về cơ bản, một component gần giống với một action và có các tính chất sau:</p>
+<ul class="simple">
+<li>Component không có route, do đó không cần đến method <tt class="docutils literal"><span class="pre">execute</span></tt>.</li>
+<li>Component không trả về một respond hoàn chỉnh, Component chỉ <tt class="docutils literal"><span class="pre">render</span></tt> ra các fragment của view. Do đó
+trong một component, thay vì sử dụng <tt class="docutils literal"><span class="pre">repondXXX</span></tt>, bạn hãy sử dụng <tt class="docutils literal"><span class="pre">renderXXX</span></tt>.</li>
+<li>Giống với một action, một component có thể không có, có một, hoặc có nhiều view liên kết với nhau.</li>
+</ul>
 <div class="highlight-python"><div class="highlight"><pre>package mypackage
 
 import xitrum.{FutureAction, Component}
@@ -711,7 +711,7 @@ import xitrum.annotation.GET
 
 class CompoWithView extends Component {
   def render() = {
-    // Render associated view template, e.g. CompoWithView.jade
+    // Render associated view         , e.g. CompoWithView.jade
     // Note that this is renderView, not respondView!
     renderView()
   }
@@ -759,7 +759,7 @@ class ArticlesShow extends Action {
 </div>
 <p>Tương tự cho các method POST, PUT, PATCH, DELETE, và OPTIONS.
 Xitrum tự động kiểm soát phần HEAD như như một method GET với phần response body rỗng.</p>
-<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method PÓST với <tt class="docutils literal"><span class="pre">_method=put</span></tt> hoặc <tt class="docutils literal"><span class="pre">_method=delete</span></tt> trong request body.</p>
+<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method POST với <tt class="docutils literal"><span class="pre">_method=put</span></tt> hoặc <tt class="docutils literal"><span class="pre">_method=delete</span></tt> trong request body.</p>
 <p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến và ghi ra out put để thông báo cho bạn biết bạn có APIs nào:</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
 GET /articles     quickstart.action.ArticlesIndex
@@ -767,11 +767,6 @@ GET /articles/:id quickstart.action.ArticlesShow
 </pre></div>
 </div>
 <p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy nghĩ về tính năng nay tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
-Routes are automatically collected in the spirit of JAX-RS
-and Rails Engines. You don&#8217;t have to declare all routes in a single place.
-Think of this feature as distributed routes. You can plug an app into another app.
-If you have a blog engine, you can package it as a JAR file, then you can put
-that JAR file into another app and that app automatically has blog feature!
 Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
 Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
 <div class="section" id="route-cache">
@@ -781,14 +776,13 @@ Trong quá trình phát triển, các route trong các tệp <tt class="docutils
 </div>
 <div class="section" id="muc-do-uu-tien-cua-cac-route-first-last">
 <h3>Mức độ ưu tiên của các route (first, last)<a class="headerlink" href="#muc-do-uu-tien-cua-cac-route-first-last" title="Permalink to this headline">¶</a></h3>
-<p>;
-Nếu bạn muốn các route như sau:</p>
+<p>Nếu bạn muốn các route như sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>/articles/:id --&gt; ArticlesShow
 /articles/new --&gt; ArticlesNew
 </pre></div>
 </div>
-<p>Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.``FIr
-You must make sure the second route be checked first. Annotation <tt class="docutils literal"><span class="pre">&#64;First</span></tt> sẽ được thêm vào:</p>
+<p>Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.
+Annotation <tt class="docutils literal"><span class="pre">&#64;First</span></tt> sẽ được thêm vào:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
 
 @GET(&quot;articles/:id&quot;)
@@ -803,7 +797,7 @@ class ArticlesNew extends Action {
 }
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">Last</span></tt> is similar.</p>
+<p>Tương tự với <tt class="docutils literal"><span class="pre">Last</span></tt>.</p>
 </div>
 <div class="section" id="nhieu-duong-dan-cho-mot-action">
 <h3>Nhiều đường dẫn cho một action<a class="headerlink" href="#nhieu-duong-dan-cho-mot-action" title="Permalink to this headline">¶</a></h3>
@@ -847,7 +841,7 @@ class ArticlesShow extends Action {
 <div class="highlight-python"><div class="highlight"><pre>/service/123/proxy/http://foo.com/bar
 </pre></div>
 </div>
-<p>để lấy ra phần <tt class="docutils literal"><span class="pre">:*</span></tt>:</p>
+<p>để lấy ra phần <tt class="docutils literal"><span class="pre">*</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre>val url = param(&quot;*&quot;)  // Will be &quot;http://foo.com/bar&quot;
 </pre></div>
 </div>
@@ -1030,7 +1024,7 @@ object Boot {
 <p>Bạn có thể viết tài liệu cho API của bạn với <a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a>. Thêm annotation <tt class="docutils literal"><span class="pre">&#64;Swagger</span></tt> vào action cần được viết tài liệu.
 Xitrum sẽ generate <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a>.
 Tệp này có thể sử dụng với <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a> để tạo giao diện cho tài liệu của API.</p>
-<p>Xitrum đã bao gồm Swagger UI. Sử dụng chúng tại đường dẫn <a href="#id1"><span class="problematic" id="id2">``</span></a>/xitrum/swagger-ui` của chưong trình của bạn.
+<p>Xitrum đã bao gồm Swagger UI. Sử dụng chúng tại đường dẫn <tt class="docutils literal"><span class="pre">/xitrum/swagger-ui</span></tt> của chưong trình của bạn.
 Ví dụ <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
 <img alt="_images/swagger.png" src="_images/swagger.png" />
 <p>Bạn có thể xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">một ví dụ</a>:</p>
@@ -1133,9 +1127,11 @@ Và đặt class này của bạn trong tệp config/xitrum.conf.</p>
 <li>Để phục vụ các người dùng cuối: bạn cần tạo giao diện web.</li>
 </ul>
 <p>Như một web framework thông thường, Xitrum hướng tới việc hỗ trợ giải quyết các use case một cách dễ dàng. Để giải quyết use case đầu tiền, bạn sử dụng <a class="reference internal" href="index.html#document-restful"><em>RESTful actions</em></a>. Để giải quyết use case thứ hai, bạn có thể sử dụng tính năng Ajax form postback của Xitrum.
-Bạn có thể xem thêm các trang dưới đây để biết thêm về postback:
-* <a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a>
-* <a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></p>
+Bạn có thể xem thêm các trang dưới đây để biết thêm về postback:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></li>
+<li><a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></li>
+</ul>
 <p>Tính năng postback của Xitrum có liên hệ tới <a class="reference external" href="http://nitrogenproject.com/">Nitrogen</a>.</p>
 <div class="section" id="layout">
 <h3>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
@@ -1262,7 +1258,7 @@ class ArticlesCreate extends AppAction {
 <div class="section" id="hien-thi-hinh-dong-khi-load-ajax">
 <h3>Hiện thị hình động khi load Ajax<a class="headerlink" href="#hien-thi-hinh-dong-khi-load-ajax" title="Permalink to this headline">¶</a></h3>
 <p>Nếu bạn muốn hiển thị hình ảnh như thế này khi load Ajax</p>
-<img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
+<img alt="_images/ajax_loading.png" src="_images/ajax_loading.png" />
 <p>bạn có thể gọi JS snippet này sau khi đã include <tt class="docutils literal"><span class="pre">jsDefaults</span></tt> (đã include
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>) trong view template của bạn:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">ajaxLoadingImg</span> <span class="o">=</span> <span class="s">&#39;path/to/your/image&#39;</span><span class="p">;</span>
@@ -2212,10 +2208,8 @@ và implement các abstract method.</p>
 </pre></div>
 </div>
 <p>Lưu trữ session ở cookie của client bất cứ khi nào có thể (serializable và
-<a class="reference external" href="http://stackoverflow.com/questions/640938/what-is-the-maximum-size-of-a-web-browsers-cookies-key">nhỏ hơn 4KB dữ liệu</a>),</p>
-<blockquote>
-<div>it&#8217;s more scalable.</div></blockquote>
-<p>Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi cần thiết.</p>
+<a class="reference external" href="http://stackoverflow.com/questions/640938/what-is-the-maximum-size-of-a-web-browsers-cookies-key">nhỏ hơn 4KB dữ liệu</a>), it&#8217;s more scalable.
+Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi cần thiết.</p>
 <p>Good read:
 <a class="reference external" href="http://www.technicalinfo.net/papers/WebBasedSessionManagement.html">Web Based Session Management - Best practices in managing HTTP-based client sessions</a>.</p>
 </div>
@@ -2426,14 +2420,14 @@ class MyAction extends Action {
 <div class="section" id="thu-tu-thuc-hien-cua-cac-bo-loc-filter">
 <h3>Thứ tự thực hiện của các bộ lọc (filter)<a class="headerlink" href="#thu-tu-thuc-hien-cua-cac-bo-loc-filter" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Before filters được chạy đầu tiên, sau đó là  around filter, cuối cùng là after</li>
+<li>Before filters được chạy đầu tiên, sau đó là  around filter, cuối cùng là after
+filter.</li>
+<li>Néu một trong nhưng before filter trả về false, các filter con lại ( bao gồm
+around và after filter) sẽ không được chạy.</li>
+<li>After filters luôn được chạy nếu ít nhát có một around filter được chạy.</li>
+<li>Nếu một around filter không gọi <tt class="docutils literal"><span class="pre">action</span></tt>, các around filter lồng bên trong
+filter này sẽ không được chạy.</li>
 </ul>
-<p>filter.
-* Néu một trong nhưng before filter trả về false, các filter con lại ( bao gồm
-around và after filter) sẽ không được chạy.
-* After filters luôn được chạy nếu ít nhát có một around filter được chạy.
-* Nếu một around filter không gọi <tt class="docutils literal"><span class="pre">action</span></tt>, các around filter lồng bên trong
-filter này sẽ không được chạy.</p>
 <div class="highlight-python"><div class="highlight"><pre>before1 -true-&gt; before2 -true-&gt; +--------------------+ --&gt; after1 --&gt; after2
                                 | around1 (1 of 2)   |
                                 |   around2 (1 of 2) |
@@ -3020,8 +3014,8 @@ sudo update-alternatives --config javaws
 </pre></div>
 </div>
 </div>
-<div class="section" id="chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-doong">
-<h3>Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi đôộng<a class="headerlink" href="#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-doong" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-dong">
+<h3>Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi động<a class="headerlink" href="#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-dong" title="Permalink to this headline">¶</a></h3>
 <p><tt class="docutils literal"><span class="pre">script/runner</span></tt> (cho các hệ thông Unix-like) và <tt class="docutils literal"><span class="pre">script/runner.bat</span></tt> (cho Windows) là các đoạn script
 để chạy bất cứ đối tượng nào có method <tt class="docutils literal"><span class="pre">main</span></tt>. Sử dụng chúng để khởi động web server trong môi trường
 sản phẩm.</p>
@@ -3648,7 +3642,7 @@ val myConfig = Loader.jsonFromClasspath[MyConfig](&quot;myconfig.json&quot;)
 </div>
 <div class="section" id="tep-properties">
 <h4>Tệp properties<a class="headerlink" href="#tep-properties" title="Permalink to this headline">¶</a></h4>
-<p>Bạn cũng có thể các tệp property, nhưng bạn nên sử dụng JSON. Tệp property không phải typesafe, không hỗ trợ UTF-8 và các cáu trúc lồng nhau v.v.</p>
+<p>Bạn cũng có thể các tệp property, nhưng bạn nên sử dụng JSON. Tệp property không phải typesafe, không hỗ trợ UTF-8 và các cấu trúc lồng nhau v.v.</p>
 <p>myconfig.properties:</p>
 <div class="highlight-python"><div class="highlight"><pre>username = God
 password = Does God need a password?
@@ -3880,7 +3874,7 @@ Chill dựa trên <a class="reference external" href="http://code.google.com/p/k
 <li><a class="reference external" href="http://slf4s.org/">SLF4S</a>, <a class="reference external" href="http://logback.qos.ch/">Logback</a>:
 Để logging.</li>
 </ul>
-<p><a href="#id1"><span class="problematic" id="id2">`Skeleton project mới của Xitrum&lt;https://github.com/xitrum-framework/xitrum-new&gt;`_</span></a>&#8216;
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Skeleton project mới của Xitrum</a>
 bao gồm các công cụ sau:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/xitrum-framework/scala-xgettext">scala-xgettext</a>:
@@ -3913,7 +3907,7 @@ Ví dụ về tạo project multimodule <a class="reference external" href="http
 Đây là template engine mặc định của Xitrum, preconfigured trong
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum new project skeleton</a>.
 Bạn có thể thay nó bằng các template engine khác, hoặc loại bỏ hoàng toàn nó
-nếu project của bạn không cần bất kì template engine nào. No phụ thuộc vào
+nếu project của bạn không cần bất kì template engine nào. Nó phụ thuộc vào
 <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> và
 <a class="reference external" href="https://github.com/chirino/scalamd">Scalamd</a>.</li>
 <li><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">xitrum-hazelcast</a>:
@@ -3965,7 +3959,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l2"><a class="reference internal" href="index.html#futureaction">FutureAction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#actor-action">Actor action</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#gui-respond-cho-client">Gửi Respond cho client</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#gui-tra-mot-template-view-file">Gửi trả một template view file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#gui-tra-mot-view-file">Gửi trả một view file</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="index.html#ep-kieu-cho-currentaction">Ép kiểu cho currentAction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#id1">Mustache</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#coffeescript">CoffeeScript</a></li>
@@ -3982,7 +3976,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l3"><a class="reference internal" href="index.html#mot-action-nhieu-view">Một action - nhiều view</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#component">component</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#document-restful">RESTful APIs</a><ul>
@@ -4132,7 +4126,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l2"><a class="reference internal" href="index.html#customize-xitrum-package">Customize xitrum-package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay">Kết nối Scala console đến một tiến trình JVM đang chạy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#cai-dat-oracle-jdk-tren-centos-hoac-ubuntu">Cài đặt Oracle JDK trên CentOS hoặc Ubuntu</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-doong">Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi đôộng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-dong">Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi động</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#thiet-lap-cong-chuyen-tiep">Thiết lập cổng chuyển tiếp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#cau-hinh-linux-de-ket-noi-hang-loat">Cấu hình Linux để kết nối hàng loạt</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="index.html#tang-so-luong-cac-tep-duoc-mo">Tăng số lượng các tệp được mở</a></li>

@@ -21,7 +21,7 @@ Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone,Android v.v m�
 Tương tự cho các method POST, PUT, PATCH, DELETE, và OPTIONS.
 Xitrum tự động kiểm soát phần HEAD như như một method GET với phần response body rỗng.
 
-Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method PÓST với ``_method=put`` hoặc ``_method=delete`` trong request body.  
+Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method POST với ``_method=put`` hoặc ``_method=delete`` trong request body.  
 
 Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến và ghi ra out put để thông báo cho bạn biết bạn có APIs nào:
 
@@ -32,11 +32,6 @@ Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả c
   GET /articles/:id quickstart.action.ArticlesShow
 
 Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy nghĩ về tính năng nay tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
-Routes are automatically collected in the spirit of JAX-RS
-and Rails Engines. You don't have to declare all routes in a single place.
-Think of this feature as distributed routes. You can plug an app into another app.
-If you have a blog engine, you can package it as a JAR file, then you can put
-that JAR file into another app and that app automatically has blog feature!
 Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
 Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng `Swagger Doc <http://swagger.wordnik.com/>`_.
 
@@ -48,7 +43,7 @@ Trong quá trình phát triển, các route trong các tệp ``*.class`` tại t
 
 Mức độ ưu tiên của các route (first, last)
 ------------------------------------------
-;
+
 Nếu bạn muốn các route như sau:
 
 ::
@@ -56,8 +51,8 @@ Nếu bạn muốn các route như sau:
   /articles/:id --> ArticlesShow
   /articles/new --> ArticlesNew
 
-Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.``FIr
-You must make sure the second route be checked first. Annotation ``@First`` sẽ được thêm vào:
+Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.
+Annotation ``@First`` sẽ được thêm vào:
 
 ::
 
@@ -74,10 +69,10 @@ You must make sure the second route be checked first. Annotation ``@First`` sẽ
     def execute() {...}
   }
 
-``Last`` is similar.
+Tương tự với ``Last``.
 
 Nhiều đường dẫn cho một action
------------------------------
+------------------------------
 
 ::
 
@@ -127,7 +122,7 @@ Kí tự đặc biệt ``/`` không được phép có mặt trong tên của pa
 
   /service/123/proxy/http://foo.com/bar
 
-để lấy ra phần ``:*``:
+để lấy ra phần ``*``:
 
 ::
 
@@ -342,7 +337,7 @@ Bạn có thể viết tài liệu cho API của bạn với `Swagger <https://d
 Xitrum sẽ generate `/xitrum/swagger.json <https://github.com/wordnik/swagger-core/wiki/API-Declaration>`_.
 Tệp này có thể sử dụng với `Swagger UI <https://github.com/wordnik/swagger-ui>`_ để tạo giao diện cho tài liệu của API.
 
-Xitrum đã bao gồm Swagger UI. Sử dụng chúng tại đường dẫn ``/xitrum/swagger-ui` của chưong trình của bạn.
+Xitrum đã bao gồm Swagger UI. Sử dụng chúng tại đường dẫn ``/xitrum/swagger-ui`` của chưong trình của bạn.
 Ví dụ http://localhost:8000/xitrum/swagger-ui.
 
 .. image:: ../img/swagger.png

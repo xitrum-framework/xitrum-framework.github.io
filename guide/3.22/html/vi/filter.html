@@ -120,14 +120,14 @@ class MyAction extends Action {
 <div class="section" id="thu-tu-thuc-hien-cua-cac-bo-loc-filter">
 <h2>Thứ tự thực hiện của các bộ lọc (filter)<a class="headerlink" href="#thu-tu-thuc-hien-cua-cac-bo-loc-filter" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Before filters được chạy đầu tiên, sau đó là  around filter, cuối cùng là after</li>
+<li>Before filters được chạy đầu tiên, sau đó là  around filter, cuối cùng là after
+filter.</li>
+<li>Néu một trong nhưng before filter trả về false, các filter con lại ( bao gồm
+around và after filter) sẽ không được chạy.</li>
+<li>After filters luôn được chạy nếu ít nhát có một around filter được chạy.</li>
+<li>Nếu một around filter không gọi <tt class="docutils literal"><span class="pre">action</span></tt>, các around filter lồng bên trong
+filter này sẽ không được chạy.</li>
 </ul>
-<p>filter.
-* Néu một trong nhưng before filter trả về false, các filter con lại ( bao gồm
-around và after filter) sẽ không được chạy.
-* After filters luôn được chạy nếu ít nhát có một around filter được chạy.
-* Nếu một around filter không gọi <tt class="docutils literal"><span class="pre">action</span></tt>, các around filter lồng bên trong
-filter này sẽ không được chạy.</p>
 <div class="highlight-python"><div class="highlight"><pre>before1 -true-&gt; before2 -true-&gt; +--------------------+ --&gt; after1 --&gt; after2
                                 | around1 (1 of 2)   |
                                 |   around2 (1 of 2) |
