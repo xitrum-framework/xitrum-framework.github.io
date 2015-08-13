@@ -1,0 +1,1111 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>RouteCollection - xitrum.routing.RouteCollection</title>
+          <meta name="description" content="RouteCollection - xitrum.routing.RouteCollection" />
+          <meta name="keywords" content="RouteCollection xitrum.routing.RouteCollection" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'xitrum.routing.RouteCollection';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="RouteCollection$.html" title="See companion object"><img src="../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../package.html" class="extype" name="xitrum">xitrum</a>.<a href="package.html" class="extype" name="xitrum.routing">routing</a></p>
+        <h1><a href="RouteCollection$.html" title="See companion object">RouteCollection</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="RouteCollection$.html" title="See companion object">object RouteCollection</a>
+            | <a href="package.html" class="extype" name="xitrum.routing">package routing</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RouteCollection</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Routes are grouped by methods.
+The routes are <code>ArrayBuffer</code> so that routes can be modified after collected.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="xitrum.routing.RouteCollection"><span>RouteCollection</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="xitrum.routing.RouteCollection#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(firstGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],sockJsRouteMap:xitrum.routing.SockJsRouteMap,swaggerMap:Map[Class[_&lt;:xitrum.Action],xitrum.annotation.Swagger],error404:Option[Class[xitrum.Action]],error500:Option[Class[xitrum.Action]]):xitrum.routing.RouteCollection"></a>
+      <a id="&lt;init&gt;:RouteCollection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RouteCollection</span><span class="params">(<span name="firstGETs">firstGETs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="lastGETs">lastGETs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="otherGETs">otherGETs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="firstPOSTs">firstPOSTs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="lastPOSTs">lastPOSTs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="otherPOSTs">otherPOSTs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="firstPUTs">firstPUTs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="lastPUTs">lastPUTs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="otherPUTs">otherPUTs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="firstPATCHs">firstPATCHs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="lastPATCHs">lastPATCHs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="otherPATCHs">otherPATCHs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="firstDELETEs">firstDELETEs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="lastDELETEs">lastDELETEs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="otherDELETEs">otherDELETEs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="firstWEBSOCKETs">firstWEBSOCKETs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="lastWEBSOCKETs">lastWEBSOCKETs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="otherWEBSOCKETs">otherWEBSOCKETs: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>, <span name="sockJsRouteMap">sockJsRouteMap: <a href="SockJsRouteMap.html" class="extype" name="xitrum.routing.SockJsRouteMap">SockJsRouteMap</a></span>, <span name="swaggerMap">swaggerMap: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="../Action.html" class="extype" name="xitrum.Action">Action</a>], <a href="../annotation/Swagger.html" class="extype" name="xitrum.annotation.Swagger">Swagger</a>]</span>, <span name="error404">error404: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.Class">Class</span>[<a href="../Action.html" class="extype" name="xitrum.Action">Action</a>]]</span>, <span name="error500">error500: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.Class">Class</span>[<a href="../Action.html" class="extype" name="xitrum.Action">Action</a>]]</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@&lt;init&gt;(firstGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],firstWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],lastWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],otherWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route],sockJsRouteMap:xitrum.routing.SockJsRouteMap,swaggerMap:Map[Class[_&lt;:xitrum.Action],xitrum.annotation.Swagger],error404:Option[Class[xitrum.Action]],error500:Option[Class[xitrum.Action]]):xitrum.routing.RouteCollection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#all" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="all:Seq[scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]]"></a>
+      <a id="all:Seq[ArrayBuffer[Route]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">all</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@all:Seq[scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">All routes in one place for ease of use.</p><div class="fullcomment"><div class="comment cmt"><p>All routes in one place for ease of use. Elements are <code>ArrayBuffer</code> and can
+still be modified.
+</p></div></div>
+    </li><li name="xitrum.routing.RouteCollection#allFirsts" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="allFirsts(xitrumRoutes:Option[Boolean]):Seq[xitrum.routing.Route]"></a>
+      <a id="allFirsts(Option[Boolean]):Seq[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allFirsts</span><span class="params">(<span name="xitrumRoutes">xitrumRoutes: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@allFirsts(xitrumRoutes:Option[Boolean]):Seq[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">xitrumRoutes</dt><dd class="cmt"><p>
+- None: No filter, return all routes
+- Some(true): Only return Xitrum internal routes
+- Some(false): Only return non Xitrum internal routes
+</p></dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#allFlatten" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="allFlatten():Seq[xitrum.routing.Route]"></a>
+      <a id="allFlatten():Seq[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allFlatten</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@allFlatten():Seq[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#allLasts" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="allLasts(xitrumRoutes:Option[Boolean]):Seq[xitrum.routing.Route]"></a>
+      <a id="allLasts(Option[Boolean]):Seq[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allLasts</span><span class="params">(<span name="xitrumRoutes">xitrumRoutes: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@allLasts(xitrumRoutes:Option[Boolean]):Seq[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">See allFirsts</p>
+    </li><li name="xitrum.routing.RouteCollection#allOthers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="allOthers(xitrumRoutes:Option[Boolean]):Seq[xitrum.routing.Route]"></a>
+      <a id="allOthers(Option[Boolean]):Seq[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">allOthers</span><span class="params">(<span name="xitrumRoutes">xitrumRoutes: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@allOthers(xitrumRoutes:Option[Boolean]):Seq[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">See allFirsts</p>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#error404" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="error404:Option[Class[xitrum.Action]]"></a>
+      <a id="error404:Option[Class[Action]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error404</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.Class">Class</span>[<a href="../Action.html" class="extype" name="xitrum.Action">Action</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@error404:Option[Class[xitrum.Action]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#error500" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="error500:Option[Class[xitrum.Action]]"></a>
+      <a id="error500:Option[Class[Action]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error500</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.Class">Class</span>[<a href="../Action.html" class="extype" name="xitrum.Action">Action</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@error500:Option[Class[xitrum.Action]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#firstDELETEs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="firstDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="firstDELETEs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstDELETEs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@firstDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#firstGETs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="firstGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="firstGETs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstGETs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@firstGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#firstPATCHs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="firstPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="firstPATCHs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstPATCHs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@firstPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#firstPOSTs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="firstPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="firstPOSTs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstPOSTs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@firstPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#firstPUTs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="firstPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="firstPUTs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstPUTs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@firstPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#firstWEBSOCKETs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="firstWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="firstWEBSOCKETs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstWEBSOCKETs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@firstWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#lastDELETEs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lastDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="lastDELETEs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastDELETEs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@lastDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#lastGETs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lastGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="lastGETs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastGETs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@lastGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#lastPATCHs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lastPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="lastPATCHs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastPATCHs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@lastPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#lastPOSTs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lastPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="lastPOSTs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastPOSTs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@lastPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#lastPUTs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lastPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="lastPUTs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastPUTs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@lastPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#lastWEBSOCKETs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="lastWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="lastWEBSOCKETs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastWEBSOCKETs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@lastWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#logAll" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="logAll():Unit"></a>
+      <a id="logAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@logAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#logErrorRoutes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="logErrorRoutes():Unit"></a>
+      <a id="logErrorRoutes():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logErrorRoutes</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@logErrorRoutes():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#logRoutes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logRoutes(xitrumRoutes:Boolean):Unit"></a>
+      <a id="logRoutes(Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logRoutes</span><span class="params">(<span name="xitrumRoutes">xitrumRoutes: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@logRoutes(xitrumRoutes:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">xitrumRoutes</dt><dd class="cmt"><p>true: log only Xitrum routes, false: log only app routes</p></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#otherDELETEs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="otherDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="otherDELETEs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">otherDELETEs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@otherDELETEs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#otherGETs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="otherGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="otherGETs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">otherGETs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@otherGETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#otherPATCHs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="otherPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="otherPATCHs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">otherPATCHs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@otherPATCHs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#otherPOSTs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="otherPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="otherPOSTs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">otherPOSTs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@otherPOSTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#otherPUTs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="otherPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="otherPUTs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">otherPUTs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@otherPUTs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#otherWEBSOCKETs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="otherWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]"></a>
+      <a id="otherWEBSOCKETs:ArrayBuffer[Route]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">otherWEBSOCKETs</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@otherWEBSOCKETs:scala.collection.mutable.ArrayBuffer[xitrum.routing.Route]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#removeByClass" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="removeByClass[A&lt;:xitrum.Action]()(implicitaction:Manifest[A]):Unit"></a>
+      <a id="removeByClass[A&lt;:Action]()(Manifest[A]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">removeByClass</span><span class="tparams">[<span name="A">A &lt;: <a href="../Action.html" class="extype" name="xitrum.Action">Action</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="action">action: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="xitrum.routing.RouteCollection.removeByClass.A">A</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@removeByClass[A&lt;:xitrum.Action]()(implicitaction:Manifest[A]):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">removeByClass[ActionClassToRemove]()</p>
+    </li><li name="xitrum.routing.RouteCollection#removeByPrefix" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="removeByPrefix(prefix:String):Unit"></a>
+      <a id="removeByPrefix(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">removeByPrefix</span><span class="params">(<span name="prefix">prefix: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@removeByPrefix(prefix:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">removeByPrefix(&quot;/path/prefix&quot;) or removeByPrefix(&quot;path/prefix&quot;)</p>
+    </li><li name="xitrum.routing.RouteCollection#reverseMappings" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reverseMappings:scala.collection.Map[String,xitrum.routing.ReverseRoute]"></a>
+      <a id="reverseMappings:Map[String,ReverseRoute]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reverseMappings</span><span class="result">: <span class="extype" name="scala.collection.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="ReverseRoute.html" class="extype" name="xitrum.routing.ReverseRoute">ReverseRoute</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@reverseMappings:scala.collection.Map[String,xitrum.routing.ReverseRoute]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Class name -&gt; ReverseRoute</p><div class="fullcomment"><div class="comment cmt"><p>Class name -&gt; ReverseRoute</p><p>Use class name (String) instead of Class[_] becasuse we want to reload
+classes in development mode, but classes loaded by different class loaders
+can't be compared.
+</p></div></div>
+    </li><li name="xitrum.routing.RouteCollection#route" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="route(httpMethod:io.netty.handler.codec.http.HttpMethod,pathInfo:xitrum.scope.request.PathInfo):Option[(xitrum.routing.Route,xitrum.scope.request.Params)]"></a>
+      <a id="route(HttpMethod,PathInfo):Option[(Route,Params)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">route</span><span class="params">(<span name="httpMethod">httpMethod: <span class="extype" name="io.netty.handler.codec.http.HttpMethod">HttpMethod</span></span>, <span name="pathInfo">pathInfo: <a href="../scope/request/PathInfo.html" class="extype" name="xitrum.scope.request.PathInfo">PathInfo</a></span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[(<a href="Route.html" class="extype" name="xitrum.routing.Route">Route</a>, <a href="../scope/request/package.html#Params=scala.collection.mutable.Map[String,Seq[String]]" class="extmbr" name="xitrum.scope.request.Params">Params</a>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@route(httpMethod:io.netty.handler.codec.http.HttpMethod,pathInfo:xitrum.scope.request.PathInfo):Option[(xitrum.routing.Route,xitrum.scope.request.Params)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#sockJsRouteMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sockJsRouteMap:xitrum.routing.SockJsRouteMap"></a>
+      <a id="sockJsRouteMap:SockJsRouteMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sockJsRouteMap</span><span class="result">: <a href="SockJsRouteMap.html" class="extype" name="xitrum.routing.SockJsRouteMap">SockJsRouteMap</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@sockJsRouteMap:xitrum.routing.SockJsRouteMap" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="xitrum.routing.RouteCollection#swaggerMap" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="swaggerMap:Map[Class[_&lt;:xitrum.Action],xitrum.annotation.Swagger]"></a>
+      <a id="swaggerMap:Map[Class[_&lt;:Action],Swagger]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">swaggerMap</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="../Action.html" class="extype" name="xitrum.Action">Action</a>], <a href="../annotation/Swagger.html" class="extype" name="xitrum.annotation.Swagger">Swagger</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@swaggerMap:Map[Class[_&lt;:xitrum.Action],xitrum.annotation.Swagger]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="xitrum.routing.RouteCollection#tryAllMethods" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tryAllMethods(pathInfo:xitrum.scope.request.PathInfo):Seq[io.netty.handler.codec.http.HttpMethod]"></a>
+      <a id="tryAllMethods(PathInfo):Seq[HttpMethod]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tryAllMethods</span><span class="params">(<span name="pathInfo">pathInfo: <a href="../scope/request/PathInfo.html" class="extype" name="xitrum.scope.request.PathInfo">PathInfo</a></span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="io.netty.handler.codec.http.HttpMethod">HttpMethod</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@tryAllMethods(pathInfo:xitrum.scope.request.PathInfo):Seq[io.netty.handler.codec.http.HttpMethod]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Used at SetCORS &amp; OPTIONSResponse.</p>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#xitrum.routing.RouteCollection@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
