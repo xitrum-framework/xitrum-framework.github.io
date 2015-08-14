@@ -76,6 +76,8 @@ and HTTP(S) server fusion<span class="small"> on top of <a class="reference exte
 
         <h2 class="title">Features</h2>
 
+        <p>There are comprehensive <a href="guide.html">usage guides</a> for many languages.</p>
+
 <ul class="simple">
 <li>Typesafe, in the spirit of Scala. All the APIs try to be as typesafe as possible.</li>
 <li>Async, in the spirit of Netty. Your request proccessing action does not have
@@ -131,79 +133,9 @@ Most people are familliar with controller-first style.</li>
         <img src="parts/whale_pool.png" alt="Scalability"/>
         <br /><br />
 
-        <h2 class="title">Xitrum Guide</h2>
-        <div>
-          <table>
-            <tr>
-              <td>
-                <p><img src="parts/english.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/en/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/en/index.html">Single page HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-en.pdf">Download PDF</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-en.pdf"><img src="guide/pdf-en.png" /></a>
-              </td>
-
-              <td>
-                <p><img src="parts/japanese.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/ja/index.html">マルチページ HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ja/index.html">シングルページ HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-ja.pdf">PDF ダウンロード</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-ja.pdf"><img src="guide/pdf-ja.png" /></a>
-              </td>
-            </tr>
-            <tr>
-              <td style="vertical-align: text-top">
-                <p><img src="parts/korean.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/ko/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ko/index.html">Single page HTML</a></li>
-                </ul>
-              </td>
-
-              <td>
-                <p><img src="parts/russian.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/ru/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ru/index.html">Single page HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-ru.pdf">Скачать PDF</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-ru.pdf"><img src="guide/pdf-ru.png" /></a>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-        <h2 class="title">Presentations</h2>
-        <div>
-          <table>
-            <tr>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/43338762" frameborder="0" allowfullscreen></iframe></td>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/38765630" frameborder="0" allowfullscreen></iframe></td>
-            </tr>
-          </table>
-
-          <table>
-            <tr>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/36938480" frameborder="0" allowfullscreen></iframe></td>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/40729551" frameborder="0" allowfullscreen></iframe></td>
-            </tr>
-          </table>
-
-          <table>
-            <tr>
-              <td><iframe width="400" height="225" src="//www.youtube.com/embed/Ds7kQ0w70Kk" frameborder="0" allowfullscreen></iframe></td>
-              <td><iframe width="400" height="225" src="//www.youtube.com/embed/h45QQ45D9P8" frameborder="0" allowfullscreen></iframe></td>
-            </tr>
-          </table>
-        </div>
-
         <div class="span-22">
           <div class="span-11">
-            <h2 class="title">Hello World sample</h2>
+            <h2 class="title">Hello World example</h2>
             <pre><code>import xitrum.Action
 import xitrum.annotation.GET
 
@@ -217,7 +149,7 @@ class HelloAction extends Action {
     respondHtml(
       &lt;xml:group&gt;
         &lt;p&gt;Hello {remoteIp}!&lt;/p&gt;
-        &lt;a href={urlToHelloActor}&gt;Actor sample&lt;/a&gt;
+        &lt;a href={urlToHelloActor}&gt;Actor example&lt;/a&gt;
       &lt;/xml:group&gt;
     )
   }
@@ -225,7 +157,7 @@ class HelloAction extends Action {
           </div>
 
           <div class="span-10">
-            <h2 class="title">Actor sample</h2>
+            <h2 class="title">Actor example</h2>
             <p>Just annotate your actors and they will be accessible from web!</p>
             <pre><code>import scala.concurrent.duration._
 import akka.actor.ReceiveTimeout
@@ -261,7 +193,7 @@ class HelloActor extends ActorAction {
 
         <div class="span-22">
           <div class="span-11">
-            <h2 class="title">WebSocket sample</h2>
+            <h2 class="title">WebSocket example</h2>
             <pre><code>import xitrum.{
   Action, WebSocketAction,
   WebSocketText, WebSocketBinary,
@@ -298,7 +230,7 @@ class EchoWebSocketActor extends WebSocketAction {
           </div>
 
           <div class="span-10">
-            <h2 class="title">SockJS sample</h2>
+            <h2 class="title">SockJS example</h2>
             <pre><code>import xitrum.{Action, SockJsAction, SockJsText}
 import xitrum.annotation.SOCKJS
 
@@ -324,6 +256,30 @@ class EchoSockJsActor extends SockJsAction {
         </div>
 
         <div class="clearfix"></div>
+
+        <h2 class="title">Presentations</h2>
+        <div>
+          <table>
+            <tr>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/43338762" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/38765630" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+
+          <table>
+            <tr>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/36938480" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/40729551" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+
+          <table>
+            <tr>
+              <td><iframe width="400" height="225" src="//www.youtube.com/embed/Ds7kQ0w70Kk" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="225" src="//www.youtube.com/embed/h45QQ45D9P8" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+        </div>
 
         <div class="section" id="create-new-empty-xitrum-project">
           <h2 class="title">Create a new empty Xitrum project from skeleton</h2>

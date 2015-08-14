@@ -75,6 +75,8 @@ là một Scala web framework bất đồng bộ, clustered và cũng là HTTPS(
 
         <h2 class="title">Tính năng</h2>
 
+        <p>Có <a href="guide.html">hướng dẫn sử dụng</a> chi tiết bằng nhiều ngôn ngữ.</p>
+
 <ul class="simple">
 <li>Typesafe, dựa trên tinh thần của Scala. Tất cả các APIs đều được thiết kế an toàn nhất có thể.</li>
 <li>Bất đồng bộ, theo tinh thần của Netty. Việc xử lý các yêu cầu (request) không cần phải đáp ứng (respond) ngay lập lức. Long polling, chunked response (streaming), WebSocket, và SockJS.</li>
@@ -102,87 +104,6 @@ và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh h�
         <p>Scalibility is easy, just throw more nodes to the pool.</p>
         <img src="parts/whale_pool.png" alt="Scalability"/>
         <br /><br />
-
-        <h2 class="title">Xitrum Guide</h2>
-        <div>
-          <table>
-            <tr>
-              <td>
-                <p><img src="parts/english.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/en/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/en/index.html">Single page HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-en.pdf">Download PDF</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-en.pdf"><img src="guide/pdf-en.png" /></a>
-              </td>
-
-              <td>
-                <p><img src="parts/japanese.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/ja/index.html">マルチページ HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ja/index.html">シングルページ HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-ja.pdf">PDF ダウンロード</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-ja.pdf"><img src="guide/pdf-ja.png" /></a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <p><img src="parts/vietnamese.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/vi/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/vi/index.html">Single page HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-vi.pdf">Bản PDF</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-vi.pdf"><img src="guide/pdf-vi.png" /></a>
-              </td>
-
-              <td>
-                <p><img src="parts/russian.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/ru/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ru/index.html">Single page HTML</a></li>
-                  <li><a href="guide/3.22/xitrum-ru.pdf">Скачать PDF</a></li>
-                </ul>
-                <a href="guide/3.22/xitrum-ru.pdf"><img src="guide/pdf-ru.png" /></a>
-              </td>
-            </tr>
-            <tr>
-              <td style="vertical-align: text-top">
-                <p><img src="parts/korean.png"></a></p>
-                <ul>
-                  <li><a href="guide/3.22/html/ko/index.html">Multiple page HTML</a></li>
-                  <li><a href="guide/3.22/singlehtml/ko/index.html">Single page HTML</a></li>
-                </ul>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-        <h2 class="title">Presentation</h2>
-        <div>
-          <table>
-            <tr>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/43338762" frameborder="0" allowfullscreen></iframe></td>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/38765630" frameborder="0" allowfullscreen></iframe></td>
-            </tr>
-          </table>
-
-          <table>
-            <tr>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/36938480" frameborder="0" allowfullscreen></iframe></td>
-              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/40729551" frameborder="0" allowfullscreen></iframe></td>
-            </tr>
-          </table>
-
-          <table>
-            <tr>
-              <td><iframe width="400" height="225" src="//www.youtube.com/embed/Ds7kQ0w70Kk" frameborder="0" allowfullscreen></iframe></td>
-              <td><iframe width="400" height="225" src="//www.youtube.com/embed/h45QQ45D9P8" frameborder="0" allowfullscreen></iframe></td>
-            </tr>
-          </table>
-        </div>
 
         <div class="span-22">
           <div class="span-11">
@@ -307,6 +228,30 @@ class EchoSockJsActor extends SockJsAction {
         </div>
 
         <div class="clearfix"></div>
+
+        <h2 class="title">Presentation</h2>
+        <div>
+          <table>
+            <tr>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/43338762" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/38765630" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+
+          <table>
+            <tr>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/36938480" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="340" src="//www.slideshare.net/slideshow/embed_code/40729551" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+
+          <table>
+            <tr>
+              <td><iframe width="400" height="225" src="//www.youtube.com/embed/Ds7kQ0w70Kk" frameborder="0" allowfullscreen></iframe></td>
+              <td><iframe width="400" height="225" src="//www.youtube.com/embed/h45QQ45D9P8" frameborder="0" allowfullscreen></iframe></td>
+            </tr>
+          </table>
+        </div>
 
         <div class="section" id="create-new-empty-xitrum-project">
           <h2 class="title">Tạo một project Xitrum mới từ skeleton</h2>
