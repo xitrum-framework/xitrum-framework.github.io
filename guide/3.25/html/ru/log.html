@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Логирование &mdash; Документация Xitrum Scala Web Framework Guide 3.25.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.25.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.25.0" href="index.html" />
+    <link rel="next" title="Развертывание на сервере" href="deploy.html" />
+    <link rel="prev" title="Интернационализация" href="i18n.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="deploy.html" title="Развертывание на сервере"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="i18n.html" title="Интернационализация"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.25.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Логирование<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="xitrum-log">
+<h2>Использование объекта xitrum.Log<a class="headerlink" href="#xitrum-log" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Везде вы можете использовать напрямую:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">Log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;My debug msg&quot;</span><span class="p">)</span>
+<span class="n">xitrum</span><span class="o">.</span><span class="n">Log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;My info msg&quot;</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Использование трейта xitrum.Log<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Если вам важно сообщать дополнительную информацию о том какой класс генерирует
+информационные сообщения, используйте наследование он xitrum.Log</p>
+<div class="highlight-python"><div class="highlight"><pre>package my_package
+import xitrum.Log
+
+object MyModel extends Log {
+  log.debug(&quot;My debug msg&quot;)
+  log.info(&quot;My info msg&quot;)
+  ...
+}
+</pre></div>
+</div>
+<p>В файле log/xitrum.log вы увидите сообщение <code class="docutils literal"><span class="pre">MyModel</span></code>.</p>
+<p>Контролеры Xitrum наследуют xitrum.Log и предоставляют метод <code class="docutils literal"><span class="pre">log</span></code>.
+В любом контроллере вы можете писать:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>Проверка уровня логирования<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">xitrum.Log</span></code> основан на <a class="reference external" href="http://slf4s.org/">SLF4S</a> (<a class="reference external" href="http://slf4s.org/api/1.7.7/">API</a>),
+который в свою очередь на <a class="reference external" href="http://www.slf4j.org/">SLF4J</a>.</p>
+<p>Обычно, перед выполнением сложных вычислений которые будут отправлены в лог, выполняют
+проверку уровня логирования что бы избежать не нужных вычислений.</p>
+<p><a class="reference external" href="https://github.com/mattroberts297/slf4s/blob/master/src/main/scala/org/slf4s/Logger.scala">SLF4S автоматически выполняет эти проверки</a>,
+поэтому нет нужды их выполнять самому.</p>
+<p>До Xitrum 3.13+:</p>
+<div class="highlight-python"><div class="highlight"><pre>if (log.isTraceEnabled) {
+  val result = heavyCalculation()
+  log.trace(&quot;Output: {}&quot;, result)
+}
+</pre></div>
+</div>
+<p>Теперь:</p>
+<div class="highlight-python"><div class="highlight"><pre>log.trace(s&quot;Output: #{heavyCalculation()}&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>Настройка уровня и способов логирования<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В build.sbt есть строчка:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">&quot;ch.qos.logback&quot;</span> <span class="o">%</span> <span class="s">&quot;logback-classic&quot;</span> <span class="o">%</span> <span class="s">&quot;1.1.2&quot;</span>
+</pre></div>
+</div>
+<p>Что означает использовать <a class="reference external" href="http://logback.qos.ch/">Logback</a>.
+Конфигурационный файл Logback - <code class="docutils literal"><span class="pre">config/logback.xml</span></code>.</p>
+<p>Вы можете заменить Logback любой другой реализацией <a class="reference external" href="http://www.slf4j.org/">SLF4J</a>.</p>
+</div>
+<div class="section" id="fluentd">
+<h2>Использование Fluentd<a class="headerlink" href="#fluentd" title="Ссылка на этот заголовок">¶</a></h2>
+<p><a class="reference external" href="http://www.fluentd.org/">Fluentd</a> очень популярная система сбора логов. Вы можете
+настроить Logback так что бы отправлять логи (возможно из нескольких мест) на Fluentd сервер.</p>
+<p>Первое, добавьте библиотеку <a class="reference external" href="https://github.com/sndyuk/logback-more-appenders">logback-more-appenders</a>
+в ваш проект:</p>
+<div class="highlight-python"><div class="highlight"><pre>libraryDependencies += &quot;org.fluentd&quot; % &quot;fluent-logger&quot; % &quot;0.2.11&quot;
+
+resolvers += &quot;Logback more appenders&quot; at &quot;http://sndyuk.github.com/maven&quot;
+
+libraryDependencies += &quot;com.sndyuk&quot; % &quot;logback-more-appenders&quot; % &quot;1.1.0&quot;
+</pre></div>
+</div>
+<p>Затем исправьте конфигурацию <code class="docutils literal"><span class="pre">config/logback.xml</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>...
+
+&lt;appender name=&quot;FLUENT&quot; class=&quot;ch.qos.logback.more.appenders.DataFluentAppender&quot;&gt;
+  &lt;tag&gt;mytag&lt;/tag&gt;
+  &lt;label&gt;mylabel&lt;/label&gt;
+  &lt;remoteHost&gt;localhost&lt;/remoteHost&gt;
+  &lt;port&gt;24224&lt;/port&gt;
+  &lt;maxQueueSize&gt;20000&lt;/maxQueueSize&gt;  &lt;!-- Позволяет экономить память если сервер выключен --&gt;
+&lt;/appender&gt;
+
+&lt;root level=&quot;DEBUG&quot;&gt;
+  &lt;appender-ref ref=&quot;FLUENT&quot;/&gt;
+  &lt;appender-ref ref=&quot;OTHER_APPENDER&quot;/&gt;
+&lt;/root&gt;
+
+...
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Логирование</a><ul>
+<li><a class="reference internal" href="#xitrum-log">Использование объекта xitrum.Log</a></li>
+<li><a class="reference internal" href="#id2">Использование трейта xitrum.Log</a></li>
+<li><a class="reference internal" href="#id3">Проверка уровня логирования</a></li>
+<li><a class="reference internal" href="#id5">Настройка уровня и способов логирования</a></li>
+<li><a class="reference internal" href="#fluentd">Использование Fluentd</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="предыдущая глава">Интернационализация</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="следующая глава">Развертывание на сервере</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/log.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="deploy.html" title="Развертывание на сервере"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="i18n.html" title="Интернационализация"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.25.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

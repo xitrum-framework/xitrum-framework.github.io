@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XML &mdash; Документация Xitrum Scala Web Framework Guide 3.25.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.25.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.25.0" href="index.html" />
+    <link rel="next" title="JavaScript и JSON" href="js.html" />
+    <link rel="prev" title="Postbacks" href="postback.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript и JSON"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="Postbacks"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.25.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="xml">
+<h1>XML<a class="headerlink" href="#xml" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Scala позволяет использовать XML литералы. Xitrum позволяет использовать такую возможность как своеобразный &#8220;шаблонизатор&#8221;:</p>
+<ul class="simple">
+<li>Scala проверяет синтаксис XML во время компиляции: представления безопасны относительно типа.</li>
+<li>Scala автоматически экранирует XML: представления по умолчанию защищены от <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a> атак.</li>
+</ul>
+<p>Ниже приведены некоторые советы.</p>
+<div class="section" id="id1">
+<h2>Отключения экранирования XML<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Используйте <code class="docutils literal"><span class="pre">scala.xml.Unparsed</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import scala.xml.Unparsed
+
+&lt;script&gt;
+  {Unparsed(&quot;if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);&quot;)}
+&lt;/script&gt;
+</pre></div>
+</div>
+<p>Или <code class="docutils literal"><span class="pre">&lt;xml:unparsed&gt;</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+  &lt;xml:unparsed&gt;
+    if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);
+  &lt;/xml:unparsed&gt;
+&lt;/script&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&lt;xml:unparsed&gt;</span></code> не отображается в выводе:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+  if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);
+&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Группировка XML элементов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>&lt;div id=&quot;header&quot;&gt;
+  {if (loggedIn)
+    &lt;xml:group&gt;
+      &lt;b&gt;{username}&lt;/b&gt;
+      &lt;a href={url[LogoutAction]}&gt;Logout&lt;/a&gt;
+    &lt;/xml:group&gt;
+  else
+    &lt;xml:group&gt;
+      &lt;a href={url[LoginAction]}&gt;Login&lt;/a&gt;
+      &lt;a href={url[RegisterAction]}&gt;Register&lt;/a&gt;
+    &lt;/xml:group&gt;}
+&lt;/div&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&lt;xml:group&gt;</span></code> не будет отображаться в выводе, например в случае пользователя прошедшего аутентификацию:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;div id=&quot;header&quot;&gt;
+  &lt;b&gt;My username&lt;/b&gt;
+  &lt;a href=&quot;/login&quot;&gt;Logout&lt;/a&gt;
+&lt;/div&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="xhtml">
+<h2>Отображение XHTML<a class="headerlink" href="#xhtml" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum отображает представления как XHTML автоматически. Допускается делать
+это самостоятельно:</p>
+<div class="highlight-python"><div class="highlight"><pre>import scala.xml.Xhtml
+
+val br = &lt;br /&gt;
+br.toString            // =&gt; &lt;br&gt;&lt;/br&gt;, some browsers will render this as 2 &lt;br /&gt;s
+Xhtml.toXhtml(&lt;br /&gt;)  // =&gt; &quot;&lt;br /&gt;&quot;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XML</a><ul>
+<li><a class="reference internal" href="#id1">Отключения экранирования XML</a></li>
+<li><a class="reference internal" href="#id2">Группировка XML элементов</a></li>
+<li><a class="reference internal" href="#xhtml">Отображение XHTML</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="postback.html"
+                        title="предыдущая глава">Postbacks</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="js.html"
+                        title="следующая глава">JavaScript и JSON</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/xml.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript и JSON"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="Postbacks"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.25.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2010, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

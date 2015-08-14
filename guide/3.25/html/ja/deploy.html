@@ -1,0 +1,597 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>プロダクション環境へのデプロイ &mdash; Xitrum Scala Web Framework Guide 3.25.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.25.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.25.0 ドキュメント" href="index.html" />
+    <link rel="next" title="AkkaとHazelcastでサーバーをクラスタリングする" href="cluster.html" />
+    <link rel="prev" title="ログ" href="log.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="AkkaとHazelcastでサーバーをクラスタリングする"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="ログ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.25.0 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>プロダクション環境へのデプロイ<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>Xitrumを直接動かすことができます:</p>
+<div class="highlight-python"><div class="highlight"><pre>ブラウザ ------ Xitrum インスタンス
+</pre></div>
+</div>
+<p>HAProxyのようなロードバランサーや、ApacheやNginxのようなリバースプロキシの背後で動かすこともできます:</p>
+<div class="highlight-python"><div class="highlight"><pre>ブラウザ ------ ロードバランサー/リバースプロキシ   -+---- Xitrum インスタンス1
+                                            　+---- Xitrum インスタンス2
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h2>ディレクトリのパッケージ化<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></code> を実行することで、プロダクション環境へデプロイ可能な <code class="docutils literal"><span class="pre">target/xitrum</span></code> ディレクトリが生成されます:</p>
+<div class="highlight-python"><div class="highlight"><pre>target/xitrum
+  config
+    [config files]
+  public
+    [static public files]
+  lib
+    [dependencies and packaged project file]
+  script
+    runner
+    runner.bat
+    scalive
+    scalive.jar
+    scalive.bat
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum-package">
+<h2>xitrum-packageのカスタマイズ<a class="headerlink" href="#xitrum-package" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>デフォルトでは <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></code> コマンドは、</p>
+<p><code class="docutils literal"><span class="pre">config</span></code> 、 <code class="docutils literal"><span class="pre">public</span></code> および <code class="docutils literal"><span class="pre">script</span></code> ディレクトリを <code class="docutils literal"><span class="pre">target/xitrum</span></code> 以下にコピーします。
+コピーするディレクトリを追加したい場合は、以下のように <code class="docutils literal"><span class="pre">build.sbt</span></code> を編集します:</p>
+<div class="highlight-python"><div class="highlight"><pre>XitrumPackage.copy(&quot;config&quot;, &quot;public, &quot;script&quot;, &quot;doc/README.txt&quot;, &quot;etc.&quot;)
+</pre></div>
+</div>
+<p>詳しくは <a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-packageのサイト</a> を参照ください。</p>
+</div>
+<div class="section" id="jvmscala">
+<h2>稼働中のJVMプロセスに対するScalaコンソール接続<a class="headerlink" href="#jvmscala" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>プロダクション環境においても特別な準備をすることなく、<a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a> を使用することで、
+稼働中のJVMプロセスに対してScalaコンソールを接続してデバッギングを行うことができます。</p>
+<p><code class="docutils literal"><span class="pre">script</span></code> ディレクトリの <code class="docutils literal"><span class="pre">scalive</span></code> コマンドを実行します:</p>
+<div class="highlight-python"><div class="highlight"><pre>script
+  runner
+  runner.bat
+  scalive
+  scalive.jar
+  scalive.bat
+</pre></div>
+</div>
+</div>
+<div class="section" id="centosubuntuoraclejdk">
+<h2>CentOSまたはUbuntuへのOracleJDKインストール<a class="headerlink" href="#centosubuntuoraclejdk" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ここではJavaのインストール方法についての簡単なガイドを紹介します。
+パッケージマネージャを使用してJavaをインストールすることも可能です。</p>
+<p>現在インストールされているJavaの確認:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --list java
+</pre></div>
+</div>
+<p>出力例:</p>
+<div class="highlight-python"><div class="highlight"><pre>/usr/lib/jvm/jdk1.7.0_15/bin/java
+/usr/lib/jvm/jdk1.7.0_25/bin/java
+</pre></div>
+</div>
+<p>サーバ環境の確認 (32 bit または 64 bit):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span>
+</pre></div>
+</div>
+<p>出力例:</p>
+<div class="highlight-python"><div class="highlight"><pre>/sbin/init: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c, stripped
+</pre></div>
+</div>
+<p>JDKを <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Oracle</a> のサイトからダウンロードします。
+ブラウザを介さないでダウンロードするにはちょっとした <a class="reference external" href="http://stackoverflow.com/questions/10268583/how-to-automate-download-and-instalation-of-java-jdk-on-linux">工夫</a> が必要です:</p>
+<div class="highlight-python"><div class="highlight"><pre>wget --no-cookies --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com&quot; &quot;http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-linux-x64.tar.gz&quot;
+</pre></div>
+</div>
+<p>ダウンロードしたアーカイブを解凍して移動します:</p>
+<div class="highlight-python"><div class="highlight"><pre>tar -xzvf jdk-7u45-linux-x64.tar.gz
+sudo mv jdk1.7.0_45 /usr/lib/jvm/jdk1.7.0_45
+</pre></div>
+</div>
+<p>コマンドを登録します:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --install &quot;/usr/bin/java&quot; &quot;java&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/java&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javac&quot; &quot;javac&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javac&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javap&quot; &quot;javap&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javap&quot; 1
+sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot; &quot;/usr/lib/jvm/jdk1.7.0_45/bin/javaws&quot; 1
+</pre></div>
+</div>
+<p>対話型のシェルで新しいパスを指定します:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config java
+</pre></div>
+</div>
+<p>出力例:</p>
+<div class="highlight-python"><div class="highlight"><pre>There are 3 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                               Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/jdk1.7.0_25/bin/java   50001     auto mode
+  1            /usr/lib/jvm/jdk1.7.0_15/bin/java   50000     manual mode
+  2            /usr/lib/jvm/jdk1.7.0_25/bin/java   50001     manual mode
+  3            /usr/lib/jvm/jdk1.7.0_45/bin/java   1         manual mode
+
+Press enter to keep the current choice[*], or type selection number: 3
+update-alternatives: using /usr/lib/jvm/jdk1.7.0_45/bin/java to provide /usr/bin/java (java) in manual mode
+</pre></div>
+</div>
+<p>バージョンを確認します:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">java</span> <span class="o">-</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>出力例:</p>
+<div class="highlight-python"><div class="highlight"><pre>java version &quot;1.7.0_45&quot;
+Java(TM) SE Runtime Environment (build 1.7.0_45-b18)
+Java HotSpot(TM) 64-Bit Server VM (build 24.45-b08, mixed mode)
+</pre></div>
+</div>
+<p>javac等も同様に行います:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config javac
+sudo update-alternatives --config javap
+sudo update-alternatives --config javaws
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum">
+<h2>システム起動時にXitrumをスタートさせる<a class="headerlink" href="#xitrum" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">script/runner</span></code> （<a href="#id5"><span class="problematic" id="id6">*</span></a>nix環境向け）と <code class="docutils literal"><span class="pre">script/runner.bat</span></code> （Windows環境向け）はオブジェクトの <code class="docutils literal"><span class="pre">main</span></code> メソッドを実行するためのスクリプトになります。
+プロダクション環境ではこのスクリプトを使用してWebサーバを起動します:</p>
+<div class="highlight-python"><div class="highlight"><pre>script/runner quickstart.Boot
+</pre></div>
+</div>
+<p><a class="reference external" href="http://www.oracle.com/technetwork/java/hotspotfaq-138619.html">JVM設定</a> を調整するには、
+<code class="docutils literal"><span class="pre">runner</span></code> （または <code class="docutils literal"><span class="pre">runner.bat</span></code>）を修正します。
+また、<code class="docutils literal"><span class="pre">config/xitrum.conf</span></code> も参照してください。</p>
+<p>Linux環境でシステム起動時にXitrumをバックグラウンドでスタートさせるには、一番簡単な方法は
+<code class="docutils literal"><span class="pre">/etc/rc.local</span></code> に一行を追加します:</p>
+<div class="highlight-python"><div class="highlight"><pre>su - user_foo_bar -c /path/to/the/runner/script/above &amp;
+</pre></div>
+</div>
+<p>他には <a class="reference external" href="http://cr.yp.to/daemontools.html">daemontools</a> が便利です。
+CentOSへのインストール手順は <a class="reference external" href="http://whomwah.com/2008/11/04/installing-daemontools-on-centos5-x86_64/">こちらの手順</a> を参照してください。
+あるいは <a class="reference external" href="http://supervisord.org/">Supervisord</a> を使用することもできます。</p>
+<p><code class="docutils literal"><span class="pre">/etc/supervisord.conf</span></code> の例:</p>
+<div class="highlight-python"><div class="highlight"><pre>[program:my_app]
+directory=/path/to/my_app
+command=/path/to/my_app/script/runner quickstart.Boot
+autostart=true
+autorestart=true
+startsecs=3
+user=my_user
+redirect_stderr=true
+stdout_logfile=/path/to/my_app/log/stdout.log
+stdout_logfile_maxbytes=10MB
+stdout_logfile_backups=7
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+environment=PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/aws/bin:~/bin
+</pre></div>
+</div>
+<p>その他のツール:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://smarden.org/runit/">runit</a></li>
+<li><a class="reference external" href="http://upstart.ubuntu.com/">upstart</a></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>ポートフォワーディングの設定<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>デフォルトではXitrumは8000ポートと4430ポートを使用します。
+これらのポート番号は <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code> で設定することができます。</p>
+<p><code class="docutils literal"><span class="pre">/etc/sysconfig/iptables</span></code> を以下のコマンドで修正することによって、
+80から8000へ、443から4430へポートフォワーディングを行うことができます:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo su - root
+chmod 700 /etc/sysconfig/iptables
+iptables-restore &lt; /etc/sysconfig/iptables
+iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8000
+iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 4430
+iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j REDIRECT --to-ports 8000
+iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 4430
+iptables-save -c &gt; /etc/sysconfig/iptables
+chmod 644 /etc/sysconfig/iptables
+</pre></div>
+</div>
+<p>もしApacheが80ポート、443ポートを使用している場合、停止する必要があります:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo /etc/init.d/httpd stop
+sudo chkconfig httpd off
+</pre></div>
+</div>
+<p>Iptablesについての参考情報:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.frozentux.net/iptables-tutorial/chunkyhtml/">Iptables チュートリアル</a></li>
+</ul>
+</div>
+<div class="section" id="linux">
+<h2>大量コネクションに対するLinux設定<a class="headerlink" href="#linux" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Macの場合、JDKは <a class="reference external" href="https://groups.google.com/forum/#!topic/spray-user/S-SNR2m0BWU">IO (NIO) に関わるパフォーマンスの問題</a> が存在します。</p>
+<p>参考情報(英語):</p>
+<ul class="simple">
+<li><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/linux/">Linux Performance Tuning (Riak)</a></li>
+<li><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/aws/">AWS Performance Tuning (Riak)</a></li>
+<li><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/">Ipsysctl tutorial</a></li>
+<li><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/tcpvariables.html">TCP variables</a></li>
+</ul>
+<div class="section" id="id9">
+<h3>ファイルディスクリプタ数の上限設定<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>各コネクションはLinuxにとってオープンファイルとしてみなされます。
+1プロセスが同時オープン可能なファイルディスクリプタ数は、デフォルトで1024となっています。
+この上限を変更するには <code class="docutils literal"><span class="pre">/etc/security/limits.conf</span></code> を編集します:</p>
+<div class="highlight-python"><div class="highlight"><pre>*  soft  nofile  1024000
+*  hard  nofile  1024000
+</pre></div>
+</div>
+<p>変更を適用するには一度ログアウトして、再度ログインする必要があります。
+一時的に適用するには <code class="docutils literal"><span class="pre">ulimit</span> <span class="pre">-n</span></code> と実行します。</p>
+</div>
+<div class="section" id="id10">
+<h3>カーネルのチューニング<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference external" href="http://www.metabrew.com/article/a-million-user-comet-application-with-mochiweb-part-1">A Million-user Comet Application with Mochiweb（英語）</a> に紹介されているように、<code class="docutils literal"><span class="pre">/etc/sysctl.conf</span></code> を編集します:</p>
+<div class="highlight-python"><div class="highlight"><pre># General gigabit tuning
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_rmem = 4096 87380 16777216
+net.ipv4.tcp_wmem = 4096 65536 16777216
+
+# This gives the kernel more memory for TCP
+# which you need with many (100k+) open socket connections
+net.ipv4.tcp_mem = 50576 64768 98152
+
+# Backlog
+net.core.netdev_max_backlog = 2048
+net.core.somaxconn = 1024
+net.ipv4.tcp_max_syn_backlog = 2048
+net.ipv4.tcp_syncookies = 1
+
+# If you run clients
+net.ipv4.ip_local_port_range = 1024 65535
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_fin_timeout = 10
+</pre></div>
+</div>
+<p>変更を適用するため、 <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">sysctl</span> <span class="pre">-p</span></code> を実行します。
+リブートの必要はありません。これでカーネルは大量のコネクションを扱うことができるようになります。</p>
+</div>
+<div class="section" id="id11">
+<h3>バックログについて<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>TCPはコネクション確立のために3種類のハンドシェイクを行います。
+リモートクライアントがサーバに接続するとき、クライアントはSYNパケットを送信します。
+そしてサーバ側のOSはSYN-ACKパケットを返信します。
+その後リモートクライアントは再びACKパケットを送信してコネクションが確立します。
+Xitrumはコネクションが完全に確立した時にそれを取得します。</p>
+<p><a class="reference external" href="https://sites.google.com/site/beingroot/articles/apache/socket-backlog-tuning-for-apache">Socket backlog tuning for Apache（英語）</a> によると、
+コネクションタイムアウトは、WebサーバのバックログキューがSYN−ACKパケット送信で溢れてしまった際に、SYNパケットが失われることによって発生します。</p>
+<p><a class="reference external" href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/configtuning-kernel-limits.html">FreeBSD Handbook（英語）</a> によると
+デフォルトの128という設定は、高負荷なサーバ環境にとって、新しいコネクションを確実に受け付けるには低すぎるとあります。
+そのような環境では、1024以上に設定することが推奨されています。
+キューサイズを大きくすることはDoS攻撃を避ける意味でも効果があります。</p>
+<p>Xitrumはバックログサイズを1024(memcachedと同じ値)としています。
+しかし、前述のカーネルのチューニングをすることも忘れないで下さい。</p>
+<p>バックログ設定値の確認方法:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">somaxconn</span>
+</pre></div>
+</div>
+<p>または:</p>
+<div class="highlight-python"><div class="highlight"><pre>sysctl net.core.somaxconn
+</pre></div>
+</div>
+<p>一時的な変更方法:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo sysctl -w net.core.somaxconn=1024
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="haproxy-tips">
+<h2>HAProxy tips<a class="headerlink" href="#haproxy-tips" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>HAProxyをSockJSのために設定するには、<a class="reference external" href="https://github.com/sockjs/sockjs-node/blob/master/examples/haproxy.cfg">こちらのサンプル</a> を参照してください。
+HAProxyを再起動せずに設定ファイルをロードするには、<a class="reference external" href="http://serverfault.com/questions/165883/is-there-a-way-to-add-more-backend-server-to-haproxy-without-restarting-haproxy">こちらのディスカッション</a> を参照してください。</p>
+<p>HAProxyはNginxより簡単に使うことができます。
+<a class="reference internal" href="cache.html"><em>キャッシュについての章</em></a> にあるように、Xitrumは <a class="reference external" href="https://gist.github.com/3293596">静的ファイルの配信に優れている</a> ため、
+静的ファイルの配信にNginxを用意する必要はありません。その点からHAProxyはXitrumととても相性が良いと言えます。</p>
+</div>
+<div class="section" id="nginx-tips">
+<h2>Nginx tips<a class="headerlink" href="#nginx-tips" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Nginx 1.2 の背後でXitrumを動かす場合、XitrumのWebSocketやSockJSの機能を使用するには、
+<a class="reference external" href="https://github.com/yaoweibin/nginx_tcp_proxy_module">nginx_tcp_proxy_module</a> を使用する必要があります。
+Nginx 1.3+ 以上はネイティブでWebSocketをサポートしています。</p>
+<p>Nginxはデフォルトでは、HTTP 1.0をリバースプロキシのプロトコルとして使用します。
+チャンクレスポンスを使用する場合、Nginxに HTTP 1.1をプロトコルとして使用することを伝える必要があります:</p>
+<div class="highlight-python"><div class="highlight"><pre>location / {
+  proxy_http_version 1.1;
+  proxy_set_header Connection &quot;&quot;;
+  proxy_pass http://127.0.0.1:8000;
+}
+</pre></div>
+</div>
+<p>http keepaliveについての <a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive">ドキュメント</a> にあるように、 <code class="docutils literal"><span class="pre">proxy_set_header</span> <span class="pre">Connection</span> <span class="pre">&quot;&quot;</span></code> と設定する必要もあります。</p>
+</div>
+<div class="section" id="heroku">
+<h2>Herokuへのデプロイ<a class="headerlink" href="#heroku" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Xitrumは <a class="reference external" href="https://www.heroku.com/">Heroku</a> 上で動かすこともできます。</p>
+<div class="section" id="id17">
+<h3>サインアップとリポジトリの作成<a class="headerlink" href="#id17" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference external" href="https://devcenter.heroku.com/articles/quickstart">公式ドキュメント</a> に沿って、サインアップしリポジトリを作成します。</p>
+</div>
+<div class="section" id="procfile">
+<h3>Procfileの作成<a class="headerlink" href="#procfile" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Procfileを作成し、プロジェクトのルートディレクトリに保存します。
+Herokuはこのファイルをもとに、起動時コマンドを実行します。</p>
+<div class="highlight-python"><div class="highlight"><pre>web: target/xitrum/script/runner &lt;YOUR_PACKAGE.YOUR_MAIN_CLASS&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="port">
+<h3>Port設定の変更<a class="headerlink" href="#port" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>ポート番号はHerokuによって動的にアサインされるため、以下のように設定する必要があります。</p>
+<p>config/xitrum.conf:</p>
+<div class="highlight-python"><div class="highlight"><pre>port {
+  http              = ${PORT}
+  # https             = 4430
+  # flashSocketPolicy = 8430  # flash_socket_policy.xml will be returned
+}
+</pre></div>
+</div>
+<p>SSLを使用するには、<a class="reference external" href="https://addons.heroku.com/ssl">アドオン</a> が必要となります。</p>
+</div>
+<div class="section" id="id20">
+<h3>ログレベルの設定<a class="headerlink" href="#id20" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>config/logback.xml:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;root level=&quot;INFO&quot;&gt;
+  &lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;
+&lt;/root&gt;
+</pre></div>
+</div>
+<p>Herokuで稼働するアプリのログをtailするには:</p>
+<div class="highlight-python"><div class="highlight"><pre>heroku logs -tail
+</pre></div>
+</div>
+</div>
+<div class="section" id="id21">
+<h3><code class="docutils literal"><span class="pre">xitrum-package</span></code> のエイリアス作成<a class="headerlink" href="#id21" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>デプロイ実行時にHerokuは、<code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span> <span class="pre">compile</span> <span class="pre">stage</span></code> を実行します。
+そのため、 <code class="docutils literal"><span class="pre">xitrum-package</span></code> に対するエイリアスを作成する必要があります。</p>
+<p>build.sbt:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">addCommandAlias</span><span class="p">(</span><span class="s">&quot;stage&quot;</span><span class="p">,</span> <span class="s">&quot;;xitrum-package&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id22">
+<h3>Herokuへのプッシュ<a class="headerlink" href="#id22" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>デプロイプロセスは git push にふっくされます:</p>
+<div class="highlight-python"><div class="highlight"><pre>git push heroku master
+</pre></div>
+</div>
+<p>詳しくはHerokuの <a class="reference external" href="https://devcenter.heroku.com/articles/getting-started-with-scala">公式ドキュメント for Scala</a> を参照してください.</p>
+</div>
+</div>
+<div class="section" id="openshift">
+<h2>OpenShiftへのデプロイ<a class="headerlink" href="#openshift" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Xitrumは <a class="reference external" href="https://developers.openshift.com/">OpenShift</a> 上で動かすこともできます。</p>
+<div class="section" id="id24">
+<h3>サインアップとリポジトリの作成<a class="headerlink" href="#id24" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference external" href="https://developers.openshift.com/en/getting-started-overview.html">公式ガイド</a> に沿って、サインアップしリポジトリを作成します。
+カートリッジには <a class="reference external" href="https://developers.openshift.com/en/diy-overview.html">DIY</a> を指定します。</p>
+<div class="highlight-python"><div class="highlight"><pre>rhc app create myapp diy
+</pre></div>
+</div>
+</div>
+<div class="section" id="id26">
+<h3>プロジェクト構成<a class="headerlink" href="#id26" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>sbtを使用してXitrumアプリケーションをコンパイル、起動するために、<a class="reference external" href="http://stackoverflow.com/questions/23826770/play-openshift-deployment-sbt-using-some-directories-behind-the-scenes">いくつかの準備</a> が必要となります。
+rhcコマンドで作成したプロジェクトディレクトリ内に`app`ディレクトリを作成し、xitrumアプリケーションのソースコードを配置します。
+また、空の`static`と`fakehome`ディレクトリを作成します、
+プロジェクトツリーは以下のようになります。</p>
+<div class="highlight-python"><div class="highlight"><pre>├── .openshift
+│   ├── README.md
+│   ├── action_hooks
+│   │   ├── README.md
+│   │   ├── start
+│   │   └── stop
+│   ├── cron
+│   └── markers
+├── README.md
+├── app
+├── fakehome
+├── misc
+└── static
+</pre></div>
+</div>
+</div>
+<div class="section" id="action-hooks">
+<h3>action_hooksの作成<a class="headerlink" href="#action-hooks" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>openshiftへpush時に実行されるスクリプトを以下のように修正します。</p>
+<p>.openshift/action_hooks/start:</p>
+<div class="highlight-python"><div class="highlight"><pre>#!/bin/bash
+IVY_DIR=$OPENSHIFT_DATA_DIR/.ivy2
+mkdir -p $IVY_DIR
+chown $OPENSHIFT_GEAR_UUID.$OPENSHIFT_GEAR_UUID -R &quot;$IVY_DIR&quot;
+cd $OPENSHIFT_REPO_DIR/app
+sbt/sbt xitrum-package
+nohup $OPENSHIFT_REPO_DIR/app/target/xitrum/script/runner quickstart.Boot &gt;&gt; nohup.out 2&gt;&amp;1 &amp; echo $! &gt; $OPENSHIFT_REPO_DIR/xitrum.pid &amp;
+</pre></div>
+</div>
+<p>.openshift/action_hooks/top:</p>
+<div class="highlight-python"><div class="highlight"><pre>#!/bin/bash
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+# The logic to stop your application should be put in this script.
+if [ -z &quot;$(ps -ef | grep `cat $OPENSHIFT_REPO_DIR/xitrum.pid` | grep -v grep)&quot; ]
+then
+    client_result &quot;Application is already stopped&quot;
+else
+    cat $OPENSHIFT_REPO_DIR/xitrum.pid | xargs kill
+fi
+</pre></div>
+</div>
+</div>
+<div class="section" id="ip-port">
+<h3>IP:Port設定の変更<a class="headerlink" href="#ip-port" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>IPとポート番号はopenshiftによって動的にアサインされるため、以下のように設定する必要があります。</p>
+<p>config/xitrum.conf:</p>
+<div class="highlight-python"><div class="highlight"><pre># Use opensift&#39;s Environment Variables
+interface = ${OPENSHIFT_DIY_IP}
+
+# Comment out the one you don&#39;t want to start.
+port {
+  http  = ${OPENSHIFT_DIY_PORT}
+</pre></div>
+</div>
+</div>
+<div class="section" id="sbt">
+<h3>sbt引数の修正<a class="headerlink" href="#sbt" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>opensift上でsbtが動かすために、sbt起動スクリプトに以下のオプションを追加します。</p>
+<p>sbt/sbt:</p>
+<div class="highlight-python"><div class="highlight"><pre>-Duser.home=$OPENSHIFT_REPO_DIR/fakehome -Dsbt.ivy.home=$OPENSHIFT_DATA_DIR/.ivy2 -Divy.home=$OPENSHIFT_DATA_DIR/.ivy2
+</pre></div>
+</div>
+</div>
+<div class="section" id="openshiftpush">
+<h3>openshiftへのpush<a class="headerlink" href="#openshiftpush" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>アプリケーションを起動するにはopensiftへソースコードをプッシュします。</p>
+<div class="highlight-python"><div class="highlight"><pre>git push
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">プロダクション環境へのデプロイ</a><ul>
+<li><a class="reference internal" href="#id2">ディレクトリのパッケージ化</a></li>
+<li><a class="reference internal" href="#xitrum-package">xitrum-packageのカスタマイズ</a></li>
+<li><a class="reference internal" href="#jvmscala">稼働中のJVMプロセスに対するScalaコンソール接続</a></li>
+<li><a class="reference internal" href="#centosubuntuoraclejdk">CentOSまたはUbuntuへのOracleJDKインストール</a></li>
+<li><a class="reference internal" href="#xitrum">システム起動時にXitrumをスタートさせる</a></li>
+<li><a class="reference internal" href="#id8">ポートフォワーディングの設定</a></li>
+<li><a class="reference internal" href="#linux">大量コネクションに対するLinux設定</a><ul>
+<li><a class="reference internal" href="#id9">ファイルディスクリプタ数の上限設定</a></li>
+<li><a class="reference internal" href="#id10">カーネルのチューニング</a></li>
+<li><a class="reference internal" href="#id11">バックログについて</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#haproxy-tips">HAProxy tips</a></li>
+<li><a class="reference internal" href="#nginx-tips">Nginx tips</a></li>
+<li><a class="reference internal" href="#heroku">Herokuへのデプロイ</a><ul>
+<li><a class="reference internal" href="#id17">サインアップとリポジトリの作成</a></li>
+<li><a class="reference internal" href="#procfile">Procfileの作成</a></li>
+<li><a class="reference internal" href="#port">Port設定の変更</a></li>
+<li><a class="reference internal" href="#id20">ログレベルの設定</a></li>
+<li><a class="reference internal" href="#id21"><code class="docutils literal"><span class="pre">xitrum-package</span></code> のエイリアス作成</a></li>
+<li><a class="reference internal" href="#id22">Herokuへのプッシュ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#openshift">OpenShiftへのデプロイ</a><ul>
+<li><a class="reference internal" href="#id24">サインアップとリポジトリの作成</a></li>
+<li><a class="reference internal" href="#id26">プロジェクト構成</a></li>
+<li><a class="reference internal" href="#action-hooks">action_hooksの作成</a></li>
+<li><a class="reference internal" href="#ip-port">IP:Port設定の変更</a></li>
+<li><a class="reference internal" href="#sbt">sbt引数の修正</a></li>
+<li><a class="reference internal" href="#openshiftpush">openshiftへのpush</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="log.html"
+                        title="前の章へ">ログ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="cluster.html"
+                        title="次の章へ">AkkaとHazelcastでサーバーをクラスタリングする</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/deploy.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="AkkaとHazelcastでサーバーをクラスタリングする"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="ログ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.25.0 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2010, Ngoc Dao.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 で生成しました。
+    </div>
+  </body>
+</html>
