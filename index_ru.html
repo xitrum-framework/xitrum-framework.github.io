@@ -108,9 +108,6 @@
             <pre><code>import xitrum.Action
 import xitrum.annotation.GET
 
-// Этот код будет выполнен в потоке Netty.
-// Для запуска в отдельном потоке (из пула),
-// наследуйтесь от xitrum.FutureAction.
 @GET("url/to/HelloAction")
 class HelloAction extends Action {
   def execute() {
@@ -118,33 +115,39 @@ class HelloAction extends Action {
     respondHtml(
       &lt;xml:group&gt;
         &lt;p&gt;Hello {remoteIp}!&lt;/p&gt;
-        &lt;a href={urlToHelloActor}&gt;Actor sample&lt;/a&gt;
+        &lt;a href={urlToHelloActor}&gt;Actor example&lt;/a&gt;
       &lt;/xml:group&gt;
     )
   }
 }</code></pre>
+            <p>
+              Этот код будет выполнен в потоке Netty.
+              Для запуска в отдельном потоке (из пула),
+              наследуйтесь от <code>xitrum.FutureAction</code>.
+            </p>
           </div>
 
           <div class="span-10">
             <h2 class="title">Контроллер актор</h2>
-            <p>Используя аннотации вы сделаете акторов доступными из сети!</p>
             <pre><code>import scala.concurrent.duration._
 import akka.actor.ReceiveTimeout
-import xitrum.{ActorAction, Config}
+
+import xitrum.ActorAction
 import xitrum.annotation.GET
 
 @GET("url/to/HelloActor")
 class HelloActor extends ActorAction {
   def execute() {
-    log.info("Actor started, remoteIp: " + remoteIp)
+    log.info("Request received: " + request)
 
-    val anotherActorRef = actorFor("someService")
-    anotherActorRef ! "someRequest"
+    // Communicate with another actor
+    anotherActorRef ! "aMsg"
 
+    // Wait for the above actor to reply within 5s
     context.setReceiveTimeout(5.seconds)
     context.become {
-      case someResponse =>
-        respondText("Response: " + someResponse)
+      case aReply =>
+        respondText(aReply)
 
       case ReceiveTimeout =>
         respondText("Timeout")
@@ -152,10 +155,11 @@ class HelloActor extends ActorAction {
   }
 
   override def postStop() {
-    log.info("Actor stopped")
+    log.info("Connection closed or response sent")
     super.postStop()
   }
 }</code></pre>
+            <p>Используя аннотации вы сделаете акторов доступными из сети!</p>
           </div>
           <div class="clearfix"></div>
         </div>
@@ -164,7 +168,7 @@ class HelloActor extends ActorAction {
           <div class="span-11">
             <h2 class="title">WebSocket</h2>
             <pre><code>import xitrum.{
-  Action, WebSocketAction,
+  WebSocketAction,
   WebSocketText, WebSocketBinary,
   WebSocketPing, WebSocketPong
 }
@@ -173,7 +177,7 @@ import xitrum.annotation.WEBSOCKET
 @WEBSOCKET("url/to/EchoWebSocketActor")
 class EchoWebSocketActor extends WebSocketAction {
   def execute() {
-    log.info("onOpen, remoteIp: " + remoteIp)
+    log.info("WebSocket onopen")
 
     context.become {
       case WebSocketText(text) =>
@@ -183,17 +187,16 @@ class EchoWebSocketActor extends WebSocketAction {
         respondWebSocketBinary(bytes)
 
       case WebSocketPing =>
-        // Xitrum автоматически посылает "pong",
-        // в ответ на "ping". Вам не следует делать
-        // это самостоятельно
+        // Xitrum automatically sends pong for you,
+        // you don't have to send pong yourself
 
       case WebSocketPong =>
-        // Клиент получил сообщение "ping"
+        // Client has received your ping
     }
   }
 
   override def postStop() {
-    log.info("onStop")
+    log.info("WebSocket onclose")
     super.postStop()
   }
 }</code></pre>
@@ -201,13 +204,13 @@ class EchoWebSocketActor extends WebSocketAction {
 
           <div class="span-10">
             <h2 class="title">SockJS</h2>
-            <pre><code>import xitrum.{Action, SockJsAction, SockJsText}
+            <pre><code>import xitrum.{SockJsAction, SockJsText}
 import xitrum.annotation.SOCKJS
 
 @SOCKJS("url/to/EchoSockJsActor")
 class EchoSockJsActor extends SockJsAction {
   def execute() {
-    log.info("onOpen, remoteIp: " + remoteIp)
+    log.info("SockJS onopen")
 
     context.become {
       case SockJsText(text) =>
@@ -216,7 +219,7 @@ class EchoSockJsActor extends SockJsAction {
   }
 
   override def postStop() {
-    log.info("onStop")
+    log.info("SockJS onclose")
     super.postStop()
   }
 }</code></pre>
