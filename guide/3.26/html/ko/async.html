@@ -1,0 +1,406 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>비동기 응답 &mdash; Xitrum Scala Web Framework Guide 3.26.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.26.2 documentation" href="index.html" />
+    <link rel="next" title="정적 파일" href="static.html" />
+    <link rel="prev" title="JavaScript 와 JSON" href="js.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="static.html" title="정적 파일"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript 와 JSON"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.26.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>비동기 응답<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Action에서 클라이언트로 응답을 반환하려면 다음 방법을 사용합니다</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">respondView</span></code>: 레이아웃 파일을 사용 또는 사용하지 않고、View의 템플릿 파일을 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondInlineView</span></code>: 레이아웃 파일을 사용 또는 사용하지 않고、인라인 작성된 템플릿을 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondText(&quot;hello&quot;)</span></code>: 레이아웃 파일을 사용하지 않고 텍스트를 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></code>: 위와 같이 contentType을 &#8220;text/html&#8221;로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></code>: Scala 객체를 JSON 으로 변환하여、contentType을 &#8220;application/json&#8221;으로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></code> contentType을 &#8220;application/javascript&#8221;으로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></code>: 위 두가지 조합을 JSONP 으로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></code>: contentType 을 &#8220;application/javascript&#8221; 으로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></code>: <cite>respondJs</cite> 、 <cite>respondJsonText</cite> 의 두가지 조합을 JSONP로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondBinary</span></code>: 바이트 배열로 보냅니다</li>
+<li><code class="docutils literal"><span class="pre">respondFile</span></code>: 디스크에서 파일을 직접 보냅니다. <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a> 를 사용하기 때문에 빠릅니다.</li>
+<li><code class="docutils literal"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></code>: 청크 응답을 보냅니다</li>
+</ul>
+<p>Xitrum 은 자동으로 어떤 특정한 응답을 하지 않습니다.스스로 응답을 <code class="docutils literal"><span class="pre">respondXXX</span></code> 형식으로 명시해야 합니다.
+<code class="docutils literal"><span class="pre">respondXXX</span></code> 을 호출하지 않을경우 Xitrum 은 HTTP 연결을 유지 하기때문에 , 나중에 <code class="docutils literal"><span class="pre">respondXXX</span></code> 형식의 호출문이 필요합니다.</p>
+<p>연결이 open 상태로 되어 있는지 확인하려면 <code class="docutils literal"><span class="pre">channel.isOpen</span></code> 을 호출하면 됩니다.``addConnectionClosedListener``
+를 사용해도 무방합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>addConnectionClosedListener {
+  // 연결이 해제되었습니다.
+  // 이벤트로부터 자원을 해제합니다.
+}
+</pre></div>
+</div>
+<p>비동기 이므로 응답을 바로 전송하지 않습니다.``respondXXX`` 의 반환값은
+<a class="reference external" href="http://netty.io/4.0/api/io/netty/channel/ChannelFuture.html">ChannelFuture</a>
+를 사용합니다.이것을 통해 실제로 전송되는 콜백을 지정할 수 있습니다.</p>
+<p>예를 들어, 응답의 전송후에 연결을 해제하려면:</p>
+<div class="highlight-python"><div class="highlight"><pre>import io.netty.channel.{ChannelFuture, ChannelFutureListener}
+
+val future = respondText(&quot;Hello&quot;)
+future.addListener(new ChannelFutureListener {
+  def operationComplete(future: ChannelFuture) {
+    future.getChannel.close()
+  }
+})
+</pre></div>
+</div>
+<p>더 짧은 예:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">respondText</span><span class="p">(</span><span class="s">&quot;Hello&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">ChannelFutureListener</span><span class="o">.</span><span class="n">CLOSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="websocket">
+<h2>WebSocket<a class="headerlink" href="#websocket" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import scala.runtime.ScalaRunTime
+import xitrum.annotation.WEBSOCKET
+import xitrum.{WebSocketAction, WebSocketBinary, WebSocketText, WebSocketPing, WebSocketPong}
+
+@WEBSOCKET(&quot;echo&quot;)
+class EchoWebSocketActor extends WebSocketAction {
+  def execute() {
+    // 여기에서 세션데이터, 요청해더 등을 추출할 수 있지만
+    // respondText 나 respondView를 사용하면 안됩니다.
+    // 응답하려면 다음과 같이 respondWebSocketXXX를 사용하세요.
+
+    log.debug(&quot;onOpen&quot;)
+
+    context.become {
+      case WebSocketText(text) =&gt;
+        log.info(&quot;onTextMessage: &quot; + text)
+        respondWebSocketText(text.toUpperCase)
+
+      case WebSocketBinary(bytes) =&gt;
+        log.info(&quot;onBinaryMessage: &quot; + ScalaRunTime.stringOf(bytes))
+        respondWebSocketBinary(bytes)
+
+      case WebSocketPing =&gt;
+        log.debug(&quot;onPing&quot;)
+
+      case WebSocketPong =&gt;
+        log.debug(&quot;onPong&quot;)
+    }
+  }
+
+  override def postStop() {
+    log.debug(&quot;onClose&quot;)
+    super.postStop()
+  }
+}
+</pre></div>
+</div>
+<p>요청이 올때 위의 액터가 생성됩니다. 그리고 다음의 경우 중단됩니다:</p>
+<ul class="simple">
+<li>연결이 끊긴경우</li>
+<li>WebSocket의 close 프레임이 수신되거나 전송되었을때</li>
+</ul>
+<p>WebSocket 프레임을 전송하는 경우:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">respondWebSocketText</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondWebSocketBinary</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondWebSocketPing</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondWebSocketClose</span></code></li>
+</ul>
+<p><code class="docutils literal"><span class="pre">respondWebSocketPong</span></code> 은 없습니다.Xitrum이 ping 을 수신하게 되면 자동으로 pong 프레임을 전송하기 때문입니다.</p>
+<p>위의 WebSocket 액션의 URL 을 얻으려면:</p>
+<div class="highlight-python"><div class="highlight"><pre>// Scalate 템플릿 파일을 사용하기 원한다면
+val url = webSocketAbsUrl[EchoWebSocketActor]
+</pre></div>
+</div>
+</div>
+<div class="section" id="sockjs">
+<h2>SockJS<a class="headerlink" href="#sockjs" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><a class="reference external" href="https://github.com/sockjs/sockjs-client">SockJS</a> 은 WebSocket을 지원하지 않는 브라우저를 위한</dt>
+<dd><p class="first">WebSocket 과 같은 API를 제공하는 JavaScript라이브러리 입니다. SockJS는 먼저 WebSocket를 시도해보고
+실패할경우 다른 방법들을 통해 WebSocket과 같은 라이브러리들을 사용하게 됩니다</p>
+<p class="last">만약, 모든 브라우저에서 WebSocket API를 사용하고 싶다면, SockJS 을 사용하되 WebSocket을 직접 사용하지 마세요.</p>
+</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+  var sock = new SockJS(&#39;http://mydomain.com/path_prefix&#39;);
+  sock.onopen = function() {
+    console.log(&#39;open&#39;);
+  };
+  sock.onmessage = function(e) {
+    console.log(&#39;message&#39;, e.data);
+  };
+  sock.onclose = function() {
+    console.log(&#39;close&#39;);
+  };
+&lt;/script&gt;
+</pre></div>
+</div>
+<p>Xitrum 은 SockJS의 JavsScript 파일을 내포하고 있습니다.
+뷰 템플릿에서 다음과 같이 사용하면 됩니다:</p>
+<div class="highlight-python"><div class="highlight"><pre>...
+html
+  head
+    != jsDefaults
+...
+</pre></div>
+</div>
+<p>SockJS는 <a class="reference external" href="https://github.com/sockjs/sockjs-protocol">server counterpart</a> 를 필요로 하지 않습니다.
+Xitrum이 자동으로 제공합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SockJsAction, SockJsText}
+import xitrum.annotation.SOCKJS
+
+@SOCKJS(&quot;echo&quot;)
+class EchoSockJsActor extends SockJsAction {
+  def execute() {
+    // 응답을 위해, 아래에 respondSockJSXXX를 사용합니다
+
+    log.info(&quot;onOpen&quot;)
+
+    context.become {
+      case SockJsText(text) =&gt;
+        log.info(&quot;onMessage: &quot; + text)
+        respondSockJsText(text)
+    }
+  }
+
+  override def postStop() {
+    log.info(&quot;onClose&quot;)
+    super.postStop()
+  }
+}
+</pre></div>
+</div>
+<p>액터 새로운 SockJS 세션이 만들어질때 생겨나고 SockJS세션이 닫힐때 종료합니다.</p>
+<p>SockJS 프레임으로 보내려면:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">respondSockJsText</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondSockJsClose</span></code></li>
+</ul>
+<p><a class="reference external" href="https://github.com/sockjs/sockjs-node#various-issues-and-design-considerations">SockJs주의사항</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>기본적으로 쿠키는 SockJS 모델과 맞지가 않습니다. 세션인증을 하려면 고유의 토큰을 SockJS를
+통해 서버측에서 검증을 해야 합니다. 이것이 본질적으로 쿠키의 작동원리 입니다
+</pre></div>
+</div>
+<p>SockJS클러스터링을 수정하려면 :doc:<a href="#id4"><span class="problematic" id="id5">`</span></a>Akka 클러스터링 &lt;/cluster&gt;`을 참고하세요.</p>
+</div>
+<div class="section" id="chunk">
+<h2>Chunk응답<a class="headerlink" href="#chunk" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunk응답</a> 을 보내려면:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">setChunked</span></code> 호출</li>
+<li><code class="docutils literal"><span class="pre">respondXXX</span></code> 호출（필요한 만큼）</li>
+<li>마지막으로 <code class="docutils literal"><span class="pre">respondLastChunk</span></code> 호출</li>
+</ol>
+<p>Chunk응답은 많은 유스케이스를 가지고 있습니다. 예를들어, 메모리에 맞지 않는 매우큰 CSV파일을 생성할때
+Chunk별로 생성해서 보낼수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>// &quot;Cache-Control&quot; 헤더가 자동으로 세팅됩니다:
+// 「no-store, no-cache, must-revalidate, max-age=0」
+//
+// 덧붙여서 &quot;Pragma: no-cache&quot; 는 응답이 아닌 요청에 링크됩니다:
+// http://palizine.plynt.com/issues/2008Jul/cache-control-attributes/
+setChunked()
+
+val generator = new MyCsvGenerator
+
+generator.onFirstLine { line =&gt;
+  val future = respondText(header, &quot;text/csv&quot;)
+  future.addListener(new ChannelFutureListener {
+    def operationComplete(future: ChannelFuture) {
+      if (future.isSuccess) generator.next()
+    }
+  }
+}
+
+generator.onNextLine { line =&gt;
+  val future = respondText(line)
+  future.addListener(new ChannelFutureListener {
+    def operationComplete(future: ChannelFuture) {
+      if (future.isSuccess) generator.next()
+    }
+  })
+}
+
+generator.onLastLine { line =&gt;
+  val future = respondText(line)
+  future.addListener(new ChannelFutureListener {
+    def operationComplete(future: ChannelFuture) {
+      if (future.isSuccess) respondLastChunk()
+    }
+  })
+}
+
+generator.generate()
+</pre></div>
+</div>
+<p>주의:</p>
+<ul class="simple">
+<li>헤더는 <code class="docutils literal"><span class="pre">respondXXX</span></code> 을 먼저 요청합니다.</li>
+<li>마지막 헤더 옵션을 <code class="docutils literal"><span class="pre">respondLastChunk</span></code> 에 설정할 수 있습니다.</li>
+<li><a class="reference internal" href="cache.html"><em>페이지와 액션캐쉬</em></a> 는 chunk 응답으로 사용할 수 없습니다.</li>
+</ul>
+<p>Chunk응답을  <code class="docutils literal"><span class="pre">ActorAction</span></code> 과 함께 사용하려면
+<a class="reference external" href="http://www.cubrid.org/blog/dev-platform/faster-web-page-loading-with-facebook-bigpipe/">Facebook BigPipe</a>
+을 통해 쉽게 구현할수 있습니다.</p>
+<div class="section" id="iframe">
+<h3>무한iframe<a class="headerlink" href="#iframe" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>청크 응답은 <a class="reference external" href="http://en.wikipedia.org/wiki/Comet_%28programming%29">Comet</a></dt>
+<dd>을 <a class="reference external" href="http://www.shanison.com/2010/05/10/stop-the-browser-%E2%80%9Cthrobber-of-doom%E2%80%9D-while-loading-comet-forever-iframe/">사용할 수 있습니다</a></dd>
+</dl>
+<p>iframe을 포함한 페이지:</p>
+<div class="highlight-python"><div class="highlight"><pre>...
+&lt;script&gt;
+  var functionForForeverIframeSnippetsToCall = function() {...}
+&lt;/script&gt;
+...
+&lt;iframe width=&quot;1&quot; height=&quot;1&quot; src=&quot;path/to/forever/iframe&quot;&gt;&lt;/iframe&gt;
+...
+</pre></div>
+</div>
+<p>무한 <code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> 생성하는 페이지:</p>
+<div class="highlight-python"><div class="highlight"><pre>// 준비
+
+setChunked()
+
+// Firefox를 동작하기 위해 &quot;123&quot; 등을 사용
+respondText(&quot;&lt;html&gt;&lt;body&gt;123&quot;, &quot;text/html&quot;)
+
+// curl을 포함한 대부분의 클라이언트는 script를 미리보기로 바로 사용할 수 없음.
+// 2KB의 더미 데이터를 바로 보내볼 필요가 있음.
+for (i &lt;- 1 to 100) respondText(&quot;&lt;script&gt;&lt;/script&gt;\n&quot;)
+</pre></div>
+</div>
+<p>나중에 실제 데이터를 브라우저에 보내려면, 미리보기를 보내면 된다:</p>
+<div class="highlight-python"><div class="highlight"><pre>if (channel.isOpen)
+  respondText(&quot;&lt;script&gt;parent.functionForForeverIframeSnippetsToCall()&lt;/script&gt;\n&quot;)
+else
+  // 연결이 종료되고, 이벤트가 해제됨
+  // ``addConnectionClosedListener`` 을 사용할수 있음.
+</pre></div>
+</div>
+</div>
+<div class="section" id="event-source">
+<h3>Event Source<a class="headerlink" href="#event-source" title="Permalink to this headline">¶</a></h3>
+<p>참고: <a class="reference external" href="http://dev.w3.org/html5/eventsource/">http://dev.w3.org/html5/eventsource/</a></p>
+<p>Event Source는 특별한 경우 chunk응답을 보냄.
+데이터는 UTF-8 이어야 함.</p>
+<p>Event Source를 응답하려면 <code class="docutils literal"><span class="pre">respondEventSource</span></code> 호출（필요한 만큼）:</p>
+<div class="highlight-python"><div class="highlight"><pre>respondEventSource(&quot;data1&quot;, &quot;event1&quot;)  // event1의 이벤트 이름
+respondEventSource(&quot;data2&quot;)            // message라는 이벤트 이름으로 기본설정됨
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">비동기 응답</a><ul>
+<li><a class="reference internal" href="#websocket">WebSocket</a></li>
+<li><a class="reference internal" href="#sockjs">SockJS</a></li>
+<li><a class="reference internal" href="#chunk">Chunk응답</a><ul>
+<li><a class="reference internal" href="#iframe">무한iframe</a></li>
+<li><a class="reference internal" href="#event-source">Event Source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="js.html"
+                        title="previous chapter">JavaScript 와 JSON</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="static.html"
+                        title="next chapter">정적 파일</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/async.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="static.html" title="정적 파일"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript 와 JSON"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.26.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

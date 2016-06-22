@@ -1,0 +1,608 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Контроллеры и представления &mdash; Документация Xitrum Scala Web Framework Guide 3.26.2</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.26.2" href="index.html" />
+    <link rel="next" title="RESTful APIs" href="restful.html" />
+    <link rel="prev" title="Как начать" href="tutorial.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Как начать"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Контроллеры и представления<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Xitrum располагает тремя видами контроллеров или действий (actions):
+стандартный контроллер <code class="docutils literal"><span class="pre">Action</span></code>, <code class="docutils literal"><span class="pre">FutureAction</span></code> и актор контроллер <code class="docutils literal"><span class="pre">ActorAction</span></code>.</p>
+<div class="section" id="normal-action">
+<h2>Стандартный контроллер (normal action)<a class="headerlink" href="#normal-action" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Реализация данного контроллера синхронная.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;hello&quot;)
+class HelloAction extends Action {
+  def execute() {
+    respondText(&quot;Hello&quot;)
+  }
+}
+</pre></div>
+</div>
+<p>В случае наследования от xitrum.Action, ваш код будет выполнятся в потоке Netty&#8217;s IO.
+Это допустимо только в случае если ваш контроллер очень легковесный и не блокирующий
+(возвращает ответ немедленно). Иначе Netty не сможет принимать новые подключения или
+отправлять запросы клиентам.</p>
+</div>
+<div class="section" id="futureaction">
+<h2>FutureAction<a class="headerlink" href="#futureaction" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.FutureAction
+import xitrum.annotation.GET
+
+@GET(&quot;hello&quot;)
+class HelloAction extends FutureAction {
+  def execute() {
+    respondText(&quot;hi&quot;)
+  }
+}
+</pre></div>
+</div>
+<p>В случае наследования от xitrum.FutureAction, код контроллера будет выполнятся в отдельном потоке (в том же пуле что и <code class="docutils literal"><span class="pre">ActorAction</span></code>) не занимая потоки Netty.</p>
+</div>
+<div class="section" id="actor-action">
+<h2>Актор контроллер (actor action)<a class="headerlink" href="#actor-action" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Если вы хотите что бы контроллер был актором Akka наследуйтесь от <code class="docutils literal"><span class="pre">ActorAction</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import scala.concurrent.duration._
+
+import xitrum.ActorAction
+import xitrum.annotation.GET
+
+@GET(&quot;hello&quot;)
+class HelloAction extends ActorAction with AppAction {
+  def execute() {
+    // See Akka doc about scheduler
+    import context.dispatcher
+    context.system.scheduler.scheduleOnce(3 seconds, self, System.currentTimeMillis())
+
+    // See Akka doc about &quot;become&quot;
+    context.become {
+      case pastTime =&gt;
+        respondInlineView(s&quot;It&#39;s $pastTime Unix ms 3s ago.&quot;)
+    }
+  }
+}
+</pre></div>
+</div>
+<p>Экземпляр актора будет создан на каждый запрос. Актор будет остановлен в момент закрытия подключения
+или когда ответ будет отправлен клиенту. Для chunked запросов актор будет остановлен когда будет
+отправлен последний chunk.</p>
+<p>Актор будет выполняться в пуле потоков Akka в системе с именем &#8220;xitrum&#8221;.</p>
+</div>
+<div class="section" id="id2">
+<h2>Отправка ответа клиенту<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Что бы отправить данные клиенту используются функции:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">respondView</span></code>: при ответе использует шаблон ассоциированный с контроллером</li>
+<li><code class="docutils literal"><span class="pre">respondInlineView</span></code>: при ответе использует шаблон переданный как аргумент</li>
+<li><code class="docutils literal"><span class="pre">respondText(&quot;hello&quot;)</span></code>: ответ строкой &#8220;plain/text&#8221;</li>
+<li><code class="docutils literal"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></code>: ответ строкой &#8220;text/html&#8221;</li>
+<li><code class="docutils literal"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></code>: преобразовать Scala объект в JSON и ответить</li>
+<li><code class="docutils literal"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></code>: совмещение предыдущих двух</li>
+<li><code class="docutils literal"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></code></li>
+<li><code class="docutils literal"><span class="pre">respondBinary</span></code>: ответ массивом байт</li>
+<li><code class="docutils literal"><span class="pre">respondFile</span></code>: переслать файл с использованием техники <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a>  (aka send-file)</li>
+<li><code class="docutils literal"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></code></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>Шаблонизация<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Каждый контроллер может быть связан с шаблоном <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>.
+В этом случае при вызове метода <cite>respondView</cite> будет задействован данный шаблон для формирования
+ответа.</p>
+<p>scr/main/scala/mypackage/MyAction.scala:</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+
+import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;myAction&quot;)
+class MyAction extends Action {
+  def execute() {
+    respondView()
+  }
+
+  def hello(what: String) = &quot;Hello %s&quot;.format(what)
+}
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-python"><div class="highlight"><pre>- import mypackage.MyAction
+
+!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    a(href={url}) Path to the current action
+    p= currentAction.asInstanceOf[MyAction].hello(&quot;World&quot;)
+
+    != jsForView
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">xitrumCss</span></code> подключает стандартные CSS встроенные в Xitrum. Вы можете убрать их если
+они не требуются</li>
+<li><code class="docutils literal"><span class="pre">jsDefaults</span></code> подключает jQuery, jQuery Validate и пр. Если используется, вызов должен
+быть размешен в секции &lt;head&gt;</li>
+<li><code class="docutils literal"><span class="pre">jsForView</span></code> использует функцию контроллера <code class="docutils literal"><span class="pre">jsAddToView</span></code> и  включает JS фаргмент в шаблон.
+Если используется, вызов должен быть в конце шаблона</li>
+</ul>
+<p>В шаблонах допускается использование любых методов из трейта <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>. Дополнительно можно использовать утильные методы Scalate,
+такие как <code class="docutils literal"><span class="pre">unescape</span></code> (см. <a class="reference external" href="http://scalate.fusesource.org/documentation/index.html">Scalate doc</a>).</p>
+<p>Синтаксис <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a> используется по умолчанию для Scalate.
+Так же вы можете использовать синтаксис <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
+<a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">Scaml</a> или
+<a class="reference external" href="http://scalate.fusesource.org/documentation/ssp-reference.html">Ssp</a>.
+Что бы установить предпочитаемый синтаксис, отредактируйте файл xitrum.conf в директории config.</p>
+<p>Кроме этого, метод <cite>respondView</cite> позволяет переопределять синтаксис шаблона.</p>
+<div class="highlight-python"><div class="highlight"><pre>respondView(Map(&quot;type&quot; -&gt;&quot;mustache&quot;))
+</pre></div>
+</div>
+<div class="section" id="currentaction">
+<h3>currentAction и приведение типов<a class="headerlink" href="#currentaction" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Если известен подкласс контроллера который используется с шаблоном, то можно выполнить
+приведение <code class="docutils literal"><span class="pre">currentAction</span></code> к этому подклассу.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Или так:</p>
+<div class="highlight-python"><div class="highlight"><pre>- val myAction = currentAction.asInstanceOf[MyAction]; import myAction._
+
+p= hello(&quot;World&quot;)
+p= hello(&quot;Scala&quot;)
+p= hello(&quot;Xitrum&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Mustache<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Важно:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://mustache.github.com/mustache.5.html">Mustache syntax</a></li>
+<li><a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Scalate implementation</a></li>
+</ul>
+<p>Mustache намеренно ограничивает возможности шаблонизации до минимума логики. Поэтому многие
+возможности используемые в Jade не применимы в Mustache.</p>
+<p>Для передачи моделей из контроллера в шаблон необходимо использовать <code class="docutils literal"><span class="pre">at</span></code>:</p>
+<p>Контролер:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">at</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="s">&quot;Jack&quot;</span>
+<span class="n">at</span><span class="p">(</span><span class="s">&quot;xitrumCss&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">xitrumCss</span>
+</pre></div>
+</div>
+<p>Шаблон Mustache:</p>
+<div class="highlight-python"><div class="highlight"><pre>Мое имя {{name}}
+{{xitrumCss}}
+</pre></div>
+</div>
+<p>Примечание: следующие слова зарезервированы и не могут быть использованы
+как ключ в <code class="docutils literal"><span class="pre">at</span></code>:</p>
+<ul class="simple">
+<li>&#8220;context&#8221;: Scalate объект предоставляющий методы <code class="docutils literal"><span class="pre">unescape</span></code> и пр.</li>
+<li>&#8220;helper&#8221;: текущий контроллер</li>
+</ul>
+</div>
+<div class="section" id="coffeescript">
+<h3>CoffeeScript<a class="headerlink" href="#coffeescript" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Scalate позволяет включать CoffeeScript в шаблоны
+<a class="reference external" href="http://scalate.fusesource.org/documentation/jade-syntax.html#filters">:coffeescript filter</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>body
+  :coffeescript
+    alert &quot;Hello, Coffee!&quot;
+</pre></div>
+</div>
+<p>Результат:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;body&gt;
+  &lt;script type=&#39;text/javascript&#39;&gt;
+    //&lt;![CDATA[
+      (function() {
+        alert(&quot;Hello, Coffee!&quot;);
+      }).call(this);
+    //]]&gt;
+  &lt;/script&gt;
+&lt;/body&gt;
+</pre></div>
+</div>
+<p>Однако, эта возможность работает достаточно <a class="reference external" href="http://groups.google.com/group/xitrum-framework/browse_thread/thread/6667a7608f0dc9c7">медленно</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>jade+javascript+1thread: 1-2ms for page
+jade+coffesscript+1thread: 40-70ms for page
+jade+javascript+100threads: ~40ms for page
+jade+coffesscript+100threads: 400-700ms for page
+</pre></div>
+</div>
+<p>Рекомендуется самостоятельно компилировать CoffeeScript в JavaScript для оптимизации производительности.</p>
+</div>
+</div>
+<div class="section" id="layout">
+<h2>Макет (Layout)<a class="headerlink" href="#layout" title="Ссылка на этот заголовок">¶</a></h2>
+<p>При использовании <code class="docutils literal"><span class="pre">respondView</span></code> или <code class="docutils literal"><span class="pre">respondInlineView</span></code>, Xitrum
+выполняет шаблонизацию в строку, и присваивает результат в переменную <code class="docutils literal"><span class="pre">renderedView</span></code>.
+Затем, Xitrum вызывает метод <code class="docutils literal"><span class="pre">layout</span></code> текущего контроллера и отправляет результат работы
+этого метода как ответ сервера.</p>
+<p>По умолчанию метод <code class="docutils literal"><span class="pre">layout</span></code> просто возвращает переменную <code class="docutils literal"><span class="pre">renderedView</span></code>.
+В случае перекрытия этого метода появляется возможность декорировать шаблон.
+Таким образом достаточно просто реализовать произвольный макет (layout) для всех контроллеров.</p>
+<p>Механизм <code class="docutils literal"><span class="pre">layout</span></code> очень простой и понятный. Никакой магии. Для удобства, вы можете
+думать что Xitrum не поддерживает макеты (layout), есть только метод <code class="docutils literal"><span class="pre">layout</span></code> и вы вольны
+делать с ним все что захотите.</p>
+<p>Обычно, создается базовый класс для реализация стандартного макета:</p>
+<p>src/main/scala/mypackage/AppAction.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+import xitrum.Action
+
+trait AppAction extends Action {
+  override def layout = renderViewNoLayout[AppAction]()
+}
+</pre></div>
+</div>
+<p>src/main/scalate/mypackage/AppAction.jade</p>
+<div class="highlight-python"><div class="highlight"><pre>!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    != renderedView
+    != jsForView
+</pre></div>
+</div>
+<p>src/main/scala/mypackage/MyAction.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+import xitrum.annotation.GET
+
+@GET(&quot;myAction&quot;)
+class MyAction extends AppAction {
+  def execute() {
+    respondView()
+  }
+
+  def hello(what: String) = &quot;Hello %s&quot;.format(what)
+}
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-python"><div class="highlight"><pre>- import mypackage.MyAction
+
+a(href={url}) Path to the current action
+p= currentAction.asInstanceOf[MyAction].hello(&quot;World&quot;)
+</pre></div>
+</div>
+<div class="section" id="id6">
+<h3>Макет в отдельном файле<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h3>
+<p>AppAction.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="respondview">
+<h3>Использование макета непосредственно в respondView<a class="headerlink" href="#respondview" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>val specialLayout = () =&gt;
+  DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+
+respondView(specialLayout _)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Внутренние представления<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Обычно, шаблон описывается в отдельном файле, но существует возможность писать
+шаблоны непосредственно в контроллере:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;myAction&quot;)
+class MyAction extends Action {
+  def execute() {
+    val s = &quot;World&quot;  // Will be automatically HTML-escaped
+    respondInlineView(
+      &lt;p&gt;Hello &lt;em&gt;{s}&lt;/em&gt;!&lt;/p&gt;
+    )
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Фрагменты<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<p>MyAction.jade:
+<code class="docutils literal"><span class="pre">scr/main/scalate/mypackage/MyAction.jade</span></code></p>
+<p>Шаблонизация с помощью фрагмента
+<code class="docutils literal"><span class="pre">scr/main/scalate/mypackage/_MyFragment.jade</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">renderFragment</span><span class="p">[</span><span class="n">MyAction</span><span class="p">](</span><span class="s">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Можно записать короче, если <code class="docutils literal"><span class="pre">MyAction</span></code> - текущий контроллер:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">renderFragment</span><span class="p">(</span><span class="s">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id9">
+<h2>Использование шаблона смежного контроллера<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Использование метода <code class="docutils literal"><span class="pre">respondView[ClassName]()</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+
+import xitrum.Action
+import xitrum.annotation.{GET, POST}
+
+@GET(&quot;login&quot;)
+class LoginFormAction extends Action {
+  def execute() {
+    // Respond scr/main/scalate/mypackage/LoginFormAction.jade
+    respondView()
+  }
+}
+
+@POST(&quot;login&quot;)
+class DoLoginAction extends Action {
+  def execute() {
+    val authenticated = ...
+    if (authenticated)
+      redirectTo[HomeAction]()
+    else
+      // Reuse the view of LoginFormAction
+      respondView[LoginFormAction]()
+  }
+}
+</pre></div>
+</div>
+<div class="section" id="id10">
+<h3>Один контроллер - много представлений<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Использование нескольких шаблонов для одного контроллера:</p>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+
+import xitrum.Action
+import xitrum.annotation.GET
+
+// Шаблоны автоматически не маршрутизируются
+// scr/main/scalate/mypackage/HomeAction_NormalUser.jade
+// scr/main/scalate/mypackage/HomeAction_Moderator.jade
+// scr/main/scalate/mypackage/HomeAction_Admin.jade
+trait HomeAction_NormalUser extends Action
+trait HomeAction_Moderator  extends Action
+trait HomeAction_Admin      extends Action
+
+@GET(&quot;&quot;)
+class HomeAction extends Action {
+  def execute() {
+    val userType = ...
+    userType match {
+      case NormalUser =&gt; respondView[HomeAction_NormalUser]()
+      case Moderator  =&gt; respondView[HomeAction_Moderator]()
+      case Admin      =&gt; respondView[HomeAction_Admin]()
+    }
+  }
+}
+</pre></div>
+</div>
+<p>Использование дополнительных не автоматических маршрутов выглядит утомительно, однако
+это более безопасно относительно типов (typesafe).</p>
+<p>Вы также можете использовать `` String`` указать местоположение шаблона:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_NormalUser&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_Moderator&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s">&quot;mypackage/HomeAction_Admin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>Компонент<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Компоненты позволяют создавать переиспользуемое поведение и могут быть включены
+во множество представлений. Концептуально компонент очень близок к контроллеру, но:</p>
+<ul class="simple">
+<li>Не имеет маршрутов, поэтому отсутствует метод <code class="docutils literal"><span class="pre">execute</span></code>.</li>
+<li>Компонент не отправляет ответ сервера, он просто выполняет шаблонизацию фрагмента.
+Поэтому внутри компонента, вместо вызовов <code class="docutils literal"><span class="pre">respondXXX</span></code>, необходимо использовать <code class="docutils literal"><span class="pre">renderXXX</span></code>.</li>
+<li>Как и контроллеры, компонент может иметь ни одного, одно или множество связанных представлений.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre>package mypackage
+
+import xitrum.{FutureAction, Component}
+import xitrum.annotation.GET
+
+class CompoWithView extends Component {
+  def render() = {
+    // Render associated view template, e.g. CompoWithView.jade
+    // Note that this is renderView, not respondView!
+    renderView()
+  }
+}
+
+class CompoWithoutView extends Component {
+  def render() = {
+    &quot;Hello World&quot;
+  }
+}
+
+@GET(&quot;foo/bar&quot;)
+class MyAction extends FutureAction {
+  def execute() {
+    respondView()
+  }
+}
+</pre></div>
+</div>
+<p>MyAction.jade:</p>
+<div class="highlight-python"><div class="highlight"><pre>- import mypackage._
+
+!= newComponent[CompoWithView]().render()
+!= newComponent[CompoWithoutView]().render()
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Контроллеры и представления</a><ul>
+<li><a class="reference internal" href="#normal-action">Стандартный контроллер (normal action)</a></li>
+<li><a class="reference internal" href="#futureaction">FutureAction</a></li>
+<li><a class="reference internal" href="#actor-action">Актор контроллер (actor action)</a></li>
+<li><a class="reference internal" href="#id2">Отправка ответа клиенту</a></li>
+<li><a class="reference internal" href="#id3">Шаблонизация</a><ul>
+<li><a class="reference internal" href="#currentaction">currentAction и приведение типов</a></li>
+<li><a class="reference internal" href="#id4">Mustache</a></li>
+<li><a class="reference internal" href="#coffeescript">CoffeeScript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#layout">Макет (Layout)</a><ul>
+<li><a class="reference internal" href="#id6">Макет в отдельном файле</a></li>
+<li><a class="reference internal" href="#respondview">Использование макета непосредственно в respondView</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Внутренние представления</a></li>
+<li><a class="reference internal" href="#id8">Фрагменты</a></li>
+<li><a class="reference internal" href="#id9">Использование шаблона смежного контроллера</a><ul>
+<li><a class="reference internal" href="#id10">Один контроллер - много представлений</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id11">Компонент</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="предыдущая глава">Как начать</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="restful.html"
+                        title="следующая глава">RESTful APIs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/action_view.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Как начать"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

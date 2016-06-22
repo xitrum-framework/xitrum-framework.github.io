@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Template engines &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.26.2</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.26.2" href="index.html" />
+    <link rel="next" title="Postbacks" href="postback.html" />
+    <link rel="prev" title="RESTful APIs" href="restful.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="postback.html" title="Postbacks"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-engines">
+<h1>Template engines<a class="headerlink" href="#template-engines" title="Permalink to this headline">¶</a></h1>
+<p>Template engine đã được cấu hình dẽ được gọi khi <a class="reference internal" href="action_view.html"><em>renderView, renderFragment,
+hoặc respondView</em></a> được gọi tới.</p>
+<div class="section" id="cau-hinh-template-engine">
+<h2>Cấu hình template engine<a class="headerlink" href="#cau-hinh-template-engine" title="Permalink to this headline">¶</a></h2>
+<p>Trong tệp <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a>, template engine có thể cấu hình theo 2 mẫu dưới dây, phụ thuộc vào engine mà bạn sử dụng:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">template</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>Hoặc:</p>
+<div class="highlight-python"><div class="highlight"><pre>template {
+  &quot;my.template.EngineClassName&quot; {
+    option1 = value1
+    option2 = value2
+  }
+}
+</pre></div>
+</div>
+<p>Template engine mặc định là <a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>.</p>
+</div>
+<div class="section" id="xoa-template-engine">
+<h2>Xóa template engine<a class="headerlink" href="#xoa-template-engine" title="Permalink to this headline">¶</a></h2>
+<p>Nếu bạn chỉ tạo RESTful APIs trong project, thông thường bạn không sử dụng method renderView, renderFragment, hoặc respondView. Trong trường hợp này, bạn còn có thể xóa template engine khỏi porject để project nhẹ hơn. Bạn chỉ cần xóa hoặc comment dòng <code class="docutils literal"><span class="pre">templateEngine</span></code> trong tệp config/xitrum.conf.</p>
+<p>Sau đó bạn xóa các cấu hình template liên quan khỏi project của bạn.</p>
+</div>
+<div class="section" id="tu-tao-template-engine-cho-rieng-ban">
+<h2>Tự tạo template engine cho riêng bạn<a class="headerlink" href="#tu-tao-template-engine-cho-rieng-ban" title="Permalink to this headline">¶</a></h2>
+<p>Để tạo template engine cho riêng bạn, tạo một class kế thừa từ <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/view/TemplateEngine.scala">xitrum.view.TemplateEngine</a>.
+Và đặt class này của bạn trong tệp config/xitrum.conf.</p>
+<p>Ví dụ, xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template engines</a><ul>
+<li><a class="reference internal" href="#cau-hinh-template-engine">Cấu hình template engine</a></li>
+<li><a class="reference internal" href="#xoa-template-engine">Xóa template engine</a></li>
+<li><a class="reference internal" href="#tu-tao-template-engine-cho-rieng-ban">Tự tạo template engine cho riêng bạn</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="restful.html"
+                        title="chương trước ">RESTful APIs</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="postback.html"
+                        title="chương tiếp">Postbacks</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/template_engines.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="postback.html" title="Postbacks"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Введение &mdash; Документация Xitrum Scala Web Framework Guide 3.26.2</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.26.2" href="index.html" />
+    <link rel="next" title="Как начать" href="tutorial.html" />
+    <link rel="prev" title="Xitrum Guide" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Как начать"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xitrum Guide"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Введение<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>+--------------------+
+|      Клиенты       |
++--------------------+
+          |
++--------------------+
+|       Netty        |
++--------------------+
+|       Xitrum       |
+| +----------------+ |
+| | HTTP(S) Сервер | |
+| |----------------| |
+| | Web фреймворк  | |  &lt;- Akka, Hazelcast -&gt; Другие экземпляры
+| +----------------+ |
++--------------------+
+|     Приложение     |
++--------------------+
+</pre></div>
+</div>
+<p>Xitrum - асинхронный и масштабируемый Scala веб фреймворк и HTTP(S) сервер. Он построен
+на базе <a class="reference external" href="http://netty.io/">Netty</a> и <a class="reference external" href="http://akka.io/">Akka</a>.</p>
+<p>Из отзывов <a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">пользователей</a>:</p>
+<blockquote>
+<div><p>Wow, this is a really impressive body of work, arguably the most
+complete Scala framework outside of Lift (but much easier to use).</p>
+<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> is truly a full stack web framework, all the bases are covered,
+including wtf-am-I-on-the-moon extras like ETags, static file cache
+identifiers &amp; auto-gzip compression. Tack on built-in JSON converter,
+before/around/after interceptors, request/session/cookie/flash scopes,
+integrated validation (server &amp; client-side, nice), built-in cache
+layer (<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>), i18n a la GNU gettext, Netty (with Nginx, hello
+blazing fast), etc. and you have, wow.</p>
+</div></blockquote>
+<div class="section" id="id3">
+<h2>Возможности<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li>Безопасный относительно типов (typesafe) во всех отношениях где это возможно.</li>
+<li>Полностью асинхронный. Необязательно слать ответ на запрос немедленно, можно запустить сложные вычисления и дать ответ, когда он будет готов. Поддерживаются Long polling, chunked response, WebSockets, SockJs, EventStream.</li>
+<li>Встроенный веб сервер основан на высоко производительном <a class="reference external" href="http://netty.io/">Netty</a>, отдача статических файлов сравнима по производительности с <a class="reference external" href="https://gist.github.com/3293596">Nginx</a>.</li>
+<li>Обширные возможности для кэширования как на серверной так и на клиентской стороне.
+На уровне сервера файлы маленького размера сохраняются в памяти, большие файлы пересылаются с использованием NIO&#8217;s zero copy.
+На уровне фреймворка есть возможность сохранить в кэш страницу, действие (action) или объект в стиле Rails.
+Учтены рекомендации <a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">Google</a>.
+Ревалидация кэша возможна в любой момент.</li>
+<li>Для статических файлов поддерживаются <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range запросы</a>. Эта функция необходима для отдачи видео файлов.</li>
+<li>Поддержка <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</li>
+<li>Автоматический расчет маршрутов (routes) приложения в стиле JAX-RS и Rails. Нет необходимости в объявлении маршрутов в каком-либо файле. Благодаря этому Xitrum позволяет объединять несколько приложений в одно. Все маршруты из jar файлов объединяются и работают как единое приложение.</li>
+<li>Обратная маршрутизация: генерация ссылок на контроллеры и действия.</li>
+<li>Генерация документации на основе <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
+<li>Автоматическая перезагрузка классов и маршрутов при изменении (не требует перезапуска сервера).</li>
+<li>Представления (views) могут быть созданы с использованием <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>, Scala или xml (во всех случаях происходит проверка типов на этапе компиляции).</li>
+<li>Сессии могут хранится в куках или кластеризованны, например, с помощью <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>.</li>
+<li>Встроенная валидация с <a class="reference external" href="http://jqueryvalidation.org/">jQuery</a> (опционально).</li>
+<li>i18n на основе <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>. Автоматическая генерация pot файлов из исходников. gettext поддерживает множественные и единственные формы числа.</li>
+</ul>
+<p>Идеологически Xitrum находится между <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
+и <a class="reference external" href="http://liftweb.net/">Lift</a>: более функциональный чем Scalatra и гораздо проще чем Lift. Вы можете очень просто создавать RESTful APIs и postbacks. <a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a>
+является controller-first фреймворком.</p>
+<p><a class="reference internal" href="deps.html"><em>Связанные сcылки</em></a> список демонстрационных проектов, плагинов и прочее.</p>
+</div>
+<div class="section" id="id7">
+<h2>Авторы<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> - проект с открытым <a class="reference external" href="https://github.com/xitrum-framework/xitrum">исходным кодом</a> проект, вступайте в официальную <a class="reference external" href="http://groups.google.com/group/xitrum-framework">Google группу</a>.</p>
+<p>Авторы в списке упорядочены по времени их
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/graphs/contributors">первого вклада в проект</a>.</p>
+<p>(*): Участники команды разработки Xitrum.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/ngocdaothanh">Ngoc Dao (*)</a></li>
+<li><a class="reference external" href="https://github.com/alide">Linh Tran</a></li>
+<li><a class="reference external" href="https://github.com/earldouglas">James Earl Douglas</a></li>
+<li><a class="reference external" href="https://github.com/caiiiycuk">Aleksander Guryanov</a></li>
+<li><a class="reference external" href="https://github.com/georgeOsdDev">Takeharu Oshida (*)</a></li>
+<li><a class="reference external" href="https://github.com/kimkha">Nguyen Kim Kha</a></li>
+<li><a class="reference external" href="https://github.com/murz">Michael Murray</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Введение</a><ul>
+<li><a class="reference internal" href="#id3">Возможности</a></li>
+<li><a class="reference internal" href="#id7">Авторы</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="index.html"
+                        title="предыдущая глава">Xitrum Guide</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="следующая глава">Как начать</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Как начать"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xitrum Guide"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

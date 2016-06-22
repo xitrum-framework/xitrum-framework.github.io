@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Metrics &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.26.2</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.26.2" href="index.html" />
+    <link rel="next" title="HOWTO" href="howto.html" />
+    <link rel="prev" title="Netty handler" href="handler.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handler"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="metrics">
+<h1>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum thu thập bộ nhớ JVM heap, CPU, và tình trạng thực thi các action từ mỗi node
+Akka cluster của ứng dụng. Nó xuất ra các số liệu trong định dạng dữ liệu JSON. Xitrum cũng để
+bạn thu thập cách các dữ liệu khác.</p>
+<p>This metrics feature is based on the library <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
+<div class="section" id="thu-thap-metrics">
+<h2>Thu thập metrics<a class="headerlink" href="#thu-thap-metrics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bo-nho-heap-va-cpu">
+<h3>Bộ nhớ heap và CPU<a class="headerlink" href="#bo-nho-heap-va-cpu" title="Permalink to this headline">¶</a></h3>
+<p>Bộ nhớ JVM heap và CPU sẽ được thu thập như
+<a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
+từ mỗi node của hệ thống Akka actor.</p>
+<p>Bộ nhớ heap:</p>
+<img alt="_images/metrics_heapmemory.png" src="_images/metrics_heapmemory.png" />
+<p>CPU: số lượng tiến trình và tải trung bình</p>
+<img alt="_images/metrics_cpu.png" src="_images/metrics_cpu.png" />
+</div>
+<div class="section" id="action-metric">
+<h3>Action metric<a class="headerlink" href="#action-metric" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum thu thập tình trạng thực thi các action của mỗi node như một
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#histograms">Histogram</a>.
+Bạn có thể biết chính các bao nhiêu lần action được thực thim và thời gian
+thực thi của những non-async action.</p>
+<img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
+<p>Thời gian thực hiện lần gần nhất của một action:</p>
+<img alt="_images/metrics_action_time.png" src="_images/metrics_action_time.png" />
+</div>
+<div class="section" id="thu-thap-cac-so-lieu-tuy-chinh">
+<h3>Thu thập các số liệu tùy chỉnh<a class="headerlink" href="#thu-thap-cac-so-lieu-tuy-chinh" title="Permalink to this headline">¶</a></h3>
+<p>Ngoài các số liệu mặc định bên trên, bạn có thể thu thập các dữ liệu cho riêng mình.
+<code class="docutils literal"><span class="pre">xitrum.Metrics</span></code> có thể truy cập vào <code class="docutils literal"><span class="pre">gauge</span></code>, <code class="docutils literal"><span class="pre">counter</span></code>, <code class="docutils literal"><span class="pre">meter</span></code>,
+<code class="docutils literal"><span class="pre">timer</span></code> và <code class="docutils literal"><span class="pre">histogram</span></code>. Vui lòng tham khảo
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a> và
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">its Scala implementation</a>
+để biết cách sử dụng chúng.</p>
+<p>Ví dụ về timer:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, Metrics}
+import xitrum.annotation.GET
+
+object MyAction {
+  lazy val myTimer = Metrics.timer(&quot;myTimer&quot;)
+}
+
+@GET(&quot;my/action&quot;)
+class MyAction extends Action {
+  import MyAction._
+
+  def execute() {
+    myTimer.time {
+      // Something that you want to measure execution time
+      ...
+    }
+    ...
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="xuat-ra-cac-metric">
+<h2>Xuất ra các metric<a class="headerlink" href="#xuat-ra-cac-metric" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum xuất ra giá trị mới nhất của metric dưới định đạng JSON sau một chu kỳ
+xác định.
+Các dữ liệu thu thập được có nhiều biến động, sẽ không được lưu trữ vĩnh viễn</p>
+<p>HeapMemory:</p>
+<div class="highlight-python"><div class="highlight"><pre>{
+  &quot;TYPE&quot;      : &quot;heapMemory&quot;,
+  &quot;SYSTEM&quot;    : akka.actor.Address.system,
+  &quot;HOST&quot;      : akka.actor.Address.host,
+  &quot;PORT&quot;      : akka.actor.Address.port,
+  &quot;HASH&quot;      : akka.actor.Address.hashCode,
+  &quot;TIMESTAMP&quot; : akka.cluster.NodeMetrics.timestamp,
+  &quot;USED&quot;      : Number as byte,
+  &quot;COMMITTED&quot; : Number as byte,
+  &quot;MAX&quot;       : Number as byte
+}
+</pre></div>
+</div>
+<p>CPU:</p>
+<div class="highlight-python"><div class="highlight"><pre>{
+  &quot;TYPE&quot;              : &quot;cpu&quot;,
+  &quot;SYSTEM&quot;            : akka.actor.Address.system,
+  &quot;HOST&quot;              : akka.actor.Address.host,
+  &quot;PORT&quot;              : akka.actor.Address.port,
+  &quot;HASH&quot;              : akka.actor.Address.hashCode,
+  &quot;TIMESTAMP&quot;         : akka.cluster.NodeMetrics.timestamp
+  &quot;SYSTEMLOADAVERAGE&quot; : Number,
+  &quot;CPUCOMBINED&quot;       : Number,
+  &quot;PROCESSORS&quot;        : Number
+}
+</pre></div>
+</div>
+<p>MetricsRegistry sẽ được phân tách bởi
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/json/">metrics-json</a>.</p>
+<div class="section" id="xitrum-viewer-mac-dinh">
+<h3>Xitrum viewer mặc định<a class="headerlink" href="#xitrum-viewer-mac-dinh" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum cung cấp metric viewer mặc định tại URL <code class="docutils literal"><span class="pre">/xitrum/metrics/viewer?api_key=&lt;see</span> <span class="pre">xitrum.conf&gt;</span></code>.
+URL này hiển thị các đồ thị như trên. Các đồ thị được tạo bởi <a class="reference external" href="http://d3js.org/">D3.js</a>.</p>
+<p>URL có thể được tạ ra với:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Config
+import xitrum.metrics.XitrumMetricsViewer
+
+url[XitrumMetricsViewer](&quot;api_key&quot; -&gt; Config.xitrum.metrics.get.apiKey)
+</pre></div>
+</div>
+</div>
+<div class="section" id="jconsole-viewer">
+<h3>Jconsole viewer<a class="headerlink" href="#jconsole-viewer" title="Permalink to this headline">¶</a></h3>
+<p>Bạn có thể xem nó với <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#reporting-via-jmx">JVM Reporter</a>.</p>
+<img alt="_images/metrics_jconsole.png" src="_images/metrics_jconsole.png" />
+<p>Khởi động JMX reporter:</p>
+<div class="highlight-python"><div class="highlight"><pre>import com.codahale.metrics.JmxReporter
+
+object Boot {
+  def main(args: Array[String]) {
+    Server.start()
+    JmxReporter.forRegistry(xitrum.Metrics.registry).build().start()
+  }
+}
+</pre></div>
+</div>
+<p>Sau đó chạy <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html">jconsole</a> command.</p>
+</div>
+<div class="section" id="hien-thi-metiric-voi-custom-viewer">
+<h3>Hiển thị metiric với custom viewer<a class="headerlink" href="#hien-thi-metiric-voi-custom-viewer" title="Permalink to this headline">¶</a></h3>
+<p>Metric sẽ được xuất ra tại SockJS URL <code class="docutils literal"><span class="pre">xitrum/metrics/channel</span></code> như JSON.
+<code class="docutils literal"><span class="pre">jsAddMetricsNameSpace</span></code> là một JavaScript snippet mà Xitrum cung cấp để tạo
+kết nối.</p>
+<p>Sử dụng JSON handler của bạn và gọi <code class="docutils literal"><span class="pre">initMetricsChannel</span></code> với handler đó.</p>
+<p>Ví dụ về action:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.GET
+import xitrum.metrics.MetricsViewer
+
+@GET(&quot;my/metrics/viewer&quot;)
+class MySubscriber extends MetricsViewer {
+  def execute() {
+    jsAddMetricsNameSpace(&quot;window&quot;)
+    jsAddToView(&quot;&quot;&quot;
+      function onValue(json) {
+        console.log(json);
+      }
+      function onClose(){
+        console.log(&quot;channel closed&quot;);
+      }
+      window.initMetricsChannel(onValue, onClose);
+    &quot;&quot;&quot;)
+    respondView()
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="luu-metric">
+<h3>Lưu metric<a class="headerlink" href="#luu-metric" title="Permalink to this headline">¶</a></h3>
+<p>Để tiết kiệm bộ nhớ, Xitrum không ghi nhớ các giá trị metric cũ. Nếu bạn muốn lưu metric vào
+cơ sở dữ liệu hoặc tệp, bạn cần implement vào subscriber của bạn.</p>
+<p>Ví dụ:</p>
+<div class="highlight-python"><div class="highlight"><pre>import akka.actor.Actor
+import xitrum.metrics.PublisherLookUp
+
+class MySubscriber extends Actor with PublisherLookUp {
+  override def preStart() {
+    lookUpPublisher()
+  }
+
+  def receive = {
+    case _ =&gt;
+  }
+
+  override def doWithPublisher(globalPublisher: ActorRef) = {
+    context.become {
+      // When run in multinode environment
+      case multinodeMetrics: Set[NodeMetrics] =&gt;
+        // Save to DB or write to file.
+
+      // When run in single node environment
+      case nodeMetrics: NodeMetrics =&gt;
+        // Save to DB or write to file.
+
+      case Publish(registryAsJson) =&gt;
+        // Save to DB or write to file.
+
+      case _ =&gt;
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Metrics</a><ul>
+<li><a class="reference internal" href="#thu-thap-metrics">Thu thập metrics</a><ul>
+<li><a class="reference internal" href="#bo-nho-heap-va-cpu">Bộ nhớ heap và CPU</a></li>
+<li><a class="reference internal" href="#action-metric">Action metric</a></li>
+<li><a class="reference internal" href="#thu-thap-cac-so-lieu-tuy-chinh">Thu thập các số liệu tùy chỉnh</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xuat-ra-cac-metric">Xuất ra các metric</a><ul>
+<li><a class="reference internal" href="#xitrum-viewer-mac-dinh">Xitrum viewer mặc định</a></li>
+<li><a class="reference internal" href="#jconsole-viewer">Jconsole viewer</a></li>
+<li><a class="reference internal" href="#hien-thi-metiric-voi-custom-viewer">Hiển thị metiric với custom viewer</a></li>
+<li><a class="reference internal" href="#luu-metric">Lưu metric</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="handler.html"
+                        title="chương trước ">Netty handler</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="howto.html"
+                        title="chương tiếp">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/metrics.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handler"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

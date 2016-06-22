@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Postbacks &mdash; Документация Xitrum Scala Web Framework Guide 3.26.2</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Документация Xitrum Scala Web Framework Guide 3.26.2" href="index.html" />
+    <link rel="next" title="XML" href="xml.html" />
+    <link rel="prev" title="Шаблонизация" href="template_engines.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="postbacks">
+<h1>Postbacks<a class="headerlink" href="#postbacks" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Клиентами веб приложения могут быть:</p>
+<ul class="simple">
+<li>другие приложения или устройства: например, RESTful APIs которое широко используется смартфонами, другими веб сайтами</li>
+<li>люди: например, интерактивные веб сайты предполагающие сложные взаимодействия</li>
+</ul>
+<p>Как фреймворк, Xitrum нацелен на создание легких решений для этих задача.
+Для решения первой задачи, используются <a class="reference internal" href="restful.html"><em>RESTful контроллеры</em></a>.
+Для решения второй задачи, в том числе существует возможность использовать postback.
+Подробнее о технологии postback:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></li>
+<li><a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></li>
+</ul>
+<p>Реализация в Xitrum&#8217;s сделана в стиле <a class="reference external" href="http://nitrogenproject.com/">Nitrogen</a>.</p>
+<div class="section" id="id1">
+<h2>Шаблон<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>AppAction.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Форма<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Articles.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, POST, First}
+import xitrum.validator._
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends AppAction {
+  def execute() {
+    val id      = param(&quot;id&quot;)
+    val article = Article.find(id)
+    respondInlineView(
+      &lt;h1&gt;{article.title}&lt;/h1&gt;
+      &lt;div&gt;{article.body}&lt;/div&gt;
+    )
+  }
+}
+
+@First  // Этот маршрут будет обработан перед &quot;show&quot;
+@GET(&quot;articles/new&quot;)
+class ArticlesNew extends AppAction {
+  def execute() {
+    respondInlineView(
+      &lt;form data-postback=&quot;submit&quot; action={url[ArticlesCreate]}&gt;
+        &lt;label&gt;Title&lt;/label&gt;
+        &lt;input type=&quot;text&quot; name=&quot;title&quot; class=&quot;required&quot; /&gt;&lt;br /&gt;
+
+        &lt;label&gt;Body&lt;/label&gt;
+        &lt;textarea name=&quot;body&quot; class=&quot;required&quot;&gt;&lt;/textarea&gt;&lt;br /&gt;
+
+        &lt;input type=&quot;submit&quot; value=&quot;Save&quot; /&gt;
+      &lt;/form&gt;
+    )
+  }
+}
+
+@POST(&quot;articles&quot;)
+class ArticlesCreate extends AppAction {
+  def execute() {
+    val title   = param(&quot;title&quot;)
+    val body    = param(&quot;body&quot;)
+    val article = Article.save(title, body)
+
+    flash(&quot;Article has been saved.&quot;)
+    jsRedirectTo(show, &quot;id&quot; -&gt; article.id)
+  }
+}
+</pre></div>
+</div>
+<p>При возникновении события <code class="docutils literal"><span class="pre">submit</span></code> формы, состояние формы будет отправлено на сервер в контроллер <code class="docutils literal"><span class="pre">ArticlesCreate</span></code>.</p>
+<p>Атрибут <code class="docutils literal"><span class="pre">action</span></code> формы зашифрован. Зашифрованный URL выступает в роли anti-CSRF токена.</p>
+</div>
+<div class="section" id="id3">
+<h2>Другие элементы (не формы)<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Postback может быть отправлен для любого элемента, не только для формы.</p>
+<p>Вот пример для ссылки:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot; data-postback=&quot;click&quot; action={postbackUrl[LogoutAction]}&gt;Logout&lt;/a&gt;
+</pre></div>
+</div>
+<p>Переход по ссылке выполнит отправку состояния в LogoutAction.</p>
+</div>
+<div class="section" id="id4">
+<h2>Диалог подтверждения<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Отображение диалоговых окон подтверждения:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot; data-postback=&quot;click&quot;
+            action={postbackUrl[LogoutAction]}
+            data-confirm=&quot;Do you want to logout?&quot;&gt;Logout&lt;/a&gt;
+</pre></div>
+</div>
+<p>В случае отказа от продолжения (при нажатии кнопки &#8220;Cancel&#8221;) postback не будет отправлен.</p>
+</div>
+<div class="section" id="id5">
+<h2>Дополнительные параметры<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В случае формы вы можете добавлять дополнительные поля <code class="docutils literal"><span class="pre">&lt;input</span> <span class="pre">type=&quot;hidden&quot;...</span></code> для отправки
+дополнительных параметров как часть postback.</p>
+<p>Для других элементов, вы можете поступать так:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot;
+   data-postback=&quot;click&quot;
+   action={postbackUrl[ArticlesDestroy](&quot;id&quot; -&gt; item.id)}
+   data-params=&quot;_method=delete&quot;
+   data-confirm={&quot;Do you want to delete %s?&quot;.format(item.name)}&gt;Delete&lt;/a&gt;
+</pre></div>
+</div>
+<p>Или вы можете поместить дополнительные параметры в смежную форму:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;form id=&quot;myform&quot; data-postback=&quot;submit&quot; action={postbackUrl[SiteSearch]}&gt;
+  Search:
+  &lt;input type=&quot;text&quot; name=&quot;keyword&quot; /&gt;
+
+  &lt;a class=&quot;pagination&quot;
+     href=&quot;#&quot;
+     data-postback=&quot;click&quot;
+     data-form=&quot;#myform&quot;
+     action={postbackUrl[SiteSearch](&quot;page&quot; -&gt; page)}&gt;{page}&lt;/a&gt;
+&lt;/form&gt;
+</pre></div>
+</div>
+<p>Используйте селектор <code class="docutils literal"><span class="pre">#myform</span></code> для получения формы с дополнительными параметрами.</p>
+</div>
+<div class="section" id="ajax">
+<h2>Отображение анимации во время Ajax загрузки<a class="headerlink" href="#ajax" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для отображения анимационной картинки, например:</p>
+<img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
+<p>используйте данный шаблон после включения <code class="docutils literal"><span class="pre">jsDefaults</span></code> (который включает
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">ajaxLoadingImg</span> <span class="o">=</span> <span class="s">&#39;path/to/your/image&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Postbacks</a><ul>
+<li><a class="reference internal" href="#id1">Шаблон</a></li>
+<li><a class="reference internal" href="#id2">Форма</a></li>
+<li><a class="reference internal" href="#id3">Другие элементы (не формы)</a></li>
+<li><a class="reference internal" href="#id4">Диалог подтверждения</a></li>
+<li><a class="reference internal" href="#id5">Дополнительные параметры</a></li>
+<li><a class="reference internal" href="#ajax">Отображение анимации во время Ajax загрузки</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="предыдущая глава">Шаблонизация</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="xml.html"
+                        title="следующая глава">XML</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/postback.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Документация Xitrum Scala Web Framework Guide 3.26.2</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Создано с помощью <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

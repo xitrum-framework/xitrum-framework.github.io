@@ -1,0 +1,506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RESTful APIs &mdash; Xitrum Scala Web Framework Guide 3.26.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.26.2 documentation" href="index.html" />
+    <link rel="next" title="Template engines" href="template_engines.html" />
+    <link rel="prev" title="Action and view" href="action_view.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Template engines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.26.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h1>
+<p>You can write RESTful APIs for iPhone, Android applications etc. very easily.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;articles&quot;)
+class ArticlesIndex extends Action {
+  def execute() {...}
+}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p>The same for POST, PUT, PATCH, DELETE, and OPTIONS.
+Xitrum automatically handles HEAD as GET with empty response body.</p>
+<p>For HTTP clients that do not support PUT and DELETE (like normal browsers), to
+simulate PUT and DELETE, send a POST with <code class="docutils literal"><span class="pre">_method=put</span></code> or <code class="docutils literal"><span class="pre">_method=delete</span></code> in the
+request body.</p>
+<p>On web application startup, Xitrum will scan all those annotations, build the
+routing table and print it out for you so that you know what APIs your
+application has, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
+GET /articles     quickstart.action.ArticlesIndex
+GET /articles/:id quickstart.action.ArticlesShow
+</pre></div>
+</div>
+<p>Routes are automatically collected in the spirit of JAX-RS
+and Rails Engines. You don&#8217;t have to declare all routes in a single place.
+Think of this feature as distributed routes. You can plug an app into another app.
+If you have a blog engine, you can package it as a JAR file, then you can put
+that JAR file into another app and that app automatically has blog feature!
+Routing is also two-way: you can recreate URLs (reverse routing) in a typesafe way.
+You can document routes using <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
+<div class="section" id="route-cache">
+<h2>Route cache<a class="headerlink" href="#route-cache" title="Permalink to this headline">¶</a></h2>
+<p>For better startup speed, routes are cached to file <code class="docutils literal"><span class="pre">routes.cache</span></code>.
+While developing, routes in .class files in the <code class="docutils literal"><span class="pre">target</span></code> directory are not
+cached. If you change library dependencies that contain routes, you may need to
+delete <code class="docutils literal"><span class="pre">routes.cache</span></code>. This file should not be committed to your project
+source code repository.</p>
+</div>
+<div class="section" id="route-order-with-first-and-last">
+<h2>Route order with first and last<a class="headerlink" href="#route-order-with-first-and-last" title="Permalink to this headline">¶</a></h2>
+<p>When you want to route like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>/articles/:id --&gt; ArticlesShow
+/articles/new --&gt; ArticlesNew
+</pre></div>
+</div>
+<p>You must make sure the second route be checked first. <code class="docutils literal"><span class="pre">First</span></code> is for this purpose:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+
+@First  // This route has higher priority than &quot;ArticlesShow&quot; above
+@GET(&quot;articles/new&quot;)
+class ArticlesNew extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">Last</span></code> is similar.</p>
+</div>
+<div class="section" id="multiple-paths-for-one-action">
+<h2>Multiple paths for one action<a class="headerlink" href="#multiple-paths-for-one-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;image&quot;, &quot;image/:format&quot;)
+class Image extends Action {
+  def execute() {
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;png&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="dot-in-route">
+<h2>Dot in route<a class="headerlink" href="#dot-in-route" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;, &quot;articles/:id.:format&quot;)
+class ArticlesShow extends Action {
+  def execute() {
+    val id     = param[Int](&quot;id&quot;)
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;html&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="regex-in-route">
+<h2>Regex in route<a class="headerlink" href="#regex-in-route" title="Permalink to this headline">¶</a></h2>
+<p>Regex can be used in routes to specify requirements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="catch-the-rest-of-path">
+<h2>Catch the rest of path<a class="headerlink" href="#catch-the-rest-of-path" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">/</span></code> character is special thus not allowed in param names. If you want to allow
+it, the param must be the last and you must write like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The path below will match:</p>
+<div class="highlight-python"><div class="highlight"><pre>/service/123/proxy/http://foo.com/bar
+</pre></div>
+</div>
+<p>To extract the <code class="docutils literal"><span class="pre">:*</span></code> part:</p>
+<div class="highlight-python"><div class="highlight"><pre>val url = param(&quot;*&quot;)  // Will be &quot;http://foo.com/bar&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="link-to-an-action">
+<h2>Link to an action<a class="headerlink" href="#link-to-an-action" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum tries to be typesafe. Don&#8217;t write URL manually. Do like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="redirect-to-another-action">
+<h2>Redirect to another action<a class="headerlink" href="#redirect-to-another-action" title="Permalink to this headline">¶</a></h2>
+<p>Read to know <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">what redirection is</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{GET, POST}
+
+@GET(&quot;login&quot;)
+class LoginInput extends Action {
+  def execute() {...}
+}
+
+@POST(&quot;login&quot;)
+class DoLogin extends Action {
+  def execute() {
+    ...
+    // After login success
+    redirectTo[AdminIndex]()
+  }
+}
+
+GET(&quot;admin&quot;)
+class AdminIndex extends Action {
+  def execute() {
+    ...
+    // Check if the user has not logged in, redirect him to the login page
+    redirectTo[LoginInput]()
+  }
+}
+</pre></div>
+</div>
+<p>You can also redirect to the current action with <code class="docutils literal"><span class="pre">redirecToThis()</span></code>.</p>
+</div>
+<div class="section" id="forward-to-another-action">
+<h2>Forward to another action<a class="headerlink" href="#forward-to-another-action" title="Permalink to this headline">¶</a></h2>
+<p>Use <code class="docutils literal"><span class="pre">forwardTo[AnotherAction]()</span></code>. While <code class="docutils literal"><span class="pre">redirectTo</span></code> above causes the browser to
+make another request, <code class="docutils literal"><span class="pre">forwardTo</span></code> does not.</p>
+</div>
+<div class="section" id="determine-is-the-request-is-ajax-request">
+<h2>Determine is the request is Ajax request<a class="headerlink" href="#determine-is-the-request-is-ajax-request" title="Permalink to this headline">¶</a></h2>
+<p>Use <code class="docutils literal"><span class="pre">isAjax</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre>// In an action
+val msg = &quot;A message&quot;
+if (isAjax)
+  jsRender(&quot;alert(&quot; + jsEscape(msg) + &quot;)&quot;)
+else
+  respondText(msg)
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Permalink to this headline">¶</a></h2>
+<p>For non-GET requests, Xitrum protects your web application from
+<a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Cross-site request forgery</a> by default.</p>
+<p>When you include <code class="docutils literal"><span class="pre">antiCsrfMeta</span></code> in your layout:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> part will include something like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>The token will be automatically included in all non-GET Ajax requests as
+<code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> header sent by jQuery if you include
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>
+in your view template. xitrum.js is included in <code class="docutils literal"><span class="pre">jsDefaults</span></code>. If you don&#8217;t
+use <code class="docutils literal"><span class="pre">jsDefaults</span></code>, you can include xitrum.js in your template like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot; src={url[xitrum.js]}&gt;&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-and-anticsrftoken">
+<h2>antiCsrfInput and antiCsrfToken<a class="headerlink" href="#anticsrfinput-and-anticsrftoken" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum takes CSRF token from <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> request header. If the header does
+not exists, Xitrum takes the token from <code class="docutils literal"><span class="pre">csrf-token</span></code> request body param
+(note: not param in the URL).</p>
+<p>If you manually write forms, and you don&#8217;t use the meta tag and xitrum.js as
+described in the previous section, you need to use <code class="docutils literal"><span class="pre">antiCsrfInput</span></code> or
+<code class="docutils literal"><span class="pre">antiCsrfToken</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  != antiCsrfInput
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  input(type=&quot;hidden&quot; name=&quot;csrf-token&quot; value={antiCsrfToken})
+</pre></div>
+</div>
+</div>
+<div class="section" id="skipcsrfcheck">
+<h2>SkipCsrfCheck<a class="headerlink" href="#skipcsrfcheck" title="Permalink to this headline">¶</a></h2>
+<p>When you create APIs for machines, e.g. smartphones, you may want to skip this
+automatic CSRF check. Add the trait xitrum.SkipCsrfCheck to you action:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.POST
+
+trait Api extends Action with SkipCsrfCheck
+
+@POST(&quot;api/positions&quot;)
+class LogPositionAPI extends Api {
+  def execute() {...}
+}
+
+@POST(&quot;api/todos&quot;)
+class CreateTodoAPI extends Api {
+  def execute() {...}
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="manipulate-collected-routes">
+<h2>Manipulate collected routes<a class="headerlink" href="#manipulate-collected-routes" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum automatically collect routes on startup.
+If you want to manipulate the routes, you can use
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
+
+object Boot {
+  def main(args: Array[String]) {
+    // You can modify routes before starting the server
+    val routes = Config.routes
+
+    // Remove routes to an action by its class
+    routes.removeByClass[MyClass]()
+
+    if (demoVersion) {
+      // Remove routes to actions by a prefix
+      routes.removeByPrefix(&quot;premium/features&quot;)
+
+      // This also works
+      routes.removeByPrefix(&quot;/premium/features&quot;)
+    }
+
+    ...
+
+    Server.start()
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-entire-request-content">
+<h2>Getting entire request content<a class="headerlink" href="#getting-entire-request-content" title="Permalink to this headline">¶</a></h2>
+<p>Usually, when the request content type is not <code class="docutils literal"><span class="pre">application/x-www-form-urlencoded</span></code>,
+you may need to get the entire request content (and parse it manually etc.).</p>
+<p>To get it as a string:</p>
+<div class="highlight-python"><div class="highlight"><pre>val body = requestContentString
+</pre></div>
+</div>
+<p>To get it as JSON:</p>
+<div class="highlight-python"><div class="highlight"><pre>val myJValue = requestContentJValue  // =&gt; JSON4S (http://json4s.org) JValue
+val myMap = xitrum.util.SeriDeseri.fromJValue[Map[String, Int]](myJValue)
+</pre></div>
+</div>
+<p>If you want to full control, use <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>.
+It returns a <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+</div>
+<div class="section" id="documenting-api-with-swagger">
+<h2>Documenting API with Swagger<a class="headerlink" href="#documenting-api-with-swagger" title="Permalink to this headline">¶</a></h2>
+<p>You can document your API with <a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a>
+out of the box. Add <code class="docutils literal"><span class="pre">&#64;Swagger</span></code> annotation on actions that need to be documented.
+Xitrum will generate <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a>.
+This file can be used with <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a>
+to generate interactive API documentation.</p>
+<p>Xitrum includes Swagger UI. Access it at the path <code class="docutils literal"><span class="pre">/xitrum/swagger-ui</span></code> of your program,
+e.g. <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p>Let&#8217;s see <a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">an example</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.{GET, Swagger}
+
+@Swagger(
+  Swagger.Tags(&quot;APIs to create images&quot;),
+  Swagger.Description(&quot;Dimensions should not be bigger than 2000 x 2000&quot;),
+  Swagger.OptStringQuery(&quot;text&quot;, &quot;Text to render on the image, default: Placeholder&quot;),
+  Swagger.Produces(&quot;image/png&quot;),
+  Swagger.Response(200, &quot;PNG image&quot;),
+  Swagger.Response(400, &quot;Width or height is invalid or too big&quot;)
+)
+trait ImageApi extends Action with SkipCsrfCheck {
+  lazy val text = paramo(&quot;text&quot;).getOrElse(&quot;Placeholder&quot;)
+}
+
+@GET(&quot;image/:width/:height&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Summary(&quot;Generate rectangle image&quot;),
+  Swagger.IntPath(&quot;width&quot;),
+  Swagger.IntPath(&quot;height&quot;)
+)
+class RectImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    val height = param[Int](&quot;height&quot;)
+    // ...
+  }
+}
+
+@GET(&quot;image/:width&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Summary(&quot;Generate square image&quot;),
+  Swagger.IntPath(&quot;width&quot;)
+)
+class SquareImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON for Swagger</a>
+will be generated when you access <code class="docutils literal"><span class="pre">/xitrum/swagger</span></code>.</p>
+<p>Swagger UI uses the JSON above to generate interactive API doc.</p>
+<p>Params other than Swagger.IntPath and Swagger.OptStringQuery above: BytePath, IntQuery, OptStringForm etc.
+They are in the form:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (required parameter)</li>
+<li><code class="docutils literal"><span class="pre">Opt&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (optional parameter)</li>
+</ul>
+<p>Value type: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Param type: Path, Query, Body, Header, Form</p>
+<p>Read more about <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">value type</a>
+and <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">param type</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#route-cache">Route cache</a></li>
+<li><a class="reference internal" href="#route-order-with-first-and-last">Route order with first and last</a></li>
+<li><a class="reference internal" href="#multiple-paths-for-one-action">Multiple paths for one action</a></li>
+<li><a class="reference internal" href="#dot-in-route">Dot in route</a></li>
+<li><a class="reference internal" href="#regex-in-route">Regex in route</a></li>
+<li><a class="reference internal" href="#catch-the-rest-of-path">Catch the rest of path</a></li>
+<li><a class="reference internal" href="#link-to-an-action">Link to an action</a></li>
+<li><a class="reference internal" href="#redirect-to-another-action">Redirect to another action</a></li>
+<li><a class="reference internal" href="#forward-to-another-action">Forward to another action</a></li>
+<li><a class="reference internal" href="#determine-is-the-request-is-ajax-request">Determine is the request is Ajax request</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-and-anticsrftoken">antiCsrfInput and antiCsrfToken</a></li>
+<li><a class="reference internal" href="#skipcsrfcheck">SkipCsrfCheck</a></li>
+<li><a class="reference internal" href="#manipulate-collected-routes">Manipulate collected routes</a></li>
+<li><a class="reference internal" href="#getting-entire-request-content">Getting entire request content</a></li>
+<li><a class="reference internal" href="#documenting-api-with-swagger">Documenting API with Swagger</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="previous chapter">Action and view</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="next chapter">Template engines</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/restful.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Template engines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.26.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

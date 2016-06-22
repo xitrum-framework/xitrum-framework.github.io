@@ -1,0 +1,480 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>스코프 &mdash; Xitrum Scala Web Framework Guide 3.26.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.26.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.26.2 documentation" href="index.html" />
+    <link rel="next" title="기본 검증" href="validation.html" />
+    <link rel="prev" title="Flash Socket 정책 파일" href="flash.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="validation.html" title="기본 검증"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="flash.html" title="Flash Socket 정책 파일"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.26.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>스코프<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>요청
+&#8212;</p>
+<div class="section" id="id2">
+<h2>매개변수<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>두가지의 요청 매개변수:</p>
+<ol class="arabic simple">
+<li>텍스트</li>
+<li>파일업로드(바이너리)</li>
+</ol>
+<p>다음과 같은 타입의 <code class="docutils literal"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Seq[String]]</span></code> 3가지 매개변수:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">queryParams</span></code>: URL내의 ?다음에 오는 매개변수  예: <code class="docutils literal"><span class="pre">http://example.com/blah?x=1&amp;y=2</span></code></li>
+<li><code class="docutils literal"><span class="pre">bodyTextParams</span></code>: POST요청의 body에 포함된 매개변수</li>
+<li><code class="docutils literal"><span class="pre">pathParams</span></code>: URL내에 포함된 매개변수  예: <code class="docutils literal"><span class="pre">GET(&quot;articles/:id/:title&quot;)</span></code></li>
+</ol>
+<p>이 매개변수들은 위의 순서대로、 <code class="docutils literal"><span class="pre">textParams</span></code> 에 병합됩니다.
+（1번에서 3번의 순서대로 매개변수를 덮어씁니다.）</p>
+<p><code class="docutils literal"><span class="pre">bodyFileParams</span></code> 은 <code class="docutils literal"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Seq[</span></code> <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a> <code class="docutils literal"><span class="pre">]]</span></code> 의 형태입니다.</p>
+</div>
+<div class="section" id="id3">
+<h2>매개변수 접근<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>액션내에서, 매개변수에 직접접근하거나, 접근자 함수를 사용할수 있습니다.</p>
+<p><code class="docutils literal"><span class="pre">textParams</span></code> 에 접근하는 경우:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">param(&quot;x&quot;)</span></code>: <code class="docutils literal"><span class="pre">String</span></code> 을 반환하며, x가 존재하지 않으면 예외를 던집니다.</li>
+<li><code class="docutils literal"><span class="pre">paramo(&quot;x&quot;)</span></code>: <code class="docutils literal"><span class="pre">Option[String]</span></code> 을 반환합니다.</li>
+<li><code class="docutils literal"><span class="pre">params(&quot;x&quot;)</span></code>: <code class="docutils literal"><span class="pre">Seq[String]</span></code> 을 반환하며, x가 존재하지 않으면 Seq.empty를 반환합니다.</li>
+</ul>
+<p>파라미터를 다른 형태(Int, Long, Fload, Double)로 다음과 같이 <code class="docutils literal"><span class="pre">param[Int](&quot;x&quot;)</span></code> 이나 <code class="docutils literal"><span class="pre">params[Int](&quot;x&quot;)</span></code> 자동으로 변환이 가능합니다.
+이 밖에 다른 형태로 변환하고자 하면, <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala-2.11/xitrum/scope/request/ParamAccess.scala">convertTextParam</a> 를 재정의 하여 사용하면 됩니다.</p>
+<p>파일 업로드의 경우, <code class="docutils literal"><span class="pre">param[FileUpload](&quot;x&quot;)</span></code> 나 <code class="docutils literal"><span class="pre">params[FileUpload](&quot;x&quot;)</span></code> 를 사용하면 됩니다.
+자세한 내용은 <a class="reference internal" href="upload.html"><em>Upload chapter</em></a> 를 참고하세요.</p>
+</div>
+<div class="section" id="at">
+<h2>&#8220;at&#8221;<a class="headerlink" href="#at" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">at</span></code> 을 사용하여 요청을 전달하는 동안 매개변수를 전달할 수 있습니다(액션이나, 뷰, 또는 레이아웃에서）.
+<code class="docutils literal"><span class="pre">at</span></code> 은 <code class="docutils literal"><span class="pre">scala.collection.mutable.HashMap[String,</span> <span class="pre">Any]</span></code> 타입입니다.
+<code class="docutils literal"><span class="pre">at</span></code> 은 Rails에서 <code class="docutils literal"><span class="pre">&#64;</span></code> 과 같은 역할을 수행합니다.</p>
+<p>Articles.scala:</p>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends AppAction {
+  def execute() {
+    val (title, body) = ...  // Get from DB
+    at(&quot;title&quot;) = title
+    respondInlineView(body)
+  }
+}
+</pre></div>
+</div>
+<p>AppAction.scala:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;{if (at.isDefinedAt(&quot;title&quot;)) &quot;My Site - &quot; + at(&quot;title&quot;) else &quot;My Site&quot;}&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="atjson">
+<h2>&#8220;atJson&#8221;<a class="headerlink" href="#atjson" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">atJson</span></code> 은 <code class="docutils literal"><span class="pre">at(&quot;key&quot;)</span></code> 을 자동으로 JSON으로 변환시 사용되는 헬퍼입니다.
+Scala 에서 Javascript 로 모델을 전달시에 유용하게 사용됩니다.</p>
+<p><code class="docutils literal"><span class="pre">atJson(&quot;key&quot;)</span></code> 은 <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.toJson(at(&quot;key&quot;))</span></code> 과 같습니다.</p>
+<p>Action.scala:</p>
+<div class="highlight-python"><div class="highlight"><pre>case class User(login: String, name: String)
+
+...
+
+def execute() {
+  at(&quot;user&quot;) = User(&quot;admin&quot;, &quot;Admin&quot;)
+  respondView()
+}
+</pre></div>
+</div>
+<p>Action.ssp:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot;&gt;
+  var user = ${atJson(&quot;user&quot;)};
+  alert(user.login);
+  alert(user.name);
+&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="requestvar">
+<h2>RequestVar<a class="headerlink" href="#requestvar" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">at</span></code> 은 어떠한 값도 map으로 저장이 가능해서 typesafe하지 않습니다.</div></blockquote>
+<p>안전하게 사용하려면 <code class="docutils literal"><span class="pre">at</span></code> 의 래퍼인 <code class="docutils literal"><span class="pre">RequestVar</span></code> 을 사용하면 됩니다.</p>
+<p>RVar.scala:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.RequestVar
+
+object RVar {
+  object title extends RequestVar[String]
+}
+</pre></div>
+</div>
+<p>Articles.scala:</p>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends AppAction {
+  def execute() {
+    val (title, body) = ...  // Get from DB
+    RVar.title.set(title)
+    respondInlineView(body)
+  }
+}
+</pre></div>
+</div>
+<p>AppAction.scala</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;{if (RVar.title.isDefined) &quot;My Site - &quot; + RVar.title.get else &quot;My Site&quot;}&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+<p>쿠키
+&#8212;</p>
+<p>위키피디아에 정의되어 있습니다. <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie">cookies</a></p>
+<p>액션내에 <code class="docutils literal"><span class="pre">requestCookies</span></code> 를 사용하여 <code class="docutils literal"><span class="pre">Map[String,</span> <span class="pre">String]</span></code> 형식으로 브라우저에서 보낸 쿠키를 읽을 수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>requestCookies.get(&quot;myCookie&quot;) match {
+  case None         =&gt; ...
+  case Some(string) =&gt; ...
+}
+</pre></div>
+</div>
+<p>브라우저에서 쿠키를 전송하려면, <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/DefaultCookie.html">DefaultCookie</a> 인스턴스를 생성하고 <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/Cookie.html">Cookie</a> 를 가지고 있는 <code class="docutils literal"><span class="pre">ArrayBuffer</span></code> 형식으로、 <code class="docutils literal"><span class="pre">responseCookies</span></code> 에 추가합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>val cookie = new DefaultCookie(&quot;name&quot;, &quot;value&quot;)
+cookie.setHttpOnly(true)  // true: JavaScript cannot access this cookie
+responseCookies.append(cookie)
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">cookie.setPath(cookiePath)</span></code> 를 설정하지 않고 사용하면
+루트 (<code class="docutils literal"><span class="pre">xitrum.Config.withBaseUrl(&quot;/&quot;)</span></code>)가 설정되고 원치않는 중복을 막아줍니다.</p>
+<p>브라우저에서 보낸 쿠키를 삭제하려면 같은 이름의 쿠키를 &#8220;max-age&#8221; 를 0으로 설정하면, 브라우저에서는 즉시 쿠키를 만료시킵니다.
+브라우저가 종료될때 쿠키를 삭제하려면 &#8220;max-age&#8221; 를 <code class="docutils literal"><span class="pre">Long.MinValue</span></code> 으로 설정합니다:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cookie</span><span class="o">.</span><span class="n">setMaxAge</span><span class="p">(</span><span class="n">Long</span><span class="o">.</span><span class="n">MinValue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://mrcoles.com/blog/cookies-max-age-vs-expires/">Internet Explorer 는 &#8220;max-age&#8221; 를 지원하지 않습니다.</a> .
+그러나, Netty는  &#8220;max-age&#8221; 와 &#8220;expires&#8221; 를 동시에 찾아내기 때문에 걱정하지 않아도 됩니다.</p>
+<p>브라우저는 쿠키의 속성 서버로 전송하지 않습니다.
+브라우저는 <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes">name-value pairs</a> 만을 보냅니다.</p>
+<p>서명된 쿠키를 사용하여 쿠키의 변조를 방지하려면,
+<code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.toSecureUrlSafeBase64</span></code> 와 <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.fromSecureUrlSafeBase64</span></code> 을 사용하세요.
+자세한 내용은 <a class="reference internal" href="howto.html"><em>How to encrypt data</em></a> 를 참고하세요</p>
+</div>
+<div class="section" id="id4">
+<h2>쿠키가 가능한 문자들<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>쿠키는 <a class="reference external" href="http://stackoverflow.com/questions/1969232/allowed-characters-in-cookies">arbitrary characters in cookie</a> 를 사용할 수 없습니다.
+UTF-8 문자는 UTF-8로 인코딩해야 합니다.
+인코딩시 <code class="docutils literal"><span class="pre">xitrum.utill.UrlSafeBase64</span></code> 또는 <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri</span></code> 가 사용가능합니다.</p>
+<p>쓰기예제:</p>
+<div class="highlight-python"><div class="highlight"><pre>import io.netty.util.CharsetUtil
+import xitrum.util.UrlSafeBase64
+
+val value   = &quot;&quot;&quot;{&quot;identity&quot;:&quot;example@gmail.com&quot;,&quot;first_name&quot;:&quot;Alexander&quot;}&quot;&quot;&quot;
+val encoded = UrlSafeBase64.noPaddingEncode(value.getBytes(CharsetUtil.UTF_8))
+val cookie  = new DefaultCookie(&quot;profile&quot;, encoded)
+responseCookies.append(cookie)
+</pre></div>
+</div>
+<p>읽기예제:</p>
+<div class="highlight-python"><div class="highlight"><pre>requestCookies.get(&quot;profile&quot;).foreach { encoded =&gt;
+  UrlSafeBase64.autoPaddingDecode(encoded).foreach { bytes =&gt;
+    val value = new String(bytes, CharsetUtil.UTF_8)
+    println(&quot;profile: &quot; + value)
+  }
+}
+</pre></div>
+</div>
+<p>세션
+&#8212;</p>
+<p>세션의 저장, 복원, 암호화 등은 Xitrum에 의해 자동화 되므로 신경쓰지 않아도 됩니다.</p>
+<p>액션내에서、 <code class="docutils literal"><span class="pre">session</span></code> 은 <code class="docutils literal"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Any]</span></code> 의 인스턴스 이고 <code class="docutils literal"><span class="pre">session</span></code> 은 반드시 직렬화 가능해야 합니다.</p>
+<p>로그인시, 사용자 이름을 세션에 저장하는 예:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">session</span><span class="p">(</span><span class="s">&quot;userId&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">userId</span>
+</pre></div>
+</div>
+<p>사용자의 로그인 여부를 판단하려면, 세션에 사용자이름 항목이 있는지 확인하면 됩니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>if (session.isDefinedAt(&quot;userId&quot;)) println(&quot;This user has logged in&quot;)
+</pre></div>
+</div>
+<p>사용자의 ID를 저장하여 매번 접근할때마다 데이터베이스에서 사용자를 검색하는것은 매우 바람직합니다.
+사용자의 정보변경을 알 수 있기 때문입니다.(권한 및 인증을 포함하여)</p>
+</div>
+<div class="section" id="session-clear">
+<h2>session.clear()<a class="headerlink" href="#session-clear" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://guides.rubyonrails.org/security.html#session-fixation">One line of code will protect you from session fixation</a>.</p>
+<p>session fixation 은 위의 항목을 참고하세요. session fixation 공격을 방지하기 위해
+사용자의 로그인시 <code class="docutils literal"><span class="pre">session.clear()</span></code> 을 호출합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;login&quot;)
+class LoginAction extends Action {
+  def execute() {
+    ...
+    session.clear()  // Reset first before doing anything else with the session
+    session(&quot;userId&quot;) = userId
+  }
+}
+</pre></div>
+</div>
+<p>로그아웃시에도 <code class="docutils literal"><span class="pre">session.clear()</span></code> 을 호출합니다.</p>
+</div>
+<div class="section" id="sessionvar">
+<h2>SessionVar<a class="headerlink" href="#sessionvar" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">RequestVar</span></code> 와 마찬가지로 SessionVar는 조금더 안전한 방법을 제공합니다.
+예를들어, 사용자 로그인후 사용자이름을 세션에 저장할 수 있습니다.</p>
+<p>SessionVar의 선언:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.SessionVar
+
+object SVar {
+  object username extends SessionVar[String]
+}
+</pre></div>
+</div>
+<p>로그인 성공후:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SVar</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>유저이름 표시:</p>
+<div class="highlight-python"><div class="highlight"><pre>if (SVar.username.isDefined)
+  &lt;em&gt;{SVar.username.get}&lt;/em&gt;
+else
+  &lt;a href={url[LoginAction]}&gt;Login&lt;/a&gt;
+</pre></div>
+</div>
+<ul class="simple">
+<li>SessionVar 삭제: <code class="docutils literal"><span class="pre">SVar.username.remove()</span></code></li>
+<li>모든 세션 초기화: <code class="docutils literal"><span class="pre">session.clear()</span></code></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>세션 스토어<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum 은 3가지의 세션 스토어를 제공합니다.
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a>
+원하는 방향대로 세션을 수정할 수 있습니다.</p>
+<p>CookieSessionStore:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Store sessions on client side</span>
+<span class="n">store</span> <span class="o">=</span> <span class="n">xitrum</span><span class="o">.</span><span class="n">scope</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">CookieSessionStore</span>
+</pre></div>
+</div>
+<p>LruSessionStore:</p>
+<div class="highlight-python"><div class="highlight"><pre># Simple in-memory server side session store
+store {
+  &quot;xitrum.local.LruSessionStore&quot; {
+    maxElems = 10000
+  }
+}
+</pre></div>
+</div>
+<p>클러스터 내에서 여러 서버를 사용하게 된다면、<a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a> 를 클러스터간 세션 공유 저장소로 사용할 수 있습니다.</p>
+<p>CookieSessionStore 이나 Hazelcast 를 세션저장용으로 사용한다면, 세션에 사용되는 데이터는 직렬화가 가능해야 합니다.
+만약、 직렬화가 불가능한 데이터일 경우에는 LruSessionStore 를 사용하세요.
+LruSessionStore를 사용하여 여러 서버를 사용하게 된다면, &#8220;sticky sessions&#8221; 이 가능한 로드밸런서를 사용해야 합니다.</p>
+<p>일반적으로, 위에 언급된 기본 세션 저장소면 충분히 구현이 가능하지만, 특별한 세션 저장소를 직접 구축하려면
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/SessionStore.scala">SessionStore</a>
+또는
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/ServerSessionStore.scala">ServerSessionStore</a>
+을 상속받아 구현하여야 합니다.</p>
+<p>설정방법은 다음의 두가지 형식이 있습니다:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">store</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">StoreClassName</span>
+</pre></div>
+</div>
+<p>또는:</p>
+<div class="highlight-python"><div class="highlight"><pre>store {
+  &quot;my.session.StoreClassName&quot; {
+    option1 = value1
+    option2 = value2
+  }
+}
+</pre></div>
+</div>
+<p>세션은 클라이언트에 저장하는것이 확장에 도움이 됩니다.
+（직렬화가 가능한 <a class="reference external" href="http://stackoverflow.com/questions/640938/what-is-the-maximum-size-of-a-web-browsers-cookies-key">4KB보다 작은</a>）.
+서버측(메모리 혹은 데이터베이스)에는 필요할때에만 저장하세요.</p>
+<p>참고:
+<a class="reference external" href="http://www.technicalinfo.net/papers/WebBasedSessionManagement.html">Web Based Session Management - Best practices in managing HTTP-based client sessions</a>.</p>
+</div>
+<div class="section" id="id6">
+<h2>클라이언트 세션저장과 서버 세션저장<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>두가지 종류의 세션 저장이 가능:</p>
+<ul class="simple">
+<li>클라이언트에만 저장</li>
+<li>클라이언트 + 서버 사용:</li>
+</ul>
+<p>클라이언트만 사용:</p>
+<ul class="simple">
+<li>세션데이터는 암호화된 쿠키로 클라이언트에 저장됩니다.</li>
+<li>서버는 어떠한 데이터도 저장할 필요가 없습니다.</li>
+<li>요청이 발생하면 서버는 복호화 해서 사용합니다.</li>
+</ul>
+<p>클라이언트 + 서버 사용:</p>
+<ul class="simple">
+<li>세션은 두가지의 정보가 있습니다: 세션ID 와 세션데이터.</li>
+<li>서버는 lookup table에서 데이터를 찾는것처럼 세션을 저장합니다.</li>
+<li>ID는 암호화 되어 클라이언트에 저장됩니다.</li>
+<li>요청이 발생하면, 서버는 아이디를 복호화 하여 데이터를 찾게됩니다.</li>
+<li>신용카드처럼, ID만 저장되고 금액은 저장되지 않는것과 같습니다.</li>
+</ul>
+<p>위 두가지 경우에 클라이언트는 반드시 쿠키를 저장하고
+(암호화된 데이터 vs 암호화된 ID). &#8220;Store sessions at server side&#8221; 가 의미하는것은 서버측에서 데이터가 저장되는것만을 의미합니다.</p>
+<div class="section" id="object-vs-val">
+<h3>object vs. val<a class="headerlink" href="#object-vs-val" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">val</span></code> 대신에 <code class="docutils literal"><span class="pre">object</span></code> 를 사용하세요.</p>
+<p><strong>아래와 같이 사용하지 마세요</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre>object RVar {
+  val title    = new RequestVar[String]
+  val category = new RequestVar[String]
+}
+
+object SVar {
+  val username = new SessionVar[String]
+  val isAdmin  = new SessionVar[Boolean]
+}
+</pre></div>
+</div>
+<p>위의 코드는 컴파일은 되지만, 실행되지 않습니다. 왜냐하면 &#8220;Vars&#8221;는 내부적으로 조회시에 클래스 이름이 사용됩니다.
+<code class="docutils literal"><span class="pre">title</span></code>, <code class="docutils literal"><span class="pre">category</span></code>, <code class="docutils literal"><span class="pre">val</span></code> 을 사용하는 경우 &#8220;xitrum.RequestVar&#8221; 라는 클래스 이름으로 사용됩니다.
+<code class="docutils literal"><span class="pre">username</span></code> 과 <code class="docutils literal"><span class="pre">isAdmin</span></code> 도 마찬가지 입니다.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">스코프</a><ul>
+<li><a class="reference internal" href="#id2">매개변수</a></li>
+<li><a class="reference internal" href="#id3">매개변수 접근</a></li>
+<li><a class="reference internal" href="#at">&#8220;at&#8221;</a></li>
+<li><a class="reference internal" href="#atjson">&#8220;atJson&#8221;</a></li>
+<li><a class="reference internal" href="#requestvar">RequestVar</a></li>
+<li><a class="reference internal" href="#id4">쿠키가 가능한 문자들</a></li>
+<li><a class="reference internal" href="#session-clear">session.clear()</a></li>
+<li><a class="reference internal" href="#sessionvar">SessionVar</a></li>
+<li><a class="reference internal" href="#id5">세션 스토어</a></li>
+<li><a class="reference internal" href="#id6">클라이언트 세션저장과 서버 세션저장</a><ul>
+<li><a class="reference internal" href="#object-vs-val">object vs. val</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="flash.html"
+                        title="previous chapter">Flash Socket 정책 파일</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="validation.html"
+                        title="next chapter">기본 검증</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/scopes.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="validation.html" title="기본 검증"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="flash.html" title="Flash Socket 정책 파일"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.26.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
