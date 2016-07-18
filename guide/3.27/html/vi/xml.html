@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XML &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.27.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.27.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.27.0" href="index.html" />
+    <link rel="next" title="JavaScript and JSON" href="js.html" />
+    <link rel="prev" title="Postbacks" href="postback.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript and JSON"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="Postbacks"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.27.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="xml">
+<h1>XML<a class="headerlink" href="#xml" title="Permalink to this headline">¶</a></h1>
+<p>Scala cho phép viết literal XML. Xitrum sử dụng tính năng này như &#8220;template engine&#8221;:</p>
+<ul class="simple">
+<li>Scala check cú pháp XML khi compile: Các View là typesafe.</li>
+<li>Scala tự động bỏ qua XML: Các view ngăn chặn <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>.</li>
+</ul>
+<p>Dưới đây là một vài thủ thuật.</p>
+<div class="section" id="unescape-xml">
+<h2>Unescape XML<a class="headerlink" href="#unescape-xml" title="Permalink to this headline">¶</a></h2>
+<p>Sử dụng <code class="docutils literal"><span class="pre">scala.xml.Unparsed</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import scala.xml.Unparsed
+
+&lt;script&gt;
+  {Unparsed(&quot;if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);&quot;)}
+&lt;/script&gt;
+</pre></div>
+</div>
+<p>hoặc sử dụng <code class="docutils literal"><span class="pre">&lt;xml:unparsed&gt;</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+  &lt;xml:unparsed&gt;
+    if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);
+  &lt;/xml:unparsed&gt;
+&lt;/script&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&lt;xml:unparsed&gt;</span></code> sẽ được ẩn đi trong output.</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
+  if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);
+&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="cac-nhom-xml-element">
+<h2>Các nhóm XML element<a class="headerlink" href="#cac-nhom-xml-element" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>&lt;div id=&quot;header&quot;&gt;
+  {if (loggedIn)
+    &lt;xml:group&gt;
+      &lt;b&gt;{username}&lt;/b&gt;
+      &lt;a href={url[LogoutAction]}&gt;Logout&lt;/a&gt;
+    &lt;/xml:group&gt;
+  else
+    &lt;xml:group&gt;
+      &lt;a href={url[LoginAction]}&gt;Login&lt;/a&gt;
+      &lt;a href={url[RegisterAction]}&gt;Register&lt;/a&gt;
+    &lt;/xml:group&gt;}
+&lt;/div&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&lt;xml:group&gt;</span></code> sẽ được ẩn đi trong output, ví dụ khi người dùng thực hiện đăng nhập:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;div id=&quot;header&quot;&gt;
+  &lt;b&gt;My username&lt;/b&gt;
+  &lt;a href=&quot;/login&quot;&gt;Logout&lt;/a&gt;
+&lt;/div&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="render-xhtml">
+<h2>Render XHTML<a class="headerlink" href="#render-xhtml" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum tự động render view và layout như XHTML.
+Nếu bạn muốn tự render chúng (hiếm khi), chú ý đến các dòng code dưới đây.</p>
+<div class="highlight-python"><div class="highlight"><pre>import scala.xml.Xhtml
+
+val br = &lt;br /&gt;
+br.toString            // =&gt; &lt;br&gt;&lt;/br&gt;, một vài trình duyệt sẽ render dòng này như 2 thẻ &lt;br /&gt;
+Xhtml.toXhtml(&lt;br /&gt;)  // =&gt; &quot;&lt;br /&gt;&quot;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XML</a><ul>
+<li><a class="reference internal" href="#unescape-xml">Unescape XML</a></li>
+<li><a class="reference internal" href="#cac-nhom-xml-element">Các nhóm XML element</a></li>
+<li><a class="reference internal" href="#render-xhtml">Render XHTML</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="postback.html"
+                        title="chương trước ">Postbacks</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="js.html"
+                        title="chương tiếp">JavaScript and JSON</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/xml.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript and JSON"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="Postbacks"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.27.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

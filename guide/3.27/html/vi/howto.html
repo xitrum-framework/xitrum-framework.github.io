@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HOWTO &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.27.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.27.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.27.0" href="index.html" />
+    <link rel="next" title="Dependencies" href="deps.html" />
+    <link rel="prev" title="Metrics" href="metrics.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="deps.html" title="Dependencies"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="Metrics"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.27.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="howto">
+<h1>HOWTO<a class="headerlink" href="#howto" title="Permalink to this headline">¶</a></h1>
+<p>Chương này bao gồm một số thủ thuật nhỏ.</p>
+<div class="section" id="basic-authentication">
+<h2>Basic authentication<a class="headerlink" href="#basic-authentication" title="Permalink to this headline">¶</a></h2>
+<p>Bạn có thể bảo vệ toàn bộ site hoặc chỉ action nào đó với
+<a class="reference external" href="http://en.wikipedia.org/wiki/Basic_access_authentication">basic authentication</a>.</p>
+<p>Ghi nhớ rằng Xitrum không hỗ trợ
+<a class="reference external" href="http://en.wikipedia.org/wiki/Digest_access_authentication">digest authentication</a>
+vì nó cung cấp một cái nhìn sai về bảo mật. Từ đó làm cho digest authentication dễ bị tấn công man-in-the-middle.
+Để bảo mật tốt hơn, bạn nên sử dụng HTTPS
+(không cần sử dụng Apache hay Nginx như reverse proxy chỉ cần sử dụng HTTPS).</p>
+<div class="section" id="cau-hinh-basic-authentication-cho-toan-bo-site">
+<h3>Cấu hình basic authentication cho toàn bộ site<a class="headerlink" href="#cau-hinh-basic-authentication-cho-toan-bo-site" title="Permalink to this headline">¶</a></h3>
+<p>Trong tệp <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>&quot;basicAuth&quot;: {
+  &quot;realm&quot;:    &quot;xitrum&quot;,
+  &quot;username&quot;: &quot;xitrum&quot;,
+  &quot;password&quot;: &quot;xitrum&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="them-basic-authentication-vao-mot-action">
+<h3>Thêm basic authentication vào một action<a class="headerlink" href="#them-basic-authentication-vao-mot-action" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+
+class MyAction extends Action {
+  beforeFilter {
+    basicAuth(&quot;Realm&quot;) { (username, password) =&gt;
+      username == &quot;username&quot; &amp;&amp; password == &quot;password&quot;
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="load-cac-tep-config">
+<h2>Load các tệp config<a class="headerlink" href="#load-cac-tep-config" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tep-json">
+<h3>Tệp JSON<a class="headerlink" href="#tep-json" title="Permalink to this headline">¶</a></h3>
+<p>JSON thuận tiện cho việc sử dụng làm các tệp cấu hình với cấu trúc lồng nhau.</p>
+<p>Lưu tệp cấu hình của bạn trong thư mục &#8220;config&#8221;. Thư mục này được đặt trong
+classpath ở chế độ phát triển bởi build.sbt và trong chế độ sản phẩm bởi  script/runner (và script/runner.bat).</p>
+<p>myconfig.json:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s">&quot;username&quot;</span><span class="p">:</span> <span class="s">&quot;God&quot;</span><span class="p">,</span>
+  <span class="s">&quot;password&quot;</span><span class="p">:</span> <span class="s">&quot;Does God need a password?&quot;</span><span class="p">,</span>
+  <span class="s">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;Adam&quot;</span><span class="p">,</span> <span class="s">&quot;Eva&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Load:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.Loader
+
+case class MyConfig(username: String, password: String, children: Seq[String])
+val myConfig = Loader.jsonFromClasspath[MyConfig](&quot;myconfig.json&quot;)
+</pre></div>
+</div>
+<p>Ghi chú:</p>
+<ul class="simple">
+<li>Các Key and string phải được dùng dấu nháy kép <code class="docutils literal"><span class="pre">&quot;</span></code>.</li>
+<li>Hiện tại, bạn không thể viết comment trong tệp JSON</li>
+</ul>
+</div>
+<div class="section" id="tep-properties">
+<h3>Tệp properties<a class="headerlink" href="#tep-properties" title="Permalink to this headline">¶</a></h3>
+<p>Bạn cũng có thể các tệp property, nhưng bạn nên sử dụng JSON. Tệp property không phải typesafe, không hỗ trợ UTF-8 và các cấu trúc lồng nhau v.v.</p>
+<p>myconfig.properties:</p>
+<div class="highlight-python"><div class="highlight"><pre>username = God
+password = Does God need a password?
+children = Adam, Eva
+</pre></div>
+</div>
+<p>Load:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.Loader
+
+// Here you get an instance of java.util.Properties
+val properties = Loader.propertiesFromClasspath(&quot;myconfig.properties&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="typesafe-tep-cau-hinh">
+<h3>Typesafe tệp cấu hình<a class="headerlink" href="#typesafe-tep-cau-hinh" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum cũng bao gồm Akka mà Akka sử dụng
+<a class="reference external" href="https://github.com/typesafehub/config">thư viện cấu hình</a> tạp bởi
+<a class="reference external" href="http://typesafe.com/company">company called Typesafe</a>.
+Chúng có thẻ tốt hơn tải các tệp cấu hình.</p>
+<p>myconfig.conf:</p>
+<div class="highlight-python"><div class="highlight"><pre>username = God
+password = Does God need a password?
+children = [&quot;Adam&quot;, &quot;Eva&quot;]
+</pre></div>
+</div>
+<p>Load:</p>
+<div class="highlight-python"><div class="highlight"><pre>import com.typesafe.config.{Config, ConfigFactory}
+
+val config   = ConfigFactory.load(&quot;myconfig.conf&quot;)
+val username = config.getString(&quot;username&quot;)
+val password = config.getString(&quot;password&quot;)
+val children = config.getStringList(&quot;children&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="serialize-va-deserialize">
+<h2>Serialize và deserialize<a class="headerlink" href="#serialize-va-deserialize" title="Permalink to this headline">¶</a></h2>
+<p>Để serialize thành <code class="docutils literal"><span class="pre">Array[Byte]</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.SeriDeseri
+val bytes = SeriDeseri.toBytes(&quot;my serializable object&quot;)
+</pre></div>
+</div>
+<p>Để deserialize các byte ngược trở lại:</p>
+<div class="highlight-python"><div class="highlight"><pre>val option = SeriDeseri.fromBytes[MyType](bytes)  // Option[MyType]
+</pre></div>
+</div>
+<p>Nếu bạn muốn lưu tệp:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+<span class="n">Loader</span><span class="o">.</span><span class="n">bytesToFile</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="s">&quot;myObject.bin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To load from the file:</p>
+<div class="highlight-python"><div class="highlight"><pre>val bytes = Loader.bytesFromFile(&quot;myObject.bin&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="ma-hoa-du-lieu">
+<h2>Mã hóa dữ liệu<a class="headerlink" href="#ma-hoa-du-lieu" title="Permalink to this headline">¶</a></h2>
+<p>Để mã hóa dữ liệu mà bạn không cần giải mã sau đó (mã hóa một chiều), bạn có thể
+sử dụng MD5 hoặc những thuật toán tương tư.</p>
+<p>Nếu bạn muốn giải mã về sau, bạn có thể sử dụng tiện ích mà Xitrum cung cấp:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.Secure
+
+// Array[Byte]
+val encrypted = Secure.encrypt(&quot;my data&quot;.getBytes)
+
+// Option[Array[Byte]]
+val decrypted = Secure.decrypt(encrypted)
+</pre></div>
+</div>
+<p>Bạn có thể sử dụng <code class="docutils literal"><span class="pre">xitrum.util.UrlSafeBase64</span></code> để mã hóa và giải mã các dữ liệu nhị phân
+thanh chuỗi thông thường (nhúng vào HTML để response chẳng hạn).</p>
+<div class="highlight-python"><div class="highlight"><pre>// String that can be included in URL, cookie etc.
+val string = UrlSafeBase64.noPaddingEncode(encrypted)
+
+// Option[Array[Byte]]
+val encrypted2 = UrlSafeBase64.autoPaddingDecode(string)
+</pre></div>
+</div>
+<p>Nếu bạn có thể phối hợp các quá trình bên trên trong một bước:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.SeriDeseri
+
+val mySerializableObject = new MySerializableClass
+
+// String
+val encrypted = SeriDeseri.toSecureUrlSafeBase64(mySerializableObject)
+
+// Option[MySerializableClass]
+val decrypted = SeriDeseri.fromSecureUrlSafeBase64[MySerializableClass](encrypted)
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">SeriDeseri</span></code> sử dụng <a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>
+để serialize và deserialize. Dữ liệu của bạn phải là serializable.</p>
+<p>Bạn có thể chỉ rõ khóa (key) để mã hóa.</p>
+<div class="highlight-python"><div class="highlight"><pre>val encrypted = Secure.encrypt(&quot;my data&quot;.getBytes, &quot;my key&quot;)
+val decrypted = Secure.decrypt(encrypted, &quot;my key&quot;)
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>val encrypted = SeriDeseri.toSecureUrlSafeBase64(mySerializableObject, &quot;my key&quot;)
+val decrypted = SeriDeseri.fromSecureUrlSafeBase64[MySerializableClass](encrypted, &quot;my key&quot;)
+</pre></div>
+</div>
+<p>Nếu bạn không chỉ rõ key nào, <code class="docutils literal"><span class="pre">secureKey</span></code> trong tệp <code class="docutils literal"><span class="pre">xitrum.conf</span></code> trong thư mục config
+sẽ được sử dụng.</p>
+</div>
+<div class="section" id="nhieu-site-voi-cung-mot-ten-mien">
+<h2>Nhiều site với cùng một tên miền<a class="headerlink" href="#nhieu-site-voi-cung-mot-ten-mien" title="Permalink to this headline">¶</a></h2>
+<p>Neus bạn muốn sử dụng một reverse proxy như Nginx để chạy nhiều site khác nhau
+tại cùng một tên miền:</p>
+<div class="highlight-python"><div class="highlight"><pre>http://example.com/site1/...
+http://example.com/site2/...
+</pre></div>
+</div>
+<p>Bạn có thể cấu hình baseUrl trong <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code>.</p>
+<p>Trong mã JS, để có chính xác URL cho Ajax request, sử dụng <code class="docutils literal"><span class="pre">withBaseUrl</span></code>
+trong <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># If the current site&#39;s baseUrl is &quot;site1&quot;, the result will be:</span>
+<span class="c"># /site1/path/to/my/action</span>
+<span class="n">xitrum</span><span class="o">.</span><span class="n">withBaseUrl</span><span class="p">(</span><span class="s">&#39;/path/to/my/action&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="convert-markdown-sang-html">
+<h2>Convert Markdown sang HTML<a class="headerlink" href="#convert-markdown-sang-html" title="Permalink to this headline">¶</a></h2>
+<p>Nếu bạn đã configured project để sử dụng <a class="reference internal" href="template_engines.html"><em>Scalate template engine</em></a>,
+Bạn chỉ cần phải làm như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>import org.fusesource.scalamd.Markdown
+val html = Markdown(&quot;input&quot;)
+</pre></div>
+</div>
+<p>Ngoài ra, bạn cần thêm thành phần phụ thuộc này vào tệp <code class="docutils literal"><span class="pre">build.sbt</span></code> của project.</p>
+<div class="highlight-python"><div class="highlight"><pre>libraryDependencies += &quot;org.fusesource.scalamd&quot; %% &quot;scalamd&quot; % &quot;1.6&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="theo-doi-su-thay-doi-cua-tep">
+<h2>Theo dõi sự thay đổi của tệp<a class="headerlink" href="#theo-doi-su-thay-doi-cua-tep" title="Permalink to this headline">¶</a></h2>
+<p>Bạn cần thiết lập callback cho
+<a class="reference external" href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/StandardWatchEventKinds.html">StandardWatchEventKinds</a>
+trên tệp và thư mục.</p>
+<div class="highlight-python"><div class="highlight"><pre>import java.nio.file.Paths
+import xitrum.util.FileMonitor
+
+val target = Paths.get(&quot;absolute_path_or_path_relative_to_application_directory&quot;).toAbsolutePath
+FileMonitor.monitor(FileMonitor.MODIFY, target, { path =&gt;
+  // Do some callback with path
+  println(s&quot;File modified: $path&quot;)
+
+  // And stop monitoring if necessary
+  FileMonitor.unmonitor(FileMonitor.MODIFY, target)
+})
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">FileMonitor</span></code> sử dụng
+<a class="reference external" href="https://github.com/lloydmeta/schwatcher">Schwatcher</a>.</p>
+</div>
+<div class="section" id="thu-muc-tam-thoi">
+<h2>Thư mục tạm thời<a class="headerlink" href="#thu-muc-tam-thoi" title="Permalink to this headline">¶</a></h2>
+<p>Mặc định Xitrum project (xem <code class="docutils literal"><span class="pre">tmpDir</span></code> trong xitrum.conf) sử dụng thư mục <code class="docutils literal"><span class="pre">tmp</span></code>
+trong thư mục hoạt động hiện thời để lưu các tệp .scala generate bởi Scalate, các tệp
+lớn sẽ được tải lên v.v.</p>
+<p>Để lấy đường dẫn đến thư mục đó:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="o">.</span><span class="n">getAbsolutePath</span>
+</pre></div>
+</div>
+<p>Tạo một tệp mới hoặc thư mục trong thư mục đó:</p>
+<div class="highlight-python"><div class="highlight"><pre>val file = new java.io.File(xitrum.Config.xitrum.tmpDir, &quot;myfile&quot;)
+
+val dir = new java.io.File(xitrum.Config.xitrum.tmpDir, &quot;mydir&quot;)
+dir.mkdirs()
+</pre></div>
+</div>
+</div>
+<div class="section" id="stream-video">
+<h2>Stream video<a class="headerlink" href="#stream-video" title="Permalink to this headline">¶</a></h2>
+<p>Có nhiều cách để steam video. Cách đơn giản nhất:</p>
+<ul class="simple">
+<li>Cung cấp tệp video .mp4 theo từng đoạn, người dùng có thể xem video trong khi
+tải về.</li>
+<li>Và sử dụng một HTTP server như Xitrum có hỗ trợ
+<a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range requests</a>, để người dùng có
+thể nhảy đến đoạn phim mà chưa được tải về.</li>
+</ul>
+<p>Bạn có thể sử dụng <a class="reference external" href="http://gpac.wp.mines-telecom.fr/mp4box/">MP4Box</a> để  tải nội dụng
+của tệp phim một các xen kẽ mỗi 0.5 giây:</p>
+<div class="highlight-python"><div class="highlight"><pre>MP4Box -inter 500 movie.mp4
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HOWTO</a><ul>
+<li><a class="reference internal" href="#basic-authentication">Basic authentication</a><ul>
+<li><a class="reference internal" href="#cau-hinh-basic-authentication-cho-toan-bo-site">Cấu hình basic authentication cho toàn bộ site</a></li>
+<li><a class="reference internal" href="#them-basic-authentication-vao-mot-action">Thêm basic authentication vào một action</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-cac-tep-config">Load các tệp config</a><ul>
+<li><a class="reference internal" href="#tep-json">Tệp JSON</a></li>
+<li><a class="reference internal" href="#tep-properties">Tệp properties</a></li>
+<li><a class="reference internal" href="#typesafe-tep-cau-hinh">Typesafe tệp cấu hình</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#serialize-va-deserialize">Serialize và deserialize</a></li>
+<li><a class="reference internal" href="#ma-hoa-du-lieu">Mã hóa dữ liệu</a></li>
+<li><a class="reference internal" href="#nhieu-site-voi-cung-mot-ten-mien">Nhiều site với cùng một tên miền</a></li>
+<li><a class="reference internal" href="#convert-markdown-sang-html">Convert Markdown sang HTML</a></li>
+<li><a class="reference internal" href="#theo-doi-su-thay-doi-cua-tep">Theo dõi sự thay đổi của tệp</a></li>
+<li><a class="reference internal" href="#thu-muc-tam-thoi">Thư mục tạm thời</a></li>
+<li><a class="reference internal" href="#stream-video">Stream video</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="metrics.html"
+                        title="chương trước ">Metrics</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="deps.html"
+                        title="chương tiếp">Dependencies</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="deps.html" title="Dependencies"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="Metrics"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.27.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

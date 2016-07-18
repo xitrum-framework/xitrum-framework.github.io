@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Action filters &mdash; Xitrum Scala Web Framework Guide 3.27.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.27.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.27.0 documentation" href="index.html" />
+    <link rel="next" title="Server-side cache" href="cache.html" />
+    <link rel="prev" title="File upload" href="upload.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Server-side cache"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="upload.html" title="File upload"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.27.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="action-filters">
+<h1>Action filters<a class="headerlink" href="#action-filters" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="before-filters">
+<h2>Before filters<a class="headerlink" href="#before-filters" title="Permalink to this headline">¶</a></h2>
+<p>Before filters are run before an action is run.
+If a before filter responds something, all filters after it and the action will
+not be run.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;before_filter&quot;)
+class MyAction extends Action {
+  beforeFilter {
+    log.info(&quot;I run therefore I am&quot;)
+  }
+
+  // This method is run after the above filters
+  def execute() {
+    respondInlineView(&quot;Before filters should have been run, please check the log&quot;)
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="after-filters">
+<h2>After filters<a class="headerlink" href="#after-filters" title="Permalink to this headline">¶</a></h2>
+<p>After filters are run after an action is run.
+They are functions that take no argument. Their return value will be ignored.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;after_filter&quot;)
+class MyAction extends Action {
+  afterFilter {
+    log.info(&quot;Run at &quot; + System.currentTimeMillis())
+  }
+
+  def execute() {
+    respondText(&quot;After filter should have been run, please check the log&quot;)
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="around-filters">
+<h2>Around filters<a class="headerlink" href="#around-filters" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;around_filter&quot;)
+class MyAction extends Action {
+  aroundFilter { action =&gt;
+    val begin = System.currentTimeMillis()
+    action()
+    val end   = System.currentTimeMillis()
+    val dt    = end - begin
+    log.info(s&quot;The action took $dt [ms]&quot;)
+  }
+
+  def execute() {
+    respondText(&quot;Around filter should have been run, please check the log&quot;)
+  }
+}
+</pre></div>
+</div>
+<p>If there are many around filters, they will be nested.</p>
+</div>
+<div class="section" id="execution-order-of-filters">
+<h2>Execution order of filters<a class="headerlink" href="#execution-order-of-filters" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Before filters are run first, then around filters, then after filters.</li>
+<li>If one of the before filters returns false, the rest (including around and
+after filters) will not be run.</li>
+<li>After filters are always run if at least an around filter is run.</li>
+<li>If an around filter decide not to call <code class="docutils literal"><span class="pre">action</span></code>, the inner nested
+around filters will not be run.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre>before1 -true-&gt; before2 -true-&gt; +--------------------+ --&gt; after1 --&gt; after2
+                                | around1 (1 of 2)   |
+                                |   around2 (1 of 2) |
+                                |     action         |
+                                |   around2 (2 of 2) |
+                                | around1 (2 of 2)   |
+                                +--------------------+
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Action filters</a><ul>
+<li><a class="reference internal" href="#before-filters">Before filters</a></li>
+<li><a class="reference internal" href="#after-filters">After filters</a></li>
+<li><a class="reference internal" href="#around-filters">Around filters</a></li>
+<li><a class="reference internal" href="#execution-order-of-filters">Execution order of filters</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="upload.html"
+                        title="previous chapter">File upload</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cache.html"
+                        title="next chapter">Server-side cache</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/filter.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Server-side cache"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="upload.html" title="File upload"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.27.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

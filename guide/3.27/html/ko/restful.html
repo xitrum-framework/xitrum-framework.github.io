@@ -1,0 +1,505 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RESTful APIs &mdash; Xitrum Scala Web Framework Guide 3.27.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.27.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.27.0 documentation" href="index.html" />
+    <link rel="next" title="템플릿 엔진" href="template_engines.html" />
+    <link rel="prev" title="Action 과 view" href="action_view.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="템플릿 엔진"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action 과 view"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.27.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h1>
+<p>XitrumiPhone、Android 등의 어플리케이션을 위한 RESTful APIs를 간단하게 만들수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;articles&quot;)
+class ArticlesIndex extends Action {
+  def execute() {...}
+}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}다
+}
+</pre></div>
+</div>
+<p>POST、 PUT、 PATCH、 DELETE 그리고 OPTIONS 뿐만 아니라
+Xitrum은 HEAD의 GET 요청를 빈 바디응답으로 자동으로 처리합니다.</p>
+<p>일반 브라우저 처럼 PUT과 DELETE를 지원하지 않는 HTTP 클라이언트 에서도、
+PUT과 DELETE를 구현하려면 、응답 본문에  <code class="docutils literal"><span class="pre">_method=put</span></code> 또、 <code class="docutils literal"><span class="pre">_method=delete</span></code> 를 포함하여
+사용할 수 있습니다.</p>
+<p>어플리케이션을 시작할때 Xitrum 어플리케이션을 스캔하여、라우팅 테이블을 만들고 출력합니다.
+다음과 같은 로그에서 어플리케이션이 어떤 API를 지원하고 있는지 알 수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
+GET /articles     quickstart.action.ArticlesIndex
+GET /articles/:id quickstart.action.ArticlesShow
+</pre></div>
+</div>
+<p>라우팅은 JAX-RS과 Rails의 철학에 따라 자동으로 수집됩니다.
+모든 경로를 한군데에 설정할 필요가 없습니다.
+분산 라우팅 처럼.이 기능덕분에 어플리케이션을 다른 어플리케이션에 통합할 수 있습니.
+만약 블로그 엔진을 만든다면 패키징된 JAR파일을 다른 어플리케이션으로 가져와서 즉시 블로그 기능을 사용할 수 있습니다.
+라우팅에는 두가지 특징이 있습니다.
+안전한 방법으로 루트를 재 생성하거나（리버스 라우팅、
+<a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a> 이라고 하는 문서를 통해서 만듨 수 있습니다.</p>
+<div class="section" id="id1">
+<h2>루트 캐싱<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>어플리케이션 시작시 속도 향상을 위해、루트는 <code class="docutils literal"><span class="pre">routes.cache</span></code> 파일에 캐쉬 됩니다.
+개발시에는 <code class="docutils literal"><span class="pre">target</span></code> 파일에 있는 클래스 파일의 루트는 캐쉬 되지 않습니다.
+만약 루트를 포함하여 라이브러리가 업데이트 된 경、 <code class="docutils literal"><span class="pre">routes.cache</span></code> 파일을 삭제하세요.
+또한、이 파일은 소스 저장소에 커밋되지 않도록 주의해야 합니다.</p>
+</div>
+<div class="section" id="firstlast">
+<h2>루트의 우선순위(first、last)<a class="headerlink" href="#firstlast" title="Permalink to this headline">¶</a></h2>
+<p>다음과 같은 루트를 만든경우</p>
+<div class="highlight-python"><div class="highlight"><pre>/articles/:id --&gt; ArticlesShow
+/articles/new --&gt; ArticlesNew
+</pre></div>
+</div>
+<p>두번째 루트를 우선시 할경우 <code class="docutils literal"><span class="pre">&#64;First</span></code> 주석을 추가시킵니.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+
+@First  // This route has higher priority than &quot;ArticlesShow&quot; above
+@GET(&quot;articles/new&quot;)
+class ArticlesNew extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">Last</span></code> 도 똑같이 사용할 수 있습니.</p>
+</div>
+<div class="section" id="action">
+<h2>Action에 여러 경로를 연동<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;image&quot;, &quot;image/:format&quot;)
+class Image extends Action {
+  def execute() {
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;png&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>점을 포함하는 루트<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;, &quot;articles/:id.:format&quot;)
+class ArticlesShow extends Action {
+  def execute() {
+    val id     = param[Int](&quot;id&quot;)
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;html&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>정규 표현식을 이용한 라우팅<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>정규 표현식을 이용하여 라우팅 할 수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>경로의 나머지 부분 이용<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">/</span></code> 문자는 특수문자라서 매개변수에 포함되지 않습니.``/`` 문자를 사용하려면 다음과 같이 씁니다:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>다음의 경로를 가져오게 됩니다:</p>
+<div class="highlight-python"><div class="highlight"><pre>/service/123/proxy/http://foo.com/bar
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">:*</span></code> 를 가져오게 됩니다:</p>
+<div class="highlight-python"><div class="highlight"><pre>val url = param(&quot;*&quot;)  // &quot;http://foo.com/bar&quot; 입니다
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>액션에 링크추가<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum은 typesafe 하기때문에, URL을 직접 사용하면 안됩니다. 다음처럼 사용하세:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>다른 액션으로 리디랙션<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>참고 <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">what redirection is</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{GET, POST}
+
+@GET(&quot;login&quot;)
+class LoginInput extends Action {
+  def execute() {...}
+}
+
+@POST(&quot;login&quot;)
+class DoLogin extends Action {
+  def execute() {
+    ...
+    // After login success
+    redirectTo[AdminIndex]()
+  }
+}
+
+GET(&quot;admin&quot;)
+class AdminIndex extends Action {
+  def execute() {
+    ...
+    // Check if the user has not logged in, redirect him to the login page
+    redirectTo[LoginInput]()
+  }
+}
+</pre></div>
+</div>
+<p>현재 액션을 다음을 이용하여 변경할 수도 있습니다. <code class="docutils literal"><span class="pre">redirecToThis()</span></code>.</p>
+</div>
+<div class="section" id="id7">
+<h2>다른 액션에 요청 전달<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">forwardTo[AnotherAction]()</span></code> 사용시에는  <code class="docutils literal"><span class="pre">redirectTo</span></code> 은 다른 요청을 만들어서 전달하지만</dt>
+<dd><code class="docutils literal"><span class="pre">forwardTo</span></code> 는 요청이 유지됩니다.</dd>
+</dl>
+</div>
+<div class="section" id="ajax">
+<h2>Ajax 요청의 결정<a class="headerlink" href="#ajax" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">isAjax</span></code> 을 사용합니다.</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre>// In an action
+val msg = &quot;A message&quot;
+if (isAjax)
+  jsRender(&quot;alert(&quot; + jsEscape(msg) + &quot;)&quot;)
+else
+  respondText(msg)
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Permalink to this headline">¶</a></h2>
+<p>GET 이외의 요청에 、Xitrum은 기본적으로 <a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Cross-site request forgery</a> 방식을 고수합니다.</p>
+<p><code class="docutils literal"><span class="pre">antiCsrfMeta</span></code> Tags 의 레이아웃에 명시한경우:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+<p>출력되는 <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> 는 다음과 같습니다:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a> 이 템플릿 내에서 사용되는 경우、</dt>
+<dd>토큰은 GET 요청을 제외한 모든 jQuery 의 Ajax 요청에 <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> 을 포함합니다.</dd>
+</dl>
+<p>xitrum.js은  <code class="docutils literal"><span class="pre">jsDefaults</span></code> 에 포함되어 있습니다.
+만약 <code class="docutils literal"><span class="pre">jsDefaults</span></code> 를 사용하지 않고 xitrum.js를 사용하고 싶다면 다음과 같이 사용합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot; src={url[xitrum.js]}&gt;&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-anticsrftoken">
+<h2>antiCsrfInput 와 antiCsrfToken<a class="headerlink" href="#anticsrfinput-anticsrftoken" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum은 CSRF토큰을  <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> 의 요청헤더 에서 가져옵니다.
+만약 요청헤더가 없다면 <code class="docutils literal"><span class="pre">csrf-token</span></code> 의 바디 파라미터에서 가져옵니다.
+（URL의 파라미터가 아닙니다.）</p>
+<p>Form을 직접작성할때, 메타 태그와 xitrum.js을 사용하지 않는다면、<code class="docutils literal"><span class="pre">antiCsrfInput</span></code> 또는
+<code class="docutils literal"><span class="pre">antiCsrfToken</span></code> 을 사용해야 합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  != antiCsrfInput
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  input(type=&quot;hidden&quot; name=&quot;csrf-token&quot; value={antiCsrfToken})
+</pre></div>
+</div>
+</div>
+<div class="section" id="csrf">
+<h2>CSRF 체크 생략<a class="headerlink" href="#csrf" title="Permalink to this headline">¶</a></h2>
+<p>스마트폰과 같은 기기를 위해서 API 를 작성할 경우 CSRF체크를 생략할 수 있습니다、
+<code class="docutils literal"><span class="pre">xitrum.SkipCsrfCheck</span></code> 를 Action에 추가하면 됩니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.POST
+
+trait Api extends Action with SkipCsrfCheck
+
+@POST(&quot;api/positions&quot;)
+class LogPositionAPI extends Api {
+  def execute() {...}
+}
+
+@POST(&quot;api/todos&quot;)
+class CreateTodoAPI extends Api {
+  def execute() {...}
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="manipulate-collected-routes">
+<h2>Manipulate collected routes<a class="headerlink" href="#manipulate-collected-routes" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum 은 시작시에 자동으로 경로를 수집합니다.
+경로를 수정하고 싶다면, 다음을 이용하세요
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
+
+object Boot {
+  def main(args: Array[String]) {
+    // You can modify routes before starting the server
+    val routes = Config.routes
+
+    // Remove routes to an action by its class
+    routes.removeByClass[MyClass]()
+
+    if (demoVersion) {
+      // Remove routes to actions by a prefix
+      routes.removeByPrefix(&quot;premium/features&quot;)
+
+      // This also works
+      routes.removeByPrefix(&quot;/premium/features&quot;)
+    }
+
+    ...
+
+    Server.start()
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>요청 내용 가져오기<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>요청에 대한 타입이 <code class="docutils literal"><span class="pre">application/x-www-form-urlencoded</span></code> 이 아닐경우 、
+요청에 대한 내용을 가져오고 수동으로 파싱이 가능합니다.</p>
+<p>문자열로 가져오기:</p>
+<div class="highlight-python"><div class="highlight"><pre>val body = requestContentString
+</pre></div>
+</div>
+<p>문자열로 가져와서 、JSON형식으로 변경합니다:</p>
+<div class="highlight-python"><div class="highlight"><pre>val myJValue = requestContentJValue  // =&gt; JSON4S (http://json4s.org) JValue
+val myMap = xitrum.util.SeriDeseri.fromJValue[Map[String, Int]](myJValue)
+</pre></div>
+</div>
+<p>요청 전체를 컨트롤 하려면、 <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a> 을 사용하면 됩니다
+<a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a> 타입으로 리턴합니다.</p>
+</div>
+<div class="section" id="swagger-api">
+<h2>Swagger로 API 문서화 하기<a class="headerlink" href="#swagger-api" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a> 를 이용하여 API문서를 만들수 있습니다.
+<code class="docutils literal"><span class="pre">&#64;Swagger</span></code> 태크를 문서화 하고 싶은 API에 명시하면 됩니다.
+Xitrum은 문서파일을 <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a> 에 생성합니다.
+이 파일들은 <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a> 를 이용하여 인터렉티브한 API문서를 생성합니다.
+Xitrum은Swagger UI 를 내포하고 있으며、 <code class="docutils literal"><span class="pre">/xitrum/swagger-ui</span></code> 에서 확인할 수 있습니다.
+: <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">예제</a> 는 여기에 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.{GET, Swagger}
+
+@Swagger(
+  Swagger.Tags(&quot;image&quot;, &quot;APIs to create images&quot;),
+  Swagger.Description(&quot;Dimensions should not be bigger than 2000 x 2000&quot;),
+  Swagger.OptStringQuery(&quot;text&quot;, &quot;Text to render on the image, default: Placeholder&quot;),
+  Swagger.Produces(&quot;image/png&quot;),
+  Swagger.Response(200, &quot;PNG image&quot;),
+  Swagger.Response(400, &quot;Width or height is invalid or too big&quot;)
+)
+trait ImageApi extends Action with SkipCsrfCheck {
+  lazy val text = paramo(&quot;text&quot;).getOrElse(&quot;Placeholder&quot;)
+}
+
+@GET(&quot;image/:width/:height&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Summary(&quot;Generate rectangle image&quot;),
+  Swagger.IntPath(&quot;width&quot;),
+  Swagger.IntPath(&quot;height&quot;)
+)
+class RectImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    val height = param[Int](&quot;height&quot;)
+    // ...
+  }
+}
+
+@GET(&quot;image/:width&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Summary(&quot;Generate square image&quot;),
+  Swagger.IntPath(&quot;width&quot;)
+)
+class SquareImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">/xitrum/swagger</span></code> 에 접근할때
+<a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON For Swagger</a>
+가 생성됩니다.</p>
+<p>Swagger UI는 이 JSON 정보를 바탕으로 인터랙티브한 API 문서를 만듭니다.</p>
+<p>여기에 있는 Swagger.IntPath、Swagger.OptStringQuery이 외에도、BytePath, IntQuery, OptStringForm 등이
+form에 명시되어 있습니다.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (필수 값)</li>
+<li><code class="docutils literal"><span class="pre">Opt&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (옵션 값)</li>
+</ul>
+<p>Value type: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Param type: Path, Query, Body, Header, Form</p>
+<p>자세한 내용은 <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">value type</a> 、
+<a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">param type</a> 를 참고하세요.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#id1">루트 캐싱</a></li>
+<li><a class="reference internal" href="#firstlast">루트의 우선순위(first、last)</a></li>
+<li><a class="reference internal" href="#action">Action에 여러 경로를 연동</a></li>
+<li><a class="reference internal" href="#id2">점을 포함하는 루트</a></li>
+<li><a class="reference internal" href="#id3">정규 표현식을 이용한 라우팅</a></li>
+<li><a class="reference internal" href="#id4">경로의 나머지 부분 이용</a></li>
+<li><a class="reference internal" href="#id5">액션에 링크추가</a></li>
+<li><a class="reference internal" href="#id6">다른 액션으로 리디랙션</a></li>
+<li><a class="reference internal" href="#id7">다른 액션에 요청 전달</a></li>
+<li><a class="reference internal" href="#ajax">Ajax 요청의 결정</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-anticsrftoken">antiCsrfInput 와 antiCsrfToken</a></li>
+<li><a class="reference internal" href="#csrf">CSRF 체크 생략</a></li>
+<li><a class="reference internal" href="#manipulate-collected-routes">Manipulate collected routes</a></li>
+<li><a class="reference internal" href="#id8">요청 내용 가져오기</a></li>
+<li><a class="reference internal" href="#swagger-api">Swagger로 API 문서화 하기</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="previous chapter">Action 과 view</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="next chapter">템플릿 엔진</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/restful.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="템플릿 엔진"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action 과 view"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.27.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

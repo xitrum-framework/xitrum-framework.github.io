@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Các tệp tĩnh &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.27.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.27.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.27.0" href="index.html" />
+    <link rel="next" title="Cung cấp flash socket policy file" href="flash.html" />
+    <link rel="prev" title="Async response" href="async.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="flash.html" title="Cung cấp flash socket policy file"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="async.html" title="Async response"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.27.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cac-tep-tinh">
+<h1>Các tệp tĩnh<a class="headerlink" href="#cac-tep-tinh" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="cung-cap-cac-tep-tinh-tren-dia">
+<h2>Cung cấp các tệp tĩnh trên đĩa<a class="headerlink" href="#cung-cap-cac-tep-tinh-tren-dia" title="Permalink to this headline">¶</a></h2>
+<p>Thư mục của dự án:</p>
+<div class="highlight-python"><div class="highlight"><pre>config
+public
+  favicon.ico
+  robots.txt
+  404.html
+  500.html
+  img
+    myimage.png
+  css
+    mystyle.css
+  js
+    myscript.js
+src
+build.sbt
+</pre></div>
+</div>
+<p>Xitrum tự động cung cấp các tệp tĩnh trong thư mực <code class="docutils literal"><span class="pre">public</span></code>.
+URLs đến các tệp này:</p>
+<div class="highlight-python"><div class="highlight"><pre>/img/myimage.png
+/css/mystyle.css
+/css/mystyle.min.css
+</pre></div>
+</div>
+<p>Để dẫn đến chúng:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;img src={publicUrl(&quot;img/myimage.png&quot;)} /&gt;
+</pre></div>
+</div>
+<p>Để cung cấp các tệp thường trong môi trường phát triển và bản rút gọn trong
+môi trường của sản phẩm (mystyle.css và mystyle.min.css as above):</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;img src={publicUrl(&quot;css&quot;, &quot;mystyle.css&quot;, &quot;mystyle.min.css&quot;)} /&gt;
+</pre></div>
+</div>
+<p>Để gửi các tệp tĩnh trên đĩa từ action, sử dụng method <code class="docutils literal"><span class="pre">respondFile</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">respondFile</span><span class="p">(</span><span class="s">&quot;/absolute/path&quot;</span><span class="p">)</span>
+<span class="n">respondFile</span><span class="p">(</span><span class="s">&quot;path/relative/to/the/current/working/directory&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Để tối ưu hóa tốc độ cung cấp các tệp tĩnh, bạn có thể bỏ qua các tệp không
+cần thiết với bộ lọc regex. Nếu request url không match với pathRegex, Xitrum
+sẽ respond lỗi 404 cho request đó.</p>
+<p>Xem <code class="docutils literal"><span class="pre">pathRegex</span></code> trong <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code>.</p>
+</div>
+<div class="section" id="index-html-fallback">
+<h2>index.html fallback<a class="headerlink" href="#index-html-fallback" title="Permalink to this headline">¶</a></h2>
+<p>Nếu không có route (không có action) cho URL <code class="docutils literal"><span class="pre">/foo/bar</span></code> (hoặc
+<code class="docutils literal"><span class="pre">/foo/bar/</span></code>), Xitrum sẽ tìm các tệp tĩnh <code class="docutils literal"><span class="pre">public/foo/bar/index.html</span></code> (năm
+trong thư mục <code class="docutils literal"><span class="pre">public</span></code>). Nếu tìm thây tệp, Xitrum sẽ respond nó về cho phía
+client.</p>
+</div>
+<div class="section" id="va-500">
+<h2>404 và 500<a class="headerlink" href="#va-500" title="Permalink to this headline">¶</a></h2>
+<p>404.html và 500.html trong thư mục <code class="docutils literal"><span class="pre">public</span></code> được sử dụng khi không có route
+nào matched và có một lỗi trong quá trình thực thi. Nếu bạn muốn tự kiểm soát
+lỗi:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{Error404, Error500}
+
+@Error404
+class My404ErrorHandlerAction extends Action {
+  def execute() {
+    if (isAjax)
+      jsRespond(&quot;alert(&quot; + jsEscape(&quot;Not Found&quot;) + &quot;)&quot;)
+    else
+      renderInlineView(&quot;Not Found&quot;)
+  }
+}
+
+@Error500
+class My500ErrorHandlerAction extends Action {
+  def execute() {
+    if (isAjax)
+      jsRespond(&quot;alert(&quot; + jsEscape(&quot;Internal Server Error&quot;) + &quot;)&quot;)
+    else
+      renderInlineView(&quot;Internal Server Error&quot;)
+  }
+}
+</pre></div>
+</div>
+<p>Response status được đặt thành 404 hoặc 500 trước khi action được thực thi, vì
+vậy bạn không cần phải đặt chúng một các thủ công.</p>
+</div>
+<div class="section" id="cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention">
+<h2>Cung cấp các tệp tài nguyên trong classpath với WebJars convention<a class="headerlink" href="#cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="webjars">
+<h3>WebJars<a class="headerlink" href="#webjars" title="Permalink to this headline">¶</a></h3>
+<p><a href="#id1"><span class="problematic" id="id2">`</span></a>WebJars &lt;<a class="reference external" href="http://www.webjars.org/">http://www.webjars.org/</a>&gt;_ cung cấp rất nhiều các thư viện web mà bạn
+<a href="#id3"><span class="problematic" id="id4">`</span></a>có sử dụng trong project.</p>
+<p>Ví dụ, nếu bạn muốn sử dụng <a class="reference external" href="http://underscorejs.org/">Underscore.js</a>, khai
+báo trong tệp <code class="docutils literal"><span class="pre">build.sbt</span></code> của project như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">&quot;org.webjars&quot;</span> <span class="o">%</span> <span class="s">&quot;underscorejs&quot;</span> <span class="o">%</span> <span class="s">&quot;1.6.0-3&quot;</span>
+</pre></div>
+</div>
+<p>Sau đó trong tệp .jade:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">script</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s">&quot;underscorejs/1.6.0&quot;</span><span class="p">,</span> <span class="s">&quot;underscore.js&quot;</span><span class="p">,</span> <span class="s">&quot;underscore-min.js&quot;</span><span class="p">)})</span>
+</pre></div>
+</div>
+<p>Xitrum sẽ tự động sử dụng <code class="docutils literal"><span class="pre">underscore.js</span></code> cho môi trường phát triển và
+<code class="docutils literal"><span class="pre">underscore-min.js</span></code> cho môi trường sản phẩm.</p>
+<p>Kết quả như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>/webjars/underscorejs/1.6.0/underscore.js?XOKgP8_KIpqz9yUqZ1aVzw
+</pre></div>
+</div>
+<p>Nếu bạn muốn sử dụng cũng một tệp trong cả 2 môi trường:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">script</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s">&quot;underscorejs/1.6.0/underscore.js&quot;</span><span class="p">)})</span>
+</pre></div>
+</div>
+<p>Khi thư viện này phụ thuộc vào thư viện kia, SBT sẽ tự động tải các thư viện
+liên quan về. Nếu thấy SBT không tải đúng phiên bản (có thể xác nhận bằng cách
+chạy lệnh <cite>sbt xitrum-package`</cite> rồi xem các tệp trong thư mục <code class="docutils literal"><span class="pre">target/xitrum/lib</span></code>
+được tạo ra), bạn có thể ép SBT dùng đúng phiên bản bạn muốn bằng <code class="docutils literal"><span class="pre">dependencyOverrides</span></code>.
+Ví dụ nếu bạn thấy SBT chọn thư viện jQuery phiên bản 2.x, mà bạn lại muốn
+dùng phiên bản 1.x để có thể hỗ trợ Internet Explorer 6, 7, hoặc 8, thì có
+thể khai báo như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dependencyOverrides</span> <span class="o">+=</span> <span class="s">&quot;org.webjars&quot;</span> <span class="o">%</span> <span class="s">&quot;jquery&quot;</span> <span class="o">%</span> <span class="s">&quot;1.11.3&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="luu-resource-file-trong-tep-jar-voi-webjars-convention">
+<h3>Lưu resource file trong tệp .jar với WebJars convention<a class="headerlink" href="#luu-resource-file-trong-tep-jar-voi-webjars-convention" title="Permalink to this headline">¶</a></h3>
+<p>Nếu bạn là người phát triển thư viện và muốn cung cấp tệp myimage.png từ thư
+viện của bạn, một tệp .jar trong classpath, sau đó lưu myimage.png trong tệp
+.jar với <a class="reference external" href="http://www.webjars.org/">WebJars</a> convention, ví dụ:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">META</span><span class="o">-</span><span class="n">INF</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">webjars</span><span class="o">/</span><span class="n">mylib</span><span class="o">/</span><span class="mf">1.0</span><span class="o">/</span><span class="n">myimage</span><span class="o">.</span><span class="n">png</span>
+</pre></div>
+</div>
+<p>Để cung cấp tệp:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;img src={webJarsUrl(&quot;mylib/1.0/myimage.png&quot;)} /&gt;
+</pre></div>
+</div>
+<p>Trong cả môi trường, đường dẫn URL sẽ là:</p>
+<div class="highlight-python"><div class="highlight"><pre>/webjars/mylib/1.0/myimage.png?xyz123
+</pre></div>
+</div>
+</div>
+<div class="section" id="respond-mot-tep-trong-classpath">
+<h3>Respond một tệp trong classpath<a class="headerlink" href="#respond-mot-tep-trong-classpath" title="Permalink to this headline">¶</a></h3>
+<p>Để respond một tệp trong một classpath element (một tệp .jar hoặc một thư
+mục), kể cả khi tệp không được lưu với <a class="reference external" href="http://www.webjars.org/">WebJars</a>
+convention:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">respondResource</span><span class="p">(</span><span class="s">&quot;path/relative/to/the/classpath/element&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Ex:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">respondResource</span><span class="p">(</span><span class="s">&quot;akka/actor/Actor.class&quot;</span><span class="p">)</span>
+<span class="n">respondResource</span><span class="p">(</span><span class="s">&quot;META-INF/resources/webjars/underscorejs/1.6.0/underscore.js&quot;</span><span class="p">)</span>
+<span class="n">respondResource</span><span class="p">(</span><span class="s">&quot;META-INF/resources/webjars/underscorejs/1.6.0/underscore-min.js&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="cache-o-phia-client-voi-etag-va-max-age">
+<h2>Cache ở phía client với ETag và max-age<a class="headerlink" href="#cache-o-phia-client-voi-etag-va-max-age" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum tự động thêm <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_ETag">Etag</a> cho các tệp
+tĩnh trên đĩa và classpath.</p>
+<p>ETags sử dụng cho các tệp nhỏ như mã MD5 của file content. Chúng sẽ được cache
+để sử dụng sau. Key của cache entry là <code class="docutils literal"><span class="pre">(file</span> <span class="pre">path,</span> <span class="pre">modified</span> <span class="pre">time)</span></code>. Bởi vì
+modified time ở các server khác nhau thì khác nhau, nên mỗi web server trong
+một cluster (nhóm) sẽ có riêng local ETag cache.</p>
+<p>Với các tệp lớn, chỉ khi sửa đổi tệp mới sử dụng Etag. Có vẻ không thực sự
+hoàn hảo bởi không thể đồng nhất các tệp trên các server khác nhau vì chúng có
+nhiều ETag khác nhau, nhưng nó vẫn tốt hơn là không sử dụng ETag.</p>
+<p><code class="docutils literal"><span class="pre">publicUrl</span></code> và <code class="docutils literal"><span class="pre">webJarsUrl</span></code> tự động thêm ETag vào URL khi chúng được generate. Ví dụ:</p>
+<div class="highlight-python"><div class="highlight"><pre>webJarsUrl(&quot;jquery/2.1.1/jquery.min.js&quot;)
+=&gt; /webjars/jquery/2.1.1/jquery.min.js?0CHJg71ucpG0OlzB-y6-mQ
+</pre></div>
+</div>
+<p>Xitrum cũng đặt <code class="docutils literal"><span class="pre">max-age</span></code> và <code class="docutils literal"><span class="pre">Exprires</span></code> header thành
+<a class="reference external" href="https://developers.google.com/speed/docs/best-practices/caching">one year</a>. Bạn không
+cần lo lắng rằng trình duyệt không chọn tệp mới nhất khi bạn sửa đổi. Bởi vì khi một tệp
+trên ổ đĩa được sửa, thuộc tính <code class="docutils literal"><span class="pre">modified</span> <span class="pre">time</span></code> của tệp đó sẽ thay đổi, do đó URL tạo
+ra bởi <code class="docutils literal"><span class="pre">publicUrl</span></code> và <code class="docutils literal"><span class="pre">webJarUrl</span></code> cũng thay đổi theo. ETag cache của tệp cũng sẽ thay
+đổi bởi cache key thay đổi.</p>
+</div>
+<div class="section" id="gzip">
+<h2>GZIP<a class="headerlink" href="#gzip" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum thực hiện việc nén GZIP tự động. Thuộc tính <code class="docutils literal"><span class="pre">Content-Type</span></code> tại header sẽ cho biết
+định dạng của respond là <code class="docutils literal"><span class="pre">text/html</span></code> hay <code class="docutils literal"><span class="pre">xml/application</span></code> v.v.</p>
+<p>Xitrum luôn tự động nén GZIP với các tệp tĩnh, nhưng định dạng responses được tùy biến, để
+tối ưu hóa, Xitrum chỉ thực hiện GZIP với các response lớn hơn 1KB.</p>
+</div>
+<div class="section" id="cache-o-phia-server">
+<h2>Cache ở phía Server<a class="headerlink" href="#cache-o-phia-server" title="Permalink to this headline">¶</a></h2>
+<p>Để hạn chế load tệp từ đĩa, Xitrum cache các tệp tĩnh nhỏ trong bộ nhớ với quy tắc LRU (Lần cuối
+sử dụng xa nhất). Xem <code class="docutils literal"><span class="pre">small_static_file_size_in_kb</span></code> và <code class="docutils literal"><span class="pre">max_cached_small_static_files</span></code>
+trong <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Các tệp tĩnh</a><ul>
+<li><a class="reference internal" href="#cung-cap-cac-tep-tinh-tren-dia">Cung cấp các tệp tĩnh trên đĩa</a></li>
+<li><a class="reference internal" href="#index-html-fallback">index.html fallback</a></li>
+<li><a class="reference internal" href="#va-500">404 và 500</a></li>
+<li><a class="reference internal" href="#cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention">Cung cấp các tệp tài nguyên trong classpath với WebJars convention</a><ul>
+<li><a class="reference internal" href="#webjars">WebJars</a></li>
+<li><a class="reference internal" href="#luu-resource-file-trong-tep-jar-voi-webjars-convention">Lưu resource file trong tệp .jar với WebJars convention</a></li>
+<li><a class="reference internal" href="#respond-mot-tep-trong-classpath">Respond một tệp trong classpath</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cache-o-phia-client-voi-etag-va-max-age">Cache ở phía client với ETag và max-age</a></li>
+<li><a class="reference internal" href="#gzip">GZIP</a></li>
+<li><a class="reference internal" href="#cache-o-phia-server">Cache ở phía Server</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="async.html"
+                        title="chương trước ">Async response</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="flash.html"
+                        title="chương tiếp">Cung cấp flash socket policy file</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/static.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="flash.html" title="Cung cấp flash socket policy file"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="async.html" title="Async response"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.27.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
