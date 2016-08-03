@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>서버측 캐시 &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.28.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="next" title="I18n" href="i18n.html" />
+    <link rel="prev" title="액션 필터" href="filter.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="액션 필터"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>서버측 캐시<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="cluster.html"><em>클러스터링</em></a> 챕터를 참고하세요</p>
+<p>Xitrum은 빠른 응답을 위해, 클라이언트 측과 서버 측의 광범위한 캐싱 기능을 제공합니다.
+웹서버 레이어는 작은 파일은 메모리에 캐시 된 큰 파일은 NIO의 제로 복사를 사용하여 전송됩니다.
+Xitrum 정적 파일 전송 속도는`Nginx와 동등 &lt;<a class="reference external" href="https://gist.github.com/3293596">https://gist.github.com/3293596</a>&gt;`_ 합니다
+Web 프레임 워크 레이어는 Rails 스타일로 페이지 나 액션 객체를 캐시 할 수 있습니다.
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google &#8216;s best practices (영문)</a>
+에서와 같이 조건부 GET 요청은 클라이언트 사이드에서 캐시됩니다.</p>
+<p>동적 콘텐츠에 대해서는 만약 파일이 생성 된 이후 변경되지 않는 경우(static file과 같이) 클라이언트에 적극적으로 캐시하도록
+헤더를 설정해야합니다.
+이 경우에는``setClientCacheAggressively ()``를 액션에서 호출하여 얻을 수 있습니다.</p>
+<p>클라이언트에 캐시시키고 싶지 않은 경우에는, <a href="#id2"><span class="problematic" id="id3">``</span></a>setNoClientCache ()``를 액션에서 호출하여 얻을 수 있습니다.</p>
+<p>서버 측 캐시에 대해서는 다음 예제에 자세히 설명합니다.</p>
+<div class="section" id="id4">
+<h2>캐시페이지 혹은 액션<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{GET, CacheActionMinute, CachePageMinute}
+
+@GET(&quot;articles&quot;)
+@CachePageMinute(1)
+class ArticlesIndex extends Action {
+  def execute() {
+    ...
+  }
+}
+
+@GET(&quot;articles/:id&quot;)
+@CacheActionMinute(1)
+class ArticlesShow extends Action {
+  def execute() {
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>&#8220;page cache&#8221;와 &#8220;acation cache&#8221; 개념은 <a href="#id5"><span class="problematic" id="id6">`</span></a>Ruby on Rails &lt;<a class="reference external" href="http://guides.rubyonrails.org/caching_with_rails.html">http://guides.rubyonrails.org/caching_with_rails.html</a>&gt;`_를 참고하고 있습니다.</p>
+<p>요청 처리 프로세스의 순서는 다음과 같습니다.</p>
+<ol class="arabic simple">
+<li>요청 -&gt; (2) Before 필터 -&gt; (3) 액션의 excute 메소드 -&gt; (4) 응답</li>
+</ol>
+<p>처음 요청시 Xitrum는 응답을 지정된 기간 동안 캐시합니다.
+<code class="docutils literal"><span class="pre">&#64;CachePageMinute</span> <span class="pre">(1)``과``&#64;CacheActionMinute</span> <span class="pre">(1)</span></code> 은 1 분 동안 캐시하는 것을 의미합니다.
+Xitrum는 응답 상태가 &#8220;200 OK&#8221;인 경우에만 캐시합니다.
+예를들어, 응답 상태가 &#8220;500 Internal Server Error&#8221;또는 &#8220;302 Found&#8221;(리디렉션)이되는 응답은 캐시되지 않습니다.</p>
+<p>동일한 작업에 대한 동일 요청에는 만약 캐시 된 응답이 지정된 기간내에 있을 경우
+Xitrum은 즉시 캐시 된 응답을 반환합니다 :</p>
+<ul class="simple">
+<li>페이지 캐시의 경우 처리 과정은 (1) -&gt; (4)입니다.</li>
+<li>액션 캐시의 경우 (1) -&gt; (2) -&gt; (4) 또는 Before 필터가 &#8220;false&#8221;를 반환 한 경우 (1) -&gt; (2)입니다.</li>
+</ul>
+<p>차이점은: page 캐시는 Before 필터를 수행하지 않습니다.</p>
+<p>일반적으로 페이지 캐시는 모든 사용자에게 공통된 반응의 경우에 사용합니다.
+액션 캐시는 Before 필터를 통해 예를 들어 사용자의 로그인 상태 체크 등을 통해 캐시 된 응답을 &#8220;가드&#8221; 하는 경우에 사용합니다 :</p>
+<ul class="simple">
+<li>로그인 한 경우 캐시 된 응답에 액세스 할 수 있습니다.</li>
+<li>로그인하지 않은 경우 로그인 페이지로 리다이렉트 합니다.</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>캐시 오브젝트<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.Cache">xitrum.Cache</a> 을 대신하여
+<code class="docutils literal"><span class="pre">xitrum.Config.xitrum.cache</span></code> 사용할 수 있습니다.</p>
+<p>명시적으로 TTL을 설정하지 않은 경우:</p>
+<ul class="simple">
+<li>put(key, value)</li>
+</ul>
+<p>유효기간을 설정한 경우:</p>
+<ul class="simple">
+<li>putSecond(key, value, seconds)</li>
+<li>putMinute(key, value, minutes)</li>
+<li>putHour(key, value, hours)</li>
+<li>putDay(key, value, days)</li>
+</ul>
+<p>존재하지 않을 경우만 캐시하는 방법:</p>
+<ul class="simple">
+<li>putIfAbsent(key, value)</li>
+<li>putIfAbsentSecond(key, value, seconds)</li>
+<li>putIfAbsentMinute(key, value, minutes)</li>
+<li>putIfAbsentHour(key, value, hours)</li>
+<li>putIfAbsentDay(key, value, days)</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>캐시 제거<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>페이지나 액션의 캐시 제거:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">removeAction</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>오브젝트 캐시 제거:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>prefix로 시작되는 키들을 모두 제거:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">removePrefix</span><span class="p">(</span><span class="n">keyPrefix</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a>removePrefix``는 prefix를 사용하여 계층적 캐쉬를 구축 할 수 있습니다.
+예를 들면, 기사와 관련된 요소를 캐쉬하고 싶은 경우, 기사가 변경되었을 때 관련 캐쉬는 다음과 같이 정리할 수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Config.xitrum.cache
+
+// prefix를 이용하여 캐쉬
+val prefix = &quot;articles/&quot; + article.id
+cache.put(prefix + &quot;/likes&quot;, likes)
+cache.put(prefix + &quot;/comments&quot;, comments)
+
+// 필요시, 기사와 관련된 캐쉬를 전부 삭제할 수 있습니다.
+cache.remove(prefix)
+</pre></div>
+</div>
+<p>설정
+&#8212;</p>
+<p>Xitrum 캐시 기능은 캐시 엔진에 의해 제공됩니다. 캐시 엔진은 프로젝트의 필요에 따라 취사선택할 수 있습니다.
+캐시 엔진 설정은 <a href="#id11"><span class="problematic" id="id12">`</span></a>config / xitrum.conf &lt;<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf</a>&gt;`_에서 사용하는 엔진에 따라 다음 두 가지 설명 방식으로 설정할 수 있습니다.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cache</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>또는:</p>
+<div class="highlight-python"><div class="highlight"><pre>cache {
+  &quot;my.cache.EngineClassName&quot; {
+    option1 = value1
+    option2 = value2
+  }
+}
+</pre></div>
+</div>
+<p>Xitrum은 이것을 제공합니다:</p>
+<div class="highlight-python"><div class="highlight"><pre>cache {
+  # Simple in-memory cache
+  &quot;xitrum.local.LruCache&quot; {
+    maxElems = 10000
+  }
+}
+</pre></div>
+</div>
+<p>만약 클러스터링 된 서버를 사용하는 경우 캐쉬 엔진에는`Hazelcast &lt;<a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">https://github.com/xitrum-framework/xitrum-hazelcast</a>&gt;`_를 사용할 수 있습니다.</p>
+<p>자체 캐쉬 엔진을 사용하는 경우,``xitrum.Cache``의`interface &lt;<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Cache.scala">https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Cache.scala</a>&gt; <a href="#id13"><span class="problematic" id="id14">`</span></a>_를 구현합니다.</p>
+</div>
+<div class="section" id="id15">
+<h2>캐쉬의 동작원리<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<p>Inbound:</p>
+<div class="highlight-python"><div class="highlight"><pre>               액션응답
+               캐쉬됨
+request        캐쉬가 존재?
+-------------------------+---------------NO---------------&gt;
+                         |
+&lt;---------YES------------+
+  캐쉬에서 응답
+</pre></div>
+</div>
+<p>Outbound:</p>
+<div class="highlight-python"><div class="highlight"><pre>               액션응답
+               캐쉬됨
+               캐쉬가 존재하지 않음? 　          response
+&lt;---------NO-------------+---------------------------------
+                         |
+&lt;---------YES------------+
+  캐쉬를 저장함
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum-util-locallrucache">
+<h2>xitrum.util.LocalLruCache<a class="headerlink" href="#xitrum-util-locallrucache" title="Permalink to this headline">¶</a></h2>
+<p>위에서 언급 한 캐쉬 엔진은 시스템 전체가 공유하는 캐시입니다.
+만약 작은 간단한 캐쉬 엔진 만 필요한 경우``xitrum.util.LocalLruCache``을 사용합니다.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.LocalLruCache
+
+// LRU (Least Recently Used) 캐쉬는 1000개만 저장합니다
+// 키와 저장값은 String 타입으로 사용됩니다
+val cache = LocalLruCache[String, String](1000)
+</pre></div>
+</div>
+<p>반환된 <code class="docutils literal"><span class="pre">캐쉬</span></code> 는 <a class="reference external" href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html">java.util.LinkedHashMap</a> 인스턴스이기 때문에 <code class="docutils literal"><span class="pre">LinkedHashMap</span></code> 방법을 사용하여 처리 할 수 있습니다.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">서버측 캐시</a><ul>
+<li><a class="reference internal" href="#id4">캐시페이지 혹은 액션</a></li>
+<li><a class="reference internal" href="#id7">캐시 오브젝트</a></li>
+<li><a class="reference internal" href="#id8">캐시 제거</a></li>
+<li><a class="reference internal" href="#id15">캐쉬의 동작원리</a></li>
+<li><a class="reference internal" href="#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filter.html"
+                        title="previous chapter">액션 필터</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="next chapter">I18n</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cache.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="액션 필터"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Ngoc Dao.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

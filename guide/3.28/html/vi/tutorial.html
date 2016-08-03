@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hướng dẫn &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.28.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="next" title="Action and view" href="action_view.html" />
+    <link rel="prev" title="Giới thiệu" href="intro.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Giới thiệu"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="huong-dan">
+<h1>Hướng dẫn<a class="headerlink" href="#huong-dan" title="Permalink to this headline">¶</a></h1>
+<p>Chương này giới thiệu ngắn gọn cách tạo và chạy một project Xitrum.
+<strong>Việc tạo project được thực hiện với giả định bạn sử dụng Linux và đã cài Java.</strong></p>
+<div class="section" id="tao-mot-project-xitrum-moi">
+<h2>Tạo một project Xitrum mới<a class="headerlink" href="#tao-mot-project-xitrum-moi" title="Permalink to this headline">¶</a></h2>
+<p>Để tạo mới một project Xitrum bạn chỉ cần tải về tập tin
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>wget -O xitrum-new.zip https://github.com/xitrum-framework/xitrum-new/archive/master.zip
+</pre></div>
+</div>
+<p>Hoặc:</p>
+<div class="highlight-python"><div class="highlight"><pre>curl -L -o xitrum-new.zip https://github.com/xitrum-framework/xitrum-new/archive/master.zip
+</pre></div>
+</div>
+</div>
+<div class="section" id="khoi-dong-project-xitrum">
+<h2>Khởi động project Xitrum<a class="headerlink" href="#khoi-dong-project-xitrum" title="Permalink to this headline">¶</a></h2>
+<p>Cách chuẩn nhất để build một project Scala là sử dụng
+<a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">SBT</a>. Các project mới được tạo đã có sẵn SBT 0.13 trong thư mục <code class="docutils literal"><span class="pre">sbt</span></code>. Nếu bạn muốn tự cài đặt SBT, bạn có thể xem <a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">hướng dẫn cài đặt</a>.</p>
+<p>Sử dụng terminal, chuyển đến thư mục của project mới tạo và chạy lệnh <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">run</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>unzip xitrum-new.zip
+cd xitrum-new
+sbt/sbt run
+</pre></div>
+</div>
+<p>Câu lệnh này sẽ download tất cả <a class="reference internal" href="deps.html"><em>dependencies</em></a>, biên dịch toàn bộ project,
+và khởi động web server qua class <code class="docutils literal"><span class="pre">quickstart.Boot</span></code>. Trong cửa sổ dòng lệnh Terminal,
+bạn sẽ thấy tất cả các định tuyến:</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Load routes.cache or recollect routes...
+[INFO] Normal routes:
+GET  /  quickstart.action.SiteIndex
+[INFO] SockJS routes:
+xitrum/metrics/channel  xitrum.metrics.XitrumMetricsChannel  websocket: true, cookie_needed: false
+[INFO] Error routes:
+404  quickstart.action.NotFoundError
+500  quickstart.action.ServerError
+[INFO] Xitrum routes:
+GET        /webjars/swagger-ui/2.0.17/index                            xitrum.routing.SwaggerUiVersioned
+GET        /xitrum/xitrum.js                                           xitrum.js
+GET        /xitrum/metrics/channel                                     xitrum.sockjs.Greeting
+GET        /xitrum/metrics/channel/:serverId/:sessionId/eventsource    xitrum.sockjs.EventSourceReceive
+GET        /xitrum/metrics/channel/:serverId/:sessionId/htmlfile       xitrum.sockjs.HtmlFileReceive
+GET        /xitrum/metrics/channel/:serverId/:sessionId/jsonp          xitrum.sockjs.JsonPPollingReceive
+POST       /xitrum/metrics/channel/:serverId/:sessionId/jsonp_send     xitrum.sockjs.JsonPPollingSend
+WEBSOCKET  /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocket
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr            xitrum.sockjs.XhrPollingReceive
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr_send       xitrum.sockjs.XhrSend
+POST       /xitrum/metrics/channel/:serverId/:sessionId/xhr_streaming  xitrum.sockjs.XhrStreamingReceive
+GET        /xitrum/metrics/channel/info                                xitrum.sockjs.InfoGET
+WEBSOCKET  /xitrum/metrics/channel/websocket                           xitrum.sockjs.RawWebSocket
+GET        /xitrum/metrics/viewer                                      xitrum.metrics.XitrumMetricsViewer
+GET        /xitrum/metrics/channel/:iframe                             xitrum.sockjs.Iframe
+GET        /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocketGET
+POST       /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.sockjs.WebSocketPOST
+[INFO] HTTP server started on port 8000
+[INFO] HTTPS server started on port 4430
+[INFO] Xitrum started in development mode
+</pre></div>
+</div>
+<p>Khi khởi động, tất cả các định tuyến (routers) sẽ được kiểm tra và lưu vào log. Bạn đã có luôn danh
+sách các định tuyến (routers), điều này rất thuận tiện với bạn để viết tài liệu về RESTful APIs của ứng dụng web
+cho bên thứ 3.</p>
+<p>Truy cập đến đường dẫn <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> hoặc <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a> bằng trình duyệt web. Trong cửa sổ
+dòng lệnh bạn sẽ thấy thông tin của các yêu cầu (request):</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] GET quickstart.action.SiteIndex, 1 [ms]
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-mot-project-xitrum-vao-eclipse">
+<h2>Import một project Xitrum vào Eclipse<a class="headerlink" href="#import-mot-project-xitrum-vao-eclipse" title="Permalink to this headline">¶</a></h2>
+<p>Bạn có thể <a class="reference external" href="http://scala-ide.org/">sử dụng Eclipse để viết code Scala</a>.</p>
+<p>Sử dụng cửa sổ dòng lệnh và từ thư mục của project Xitrum chạy lệnh sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>sbt/sbt eclipse
+</pre></div>
+</div>
+<p>file <code class="docutils literal"><span class="pre">.project</span></code> cho Eclipse sẽ được tạo với thông tin trong file <code class="docutils literal"><span class="pre">build.sbt</span></code>.
+Sau đó chạy Eclipse và import project.</p>
+</div>
+<div class="section" id="import-mot-project-xitrum-vao-intellij">
+<h2>Import một project Xitrum vào IntelliJ<a class="headerlink" href="#import-mot-project-xitrum-vao-intellij" title="Permalink to this headline">¶</a></h2>
+<p>Bạn cũng có thể sử dụng <a class="reference external" href="http://www.jetbrains.com/idea/">IntelliJ</a> như Eclipse để viết code.</p>
+<p>IntelliJ có Scala plugin rất tốt, chỉ cần mở project SBT là xong, không cần tạo trước
+project file như trường hợp Eclipse ở trên.</p>
+</div>
+<div class="section" id="nap-lai-tu-dong-autoreload">
+<h2>Nạp lại tự động (Autoreload)<a class="headerlink" href="#nap-lai-tu-dong-autoreload" title="Permalink to this headline">¶</a></h2>
+<p>Bạn có thể thiết lập nạp lại tự động các tập tin .class (hot swap) mà không cần phải khởi động lại chương trình. Tuy nhiên, để tránh gặp phải các vấn đề về hiệu suất cũng như tính ổn định của chương
+trình, bạn chỉ nên thiết lập nạp lại tự động các tập tin .class trong quá trình phát triển (development mode).</p>
+<div class="section" id="chay-project-voi-ides">
+<h3>Chạy project với IDEs<a class="headerlink" href="#chay-project-voi-ides" title="Permalink to this headline">¶</a></h3>
+<p>Trong quá trình phát triển, khi chạy project với các IDE cấp cao như Eclipse hoặc IntelliJ,
+code sẽ được tự động nạp lại bởi thiết lập mặc định của IDE.</p>
+</div>
+<div class="section" id="chay-project-voi-sbt">
+<h3>Chạy project với SBT<a class="headerlink" href="#chay-project-voi-sbt" title="Permalink to this headline">¶</a></h3>
+<p>Khi bạn chạy project với SBT, bạn cần phải mở 2 cửa sổ dòng lệnh:</p>
+<ul class="simple">
+<li>Một để chạy <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">run</span></code>. Câu lệnh này để chạy chương trình và tải lại các tập .class khi chúng được thay đổi.</li>
+<li>Một để chạy <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">~compile</span></code>. Mỗi khi bạn thay đổi các file mã nguồn, câu lệnh này sẽ biên dịch mã nguồn thành các file .class.</li>
+</ul>
+<p>Thư mục sbt có chứa một tập tin là <a class="reference external" href="https://github.com/xitrum-framework/agent7">agent7.jar</a>.
+Tập tin này chịu trách nhiệm tải lại các tập tin .class trong thư mục hiện hành (và các thư mục con).
+Nếu nhìn vào đoạn mã <code class="docutils literal"><span class="pre">sbt/sbt</span></code>, bạn sẽ thấy tùy chọn <code class="docutils literal"><span class="pre">-javaagent:agent7.jar</span></code>.</p>
+</div>
+<div class="section" id="dcevm">
+<h3>DCEVM<a class="headerlink" href="#dcevm" title="Permalink to this headline">¶</a></h3>
+<p>Thông thường JVM chỉ cho phép thay đổi nội dung của một method. Bạn có thể sử dụng
+<a class="reference external" href="https://github.com/dcevm/dcevm">DCEVM</a>, một biến thể mã nguồn mở của máy ảo Java HotSpot
+VM cho phép bạn định nghĩa lại không hạn chế các class đã được tải.</p>
+<p>Bạn có thể cài DCEVM bằng 2 cách:</p>
+<ul class="simple">
+<li>Sử dụng bản <a class="reference external" href="https://github.com/dcevm/dcevm/releases">Patch</a> với bản Java đã được cài đặt sẵn trên máy của bạn.</li>
+<li>Cài đặt một bản <a class="reference external" href="http://dcevm.nentjes.com/">prebuilt</a> (cách dễ dàng hơn).</li>
+</ul>
+<p>Nếu bạn chọn cách sử dụng Patch:</p>
+<ul class="simple">
+<li>Bạn có thể kích hoạt DCEVM chạy vĩnh viễn.</li>
+<li>Hoặc sử dụng JVM thay thế (&#8220;alternative&#8221; JVM). Trong trường hợp này, để chạy DCEVM bạn cần chạy câu lệnh <code class="docutils literal"><span class="pre">java</span></code> với tùy chọn <code class="docutils literal"><span class="pre">-XXaltjvm=dcevm</span></code>.
+Ví dụ, bạn cần thêm tùy chọn <code class="docutils literal"><span class="pre">-XXaltjvm=dcevm</span></code> vào câu lệnh <code class="docutils literal"><span class="pre">sbt/sbt</span></code>.</li>
+</ul>
+<p>Nếu bạn sử dụng IDE như Eclipse hoặc IntelliJ, bạn cần thiết lập IDE để sử dụng DCEVM (mà không phải JVM mặc định) để chạy project.</p>
+<p>Nếu bạn sử dụng SBT, bạn cần cài đặt biến môi trường <code class="docutils literal"><span class="pre">PATH</span></code> với đường dẫn câu lệnh <code class="docutils literal"><span class="pre">java</span></code> từ DCEVM (không phải bản JVM mặc định). Bạn vẫn có thể cần đến <code class="docutils literal"><span class="pre">javaagent</span></code> trên đây, bởi vì mặc dù DCEVM hỗ trợ các tiện ích khi sửa đổi class, bản thân nó không thể tự tải lại các class.</p>
+<p>Để có thêm thông tin chi tiết bạn có thể tham khảo <a class="reference external" href="http://javainformed.blogspot.jp/2014/01/jrebel-free-alternative.html">DCEVM - A JRebel free alternative</a>.</p>
+</div>
+</div>
+<div class="section" id="danh-sach-cac-tap-tin-bi-bo-qua">
+<h2>Danh sách các tập tin bị bỏ qua<a class="headerlink" href="#danh-sach-cac-tap-tin-bi-bo-qua" title="Permalink to this headline">¶</a></h2>
+<p>Thông thường, những những tập tin này nên được <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/.gitignore">bỏ qua</a>
+(không commit lên SVN hoặc Git repository):</p>
+<div class="highlight-python"><div class="highlight"><pre>.*
+log
+project/project
+project/target
+target
+tmp
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hướng dẫn</a><ul>
+<li><a class="reference internal" href="#tao-mot-project-xitrum-moi">Tạo một project Xitrum mới</a></li>
+<li><a class="reference internal" href="#khoi-dong-project-xitrum">Khởi động project Xitrum</a></li>
+<li><a class="reference internal" href="#import-mot-project-xitrum-vao-eclipse">Import một project Xitrum vào Eclipse</a></li>
+<li><a class="reference internal" href="#import-mot-project-xitrum-vao-intellij">Import một project Xitrum vào IntelliJ</a></li>
+<li><a class="reference internal" href="#nap-lai-tu-dong-autoreload">Nạp lại tự động (Autoreload)</a><ul>
+<li><a class="reference internal" href="#chay-project-voi-ides">Chạy project với IDEs</a></li>
+<li><a class="reference internal" href="#chay-project-voi-sbt">Chạy project với SBT</a></li>
+<li><a class="reference internal" href="#dcevm">DCEVM</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#danh-sach-cac-tap-tin-bi-bo-qua">Danh sách các tập tin bị bỏ qua</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="intro.html"
+                        title="chương trước ">Giới thiệu</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="chương tiếp">Action and view</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Giới thiệu"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RESTful APIs &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.28.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="next" title="Template engines" href="template_engines.html" />
+    <link rel="prev" title="Action and view" href="action_view.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Template engines"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h1>
+<p>Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone,Android v.v một cách rất dễ dàng.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;articles&quot;)
+class ArticlesIndex extends Action {
+  def execute() {...}
+}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p>Tương tự cho các method POST, PUT, PATCH, DELETE, và OPTIONS.
+Xitrum tự động kiểm soát phần HEAD như như một method GET với phần response body rỗng.</p>
+<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method PÓST với <code class="docutils literal"><span class="pre">_method=put</span></code> hoặc <code class="docutils literal"><span class="pre">_method=delete</span></code> trong request body.</p>
+<p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến và ghi ra out put để thông báo cho bạn biết bạn có APIs nào:</p>
+<div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
+GET /articles     quickstart.action.ArticlesIndex
+GET /articles/:id quickstart.action.ArticlesShow
+</pre></div>
+</div>
+<p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy nghĩ về tính năng nay tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
+Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
+Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
+<div class="section" id="route-cache">
+<h2>Route cache<a class="headerlink" href="#route-cache" title="Permalink to this headline">¶</a></h2>
+<p>Để khởi động nhanh hơn, route được cache trong file <code class="docutils literal"><span class="pre">routes.cache</span></code>.
+Trong quá trình phát triển, các route trong các tệp <code class="docutils literal"><span class="pre">*.class</span></code> tại thư mục <code class="docutils literal"><span class="pre">target</span></code> sẽ không được cache. Nếu bạn thực hiện cập nhất các thư viện phụ thuộc có chứa route, bạn có thể cần phải xóa tệp <code class="docutils literal"><span class="pre">routes.cache</span></code>. Tệp này không nên được commit đến kho mã nguồn.</p>
+</div>
+<div class="section" id="muc-do-uu-tien-cua-cac-route-first-last">
+<h2>Mức độ ưu tiên của các route (first, last)<a class="headerlink" href="#muc-do-uu-tien-cua-cac-route-first-last" title="Permalink to this headline">¶</a></h2>
+<p>;
+Nếu bạn muốn các route như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>/articles/:id --&gt; ArticlesShow
+/articles/new --&gt; ArticlesNew
+</pre></div>
+</div>
+<p>Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.
+Annotation <code class="docutils literal"><span class="pre">&#64;First</span></code> sẽ được thêm vào:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
+
+@GET(&quot;articles/:id&quot;)
+class ArticlesShow extends Action {
+  def execute() {...}
+}
+
+@First  // This route has higher priority than &quot;ArticlesShow&quot; above
+@GET(&quot;articles/new&quot;)
+class ArticlesNew extends Action {
+  def execute() {...}
+}
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">Last</span></code> is similar.</p>
+</div>
+<div class="section" id="nhieu-duong-dan-cho-mot-action">
+<h2>Nhiều đường dẫn cho một action<a class="headerlink" href="#nhieu-duong-dan-cho-mot-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;image&quot;, &quot;image/:format&quot;)
+class Image extends Action {
+  def execute() {
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;png&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="dot-trong-route">
+<h2>Dot trong route<a class="headerlink" href="#dot-trong-route" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;, &quot;articles/:id.:format&quot;)
+class ArticlesShow extends Action {
+  def execute() {
+    val id     = param[Int](&quot;id&quot;)
+    val format = paramo(&quot;format&quot;).getOrElse(&quot;html&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="regular-expression-trong-route">
+<h2>Regular Expression trong route<a class="headerlink" href="#regular-expression-trong-route" title="Permalink to this headline">¶</a></h2>
+<p>Regex có thể được sử dụng trong route:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xu-ly-cac-phan-con-lai-cua-route">
+<h2>Xử lý các phần còn lại của route<a class="headerlink" href="#xu-ly-cac-phan-con-lai-cua-route" title="Permalink to this headline">¶</a></h2>
+<p>Kí tự đặc biệt <code class="docutils literal"><span class="pre">/</span></code> không được phép có mặt trong tên của parameter. Nếu bạn muốn sử dụng kí tự này, parameter phải được đặt cuối cùng và bạn phải sử dụng nó như dưới đây:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span><span class="p">(</span><span class="s">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Đường dẫn dưới đây sẽ xuất hiện:</p>
+<div class="highlight-python"><div class="highlight"><pre>/service/123/proxy/http://foo.com/bar
+</pre></div>
+</div>
+<p>để lấy ra phần <code class="docutils literal"><span class="pre">*</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>val url = param(&quot;*&quot;)  // Will be &quot;http://foo.com/bar&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="lien-ket-den-mot-action">
+<h2>Liên kết đến một action<a class="headerlink" href="#lien-ket-den-mot-action" title="Permalink to this headline">¶</a></h2>
+<p>Để bảo toàn tính typesafe của Xitrum, bạn không nên sử dụng URL một cách thủ công, hãy sử dụng các dưới đây:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="redirect-den-mot-action-khac">
+<h2>Redirect đến một action khác<a class="headerlink" href="#redirect-den-mot-action-khac" title="Permalink to this headline">¶</a></h2>
+<p>Đọc thêm để biết <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">redirection là gì</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.annotation.{GET, POST}
+
+@GET(&quot;login&quot;)
+class LoginInput extends Action {
+  def execute() {...}
+}
+
+@POST(&quot;login&quot;)
+class DoLogin extends Action {
+  def execute() {
+    ...
+    // After login success
+    redirectTo[AdminIndex]()
+  }
+}
+
+GET(&quot;admin&quot;)
+class AdminIndex extends Action {
+  def execute() {
+    ...
+    // Check if the user has not logged in, redirect him to the login page
+    redirectTo[LoginInput]()
+  }
+}
+</pre></div>
+</div>
+<p>Bạn cũng có thể redirect đến action hiện tại (current action) với method <code class="docutils literal"><span class="pre">redirectToThis()</span></code>.</p>
+</div>
+<div class="section" id="forward-den-action-khac">
+<h2>Forward đến action khác<a class="headerlink" href="#forward-den-action-khac" title="Permalink to this headline">¶</a></h2>
+<p>Sử dụng method <code class="docutils literal"><span class="pre">forwardTo[AnotherAction]()</span></code>. Nếu bạn sử dụng method <code class="docutils literal"><span class="pre">redirectTo</span></code> ở trên đây, trình duyệt sẽ tạo một request khác, trong khi đó method <code class="docutils literal"><span class="pre">forwardTo</span></code> thì không.</p>
+</div>
+<div class="section" id="xac-dinh-ajax-request">
+<h2>Xác định Ajax request<a class="headerlink" href="#xac-dinh-ajax-request" title="Permalink to this headline">¶</a></h2>
+<p>Sử dụng method <code class="docutils literal"><span class="pre">isAjax</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre>// In an action
+val msg = &quot;A message&quot;
+if (isAjax)
+  jsRender(&quot;alert(&quot; + jsEscape(msg) + &quot;)&quot;)
+else
+  respondText(msg)
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Permalink to this headline">¶</a></h2>
+<p>Với các requests, Xitrum mặc định bảo vệ ứng dụng web của bạn khỏi kỹ thuật tấn công <a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Giả mạo Cross-site request</a>.</p>
+<p>Khi bạn incluede <code class="docutils literal"><span class="pre">antiCsrfMeta</span></code> trong layout của bạn:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+        &lt;title&gt;Welcome to Xitrum&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}
+</pre></div>
+</div>
+<p>Thẻ <code class="docutils literal"><span class="pre">&lt;head&gt;</span></code> sẽ tưong tự như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>Các token sẽ được tự động include trong tất cả các non-GET Ajax requests như <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> header gửi bởi jQuery nếu bạn include <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a> trong view template. <code class="docutils literal"><span class="pre">xitrum.js</span></code> được include trong <code class="docutils literal"><span class="pre">jsDefaults</span></code>. Nếu bạn không sử dụng <code class="docutils literal"><span class="pre">jsDefaults</span></code>, bạn có thể include <code class="docutils literal"><span class="pre">xitrum.js</span></code> trong template như sau:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;script type=&quot;text/javascript&quot; src={url[xitrum.js]}&gt;&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-va-anticsrftoken">
+<h2>antiCsrfInput và antiCsrfToken<a class="headerlink" href="#anticsrfinput-va-anticsrftoken" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum lây CSRF token từ <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> request header. Nếu header không tồn tại, Xitrum sẽ lấy token từ parameter <code class="docutils literal"><span class="pre">csrf-token</span></code> tại request body (chú ý: không phải parameter trong URL).</p>
+<p>Nếu bạn tự tạo form, và bạn không sử dụng thẻ meta và xitrum.js như đã trình bày ở trên, bạn cần sử dụng <code class="docutils literal"><span class="pre">antiCsrfInput</span></code> hoặc <code class="docutils literal"><span class="pre">antiCsrfToken</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  != antiCsrfInput
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
+  input(type=&quot;hidden&quot; name=&quot;csrf-token&quot; value={antiCsrfToken})
+</pre></div>
+</div>
+</div>
+<div class="section" id="skipcsrfcheck">
+<h2>SkipCsrfCheck<a class="headerlink" href="#skipcsrfcheck" title="Permalink to this headline">¶</a></h2>
+<p>Khi bạn tạo các APIs cho thiết bị, ví dụ điện thoại thông minh, bạn có thể muốn bỏ qua việc tự động kiểm tra CSRS. Thêm trait xitrum.SkipCsrfCheck vào action của bạn:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.POST
+
+trait Api extends Action with SkipCsrfCheck
+
+@POST(&quot;api/positions&quot;)
+class LogPositionAPI extends Api {
+  def execute() {...}
+}
+
+@POST(&quot;api/todos&quot;)
+class CreateTodoAPI extends Api {
+  def execute() {...}
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="kiem-soat-cac-route">
+<h2>Kiểm soát các route<a class="headerlink" href="#kiem-soat-cac-route" title="Permalink to this headline">¶</a></h2>
+<p>Khi khởi động Xitrum sẽ tự động gom các route lại. Nếu bạn muốn điều khiển các route, bạn có thể sử dụng <a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Ví dụ:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
+
+object Boot {
+  def main(args: Array[String]) {
+    // You can modify routes before starting the server
+    val routes = Config.routes
+
+    // Remove routes to an action by its class
+    routes.removeByClass[MyClass]()
+
+    if (demoVersion) {
+      // Remove routes to actions by a prefix
+      routes.removeByPrefix(&quot;premium/features&quot;)
+
+      // This also works
+      routes.removeByPrefix(&quot;/premium/features&quot;)
+    }
+
+    ...
+
+    Server.start()
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="lay-tat-ca-cac-request-content">
+<h2>Lấy tất cẩ các request content<a class="headerlink" href="#lay-tat-ca-cac-request-content" title="Permalink to this headline">¶</a></h2>
+<p>Thông thường, nếu request content không phải là <code class="docutils literal"><span class="pre">application/x-www-form-urlencoded</span></code>, bạn có thể cần phải lấy tất cả các request content (và tự phân tích chúng).</p>
+<p>Để lấy ra một chuối ký tự (string):</p>
+<div class="highlight-python"><div class="highlight"><pre>val body = requestContentString
+</pre></div>
+</div>
+<p>Để lấy ra một string và phân tích chúng thành JSON:</p>
+<div class="highlight-python"><div class="highlight"><pre>val myJValue = requestContentJValue  // =&gt; JSON4S (http://json4s.org) JValue
+val myMap = xitrum.util.SeriDeseri.fromJValue[Map[String, Int]](myJValue)
+</pre></div>
+</div>
+<p>Nếu bạn muốn kiểm soát toàn bộn, sử dụng <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Nó sẽ trả về một <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+</div>
+<div class="section" id="viet-tai-lieu-api-voi-swagger">
+<h2>Viết tài liệu API với Swagger<a class="headerlink" href="#viet-tai-lieu-api-voi-swagger" title="Permalink to this headline">¶</a></h2>
+<p>Bạn có thể viết tài liệu cho API của bạn với <a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a>. Thêm annotation <code class="docutils literal"><span class="pre">&#64;Swagger</span></code> vào action cần được viết tài liệu.
+Xitrum sẽ generate <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a>.
+Tệp này có thể sử dụng với <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a> để tạo giao diện cho tài liệu của API.</p>
+<p>Xitrum đã bao gồm Swagger UI. Sử dụng chúng tại đường dẫn <a href="#id1"><span class="problematic" id="id2">``</span></a>/xitrum/swagger-ui` của chưong trình của bạn.
+Ví dụ <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p>Bạn có thể xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">một ví dụ</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, SkipCsrfCheck}
+import xitrum.annotation.{GET, Swagger}
+
+@Swagger(
+  Swagger.Tags(&quot;image&quot;, &quot;APIs to create images&quot;),
+  Swagger.Description(&quot;Dimensions should not be bigger than 2000 x 2000&quot;),
+  Swagger.OptStringQuery(&quot;text&quot;, &quot;Text to render on the image, default: Placeholder&quot;),
+  Swagger.Produces(&quot;image/png&quot;),
+  Swagger.Response(200, &quot;PNG image&quot;),
+  Swagger.Response(400, &quot;Width or height is invalid or too big&quot;)
+)
+trait ImageApi extends Action with SkipCsrfCheck {
+  lazy val text = paramo(&quot;text&quot;).getOrElse(&quot;Placeholder&quot;)
+}
+
+@GET(&quot;image/:width/:height&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Summary(&quot;Generate rectangle image&quot;),
+  Swagger.IntPath(&quot;width&quot;),
+  Swagger.IntPath(&quot;height&quot;)
+)
+class RectImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    val height = param[Int](&quot;height&quot;)
+    // ...
+  }
+}
+
+@GET(&quot;image/:width&quot;)
+@Swagger(  // &lt;-- Inherits other info from ImageApi
+  Swagger.Summary(&quot;Generate square image&quot;),
+  Swagger.IntPath(&quot;width&quot;)
+)
+class SquareImageApi extends Api {
+  def execute {
+    val width  = param[Int](&quot;width&quot;)
+    // ...
+  }
+}
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON cho Swagger</a> sẽ được tạo khi bạn sử dụng <code class="docutils literal"><span class="pre">/xitrum/swagger</span></code>.</p>
+<p>Swagger UI sử dụng JSON dưới đây để tạo giao diện cho tài liệu API.</p>
+<p>Ngoài các parameter như Swagger.IntPath và Swagger.OptStringQuery còn các tham số sau: BytePath, IntQuery, OptStringForm etc.
+Chúng ta có thể tạo theo mẫu
+They are in the form:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (required parameter)</li>
+<li><code class="docutils literal"><span class="pre">Opt&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (optional parameter)</li>
+</ul>
+<p>Kiểu dữ liệu: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Kiểu tham số: Path, Query, Body, Header, Form</p>
+<p>Đọc thêm về <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">kiểu dữ liệu</a> và  <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">kiểu tham số</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#route-cache">Route cache</a></li>
+<li><a class="reference internal" href="#muc-do-uu-tien-cua-cac-route-first-last">Mức độ ưu tiên của các route (first, last)</a></li>
+<li><a class="reference internal" href="#nhieu-duong-dan-cho-mot-action">Nhiều đường dẫn cho một action</a></li>
+<li><a class="reference internal" href="#dot-trong-route">Dot trong route</a></li>
+<li><a class="reference internal" href="#regular-expression-trong-route">Regular Expression trong route</a></li>
+<li><a class="reference internal" href="#xu-ly-cac-phan-con-lai-cua-route">Xử lý các phần còn lại của route</a></li>
+<li><a class="reference internal" href="#lien-ket-den-mot-action">Liên kết đến một action</a></li>
+<li><a class="reference internal" href="#redirect-den-mot-action-khac">Redirect đến một action khác</a></li>
+<li><a class="reference internal" href="#forward-den-action-khac">Forward đến action khác</a></li>
+<li><a class="reference internal" href="#xac-dinh-ajax-request">Xác định Ajax request</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-va-anticsrftoken">antiCsrfInput và antiCsrfToken</a></li>
+<li><a class="reference internal" href="#skipcsrfcheck">SkipCsrfCheck</a></li>
+<li><a class="reference internal" href="#kiem-soat-cac-route">Kiểm soát các route</a></li>
+<li><a class="reference internal" href="#lay-tat-ca-cac-request-content">Lấy tất cẩ các request content</a></li>
+<li><a class="reference internal" href="#viet-tai-lieu-api-voi-swagger">Viết tài liệu API với Swagger</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="chương trước ">Action and view</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="chương tiếp">Template engines</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/restful.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Template engines"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

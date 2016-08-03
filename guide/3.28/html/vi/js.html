@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JavaScript and JSON &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.28.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="next" title="Async response" href="async.html" />
+    <link rel="prev" title="XML" href="xml.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="async.html" title="Async response"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="javascript-and-json">
+<h1>JavaScript and JSON<a class="headerlink" href="#javascript-and-json" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="javascript">
+<h2>JavaScript<a class="headerlink" href="#javascript" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum đã inlcude jQuery. Có một vài jsXXX helper.</p>
+<div class="section" id="them-cac-doan-javascript-vao-mot-view">
+<h3>Thêm các đoạn JavaScript vào một view<a class="headerlink" href="#them-cac-doan-javascript-vao-mot-view" title="Permalink to this headline">¶</a></h3>
+<p>Trong action, gọi method <code class="docutils literal"><span class="pre">jsAddToView</span></code> (nhiều lần nếu cần):</p>
+<div class="highlight-python"><div class="highlight"><pre>class MyAction extends AppAction {
+  def execute() {
+    ...
+    jsAddToView(&quot;alert(&#39;Hello&#39;)&quot;)
+    ...
+    jsAddToView(&quot;alert(&#39;Hello again&#39;)&quot;)
+    ...
+    respondInlineView(&lt;p&gt;My view&lt;/p&gt;)
+  }
+}
+</pre></div>
+</div>
+<p>Trong layout, gọi method <code class="docutils literal"><span class="pre">jsForView</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
+import xitrum.view.DocType
+
+trait AppAction extends Action {
+  override def layout = DocType.html5(
+    &lt;html&gt;
+      &lt;head&gt;
+        {antiCsrfMeta}
+        {xitrumCss}
+        {jsDefaults}
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div id=&quot;flash&quot;&gt;{jsFlash}&lt;/div&gt;
+        {renderedView}
+        {jsForView}
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+</pre></div>
+</div>
+</div>
+<div class="section" id="respond-javascript-truc-tiep-khong-su-dung-view">
+<h3>Respond JavaScript trực tiếp không sử dụng view<a class="headerlink" href="#respond-javascript-truc-tiep-khong-su-dung-view" title="Permalink to this headline">¶</a></h3>
+<p>Để respond JavaScript:</p>
+<div class="highlight-python"><div class="highlight"><pre>jsRespond(&quot;$(&#39;#error&#39;).html(%s)&quot;.format(jsEscape(&lt;p class=&quot;error&quot;&gt;Could not login.&lt;/p&gt;)))
+</pre></div>
+</div>
+<p>Một các trực tiếp:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">jsRedirectTo</span><span class="p">(</span><span class="s">&quot;http://cntt.tv/&quot;</span><span class="p">)</span>
+<span class="n">jsRedirectTo</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="json">
+<h2>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum đã include <a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>.
+Bạn có thể đọc thêm để biết các parse và generate ra JSON.</p>
+<p>Để convert từ Scala case object thành JSON string và ngược lại:</p>
+<div class="highlight-python"><div class="highlight"><pre>import xitrum.util.SeriDeseri
+
+case class Person(name: String, age: Int, phone: Option[String])
+val person1 = Person(&quot;Jack&quot;, 20, None)
+val json    = SeriDeseri.toJson(person1)
+val person2 = SeriDeseri.fromJson[Person](json)
+</pre></div>
+</div>
+<p>Để respond JSON:</p>
+<div class="highlight-python"><div class="highlight"><pre>val scalaData = List(1, 2, 3)  // An example
+respondJson(scalaData)
+</pre></div>
+</div>
+<p>JSON cũng thuận tiện cho các tệp cấu hình cần tới các cấu trúc lồng nhau:
+Xem <a class="reference internal" href="howto.html"><em>Load config files</em></a>.</p>
+</div>
+<div class="section" id="plugin-cho-knockout-js">
+<h2>Plugin cho Knockout.js<a class="headerlink" href="#plugin-cho-knockout-js" title="Permalink to this headline">¶</a></h2>
+<p>Xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">https://github.com/xitrum-framework/xitrum-ko</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Mục Lục</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JavaScript and JSON</a><ul>
+<li><a class="reference internal" href="#javascript">JavaScript</a><ul>
+<li><a class="reference internal" href="#them-cac-doan-javascript-vao-mot-view">Thêm các đoạn JavaScript vào một view</a></li>
+<li><a class="reference internal" href="#respond-javascript-truc-tiep-khong-su-dung-view">Respond JavaScript trực tiếp không sử dụng view</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json">JSON</a></li>
+<li><a class="reference internal" href="#plugin-cho-knockout-js">Plugin cho Knockout.js</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="xml.html"
+                        title="chương trước ">XML</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="async.html"
+                        title="chương tiếp">Async response</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/js.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Thực hiện" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Nhập thuật ngữ, tên một mô-đun, lớp hay hàm cần tìm.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="async.html" title="Async response"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+      Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
