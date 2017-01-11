@@ -1,0 +1,723 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <title></title>
+          <meta name="description" content="" />
+          <meta name="keywords" content="" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/index.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.panzoom.min.js"></script>
+      <script type="text/javascript" src="../../lib/jquery.mousewheel.min.js"></script>
+      <script type="text/javascript" src="../../lib/index.js"></script>
+      <script type="text/javascript" src="../../index.js"></script>
+      <script type="text/javascript" src="../../lib/scheduler.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      <script type="text/javascript" src="../../lib/modernizr.custom.js"></script><script type="text/javascript" src="../../lib/diagrams.js" id="diagrams-js"></script>
+      <script type="text/javascript">
+        /* this variable can be used by the JS to determine the path to the root document */
+        var toRoot = '../../';
+      </script>
+    
+        </head>
+        <body>
+      <div id="search">
+        <span id="doc-title"><span id="doc-version"></span></span>
+        <span class="close-results"><span class="left">&lt;</span> Back</span>
+        <div id="textfilter">
+          <span class="input">
+            <input autocapitalize="none" placeholder="Search" id="index-input" type="text" accesskey="/" />
+            <i class="clear material-icons"></i>
+            <i id="search-icon" class="material-icons"></i>
+          </span>
+        </div>
+    </div>
+      <div id="search-results">
+        <div id="search-progress">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="results-content">
+          <div id="entity-results"></div>
+          <div id="member-results"></div>
+        </div>
+      </div>
+      <div id="content-scroll-container" style="-webkit-overflow-scrolling: touch;">
+        <div id="content-container" style="-webkit-overflow-scrolling: touch;">
+          <div id="subpackage-spacer">
+            <div id="packages">
+              <h1>Packages</h1>
+              <ul>
+                <li name="_root_.root" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="_root_"></a><a id="root:_root_"></a>
+      <span class="permalink">
+      <a href="index.html#_root_" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="../../index.html">
+              <span class="name">root</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="_root_.xitrum" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="xitrum"></a><a id="xitrum:xitrum"></a>
+      <span class="permalink">
+      <a href="index.html#xitrum" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="Things that are usually used by application developers are put in this package
+for convenience, because when they want to use XXX, they can simply write:" href="../index.html">
+              <span class="name">xitrum</span>
+            </a>
+      </span>
+      
+      <p class="shortcomment cmt">Things that are usually used by application developers are put in this package
+for convenience, because when they want to use XXX, they can simply write:</p><div class="fullcomment"><div class="comment cmt"><p>Things that are usually used by application developers are put in this package
+for convenience, because when they want to use XXX, they can simply write:</p><pre><span class="kw">import</span> xitrum.XXX</pre><p>To avoid polluting this namespace, things that are utilities should be put in
+package xitrum.util, not here.</p><p>Annotations and validators are put to package xitrum.annation and xitrum.validator
+because there are many of them. It's better for application developers to write:</p><pre><span class="kw">import</span> xitrum.annotation._
+<span class="kw">import</span> xitrum.validator._</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+    </li><li name="xitrum.annotation" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="annotation"></a><a id="annotation:annotation"></a>
+      <span class="permalink">
+      <a href="../xitrum/index.html#annotation" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="index.html">
+              <span class="name">annotation</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="xitrum">xitrum</a></dd></dl></div>
+    </li><li name="xitrum.annotation.SwaggerTypes" visbl="pub" class="indented3 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SwaggerTypes"></a><a id="SwaggerTypes:SwaggerTypes"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/index.html#SwaggerTypes" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="SwaggerTypes$.html">
+              <span class="name">SwaggerTypes</span>
+            </a>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="xitrum.annotation">annotation</a></dd></dl></div>
+    </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerArg.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerArg.html" title="">
+                          SwaggerArg
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerBinaryParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerBinaryParam.html" title="">
+                          SwaggerBinaryParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerBodyParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerBodyParam.html" title="">
+                          SwaggerBodyParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerBooleanParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerBooleanParam.html" title="">
+                          SwaggerBooleanParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerByteParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerByteParam.html" title="">
+                          SwaggerByteParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerDateParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerDateParam.html" title="">
+                          SwaggerDateParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerDateTimeParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerDateTimeParam.html" title="">
+                          SwaggerDateTimeParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerDoubleParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerDoubleParam.html" title="">
+                          SwaggerDoubleParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerFileParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerFileParam.html" title="">
+                          SwaggerFileParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerFloatParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerFloatParam.html" title="">
+                          SwaggerFloatParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerFormParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerFormParam.html" title="">
+                          SwaggerFormParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerHeaderParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerHeaderParam.html" title="">
+                          SwaggerHeaderParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerIntParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerIntParam.html" title="">
+                          SwaggerIntParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerLongParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerLongParam.html" title="">
+                          SwaggerLongParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerOptParamArg.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerOptParamArg.html" title="">
+                          SwaggerOptParamArg
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerParamArg.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerParamArg.html" title="">
+                          SwaggerParamArg
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerPasswordParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerPasswordParam.html" title="">
+                          SwaggerPasswordParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerPathParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerPathParam.html" title="">
+                          SwaggerPathParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="SwaggerTypes$$SwaggerQueryParam.html" title=""></a>
+                        <a href="SwaggerTypes$$SwaggerQueryParam.html" title="">
+                          SwaggerQueryParam
+                        </a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="" title=""></a>
+                        <a href="" title="">
+                          SwaggerStringParam
+                        </a>
+                      </li>
+              </ul>
+            </div>
+          </div>
+          <div id="content">
+            <body class="trait type">
+      <div id="definition">
+        <div class="big-circle trait">t</div>
+        <p id="owner"><a href="../index.html" class="extype" name="xitrum">xitrum</a>.<a href="index.html" class="extype" name="xitrum.annotation">annotation</a>.<a href="SwaggerTypes$.html" class="extype" name="xitrum.annotation.SwaggerTypes">SwaggerTypes</a></p>
+        <h1>SwaggerStringParam<span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span></h1>
+        <h3><span class="morelinks"></span></h3>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">SwaggerStringParam</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">
+            Linear Supertypes
+          </span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">
+              Known Subclasses
+            </span>
+            <div class="subClasses hiddenContent"><a href="Swagger$$OptStringBody.html" class="extype" name="xitrum.annotation.Swagger.OptStringBody">OptStringBody</a>, <a href="Swagger$$OptStringForm.html" class="extype" name="xitrum.annotation.Swagger.OptStringForm">OptStringForm</a>, <a href="Swagger$$OptStringHeader.html" class="extype" name="xitrum.annotation.Swagger.OptStringHeader">OptStringHeader</a>, <a href="Swagger$$OptStringPath.html" class="extype" name="xitrum.annotation.Swagger.OptStringPath">OptStringPath</a>, <a href="Swagger$$OptStringQuery.html" class="extype" name="xitrum.annotation.Swagger.OptStringQuery">OptStringQuery</a>, <a href="Swagger$$StringBody.html" class="extype" name="xitrum.annotation.Swagger.StringBody">StringBody</a>, <a href="Swagger$$StringForm.html" class="extype" name="xitrum.annotation.Swagger.StringForm">StringForm</a>, <a href="Swagger$$StringHeader.html" class="extype" name="xitrum.annotation.Swagger.StringHeader">StringHeader</a>, <a href="Swagger$$StringPath.html" class="extype" name="xitrum.annotation.Swagger.StringPath">StringPath</a>, <a href="Swagger$$StringQuery.html" class="extype" name="xitrum.annotation.Swagger.StringQuery">StringQuery</a></div>
+          </div><div class="toggleContainer block diagram-container" id="inheritance-diagram-container">
+                <span class="toggle diagram-link">
+                  Type Hierarchy
+                </span>
+                <div class="diagram" id="inheritance-diagram"><svg class="class-diagram" id="graph1" viewBox="0.00 0.00 1074.00 155.00" height="155pt" width="1074pt" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 1) rotate(0) translate(4 151)" class="graph" id="graph0"><polygon points="-4,4 -4,-151 1070,-151 1070,4 -4,4" stroke="none" fill="white"></polygon><g class="cluster" id="clust1"></g><g class="cluster" id="clust2"></g><!-- node0 --><g class="node this trait" id="graph1_0"><g id="a_this trait|graph1_0"><a xlink:title="xitrum.annotation.SwaggerTypes.SwaggerStringParam (this trait)" xlink:href="#inheritance-diagram"><path d="M612.667,-86C612.667,-86 510.333,-86 510.333,-86 506.167,-86 502,-81.8333 502,-77.6667 502,-77.6667 502,-69.3333 502,-69.3333 502,-65.1667 506.167,-61 510.333,-61 510.333,-61 612.667,-61 612.667,-61 616.833,-61 621,-65.1667 621,-69.3333 621,-69.3333 621,-77.6667 621,-77.6667 621,-81.8333 616.833,-86 612.667,-86" stroke="#2e6d82" fill="#2e6d82"></path><image xlink:href="../../lib/trait_diagram.png" y="-80.5" x="512.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-70.6" x="533.371" text-anchor="start">SwaggerStringParam</text></a></g></g><!-- node1 --><g class="node class" id="graph1_1"><g id="a_class|graph1_1"><a xlink:title="xitrum.annotation.Swagger.OptStringBody" xlink:href="Swagger$$OptStringBody.html#inheritance-diagram"><path d="M86.6667,-25C86.6667,-25 8.33333,-25 8.33333,-25 4.16667,-25 0,-20.8333 0,-16.6667 0,-16.6667 0,-8.33333 0,-8.33333 0,-4.16667 4.16667,-0 8.33333,-0 8.33333,-0 86.6667,-0 86.6667,-0 90.8333,-0 95,-4.16667 95,-8.33333 95,-8.33333 95,-16.6667 95,-16.6667 95,-20.8333 90.8333,-25 86.6667,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="10.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="31.375" text-anchor="start">OptStringBody</text></a></g></g><!-- node0&#45;&gt;node1 --><g class="edge inheritance" id="graph1_0_1"><g id="a_inheritance|graph1_0_1"><a xlink:title="OptStringBody is a subtype of SwaggerStringParam"><path d="M494.875,-67.6744C405.492,-60.7253 241.963,-46.3435 103.5,-25 100.753,-24.5766 97.9377,-24.1083 95.1009,-23.6099" stroke="#d4d4d4" fill="none"></path><polygon points="494.804,-70.1261 501.972,-68.2226 495.181,-65.2407 494.804,-70.1261" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node2 --><g class="node class" id="graph1_2"><g id="a_class|graph1_2"><a xlink:title="xitrum.annotation.Swagger.OptStringForm" xlink:href="Swagger$$OptStringForm.html#inheritance-diagram"><path d="M199.667,-25C199.667,-25 121.333,-25 121.333,-25 117.167,-25 113,-20.8333 113,-16.6667 113,-16.6667 113,-8.33333 113,-8.33333 113,-4.16667 117.167,-0 121.333,-0 121.333,-0 199.667,-0 199.667,-0 203.833,-0 208,-4.16667 208,-8.33333 208,-8.33333 208,-16.6667 208,-16.6667 208,-20.8333 203.833,-25 199.667,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="123.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="144.16" text-anchor="start">OptStringForm</text></a></g></g><!-- node0&#45;&gt;node2 --><g class="edge inheritance" id="graph1_0_2"><g id="a_inheritance|graph1_0_2"><a xlink:title="OptStringForm is a subtype of SwaggerStringParam"><path d="M494.771,-64.6326C425.131,-56.1133 312.859,-41.5091 216.5,-25 213.761,-24.5307 210.951,-24.0265 208.119,-23.5006" stroke="#d4d4d4" fill="none"></path><polygon points="494.548,-67.0734 501.793,-65.4886 495.141,-62.2094 494.548,-67.0734" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node3 --><g class="node class" id="graph1_3"><g id="a_class|graph1_3"><a xlink:title="xitrum.annotation.Swagger.OptStringHeader" xlink:href="Swagger$$OptStringHeader.html#inheritance-diagram"><path d="M320.667,-25C320.667,-25 234.333,-25 234.333,-25 230.167,-25 226,-20.8333 226,-16.6667 226,-16.6667 226,-8.33333 226,-8.33333 226,-4.16667 230.167,-0 234.333,-0 234.333,-0 320.667,-0 320.667,-0 324.833,-0 329,-4.16667 329,-8.33333 329,-8.33333 329,-16.6667 329,-16.6667 329,-20.8333 324.833,-25 320.667,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="236.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="257.373" text-anchor="start">OptStringHeader</text></a></g></g><!-- node0&#45;&gt;node3 --><g class="edge inheritance" id="graph1_0_3"><g id="a_inheritance|graph1_0_3"><a xlink:title="OptStringHeader is a subtype of SwaggerStringParam"><path d="M499.029,-59.5219C448.171,-48.9563 377.224,-34.2173 329.442,-24.2907" stroke="#d4d4d4" fill="none"></path><polygon points="498.716,-61.959 506.068,-60.9841 499.712,-57.1615 498.716,-61.959" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node4 --><g class="node class" id="graph1_4"><g id="a_class|graph1_4"><a xlink:title="xitrum.annotation.Swagger.OptStringPath" xlink:href="Swagger$$OptStringPath.html#inheritance-diagram"><path d="M431.667,-25C431.667,-25 355.333,-25 355.333,-25 351.167,-25 347,-20.8333 347,-16.6667 347,-16.6667 347,-8.33333 347,-8.33333 347,-4.16667 351.167,-0 355.333,-0 355.333,-0 431.667,-0 431.667,-0 435.833,-0 440,-4.16667 440,-8.33333 440,-8.33333 440,-16.6667 440,-16.6667 440,-20.8333 435.833,-25 431.667,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="357.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="378.264" text-anchor="start">OptStringPath</text></a></g></g><!-- node0&#45;&gt;node4 --><g class="edge inheritance" id="graph1_0_4"><g id="a_inheritance|graph1_0_4"><a xlink:title="OptStringPath is a subtype of SwaggerStringParam"><path d="M521.925,-58.6017C492.874,-48.3992 453.869,-34.7012 426.495,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="521.293,-60.9762 528.709,-60.9841 522.916,-56.353 521.293,-60.9762" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node5 --><g class="node class" id="graph1_5"><g id="a_class|graph1_5"><a xlink:title="xitrum.annotation.Swagger.OptStringQuery" xlink:href="Swagger$$OptStringQuery.html#inheritance-diagram"><path d="M548.167,-25C548.167,-25 466.833,-25 466.833,-25 462.667,-25 458.5,-20.8333 458.5,-16.6667 458.5,-16.6667 458.5,-8.33333 458.5,-8.33333 458.5,-4.16667 462.667,-0 466.833,-0 466.833,-0 548.167,-0 548.167,-0 552.333,-0 556.5,-4.16667 556.5,-8.33333 556.5,-8.33333 556.5,-16.6667 556.5,-16.6667 556.5,-20.8333 552.333,-25 548.167,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="468.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="489.1" text-anchor="start">OptStringQuery</text></a></g></g><!-- node0&#45;&gt;node5 --><g class="edge inheritance" id="graph1_0_5"><g id="a_inheritance|graph1_0_5"><a xlink:title="OptStringQuery is a subtype of SwaggerStringParam"><path d="M545.863,-55.4154C536.966,-45.6942 526.055,-33.7727 518.146,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="544.298,-57.3339 550.831,-60.8435 547.913,-54.0256 544.298,-57.3339" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node6 --><g class="node class" id="graph1_6"><g id="a_class|graph1_6"><a xlink:title="xitrum.annotation.Swagger.StringBody" xlink:href="Swagger$$StringBody.html#inheritance-diagram"><path d="M648.167,-25C648.167,-25 582.833,-25 582.833,-25 578.667,-25 574.5,-20.8333 574.5,-16.6667 574.5,-16.6667 574.5,-8.33333 574.5,-8.33333 574.5,-4.16667 578.667,-0 582.833,-0 582.833,-0 648.167,-0 648.167,-0 652.333,-0 656.5,-4.16667 656.5,-8.33333 656.5,-8.33333 656.5,-16.6667 656.5,-16.6667 656.5,-20.8333 652.333,-25 648.167,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="584.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="605.322" text-anchor="start">StringBody</text></a></g></g><!-- node0&#45;&gt;node6 --><g class="edge inheritance" id="graph1_0_6"><g id="a_inheritance|graph1_0_6"><a xlink:title="StringBody is a subtype of SwaggerStringParam"><path d="M577.137,-55.4154C586.034,-45.6942 596.945,-33.7727 604.854,-25.1323" stroke="#d4d4d4" fill="none"></path><polygon points="575.087,-54.0256 572.169,-60.8435 578.702,-57.3339 575.087,-54.0256" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node7 --><g class="node class" id="graph1_7"><g id="a_class|graph1_7"><a xlink:title="xitrum.annotation.Swagger.StringForm" xlink:href="Swagger$$StringForm.html#inheritance-diagram"><path d="M748.167,-25C748.167,-25 682.833,-25 682.833,-25 678.667,-25 674.5,-20.8333 674.5,-16.6667 674.5,-16.6667 674.5,-8.33333 674.5,-8.33333 674.5,-4.16667 678.667,-0 682.833,-0 682.833,-0 748.167,-0 748.167,-0 752.333,-0 756.5,-4.16667 756.5,-8.33333 756.5,-8.33333 756.5,-16.6667 756.5,-16.6667 756.5,-20.8333 752.333,-25 748.167,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="684.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="705.107" text-anchor="start">StringForm</text></a></g></g><!-- node0&#45;&gt;node7 --><g class="edge inheritance" id="graph1_0_7"><g id="a_inheritance|graph1_0_7"><a xlink:title="StringForm is a subtype of SwaggerStringParam"><path d="M598.115,-58.4723C624.709,-48.2837 660.267,-34.6606 685.255,-25.0875" stroke="#d4d4d4" fill="none"></path><polygon points="597.219,-56.1919 591.558,-60.9841 598.972,-60.7676 597.219,-56.1919" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node8 --><g class="node class" id="graph1_8"><g id="a_class|graph1_8"><a xlink:title="xitrum.annotation.Swagger.StringHeader" xlink:href="Swagger$$StringHeader.html#inheritance-diagram"><path d="M856.167,-25C856.167,-25 782.833,-25 782.833,-25 778.667,-25 774.5,-20.8333 774.5,-16.6667 774.5,-16.6667 774.5,-8.33333 774.5,-8.33333 774.5,-4.16667 778.667,-0 782.833,-0 782.833,-0 856.167,-0 856.167,-0 860.333,-0 864.5,-4.16667 864.5,-8.33333 864.5,-8.33333 864.5,-16.6667 864.5,-16.6667 864.5,-20.8333 860.333,-25 856.167,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="784.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="805.32" text-anchor="start">StringHeader</text></a></g></g><!-- node0&#45;&gt;node8 --><g class="edge inheritance" id="graph1_0_8"><g id="a_inheritance|graph1_0_8"><a xlink:title="StringHeader is a subtype of SwaggerStringParam"><path d="M618.932,-59.3664C665.85,-48.6369 731.249,-33.6815 774.447,-23.8028" stroke="#d4d4d4" fill="none"></path><polygon points="618.135,-57.0352 611.857,-60.9841 619.228,-61.8119 618.135,-57.0352" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node9 --><g class="node class" id="graph1_9"><g id="a_class|graph1_9"><a xlink:title="xitrum.annotation.Swagger.StringPath" xlink:href="Swagger$$StringPath.html#inheritance-diagram"><path d="M954.167,-25C954.167,-25 890.833,-25 890.833,-25 886.667,-25 882.5,-20.8333 882.5,-16.6667 882.5,-16.6667 882.5,-8.33333 882.5,-8.33333 882.5,-4.16667 886.667,-0 890.833,-0 890.833,-0 954.167,-0 954.167,-0 958.333,-0 962.5,-4.16667 962.5,-8.33333 962.5,-8.33333 962.5,-16.6667 962.5,-16.6667 962.5,-20.8333 958.333,-25 954.167,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="892.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="913.211" text-anchor="start">StringPath</text></a></g></g><!-- node0&#45;&gt;node9 --><g class="edge inheritance" id="graph1_0_9"><g id="a_inheritance|graph1_0_9"><a xlink:title="StringPath is a subtype of SwaggerStringParam"><path d="M628.433,-63.8765C691.792,-55.3438 789.454,-41.2336 873.5,-25 876.417,-24.4366 879.424,-23.8199 882.444,-23.1742" stroke="#d4d4d4" fill="none"></path><polygon points="627.876,-61.4792 621.264,-64.838 628.527,-66.3358 627.876,-61.4792" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node10 --><g class="node class" id="graph1_10"><g id="a_class|graph1_10"><a xlink:title="xitrum.annotation.Swagger.StringQuery" xlink:href="Swagger$$StringQuery.html#inheritance-diagram"><path d="M1057.67,-25C1057.67,-25 989.333,-25 989.333,-25 985.167,-25 981,-20.8333 981,-16.6667 981,-16.6667 981,-8.33333 981,-8.33333 981,-4.16667 985.167,-0 989.333,-0 989.333,-0 1057.67,-0 1057.67,-0 1061.83,-0 1066,-4.16667 1066,-8.33333 1066,-8.33333 1066,-16.6667 1066,-16.6667 1066,-20.8333 1061.83,-25 1057.67,-25" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-19.5" x="991.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-9.6" x="1012.05" text-anchor="start">StringQuery</text></a></g></g><!-- node0&#45;&gt;node10 --><g class="edge inheritance" id="graph1_0_10"><g id="a_inheritance|graph1_0_10"><a xlink:title="StringQuery is a subtype of SwaggerStringParam"><path d="M628.384,-66.8699C709.793,-59.53 851.286,-45.202 971.5,-25 974.509,-24.4943 977.606,-23.928 980.719,-23.3249" stroke="#d4d4d4" fill="none"></path><polygon points="627.933,-64.4504 621.18,-67.5153 628.371,-69.3309 627.933,-64.4504" stroke="#d4d4d4" fill="none"></polygon></a></g></g><!-- node11 --><g class="node class" id="graph1_11"><g id="a_class|graph1_11"><a xlink:title="scala.AnyRef"><path d="M587.667,-147C587.667,-147 535.333,-147 535.333,-147 531.167,-147 527,-142.833 527,-138.667 527,-138.667 527,-130.333 527,-130.333 527,-126.167 531.167,-122 535.333,-122 535.333,-122 587.667,-122 587.667,-122 591.833,-122 596,-126.167 596,-130.333 596,-130.333 596,-138.667 596,-138.667 596,-142.833 591.833,-147 587.667,-147" stroke="#418565" fill="#418565"></path><image xlink:href="../../lib/class_diagram.png" y="-141.5" x="537.5" preserveAspectRatio="xMinYMin meet" height="15px" width="15px"></image><text fill="#ffffff" font-size="8.00" font-family="Source Code Pro" y="-131.6" x="558.271" text-anchor="start">AnyRef</text></a></g></g><!-- node11&#45;&gt;node0 --><g class="edge inheritance" id="graph1_11_0"><g id="a_inheritance|graph1_11_0"><a xlink:title="SwaggerStringParam is a subtype of AnyRef"><path d="M561.5,-114.76C561.5,-105.367 561.5,-94.2882 561.5,-86.1323" stroke="#d4d4d4" fill="none"></path><polygon points="559.05,-114.843 561.5,-121.843 563.95,-114.844 559.05,-114.843" stroke="#d4d4d4" fill="none"></polygon></a></g></g></g></svg></div>
+                <div id="diagram-controls" class="hiddenContent">
+                  <button id="diagram-zoom-out" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button id="diagram-zoom-in" class="diagram-btn"><i class="material-icons"></i></button>
+                  <button title="Toggle full-screen" id="diagram-fs" class="diagram-btn to-full"><i class="material-icons"></i></button>
+                </div>
+              </div></div>
+        
+
+      <div id="mbrsel">
+        <div class="toggle"></div>
+        <div id="memberfilter">
+          <i class="material-icons arrow"></i>
+          <span class="input">
+            <input id="mbrsel-input" placeholder="Filter all members" type="text" accesskey="/" />
+          </span>
+          <i class="clear material-icons"></i>
+        </div>
+        <div id="filterby">
+          <div id="order">
+            <span class="filtertype">Ordering</span>
+            <ol>
+              
+              <li class="alpha in"><span>Alphabetic</span></li>
+              <li class="inherit out"><span>By Inheritance</span></li>
+            </ol>
+          </div>
+          <div class="ancestors">
+                  <span class="filtertype">Inherited<br />
+                  </span>
+                  <ol id="linearization">
+                    <li class="in" name="xitrum.annotation.SwaggerTypes.SwaggerStringParam"><span>SwaggerStringParam</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  </ol>
+                </div><div class="ancestors">
+              <span class="filtertype"></span>
+              <ol>
+                <li class="hideall out"><span>Hide All</span></li>
+                <li class="showall in"><span>Show All</span></li>
+              </ol>
+            </div>
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div class="values members">
+              <h3>Value Members</h3>
+              <ol>
+                <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#!=(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html###():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#==(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#asInstanceOf[T0]:T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a><a id="clone():AnyRef"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#clone():Object" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#equals(x$1:Any):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#finalize():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#getClass():Class[_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#hashCode():Int" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#isInstanceOf[T0]:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#notify():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#notifyAll():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#toString():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#wait():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
+      <span class="permalink">
+      <a href="../../xitrum/annotation/SwaggerTypes$$SwaggerStringParam.html#wait(x$1:Long):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li>
+              </ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+    </body>
+          </div>
+        </div>
+      </div>
+    </body>
+      </html>
