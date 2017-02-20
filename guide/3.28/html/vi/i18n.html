@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>I18n &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>I18n &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="Log" href="log.html" />
     <link rel="prev" title="Cache ở server" href="cache.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="cache.html" title="Cache ở server"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,12 +52,12 @@
             
   <div class="section" id="i18n">
 <h1>I18n<a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h1>
-<p>Phong cách GNU gettext được sử dụng. Không giống như các i18n method khác, gettext
-hỗ trợ đa số các form.</p>
+<p>Phong cách GNU gettext được sử dụng. Không giống như các cách i18n khác, gettext
+hỗ trợ nhiều định dạng khác nhau.</p>
 <img alt="_images/poedit.png" src="_images/poedit.png" />
 <div class="section" id="viet-cac-internationalized-messages-vao-source-code">
 <h2>Viết các internationalized messages vào source code<a class="headerlink" href="#viet-cac-internationalized-messages-vao-source-code" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">xitrum.Action</span></code> kế thừa <code class="docutils literal"><span class="pre">xitrum.I18n</span></code>, và có 2 method sau:</p>
+<p><code class="docutils literal"><span class="pre">xitrum.Action</span></code> kế thừa <code class="docutils literal"><span class="pre">xitrum.I18n</span></code>, và khi đó có 2 method sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>t(&quot;Message&quot;)
 tc(&quot;Context&quot;, &quot;Message&quot;)
 
@@ -80,7 +80,7 @@ t(&quot;%,.3f&quot;, 1234.5678)
 </pre></div>
 </div>
 <p>Bạn có thể gọi trực tiếp 2 method trên từ trong action.
-Tại một nơi khác như model, bạn cần truyền current action vào đó và gọi <code class="docutils literal"><span class="pre">t</span></code> và
+Trong khi các nơi khác như model, bạn cần truyền current action vào đó và gọi <code class="docutils literal"><span class="pre">t</span></code> và
 <code class="docutils literal"><span class="pre">tc</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre>// In an action
 respondText(MyModel.hello(this))
@@ -93,8 +93,8 @@ object MyModel {
 </pre></div>
 </div>
 </div>
-<div class="section" id="trien-khai-cac-tin-nhan-den-tep-pot">
-<h2>Triển khai các tin nhắn đến tệp pot<a class="headerlink" href="#trien-khai-cac-tin-nhan-den-tep-pot" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="trien-khai-cac-message-den-tap-tin-pot">
+<h2>Triển khai các message đến tập tin pot<a class="headerlink" href="#trien-khai-cac-message-den-tap-tin-pot" title="Permalink to this headline">¶</a></h2>
 <p>Tạo một tệp i18n.pot trong thư mục gốc của project, sau đó biên dịch lại cả
 project.</p>
 <div class="highlight-python"><div class="highlight"><pre>sbt/sbt clean
@@ -103,15 +103,15 @@ touch i18n.pot
 sbt/sbt compile
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> dùng để xóa tất cả các tệp .class , bắt SBT biên dịch lại cả
+<p>Lệnh <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> dùng để xóa tất cả các tệp .class , yêu cầu SBT biên dịch lại cả
 project. Vì sau <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code>, SBT sẽ thử tải lại toàn bộ <a class="reference internal" href="deps.html"><em>dependencies</em></a>,
 bạn có thể tiến hành nhanh hơn một chút với lệnh <code class="docutils literal"><span class="pre">find</span> <span class="pre">target</span> <span class="pre">-name</span> <span class="pre">*.class</span> <span class="pre">-delete</span></code>,
 nó sẽ xóa toàn bộ các tệp . class trong thư mục <code class="docutils literal"><span class="pre">target</span></code>.</p>
-<p>Sau khi biên dịch lại, i18n.pot sẽ được lấp đầy với các gettext message triển khai
+<p>Sau khi biên dịch lại, i18n.pot sẽ được lấp đầy với các gettext message
 từ mã nguồn. Để làm điều này, <a class="reference external" href="http://www.scala-lang.org/node/140">Scala compiler plugin technique</a>
 được sử dụng.</p>
 <p>Tuy nhiên, phương pháp này sẽ chỉ trích rút dữ liệu từ mã nguồn. Nếu bạn có các
-tệp Java, bạn có thể sử dụng câu lệnh <code class="docutils literal"><span class="pre">xgettext</span></code> để trích xuất dữ liệu:</p>
+tập tin Java, bạn có thể sử dụng câu lệnh <code class="docutils literal"><span class="pre">xgettext</span></code> để trích xuất dữ liệu:</p>
 <div class="highlight-python"><div class="highlight"><pre>xgettext -kt -ktc:1c,2 -ktn:1,2 -ktcn:1c,2,3 -o i18n_java.pot --from-code=UTF-8 $(find src/main/java -name &quot;*.java&quot;)
 </pre></div>
 </div>
@@ -156,7 +156,7 @@ another.jar
 <div class="section" id="chon-ngon-ngu">
 <h2>Chọn ngôn ngữ<a class="headerlink" href="#chon-ngon-ngu" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Để lấy cấc ngôn ngữ trong <code class="docutils literal"><span class="pre">Accept-Language</span></code> request header bởi browser, gọi
+<li>Để lấy cấc ngôn ngữ trong <code class="docutils literal"><span class="pre">Accept-Language</span></code> request header bởi browser, gọi hàm
 <code class="docutils literal"><span class="pre">browserLanguages</span></code>. Kết quả sẽ được sắp xếp theo mức ưu tiên đặt bởi trình duyệt
 từ cao xuống thấp.</li>
 <li>Ngôn ngữ mặc định là &#8220;en&#8221;. Để chuyển ngôn ngữ, ví dụ Nhật Bản, gọi <code class="docutils literal"><span class="pre">language</span> <span class="pre">=</span> <span class="pre">&quot;ja&quot;</span></code></li>
@@ -237,7 +237,7 @@ respondView(options)
   <ul>
 <li><a class="reference internal" href="#">I18n</a><ul>
 <li><a class="reference internal" href="#viet-cac-internationalized-messages-vao-source-code">Viết các internationalized messages vào source code</a></li>
-<li><a class="reference internal" href="#trien-khai-cac-tin-nhan-den-tep-pot">Triển khai các tin nhắn đến tệp pot</a></li>
+<li><a class="reference internal" href="#trien-khai-cac-message-den-tap-tin-pot">Triển khai các message đến tập tin pot</a></li>
 <li><a class="reference internal" href="#luu-cac-tep-po-tai-dau">Lưu các tệp .po tại đâu</a></li>
 <li><a class="reference internal" href="#chon-ngon-ngu">Chọn ngôn ngữ</a></li>
 <li><a class="reference internal" href="#validation-messages">Validation messages</a></li>
@@ -289,7 +289,7 @@ respondView(options)
         <li class="right" >
           <a href="cache.html" title="Cache ở server"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

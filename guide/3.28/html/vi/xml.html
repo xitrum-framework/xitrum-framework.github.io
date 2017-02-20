@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>XML &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>XML &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="JavaScript and JSON" href="js.html" />
     <link rel="prev" title="Postbacks" href="postback.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="postback.html" title="Postbacks"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,7 +55,7 @@
 <p>Scala cho phép viết literal XML. Xitrum sử dụng tính năng này như &#8220;template engine&#8221;:</p>
 <ul class="simple">
 <li>Scala check cú pháp XML khi compile: Các View là typesafe.</li>
-<li>Scala tự động bỏ qua XML: Các view ngăn chặn <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>.</li>
+<li>Scala tự động bỏ qua XML: Các view được tránh <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a> theo mặc định.</li>
 </ul>
 <p>Dưới đây là một vài thủ thuật.</p>
 <div class="section" id="unescape-xml">
@@ -109,7 +109,7 @@
 </div>
 <div class="section" id="render-xhtml">
 <h2>Render XHTML<a class="headerlink" href="#render-xhtml" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum tự động render view và layout như XHTML.
+<p>Xitrum tự động render view và layout sang XHTML.
 Nếu bạn muốn tự render chúng (hiếm khi), chú ý đến các dòng code dưới đây.</p>
 <div class="highlight-python"><div class="highlight"><pre>import scala.xml.Xhtml
 
@@ -179,7 +179,7 @@ Xhtml.toXhtml(&lt;br /&gt;)  // =&gt; &quot;&lt;br /&gt;&quot;
         <li class="right" >
           <a href="postback.html" title="Postbacks"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

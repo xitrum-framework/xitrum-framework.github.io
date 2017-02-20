@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Hướng dẫn sử dụng Xitrum &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Hướng dẫn sử dụng Xitrum &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="#" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="#" />
     <link rel="next" title="Giới thiệu" href="intro.html" /> 
   </head>
   <body role="document">
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="intro.html" title="Giới thiệu"
              accesskey="N">xem tiếp</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -106,7 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="restful.html#route-cache">Route cache</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#muc-do-uu-tien-cua-cac-route-first-last">Mức độ ưu tiên của các route (first, last)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#nhieu-duong-dan-cho-mot-action">Nhiều đường dẫn cho một action</a></li>
-<li class="toctree-l2"><a class="reference internal" href="restful.html#dot-trong-route">Dot trong route</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#dau-cham-trong-route">Dấu chấm trong route</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#regular-expression-trong-route">Regular Expression trong route</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#xu-ly-cac-phan-con-lai-cua-route">Xử lý các phần còn lại của route</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#lien-ket-den-mot-action">Liên kết đến một action</a></li>
@@ -133,7 +133,7 @@
 <li class="toctree-l2"><a class="reference internal" href="postback.html#non-form">Non-form</a></li>
 <li class="toctree-l2"><a class="reference internal" href="postback.html#hop-thoai-xac-nhan">Hộp thoại xác nhận</a></li>
 <li class="toctree-l2"><a class="reference internal" href="postback.html#them-parameter-khac">Thêm parameter khác</a></li>
-<li class="toctree-l2"><a class="reference internal" href="postback.html#hien-thi-anh-cho-khi-load-ajax">Hiện thị ảnh chờ khi load Ajax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postback.html#hien-thi-anh-cho-khi-load-ajax">Hiển thị ảnh chờ khi load Ajax</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="xml.html">XML</a><ul>
@@ -162,14 +162,14 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="static.html">Các tệp tĩnh</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static.html#cung-cap-cac-tep-tinh-tren-dia">Cung cấp các tệp tĩnh trên đĩa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static.html">Các tập tin tĩnh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static.html#phuc-vu-cac-tap-tin-tinh-tren-o-dia">Phục vụ các tập tin tĩnh trên ổ đĩa</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static.html#index-html-fallback">index.html fallback</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static.html#va-500">404 và 500</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static.html#cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention">Cung cấp các tệp tài nguyên trong classpath với WebJars convention</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static.html#cung-cap-cac-tap-tin-tai-nguyen-trong-classpath-voi-webjars-convention">Cung cấp các tập tin tài nguyên trong classpath với WebJars convention</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static.html#webjars">WebJars</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static.html#luu-resource-file-trong-tep-jar-voi-webjars-convention">Lưu resource file trong tệp .jar với WebJars convention</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static.html#respond-mot-tep-trong-classpath">Respond một tệp trong classpath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static.html#luu-resource-file-trong-tap-tin-jar-voi-webjars-convention">Lưu resource file trong tập tin .jar với WebJars convention</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static.html#respond-mot-tap-tin-trong-classpath">Respond một tập tin trong classpath</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static.html#cache-o-phia-client-voi-etag-va-max-age">Cache ở phía client với ETag và max-age</a></li>
@@ -181,7 +181,7 @@
 <li class="toctree-l1"><a class="reference internal" href="scopes.html">Scopes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="scopes.html#request">Request</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="scopes.html#cac-loai-parameter">Các loại parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="scopes.html#accesing-parameter">Accesing parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#truy-xuat-cac-parameter">Truy xuất các parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="scopes.html#at">&#8220;at&#8221;</a></li>
 <li class="toctree-l3"><a class="reference internal" href="scopes.html#atjson">&#8220;atJson&#8221;</a></li>
 <li class="toctree-l3"><a class="reference internal" href="scopes.html#requestvar">RequestVar</a></li>
@@ -228,7 +228,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="i18n.html">I18n</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="i18n.html#viet-cac-internationalized-messages-vao-source-code">Viết các internationalized messages vào source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="i18n.html#trien-khai-cac-tin-nhan-den-tep-pot">Triển khai các tin nhắn đến tệp pot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i18n.html#trien-khai-cac-message-den-tap-tin-pot">Triển khai các message đến tập tin pot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="i18n.html#luu-cac-tep-po-tai-dau">Lưu các tệp .po tại đâu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="i18n.html#chon-ngon-ngu">Chọn ngôn ngữ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="i18n.html#validation-messages">Validation messages</a></li>
@@ -278,7 +278,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html#thu-thap-metrics">Thu thập metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#thu-thap-thong-tin">Thu thập thông tin</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="metrics.html#bo-nho-heap-va-cpu">Bộ nhớ heap và CPU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="metrics.html#action-metric">Action metric</a></li>
 <li class="toctree-l3"><a class="reference internal" href="metrics.html#thu-thap-cac-so-lieu-tuy-chinh">Thu thập các số liệu tùy chỉnh</a></li>
@@ -365,7 +365,7 @@
         <li class="right" >
           <a href="intro.html" title="Giới thiệu"
              >xem tiếp</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

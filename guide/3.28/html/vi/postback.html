@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Postbacks &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Postbacks &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="XML" href="xml.html" />
     <link rel="prev" title="Template engines" href="template_engines.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="template_engines.html" title="Template engines"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -57,7 +57,7 @@
 <li>Để phục vụ các thiết bị: bạn cần tạo các RESTful APIs cho smartphones, web service cho các web site khác.</li>
 <li>Để phục vụ các người dùng cuối: bạn cần tạo giao diện web.</li>
 </ul>
-<p>Như một web framework thông thường, Xitrum hướng tới việc hỗ trợ giải quyết các use case một cách dễ dàng. Để giải quyết use case đầu tiền, bạn sử dụng <a class="reference internal" href="restful.html"><em>RESTful actions</em></a>. Để giải quyết use case thứ hai, bạn có thể sử dụng tính năng Ajax form postback của Xitrum.
+<p>Như một web framework thông thường, Xitrum hướng tới việc hỗ trợ giải quyết các use case một cách dễ dàng. Để giải quyết use case đầu tiên, xem <a class="reference internal" href="restful.html"><em>RESTful APIs</em></a>. Để giải quyết use case thứ hai, bạn có thể sử dụng tính năng Ajax form postback của Xitrum.
 Bạn có thể xem thêm các trang dưới đây để biết thêm về postback:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></li>
@@ -187,10 +187,10 @@ class ArticlesCreate extends AppAction {
 <p><code class="docutils literal"><span class="pre">#myform</span></code> là một jQuery selector để chọn form có chứa các parameter được thêm vào.</p>
 </div>
 <div class="section" id="hien-thi-anh-cho-khi-load-ajax">
-<h2>Hiện thị ảnh chờ khi load Ajax<a class="headerlink" href="#hien-thi-anh-cho-khi-load-ajax" title="Permalink to this headline">¶</a></h2>
+<h2>Hiển thị ảnh chờ khi load Ajax<a class="headerlink" href="#hien-thi-anh-cho-khi-load-ajax" title="Permalink to this headline">¶</a></h2>
 <p>Mặc định, ảnh sau sẽ được hiển thị khi load Ajax:</p>
 <img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
-<p>Để đổi ảnh, bạn có thể gọi JS snippet này sau khi đã include <code class="docutils literal"><span class="pre">jsDefaults</span></code> (đã include
+<p>Để hiển thị ảnh, bạn có thể gọi JS snippet này sau khi đã include <code class="docutils literal"><span class="pre">jsDefaults</span></code> (đã include
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>) trong view template của bạn:</p>
 <div class="highlight-python"><div class="highlight"><pre>// target: The element that triggered the postback
 xitrum.ajaxLoading = function(target) {
@@ -225,7 +225,7 @@ xitrum.ajaxLoading = function(target) {
 <li><a class="reference internal" href="#non-form">Non-form</a></li>
 <li><a class="reference internal" href="#hop-thoai-xac-nhan">Hộp thoại xác nhận</a></li>
 <li><a class="reference internal" href="#them-parameter-khac">Thêm parameter khác</a></li>
-<li><a class="reference internal" href="#hien-thi-anh-cho-khi-load-ajax">Hiện thị ảnh chờ khi load Ajax</a></li>
+<li><a class="reference internal" href="#hien-thi-anh-cho-khi-load-ajax">Hiển thị ảnh chờ khi load Ajax</a></li>
 </ul>
 </li>
 </ul>
@@ -272,7 +272,7 @@ xitrum.ajaxLoading = function(target) {
         <li class="right" >
           <a href="template_engines.html" title="Template engines"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

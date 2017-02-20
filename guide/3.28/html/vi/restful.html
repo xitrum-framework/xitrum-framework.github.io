@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RESTful APIs &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>RESTful APIs &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="Template engines" href="template_engines.html" />
     <link rel="prev" title="Action and view" href="action_view.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="action_view.html" title="Action and view"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,7 +52,7 @@
             
   <div class="section" id="restful-apis">
 <h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h1>
-<p>Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone,Android v.v một cách rất dễ dàng.</p>
+<p>Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone, Android v.v một cách rất dễ dàng.</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 import xitrum.annotation.GET
 
@@ -68,21 +68,21 @@ class ArticlesShow extends Action {
 </pre></div>
 </div>
 <p>Tương tự cho các method POST, PUT, PATCH, DELETE, và OPTIONS.
-Xitrum tự động kiểm soát phần HEAD như như một method GET với phần response body rỗng.</p>
-<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method PÓST với <code class="docutils literal"><span class="pre">_method=put</span></code> hoặc <code class="docutils literal"><span class="pre">_method=delete</span></code> trong request body.</p>
-<p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến và ghi ra out put để thông báo cho bạn biết bạn có APIs nào:</p>
+Xitrum tự động kiểm soát phần HEAD như một method GET với phần response body rỗng.</p>
+<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, một thủ thuật được sử dụng là gửi một method POST với <code class="docutils literal"><span class="pre">_method=put</span></code> hoặc <code class="docutils literal"><span class="pre">_method=delete</span></code> trong request body.</p>
+<p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến (route) và ghi ra output để thông báo cho bạn biết bạn có APIs nào:</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
 GET /articles     quickstart.action.ArticlesIndex
 GET /articles/:id quickstart.action.ArticlesShow
 </pre></div>
 </div>
-<p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy nghĩ về tính năng nay tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
+<p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy xem tính năng này tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
 Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
 Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
 <div class="section" id="route-cache">
 <h2>Route cache<a class="headerlink" href="#route-cache" title="Permalink to this headline">¶</a></h2>
 <p>Để khởi động nhanh hơn, route được cache trong file <code class="docutils literal"><span class="pre">routes.cache</span></code>.
-Trong quá trình phát triển, các route trong các tệp <code class="docutils literal"><span class="pre">*.class</span></code> tại thư mục <code class="docutils literal"><span class="pre">target</span></code> sẽ không được cache. Nếu bạn thực hiện cập nhất các thư viện phụ thuộc có chứa route, bạn có thể cần phải xóa tệp <code class="docutils literal"><span class="pre">routes.cache</span></code>. Tệp này không nên được commit đến kho mã nguồn.</p>
+Trong quá trình phát triển, các route trong các tệp <code class="docutils literal"><span class="pre">*.class</span></code> tại thư mục <code class="docutils literal"><span class="pre">target</span></code> sẽ không được cache. Nếu bạn thực hiện cập nhật các thư viện phụ thuộc có chứa route, bạn có thể cần phải xóa tệp <code class="docutils literal"><span class="pre">routes.cache</span></code>. Tệp này không nên được commit đến kho mã nguồn.</p>
 </div>
 <div class="section" id="muc-do-uu-tien-cua-cac-route-first-last">
 <h2>Mức độ ưu tiên của các route (first, last)<a class="headerlink" href="#muc-do-uu-tien-cua-cac-route-first-last" title="Permalink to this headline">¶</a></h2>
@@ -93,7 +93,7 @@ Nếu bạn muốn các route như sau:</p>
 </pre></div>
 </div>
 <p>Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.
-Annotation <code class="docutils literal"><span class="pre">&#64;First</span></code> sẽ được thêm vào:</p>
+Nếu bạn muốn ngược lại, annotation <code class="docutils literal"><span class="pre">&#64;First</span></code> sẽ được thêm vào:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
 
 @GET(&quot;articles/:id&quot;)
@@ -108,7 +108,7 @@ class ArticlesNew extends Action {
 }
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">Last</span></code> is similar.</p>
+<p>Tương tự cho <code class="docutils literal"><span class="pre">&#64;Last</span></code>.</p>
 </div>
 <div class="section" id="nhieu-duong-dan-cho-mot-action">
 <h2>Nhiều đường dẫn cho một action<a class="headerlink" href="#nhieu-duong-dan-cho-mot-action" title="Permalink to this headline">¶</a></h2>
@@ -122,8 +122,8 @@ class Image extends Action {
 </pre></div>
 </div>
 </div>
-<div class="section" id="dot-trong-route">
-<h2>Dot trong route<a class="headerlink" href="#dot-trong-route" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dau-cham-trong-route">
+<h2>Dấu chấm trong route<a class="headerlink" href="#dau-cham-trong-route" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;, &quot;articles/:id.:format&quot;)
 class ArticlesShow extends Action {
   def execute() {
@@ -159,7 +159,7 @@ class ArticlesShow extends Action {
 </div>
 <div class="section" id="lien-ket-den-mot-action">
 <h2>Liên kết đến một action<a class="headerlink" href="#lien-ket-den-mot-action" title="Permalink to this headline">¶</a></h2>
-<p>Để bảo toàn tính typesafe của Xitrum, bạn không nên sử dụng URL một cách thủ công, hãy sử dụng các dưới đây:</p>
+<p>Để bảo toàn tính typesafe của Xitrum, bạn không nên sử dụng URL một cách thủ công, hãy sử dụng cách dưới đây:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
 </pre></div>
 </div>
@@ -256,7 +256,7 @@ trait AppAction extends Action {
 </div>
 <div class="section" id="anticsrfinput-va-anticsrftoken">
 <h2>antiCsrfInput và antiCsrfToken<a class="headerlink" href="#anticsrfinput-va-anticsrftoken" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum lây CSRF token từ <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> request header. Nếu header không tồn tại, Xitrum sẽ lấy token từ parameter <code class="docutils literal"><span class="pre">csrf-token</span></code> tại request body (chú ý: không phải parameter trong URL).</p>
+<p>Xitrum lấy CSRF token từ <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> request header. Nếu header không tồn tại, Xitrum sẽ lấy token từ parameter <code class="docutils literal"><span class="pre">csrf-token</span></code> tại request body (chú ý: không phải parameter trong URL).</p>
 <p>Nếu bạn tự tạo form, và bạn không sử dụng thẻ meta và xitrum.js như đã trình bày ở trên, bạn cần sử dụng <code class="docutils literal"><span class="pre">antiCsrfInput</span></code> hoặc <code class="docutils literal"><span class="pre">antiCsrfToken</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
   != antiCsrfInput
@@ -289,7 +289,7 @@ class CreateTodoAPI extends Api {
 </div>
 <div class="section" id="kiem-soat-cac-route">
 <h2>Kiểm soát các route<a class="headerlink" href="#kiem-soat-cac-route" title="Permalink to this headline">¶</a></h2>
-<p>Khi khởi động Xitrum sẽ tự động gom các route lại. Nếu bạn muốn điều khiển các route, bạn có thể sử dụng <a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Khi khởi động Xitrum sẽ tự động gom các route lại. Nếu bạn muốn điều khiển các route theo cách của mình, bạn có thể sử dụng <a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
 <p>Ví dụ:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
 
@@ -329,7 +329,7 @@ object Boot {
 val myMap = xitrum.util.SeriDeseri.fromJValue[Map[String, Int]](myJValue)
 </pre></div>
 </div>
-<p>Nếu bạn muốn kiểm soát toàn bộn, sử dụng <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Nó sẽ trả về một <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+<p>Nếu bạn muốn kiểm soát toàn bộ, sử dụng <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Nó sẽ trả về một <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
 </div>
 <div class="section" id="viet-tai-lieu-api-voi-swagger">
 <h2>Viết tài liệu API với Swagger<a class="headerlink" href="#viet-tai-lieu-api-voi-swagger" title="Permalink to this headline">¶</a></h2>
@@ -409,7 +409,7 @@ They are in the form:</p>
 <li><a class="reference internal" href="#route-cache">Route cache</a></li>
 <li><a class="reference internal" href="#muc-do-uu-tien-cua-cac-route-first-last">Mức độ ưu tiên của các route (first, last)</a></li>
 <li><a class="reference internal" href="#nhieu-duong-dan-cho-mot-action">Nhiều đường dẫn cho một action</a></li>
-<li><a class="reference internal" href="#dot-trong-route">Dot trong route</a></li>
+<li><a class="reference internal" href="#dau-cham-trong-route">Dấu chấm trong route</a></li>
 <li><a class="reference internal" href="#regular-expression-trong-route">Regular Expression trong route</a></li>
 <li><a class="reference internal" href="#xu-ly-cac-phan-con-lai-cua-route">Xử lý các phần còn lại của route</a></li>
 <li><a class="reference internal" href="#lien-ket-den-mot-action">Liên kết đến một action</a></li>
@@ -468,7 +468,7 @@ They are in the form:</p>
         <li class="right" >
           <a href="action_view.html" title="Action and view"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

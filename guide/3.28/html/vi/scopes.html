@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Scopes &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Scopes &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="Validation" href="validation.html" />
     <link rel="prev" title="Cung cấp flash socket policy file" href="flash.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="flash.html" title="Cung cấp flash socket policy file"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -66,8 +66,8 @@
 <p>Các parameter được gộp thành kiểu <code class="docutils literal"><span class="pre">textParams</span></code> (từ 1 đến 3, kiểu sau sẽ override kiểu trước).</p>
 <p><code class="docutils literal"><span class="pre">bodyFileParams</span></code> thuộc kiểu scala.collection.mutable.Map[String, Seq[<a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>]].</p>
 </div>
-<div class="section" id="accesing-parameter">
-<h3>Accesing parameter<a class="headerlink" href="#accesing-parameter" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="truy-xuat-cac-parameter">
+<h3>Truy xuất các parameter<a class="headerlink" href="#truy-xuat-cac-parameter" title="Permalink to this headline">¶</a></h3>
 <p>Từ một action, bạn có thể truy cập đến các parameter trực tiếp, hoặc bạn có thể
 sử dụng các accessor method.</p>
 <p>Để truy cập <code class="docutils literal"><span class="pre">textParams</span></code>:</p>
@@ -81,7 +81,7 @@ một các tự động bằng cách sử dụng <code class="docutils literal">
 các text parameter thành các kiểu khác, override
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala-2.11/xitrum/scope/request/ParamAccess.scala">convertTextParam</a>.</p>
 <p>Với các file upload parameter: <code class="docutils literal"><span class="pre">param[FileUpload](&quot;x&quot;)</span></code>, <code class="docutils literal"><span class="pre">params[FileUpload](&quot;x&quot;)</span></code> v.v.
-Để biết chi tiết, hãy xem <a class="reference internal" href="upload.html"><em>Upload chapter</em></a>.</p>
+Để biết chi tiết, hãy xem <a class="reference internal" href="upload.html"><em>Chương Upload</em></a>.</p>
 </div>
 <div class="section" id="at">
 <h3>&#8220;at&#8221;<a class="headerlink" href="#at" title="Permalink to this headline">¶</a></h3>
@@ -126,7 +126,7 @@ trait AppAction extends Action {
 <div class="section" id="atjson">
 <h3>&#8220;atJson&#8221;<a class="headerlink" href="#atjson" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal"><span class="pre">atJson</span></code> là một helper method tự động convert <code class="docutils literal"><span class="pre">at(&quot;key&quot;)</span></code> sang JSON.
-Nếu bạn chuyển model từ Scala sang JavaScript.</p>
+Khi bạn cần chuyển model từ Scala sang JavaScript.</p>
 <p><code class="docutils literal"><span class="pre">atJson(&quot;key&quot;)</span></code> tương đương với <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.toJson(at(&quot;key&quot;))</span></code>:</p>
 <p>Action.scala</p>
 <div class="highlight-python"><div class="highlight"><pre>case class User(login: String, name: String)
@@ -199,14 +199,14 @@ trait AppAction extends Action {
 <h2>Cookie<a class="headerlink" href="#cookie" title="Permalink to this headline">¶</a></h2>
 <p>Bạn có thể đọc thêm Wikipedia về <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie">cookies</a>.</p>
 <p>Trong một action, sử dụng <code class="docutils literal"><span class="pre">requestCookies</span></code>, <code class="docutils literal"><span class="pre">Map[String,</span> <span class="pre">String]</span></code>, để đọc cookie
-gửi bởi browser.</p>
+gửi bởi trình duyệt.</p>
 <div class="highlight-python"><div class="highlight"><pre>requestCookies.get(&quot;myCookie&quot;) match {
   case None         =&gt; ...
   case Some(string) =&gt; ...
 }
 </pre></div>
 </div>
-<p>Để gửi cookie đến browser, tạo một <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/DefaultCookie.html">DefaultCookie</a>
+<p>Để gửi cookie đến trình duyệt, tạo một <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/DefaultCookie.html">DefaultCookie</a>
 và thêm nó vào <code class="docutils literal"><span class="pre">responseCookies</span></code>, một <code class="docutils literal"><span class="pre">ArrayBuffer</span></code> đã bao gồm <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/Cookie.html">Cookie</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre>val cookie = new DefaultCookie(&quot;name&quot;, &quot;value&quot;)
 cookie.setHttpOnly(true)  // true: JavaScript cannot access this cookie
@@ -214,26 +214,25 @@ responseCookies.append(cookie)
 </pre></div>
 </div>
 <p>Nếu bạn không set path của cookie bằng cách gọi <code class="docutils literal"><span class="pre">cookie.setPath(cookiePath)</span></code>,
-đường path của nó sẽ được gán là root path của site (<code class="docutils literal"><span class="pre">xitrum.Config.withBaseUrl(&quot;/&quot;)</span></code>).
-Việc này đề phòng việc trùng lặp cookie.</p>
-<p>Để xóa cookie gửi bởi browser, gửi một cookie trùng tên và đặt max age của
-cookie này là 0. Browser sẽ giải phóng cookie này ngay lập tức. Để báo với browser
-xóa cookie khi tắt browser, đặt max age thành <code class="docutils literal"><span class="pre">Long.MinValue</span></code>:</p>
+path của nó sẽ là root path của site (<code class="docutils literal"><span class="pre">xitrum.Config.withBaseUrl(&quot;/&quot;)</span></code>).
+Việc này để tránh việc trùng lặp cookie.</p>
+<p>Để xóa cookie trên trình duyệt, gửi một cookie trùng tên và đặt max age của
+cookie này là 0. Trình duyệt sẽ giải phóng cookie này ngay lập tức. Để báo với trình duyệt
+xóa cookie khi tắt trình duyệt, đặt max age thành <code class="docutils literal"><span class="pre">Long.MinValue</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cookie</span><span class="o">.</span><span class="n">setMaxAge</span><span class="p">(</span><span class="n">Long</span><span class="o">.</span><span class="n">MinValue</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="http://mrcoles.com/blog/cookies-max-age-vs-expires/">Internet Explorer không hỗ trợ &#8220;max-age&#8221;</a>,
-nhưng Netty có thể nhận diện và xuất ra &#8220;max-age&#8221; hoặc &#8220;expires&#8221; một cách chính xác. Don&#8217;t worry!</p>
-<p>Browser sẽ không gửi các cookie attribute ngược trở lại server. Browser
-sẽ <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes">only send the cookie name-value pairs</a>.</p>
+nhưng Netty có thể nhận diện và xuất ra &#8220;max-age&#8221; hoặc &#8220;expires&#8221; một cách chính xác. Đừng lo!</p>
+<p>Trình duyệt sẽ không gửi các thuộc tính của cookie ngược trở lại server. Trình duyệt
+sẽ <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes">chỉ gửi cặp name-value của cookie thôi</a>.</p>
 <p>Nếu bạn muốn ngăn chặn các người dùng khác giả mạo cookie, sử dụng
 <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.toSecureUrlSafeBase64</span></code> và <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.fromSecureUrlSafeBase64</span></code>.
-Để biết thêm thông tin, xem <a class="reference internal" href="howto.html"><em>How to encrypt data</em></a>.</p>
+Để biết thêm thông tin, xem <a class="reference internal" href="howto.html"><em>Làm sao mã hoá dữ liệu</em></a>.</p>
 <div class="section" id="su-dung-ki-tu-trong-cookie">
 <h3>Sử dụng kí tự trong cookie<a class="headerlink" href="#su-dung-ki-tu-trong-cookie" title="Permalink to this headline">¶</a></h3>
-<p>Bạn không thế sử dụng
-<a class="reference external" href="http://stackoverflow.com/questions/1969232/allowed-characters-in-cookies">các ký tự động trong cookie</a>.
-Ví dụ, nếu bạn muốn sử dụng kí tự UTF-8, bạn cần phải encode, bằng cách sử
+<p>Bạn không thể sử dụng <a class="reference external" href="http://stackoverflow.com/questions/1969232/allowed-characters-in-cookies">các ký đặc biệt trong cookie</a>.
+Ví dụ, nếu bạn cần sử dụng kí tự UTF-8, bạn cần phải encode, bằng cách sử
 dụng <code class="docutils literal"><span class="pre">xitrum.utill.UrlSafeBase64</span></code> hoặc <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri</span></code>.</p>
 <p>Viết cookie:</p>
 <div class="highlight-python"><div class="highlight"><pre>import io.netty.util.CharsetUtil
@@ -258,9 +257,9 @@ responseCookies.append(cookie)
 </div>
 <div class="section" id="session">
 <h2>Session<a class="headerlink" href="#session" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum tự động quản lý Session bao gồm lưu trữ, trả về dữ liệu, mã hóa, v.v.
-Bạn không cần phải bận tâm đến Session.</p>
-<p>Trong action, bạn có thể sử dụng action <code class="docutils literal"><span class="pre">session</span></code>, một instance
+<p>Việc tương tác Session bao gồm lưu trữ, trả về dữ liệu, mã hóa, v.v. được làm tự động trong Xitrum.
+Bạn không cần phải bận tâm về Session.</p>
+<p>Trong action, bạn có thể sử dụng biến <code class="docutils literal"><span class="pre">session</span></code>, là một instance của
 <code class="docutils literal"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Any]</span></code>. Mọi thứ lưu trữ trong <code class="docutils literal"><span class="pre">session</span></code>
 phải serializable.</p>
 <p>Ví dụ, để đánh dấu một người dùng đã đăng nhập, bạn có để đặt username của người
@@ -273,9 +272,9 @@ dùng vào session:</p>
 <div class="highlight-python"><div class="highlight"><pre>if (session.isDefinedAt(&quot;userId&quot;)) println(&quot;This user has logged in&quot;)
 </pre></div>
 </div>
-<p>Lưu trữ user ID và lấy thông tin người dùng từ database mỗi lần truy cập thường
-được sử dụng hơn, Cách này bạn có thể biết được thông tin người dùng đã được cập
-nhất (bao gồm quyền và xác thực) ở mỗi lần truy cập.</p>
+<p>Việc lưu trữ user ID và lấy thông tin người dùng từ database mỗi lần truy cập thường
+xuyên được sử dụng. Với cách này bạn sẽ luôn nhận được bản cập nhật thông tin người dùng
+(bao gồm quyền và xác thực) ở mỗi lần truy cập.</p>
 <div class="section" id="session-clear">
 <h3>session.clear()<a class="headerlink" href="#session-clear" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://guides.rubyonrails.org/security.html#session-fixation">Với một dòng mã bạn có thể bảo vệ ứng xụng khỏi session fixation</a>.</p>
@@ -379,7 +378,7 @@ Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi
 <p>Có 2 hình thức lưu trữ session:</p>
 <ul class="simple">
 <li>Chỉ ở phía client</li>
-<li>Kết hợp cả 2 : client và server</li>
+<li>Kết hợp cả 2: client và server</li>
 </ul>
 <p>Với chỉ lưu trữ ở client:</p>
 <ul class="simple">
@@ -387,7 +386,7 @@ Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi
 <li>Phía server không cần phải lưu trữ bất cứ thứ gì.</li>
 <li>Khi có một request truyền tới, server sẽ tiến hành giải mã dữ liệu.</li>
 </ul>
-<p>Kết hợp cả 2 : client và server:</p>
+<p>Kết hợp cả 2, client và server:</p>
 <ul class="simple">
 <li>Một session có 2 phần: session ID và session data.</li>
 <li>Server lưu trữ dữ liệu trong session, theo cặp ID -&gt; data</li>
@@ -396,7 +395,7 @@ Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi
 <li>Các này giống như sử dụng thẻ tín dụng. Số tiền không lưu trong thẻ tín dụng mà</li>
 </ul>
 <p>ở ID</p>
-<p>Trong cả 2 cách, client phải lưu trữ một vài thứ như cookie (dữ liệu được mã hóa
+<p>Trong cả 2 cách, client phải lưu trữ một vài thứ trong cookie (dữ liệu được mã hóa
 và ID được mã hóa). &#8220;Lưu trữ session ở server&#8221; có nghĩa là lưu trữ dữ liệu của
 session ở phía server.</p>
 </div>
@@ -417,7 +416,7 @@ object SVar {
 </pre></div>
 </div>
 <p>Đoạn code trên là đúng cú pháp và sẽ được biên dịch nhưng không chạy, bởi vì các
-Var bản thân chúng sử dụng class nameđể tìm kiếm. Khi sử dụng <code class="docutils literal"><span class="pre">val</span></code>, <code class="docutils literal"><span class="pre">title</span></code>
+Var bản thân chúng sử dụng class name để tìm kiếm. Khi sử dụng <code class="docutils literal"><span class="pre">val</span></code>, <code class="docutils literal"><span class="pre">title</span></code>
 và <code class="docutils literal"><span class="pre">category</span></code> sẽ có chung class name &#8220;xitrum.RequestVar&#8221;. Tương tự với <code class="docutils literal"><span class="pre">username</span></code>
 và <code class="docutils literal"><span class="pre">isAdmin</span></code>.</p>
 </div>
@@ -434,7 +433,7 @@ và <code class="docutils literal"><span class="pre">isAdmin</span></code>.</p>
 <li><a class="reference internal" href="#">Scopes</a><ul>
 <li><a class="reference internal" href="#request">Request</a><ul>
 <li><a class="reference internal" href="#cac-loai-parameter">Các loại parameter</a></li>
-<li><a class="reference internal" href="#accesing-parameter">Accesing parameter</a></li>
+<li><a class="reference internal" href="#truy-xuat-cac-parameter">Truy xuất các parameter</a></li>
 <li><a class="reference internal" href="#at">&#8220;at&#8221;</a></li>
 <li><a class="reference internal" href="#atjson">&#8220;atJson&#8221;</a></li>
 <li><a class="reference internal" href="#requestvar">RequestVar</a></li>
@@ -498,7 +497,7 @@ và <code class="docutils literal"><span class="pre">isAdmin</span></code>.</p>
         <li class="right" >
           <a href="flash.html" title="Cung cấp flash socket policy file"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

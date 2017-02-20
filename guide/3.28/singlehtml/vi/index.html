@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Điều hướng</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,7 +70,7 @@
 +--------------------+
 </pre></div>
 </div>
-<p>Xitrum là một Scala web framework bất đồng bộ, <cite>clustered</cite> và cũng là một HTTPS(server) trên nền của
+<p>Xitrum là một Scala web framework bất đồng bộ, <cite>clustered</cite> và cũng là một HTTPS (server) trên nền của
 <a class="reference external" href="http://netty.io/">Netty</a> và <a class="reference external" href="http://akka.io/">Akka</a>.</p>
 <p><a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">Một người dùng Xiturm</a> đã nói rằng:</p>
 <blockquote>
@@ -85,38 +85,38 @@ tính năng đa ngôn ngữ i18n theo phong cách GNU gettext, Netty (nhanh khô
 <div class="section" id="tinh-nang">
 <h3>Tính năng<a class="headerlink" href="#tinh-nang" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Typesafe, dựa trên tinh thần của Scala. Tất cả các APIs đều được thiết kế an toàn nhất có thể</li>
-<li>Bất đồng bộ, theo tinh thần của Netty. Việc xử lý các yêu cầu (request) không cần phải đáp ứng (respond) ngay lập lức.
-Long polling, chunked response (streaming), WebSocket, và SockJS.</li>
+<li>Typesafe, theo tinh thần của Scala. Tất cả các API đều cố gắng trở thành an toàn kiểu (typesafe) nhất có thể.</li>
+<li>Bất đồng bộ, theo tinh thần của Netty. Việc xử lý các yêu cầu (request) không cần phải đáp ứng (response) ngay lập lức.
+Long polling, chunked response (streaming), WebSocket, và SockJS đều được hỗ trợ.</li>
 <li>Tích hợp sẵn HTTP và HTTPS server có tốc độ nhanh dựa trên <a class="reference external" href="http://netty.io/">Netty</a>
-(HTTPS có thể sử dụng công nghệ Java hoặc công nghệ mã OpenSSL tự nhiên).
-Tốc độ phục vụ tập tin tĩnh của Xitrum có thể đạt mức <a class="reference external" href="https://gist.github.com/3293596">tương đương Nginx</a>.</li>
+(HTTPS có thể sử dụng nền tảng Java hoặc nền tảng OpenSSL).
+Tốc độ phục vụ tập tin tĩnh của Xitrum <a class="reference external" href="https://gist.github.com/3293596">tương đương Nginx</a>.</li>
 <li>Tối ưu hóa cache cả ở phía máy chủ (server) và máy khách (client) để tăng tốc độ đáp ứng.
-Ở tầng máy chủ web, các tập tin nhỏ được cache vào bộ nhớ, đối với các tập tin lớn thì sử dụng kỹ thuật
+Ở tầng máy chủ web, các tập tin nhỏ được cache thẳng vào bộ nhớ, đối với các tập tin lớn thì sử dụng kỹ thuật
 zero copy của NIO.
 Ở tầng web framework bạn có thể khai báo cache ở các mức page, action và object theo phong cách <a class="reference external" href="https://github.com/rails/rails">Rails framework</a>.
 <a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">Tất cả thủ thuật mà Google khuyên nên dùng để tăng tốc trang web</a>
 như method GET có điều kiện được áp dụng để cache phía client.
-Bạn cũng có thể buộc các trình duyệt để luôn gửi yêu cầu đến máy chủ để kiểm tra lại cache trước khi sử dụng.</li>
+Bạn cũng có thể buộc trình duyệt gửi yêu cầu đến máy chủ để kiểm tra lại cache trước khi sử dụng.</li>
 <li>Tính năng <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range request</a> hỗ trợ các tập tin tĩnh.
-Tính năng này cần cho việc cung cấp dịch vụ video cho điện thoại thông minh.
-Bạn có thể tạm dừng/tiếp tục việc tải tập tin video.</li>
+Việc gửi trả video cho điện thoại thông minh cần tính năng này.
+Khi đó, bạn có thể tạm dừng/tiếp tục việc tải tập tin video.</li>
 <li>Hỗ trợ <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</li>
-<li>Tính năng định tuyến được thực hiện tự động trên tinh thần của JAX-RS và Rails Engines.
-Bạn không cần phải được khai báo ở tất cả các tuyến kết nối tại cùng một điểm mà có thể tại nhiều điểm khác nhau.
-Tính năng này có thể hiểu như định tuyến một cách phân tán. Bạn có thể cài cắm ứng dụng này vào ứng dụng khác.
-Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một
-ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
-Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
-Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
-<li>Các lớp và các đường định tuyến được tải lại một cách tự động trong chế độ phát triển (development mode).</li>
-<li>Các View có thể viết bằng các tập tin mẫu <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
-một các riêng biệt hoặc bằng Scala inline XML. Cả hai cách đều an toàn.</li>
-<li>Phiên làm việc(Sessions) có thể lưu trữ ngay trong cookies(đáp ứng đuợc nhiều user cùng lúc hơn) hoặc lưu trữ bằng <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> (tính bảo mật cao hơn).
-Hazelcast cũng chạy ngay trong cùng process với việc sử dụng cache phân tán(do đó nhanh hơn và dễ sử dụng hơn) ,
-vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Điều này cũng đúng trong chức năng pubsub của Akka.</li>
-<li><a class="reference external" href="http://jqueryvalidation.org/">jQuery Validation</a> được tích hợp trong việc chuẩn hóa dữ liệu ở cả máy chủ(server) và máy khách
-(client)</li>
+<li>Tính năng định tuyến (route) được thực hiện tự động trên tinh thần của JAX-RS và Rails Engines.
+Bạn không cần phải khai báo mọi định tuyến tại một nơi.
+Tuy nhiên, chúng được phân tán ra nhiều nơi. Và bạn có thể cài cắm ứng dụng này vào một ứng dụng khác.
+Ví dụ như bạn tạo một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đưa tập tin JAR đó
+trong một ứng dụng khác, như vậy ứng dụng đó sẽ có thêm tính năng blog.
+Việc định tuyến bao gồm 2 chiều: bạn có thể dựng lại đường dẫn URL (reverse routing) từ action cụ thể một cách an toàn.
+Bạn còn có thể tạo tài liệu về các định tuyến của bạn bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</li>
+<li>Các lớp (class) và định tuyến (route) được tải lại tự động trong lúc phát triển (development mode).</li>
+<li>Các View có thể viết trong các tập tin mẫu dạng <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
+hoặc bằng Scala inline XML. Cả hai cách đều an toàn.</li>
+<li>Phiên làm việc (session) có thể lưu trữ ngay trong cookies (giúp dễ scale) hoặc lưu trữ bằng <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> (tính bảo mật cao hơn).
+Hazelcast cũng chạy ngay trong cùng process với việc sử dụng cache phân tán (do đó nhanh hơn và dễ sử dụng hơn) ,
+vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Điều này cũng tương tự trong chức năng pubsub của Akka.</li>
+<li><a class="reference external" href="http://jqueryvalidation.org/">jQuery Validation</a> được tích hợp trong việc chuẩn hóa dữ liệu ở cả
+máy chủ (server) và máy khách (client)</li>
 <li>i18n theo phong cách <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>.
 Việc trích các chuổi văn bản ra ngoài để thực hiện dịch được thực hiện tự động, bạn sẽ không cần làm thủ công với properties file.
 Bạn cũng có thể sử dụng các công cụ mạnh như <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a> để dịch và hợp nhất các bản dịch.
@@ -151,7 +151,7 @@ bạn có thể tham gia vào <a class="reference external" href="http://groups.
 <span id="document-tutorial"></span><div class="section" id="huong-dan">
 <h2>Hướng dẫn<a class="headerlink" href="#huong-dan" title="Permalink to this headline">¶</a></h2>
 <p>Chương này giới thiệu ngắn gọn cách tạo và chạy một project Xitrum.
-<strong>Việc tạo project được thực hiện với giả định bạn sử dụng Linux và đã cài Java.</strong></p>
+<strong>Việc tạo project được thực hiện với giả định bạn sử dụng Linux và đã cài Java 8.</strong></p>
 <div class="section" id="tao-mot-project-xitrum-moi">
 <h3>Tạo một project Xitrum mới<a class="headerlink" href="#tao-mot-project-xitrum-moi" title="Permalink to this headline">¶</a></h3>
 <p>Để tạo mới một project Xitrum bạn chỉ cần tải về tập tin
@@ -174,7 +174,7 @@ cd xitrum-new
 sbt/sbt run
 </pre></div>
 </div>
-<p>Câu lệnh này sẽ download tất cả <a class="reference internal" href="index.html#document-deps"><em>dependencies</em></a>, biên dịch toàn bộ project,
+<p>Câu lệnh này sẽ download tất cả <a class="reference internal" href="index.html#document-deps"><em>thư viện liên quan</em></a>, biên dịch toàn bộ project,
 và khởi động web server qua class <code class="docutils literal"><span class="pre">quickstart.Boot</span></code>. Trong cửa sổ dòng lệnh Terminal,
 bạn sẽ thấy tất cả các định tuyến:</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] Load routes.cache or recollect routes...
@@ -209,8 +209,7 @@ POST       /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.so
 </pre></div>
 </div>
 <p>Khi khởi động, tất cả các định tuyến (routers) sẽ được kiểm tra và lưu vào log. Bạn đã có luôn danh
-sách các định tuyến (routers), điều này rất thuận tiện với bạn để viết tài liệu về RESTful APIs của ứng dụng web
-cho bên thứ 3.</p>
+sách các định tuyến (routers), điều này rất thuận tiện với bạn để viết tài liệu về RESTful APIs của ứng dụng web cho bên thứ 3.</p>
 <p>Truy cập đến đường dẫn <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> hoặc <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a> bằng trình duyệt web. Trong cửa sổ
 dòng lệnh bạn sẽ thấy thông tin của các yêu cầu (request):</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] GET quickstart.action.SiteIndex, 1 [ms]
@@ -750,7 +749,7 @@ class MyAction extends FutureAction {
 </div>
 <span id="document-restful"></span><div class="section" id="restful-apis">
 <h2>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h2>
-<p>Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone,Android v.v một cách rất dễ dàng.</p>
+<p>Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone, Android v.v một cách rất dễ dàng.</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 import xitrum.annotation.GET
 
@@ -766,21 +765,21 @@ class ArticlesShow extends Action {
 </pre></div>
 </div>
 <p>Tương tự cho các method POST, PUT, PATCH, DELETE, và OPTIONS.
-Xitrum tự động kiểm soát phần HEAD như như một method GET với phần response body rỗng.</p>
-<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, sử dụng thủ thuật gửi một method PÓST với <code class="docutils literal"><span class="pre">_method=put</span></code> hoặc <code class="docutils literal"><span class="pre">_method=delete</span></code> trong request body.</p>
-<p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến và ghi ra out put để thông báo cho bạn biết bạn có APIs nào:</p>
+Xitrum tự động kiểm soát phần HEAD như một method GET với phần response body rỗng.</p>
+<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, một thủ thuật được sử dụng là gửi một method POST với <code class="docutils literal"><span class="pre">_method=put</span></code> hoặc <code class="docutils literal"><span class="pre">_method=delete</span></code> trong request body.</p>
+<p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến (route) và ghi ra output để thông báo cho bạn biết bạn có APIs nào:</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] Routes:
 GET /articles     quickstart.action.ArticlesIndex
 GET /articles/:id quickstart.action.ArticlesShow
 </pre></div>
 </div>
-<p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy nghĩ về tính năng nay tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
+<p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy xem tính năng này tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
 Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
 Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
 <div class="section" id="route-cache">
 <h3>Route cache<a class="headerlink" href="#route-cache" title="Permalink to this headline">¶</a></h3>
 <p>Để khởi động nhanh hơn, route được cache trong file <code class="docutils literal"><span class="pre">routes.cache</span></code>.
-Trong quá trình phát triển, các route trong các tệp <code class="docutils literal"><span class="pre">*.class</span></code> tại thư mục <code class="docutils literal"><span class="pre">target</span></code> sẽ không được cache. Nếu bạn thực hiện cập nhất các thư viện phụ thuộc có chứa route, bạn có thể cần phải xóa tệp <code class="docutils literal"><span class="pre">routes.cache</span></code>. Tệp này không nên được commit đến kho mã nguồn.</p>
+Trong quá trình phát triển, các route trong các tệp <code class="docutils literal"><span class="pre">*.class</span></code> tại thư mục <code class="docutils literal"><span class="pre">target</span></code> sẽ không được cache. Nếu bạn thực hiện cập nhật các thư viện phụ thuộc có chứa route, bạn có thể cần phải xóa tệp <code class="docutils literal"><span class="pre">routes.cache</span></code>. Tệp này không nên được commit đến kho mã nguồn.</p>
 </div>
 <div class="section" id="muc-do-uu-tien-cua-cac-route-first-last">
 <h3>Mức độ ưu tiên của các route (first, last)<a class="headerlink" href="#muc-do-uu-tien-cua-cac-route-first-last" title="Permalink to this headline">¶</a></h3>
@@ -791,7 +790,7 @@ Nếu bạn muốn các route như sau:</p>
 </pre></div>
 </div>
 <p>Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.
-Annotation <code class="docutils literal"><span class="pre">&#64;First</span></code> sẽ được thêm vào:</p>
+Nếu bạn muốn ngược lại, annotation <code class="docutils literal"><span class="pre">&#64;First</span></code> sẽ được thêm vào:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.annotation.{GET, First}
 
 @GET(&quot;articles/:id&quot;)
@@ -806,7 +805,7 @@ class ArticlesNew extends Action {
 }
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">Last</span></code> is similar.</p>
+<p>Tương tự cho <code class="docutils literal"><span class="pre">&#64;Last</span></code>.</p>
 </div>
 <div class="section" id="nhieu-duong-dan-cho-mot-action">
 <h3>Nhiều đường dẫn cho một action<a class="headerlink" href="#nhieu-duong-dan-cho-mot-action" title="Permalink to this headline">¶</a></h3>
@@ -820,8 +819,8 @@ class Image extends Action {
 </pre></div>
 </div>
 </div>
-<div class="section" id="dot-trong-route">
-<h3>Dot trong route<a class="headerlink" href="#dot-trong-route" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="dau-cham-trong-route">
+<h3>Dấu chấm trong route<a class="headerlink" href="#dau-cham-trong-route" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>@GET(&quot;articles/:id&quot;, &quot;articles/:id.:format&quot;)
 class ArticlesShow extends Action {
   def execute() {
@@ -857,7 +856,7 @@ class ArticlesShow extends Action {
 </div>
 <div class="section" id="lien-ket-den-mot-action">
 <h3>Liên kết đến một action<a class="headerlink" href="#lien-ket-den-mot-action" title="Permalink to this headline">¶</a></h3>
-<p>Để bảo toàn tính typesafe của Xitrum, bạn không nên sử dụng URL một cách thủ công, hãy sử dụng các dưới đây:</p>
+<p>Để bảo toàn tính typesafe của Xitrum, bạn không nên sử dụng URL một cách thủ công, hãy sử dụng cách dưới đây:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;a href={url[ArticlesShow](&quot;id&quot; -&gt; myArticle.id)}&gt;{myArticle.title}&lt;/a&gt;
 </pre></div>
 </div>
@@ -954,7 +953,7 @@ trait AppAction extends Action {
 </div>
 <div class="section" id="anticsrfinput-va-anticsrftoken">
 <h3>antiCsrfInput và antiCsrfToken<a class="headerlink" href="#anticsrfinput-va-anticsrftoken" title="Permalink to this headline">¶</a></h3>
-<p>Xitrum lây CSRF token từ <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> request header. Nếu header không tồn tại, Xitrum sẽ lấy token từ parameter <code class="docutils literal"><span class="pre">csrf-token</span></code> tại request body (chú ý: không phải parameter trong URL).</p>
+<p>Xitrum lấy CSRF token từ <code class="docutils literal"><span class="pre">X-CSRF-Token</span></code> request header. Nếu header không tồn tại, Xitrum sẽ lấy token từ parameter <code class="docutils literal"><span class="pre">csrf-token</span></code> tại request body (chú ý: không phải parameter trong URL).</p>
 <p>Nếu bạn tự tạo form, và bạn không sử dụng thẻ meta và xitrum.js như đã trình bày ở trên, bạn cần sử dụng <code class="docutils literal"><span class="pre">antiCsrfInput</span></code> hoặc <code class="docutils literal"><span class="pre">antiCsrfToken</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[AdminAddGroup]})
   != antiCsrfInput
@@ -987,7 +986,7 @@ class CreateTodoAPI extends Api {
 </div>
 <div class="section" id="kiem-soat-cac-route">
 <h3>Kiểm soát các route<a class="headerlink" href="#kiem-soat-cac-route" title="Permalink to this headline">¶</a></h3>
-<p>Khi khởi động Xitrum sẽ tự động gom các route lại. Nếu bạn muốn điều khiển các route, bạn có thể sử dụng <a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Khi khởi động Xitrum sẽ tự động gom các route lại. Nếu bạn muốn điều khiển các route theo cách của mình, bạn có thể sử dụng <a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
 <p>Ví dụ:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.{Config, Server}
 
@@ -1027,7 +1026,7 @@ object Boot {
 val myMap = xitrum.util.SeriDeseri.fromJValue[Map[String, Int]](myJValue)
 </pre></div>
 </div>
-<p>Nếu bạn muốn kiểm soát toàn bộn, sử dụng <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Nó sẽ trả về một <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+<p>Nếu bạn muốn kiểm soát toàn bộ, sử dụng <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Nó sẽ trả về một <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
 </div>
 <div class="section" id="viet-tai-lieu-api-voi-swagger">
 <h3>Viết tài liệu API với Swagger<a class="headerlink" href="#viet-tai-lieu-api-voi-swagger" title="Permalink to this headline">¶</a></h3>
@@ -1096,7 +1095,7 @@ They are in the form:</p>
 </div>
 <span id="document-template_engines"></span><div class="section" id="template-engines">
 <h2>Template engines<a class="headerlink" href="#template-engines" title="Permalink to this headline">¶</a></h2>
-<p>Template engine đã được cấu hình dẽ được gọi khi <a class="reference internal" href="index.html#document-action_view"><em>renderView, renderFragment,
+<p>Template engine đã được cấu hình sẽ được gọi khi <a class="reference internal" href="index.html#document-action_view"><em>renderView, renderFragment,
 hoặc respondView</em></a> được gọi tới.</p>
 <div class="section" id="cau-hinh-template-engine">
 <h3>Cấu hình template engine<a class="headerlink" href="#cau-hinh-template-engine" title="Permalink to this headline">¶</a></h3>
@@ -1117,7 +1116,7 @@ hoặc respondView</em></a> được gọi tới.</p>
 </div>
 <div class="section" id="xoa-template-engine">
 <h3>Xóa template engine<a class="headerlink" href="#xoa-template-engine" title="Permalink to this headline">¶</a></h3>
-<p>Nếu bạn chỉ tạo RESTful APIs trong project, thông thường bạn không sử dụng method renderView, renderFragment, hoặc respondView. Trong trường hợp này, bạn còn có thể xóa template engine khỏi porject để project nhẹ hơn. Bạn chỉ cần xóa hoặc comment dòng <code class="docutils literal"><span class="pre">templateEngine</span></code> trong tệp config/xitrum.conf.</p>
+<p>Nếu bạn chỉ tạo RESTful APIs trong project, thông thường bạn không sử dụng method renderView, renderFragment, hoặc respondView. Trong trường hợp này, bạn còn có thể xóa template engine khỏi project để project nhẹ hơn. Bạn chỉ cần xóa hoặc comment dòng <code class="docutils literal"><span class="pre">templateEngine</span></code> trong tệp config/xitrum.conf.</p>
 <p>Sau đó bạn xóa các cấu hình template liên quan khỏi project của bạn.</p>
 </div>
 <div class="section" id="tu-tao-template-engine-cho-rieng-ban">
@@ -1134,7 +1133,7 @@ Và đặt class này của bạn trong tệp config/xitrum.conf.</p>
 <li>Để phục vụ các thiết bị: bạn cần tạo các RESTful APIs cho smartphones, web service cho các web site khác.</li>
 <li>Để phục vụ các người dùng cuối: bạn cần tạo giao diện web.</li>
 </ul>
-<p>Như một web framework thông thường, Xitrum hướng tới việc hỗ trợ giải quyết các use case một cách dễ dàng. Để giải quyết use case đầu tiền, bạn sử dụng <a class="reference internal" href="index.html#document-restful"><em>RESTful actions</em></a>. Để giải quyết use case thứ hai, bạn có thể sử dụng tính năng Ajax form postback của Xitrum.
+<p>Như một web framework thông thường, Xitrum hướng tới việc hỗ trợ giải quyết các use case một cách dễ dàng. Để giải quyết use case đầu tiên, xem <a class="reference internal" href="index.html#document-restful"><em>RESTful APIs</em></a>. Để giải quyết use case thứ hai, bạn có thể sử dụng tính năng Ajax form postback của Xitrum.
 Bạn có thể xem thêm các trang dưới đây để biết thêm về postback:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></li>
@@ -1264,10 +1263,10 @@ class ArticlesCreate extends AppAction {
 <p><code class="docutils literal"><span class="pre">#myform</span></code> là một jQuery selector để chọn form có chứa các parameter được thêm vào.</p>
 </div>
 <div class="section" id="hien-thi-anh-cho-khi-load-ajax">
-<h3>Hiện thị ảnh chờ khi load Ajax<a class="headerlink" href="#hien-thi-anh-cho-khi-load-ajax" title="Permalink to this headline">¶</a></h3>
+<h3>Hiển thị ảnh chờ khi load Ajax<a class="headerlink" href="#hien-thi-anh-cho-khi-load-ajax" title="Permalink to this headline">¶</a></h3>
 <p>Mặc định, ảnh sau sẽ được hiển thị khi load Ajax:</p>
 <img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
-<p>Để đổi ảnh, bạn có thể gọi JS snippet này sau khi đã include <code class="docutils literal"><span class="pre">jsDefaults</span></code> (đã include
+<p>Để hiển thị ảnh, bạn có thể gọi JS snippet này sau khi đã include <code class="docutils literal"><span class="pre">jsDefaults</span></code> (đã include
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>) trong view template của bạn:</p>
 <div class="highlight-python"><div class="highlight"><pre>// target: The element that triggered the postback
 xitrum.ajaxLoading = function(target) {
@@ -1292,7 +1291,7 @@ xitrum.ajaxLoading = function(target) {
 <p>Scala cho phép viết literal XML. Xitrum sử dụng tính năng này như &#8220;template engine&#8221;:</p>
 <ul class="simple">
 <li>Scala check cú pháp XML khi compile: Các View là typesafe.</li>
-<li>Scala tự động bỏ qua XML: Các view ngăn chặn <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>.</li>
+<li>Scala tự động bỏ qua XML: Các view được tránh <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a> theo mặc định.</li>
 </ul>
 <p>Dưới đây là một vài thủ thuật.</p>
 <div class="section" id="unescape-xml">
@@ -1346,7 +1345,7 @@ xitrum.ajaxLoading = function(target) {
 </div>
 <div class="section" id="render-xhtml">
 <h3>Render XHTML<a class="headerlink" href="#render-xhtml" title="Permalink to this headline">¶</a></h3>
-<p>Xitrum tự động render view và layout như XHTML.
+<p>Xitrum tự động render view và layout sang XHTML.
 Nếu bạn muốn tự render chúng (hiếm khi), chú ý đến các dòng code dưới đây.</p>
 <div class="highlight-python"><div class="highlight"><pre>import scala.xml.Xhtml
 
@@ -1405,7 +1404,7 @@ trait AppAction extends Action {
 <div class="highlight-python"><div class="highlight"><pre>jsRespond(&quot;$(&#39;#error&#39;).html(%s)&quot;.format(jsEscape(&lt;p class=&quot;error&quot;&gt;Could not login.&lt;/p&gt;)))
 </pre></div>
 </div>
-<p>Một các trực tiếp:</p>
+<p>Đổi hướng:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">jsRedirectTo</span><span class="p">(</span><span class="s">&quot;http://cntt.tv/&quot;</span><span class="p">)</span>
 <span class="n">jsRedirectTo</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]()</span>
 </pre></div>
@@ -1726,10 +1725,10 @@ respondEventSource(&quot;data2&quot;)            // Event name is set to &quot;m
 </div>
 </div>
 </div>
-<span id="document-static"></span><div class="section" id="cac-tep-tinh">
-<h2>Các tệp tĩnh<a class="headerlink" href="#cac-tep-tinh" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cung-cap-cac-tep-tinh-tren-dia">
-<h3>Cung cấp các tệp tĩnh trên đĩa<a class="headerlink" href="#cung-cap-cac-tep-tinh-tren-dia" title="Permalink to this headline">¶</a></h3>
+<span id="document-static"></span><div class="section" id="cac-tap-tin-tinh">
+<h2>Các tập tin tĩnh<a class="headerlink" href="#cac-tap-tin-tinh" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="phuc-vu-cac-tap-tin-tinh-tren-o-dia">
+<h3>Phục vụ các tập tin tĩnh trên ổ đĩa<a class="headerlink" href="#phuc-vu-cac-tap-tin-tinh-tren-o-dia" title="Permalink to this headline">¶</a></h3>
 <p>Thư mục của dự án:</p>
 <div class="highlight-python"><div class="highlight"><pre>config
 public
@@ -1747,44 +1746,44 @@ src
 build.sbt
 </pre></div>
 </div>
-<p>Xitrum tự động cung cấp các tệp tĩnh trong thư mực <code class="docutils literal"><span class="pre">public</span></code>.
-URLs đến các tệp này:</p>
+<p>Xitrum tự động phục vụ các tập tin tĩnh trong thư mực <code class="docutils literal"><span class="pre">public</span></code>.
+URLs đến các tập tin này:</p>
 <div class="highlight-python"><div class="highlight"><pre>/img/myimage.png
 /css/mystyle.css
 /css/mystyle.min.css
 </pre></div>
 </div>
-<p>Để dẫn đến chúng:</p>
+<p>Để dẫn đến chúng thì:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;img src={publicUrl(&quot;img/myimage.png&quot;)} /&gt;
 </pre></div>
 </div>
-<p>Để cung cấp các tệp thường trong môi trường phát triển và bản rút gọn trong
-môi trường của sản phẩm (mystyle.css và mystyle.min.css as above):</p>
+<p>Để phục vụ các tập tin bình thường trong môi trường phát triển cũng như bản rút gọn của nó trong
+môi trường sản phẩm (là mystyle.css và mystyle.min.css như trên) thì:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;img src={publicUrl(&quot;css&quot;, &quot;mystyle.css&quot;, &quot;mystyle.min.css&quot;)} /&gt;
 </pre></div>
 </div>
-<p>Để gửi các tệp tĩnh trên đĩa từ action, sử dụng method <code class="docutils literal"><span class="pre">respondFile</span></code>.</p>
+<p>Để gửi các tập tin tĩnh trên ổ đĩa từ action, sử dụng hàm <code class="docutils literal"><span class="pre">respondFile</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">respondFile</span><span class="p">(</span><span class="s">&quot;/absolute/path&quot;</span><span class="p">)</span>
 <span class="n">respondFile</span><span class="p">(</span><span class="s">&quot;path/relative/to/the/current/working/directory&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Để tối ưu hóa tốc độ cung cấp các tệp tĩnh, bạn có thể bỏ qua các tệp không
-cần thiết với bộ lọc regex. Nếu request url không match với pathRegex, Xitrum
+<p>Để tối ưu hóa tốc độ phục vụ các tập tin tĩnh, bạn có thể bỏ qua các tập tin không
+cần thiết với bộ lọc regex. Nếu request url không khớp với pathRegex, Xitrum
 sẽ respond lỗi 404 cho request đó.</p>
 <p>Xem <code class="docutils literal"><span class="pre">pathRegex</span></code> trong <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code>.</p>
 </div>
 <div class="section" id="index-html-fallback">
 <h3>index.html fallback<a class="headerlink" href="#index-html-fallback" title="Permalink to this headline">¶</a></h3>
 <p>Nếu không có route (không có action) cho URL <code class="docutils literal"><span class="pre">/foo/bar</span></code> (hoặc
-<code class="docutils literal"><span class="pre">/foo/bar/</span></code>), Xitrum sẽ tìm các tệp tĩnh <code class="docutils literal"><span class="pre">public/foo/bar/index.html</span></code> (năm
-trong thư mục <code class="docutils literal"><span class="pre">public</span></code>). Nếu tìm thây tệp, Xitrum sẽ respond nó về cho phía
+<code class="docutils literal"><span class="pre">/foo/bar/</span></code>), Xitrum sẽ tìm các tập tin tĩnh <code class="docutils literal"><span class="pre">public/foo/bar/index.html</span></code> (nằm
+trong thư mục <code class="docutils literal"><span class="pre">public</span></code>). Nếu tìm thấy tập tin, Xitrum sẽ respond nó về cho phía
 client.</p>
 </div>
 <div class="section" id="va-500">
 <h3>404 và 500<a class="headerlink" href="#va-500" title="Permalink to this headline">¶</a></h3>
 <p>404.html và 500.html trong thư mục <code class="docutils literal"><span class="pre">public</span></code> được sử dụng khi không có route
-nào matched và có một lỗi trong quá trình thực thi. Nếu bạn muốn tự kiểm soát
-lỗi:</p>
+nào phù hợp hoặc có một lỗi trong quá trình thực thi. Nếu bạn muốn tự kiểm soát
+lỗi thì:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.Action
 import xitrum.annotation.{Error404, Error500}
 
@@ -1812,18 +1811,18 @@ class My500ErrorHandlerAction extends Action {
 <p>Response status được đặt thành 404 hoặc 500 trước khi action được thực thi, vì
 vậy bạn không cần phải đặt chúng một các thủ công.</p>
 </div>
-<div class="section" id="cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention">
-<h3>Cung cấp các tệp tài nguyên trong classpath với WebJars convention<a class="headerlink" href="#cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="cung-cap-cac-tap-tin-tai-nguyen-trong-classpath-voi-webjars-convention">
+<h3>Cung cấp các tập tin tài nguyên trong classpath với WebJars convention<a class="headerlink" href="#cung-cap-cac-tap-tin-tai-nguyen-trong-classpath-voi-webjars-convention" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="webjars">
 <h4>WebJars<a class="headerlink" href="#webjars" title="Permalink to this headline">¶</a></h4>
-<p><a href="#id1"><span class="problematic" id="id2">`</span></a>WebJars &lt;<a class="reference external" href="http://www.webjars.org/">http://www.webjars.org/</a>&gt;_ cung cấp rất nhiều các thư viện web mà bạn
-<a href="#id3"><span class="problematic" id="id4">`</span></a>có sử dụng trong project.</p>
-<p>Ví dụ, nếu bạn muốn sử dụng <a class="reference external" href="http://underscorejs.org/">Underscore.js</a>, khai
-báo trong tệp <code class="docutils literal"><span class="pre">build.sbt</span></code> của project như sau:</p>
+<p><a class="reference external" href="http://www.webjars.org/">WebJars</a> cung cấp rất nhiều các thư viện web mà bạn
+có thể sử dụng trong project.</p>
+<p>Ví dụ, nếu bạn muốn sử dụng <a class="reference external" href="http://underscorejs.org/">Underscore.js</a>, hãy khai
+báo trong tập tin <code class="docutils literal"><span class="pre">build.sbt</span></code> của project như sau:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">&quot;org.webjars&quot;</span> <span class="o">%</span> <span class="s">&quot;underscorejs&quot;</span> <span class="o">%</span> <span class="s">&quot;1.6.0-3&quot;</span>
 </pre></div>
 </div>
-<p>Sau đó trong tệp .jade:</p>
+<p>Sau đó trong tập tin giao diện .jade:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">script</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s">&quot;underscorejs/1.6.0&quot;</span><span class="p">,</span> <span class="s">&quot;underscore.js&quot;</span><span class="p">,</span> <span class="s">&quot;underscore-min.js&quot;</span><span class="p">)})</span>
 </pre></div>
 </div>
@@ -1833,14 +1832,14 @@ báo trong tệp <code class="docutils literal"><span class="pre">build.sbt</spa
 <div class="highlight-python"><div class="highlight"><pre>/webjars/underscorejs/1.6.0/underscore.js?XOKgP8_KIpqz9yUqZ1aVzw
 </pre></div>
 </div>
-<p>Nếu bạn muốn sử dụng cũng một tệp trong cả 2 môi trường:</p>
+<p>Nếu bạn muốn sử dụng cũng một tập tin trong cả 2 môi trường:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">script</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s">&quot;underscorejs/1.6.0/underscore.js&quot;</span><span class="p">)})</span>
 </pre></div>
 </div>
 <p>Khi thư viện này phụ thuộc vào thư viện kia, SBT sẽ tự động tải các thư viện
 liên quan về. Nếu thấy SBT không tải đúng phiên bản (có thể xác nhận bằng cách
-chạy lệnh <cite>sbt xitrum-package`</cite> rồi xem các tệp trong thư mục <code class="docutils literal"><span class="pre">target/xitrum/lib</span></code>
-được tạo ra), bạn có thể ép SBT dùng đúng phiên bản bạn muốn bằng <code class="docutils literal"><span class="pre">dependencyOverrides</span></code>.
+chạy lệnh <code class="docutils literal"><span class="pre">sbt</span> <span class="pre">xitrum-package</span></code> rồi xem các tập tin trong thư mục <code class="docutils literal"><span class="pre">target/xitrum/lib</span></code>
+được tạo ra), bạn có thể ép SBT dùng đúng phiên bản bạn muốn bằng <code class="docutils literal"><span class="pre">dependencyOverrides</span></code>
 Ví dụ nếu bạn thấy SBT chọn thư viện jQuery phiên bản 2.x, mà bạn lại muốn
 dùng phiên bản 1.x để có thể hỗ trợ Internet Explorer 6, 7, hoặc 8, thì có
 thể khai báo như sau:</p>
@@ -1848,15 +1847,15 @@ thể khai báo như sau:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="luu-resource-file-trong-tep-jar-voi-webjars-convention">
-<h4>Lưu resource file trong tệp .jar với WebJars convention<a class="headerlink" href="#luu-resource-file-trong-tep-jar-voi-webjars-convention" title="Permalink to this headline">¶</a></h4>
-<p>Nếu bạn là người phát triển thư viện và muốn cung cấp tệp myimage.png từ thư
-viện của bạn, một tệp .jar trong classpath, sau đó lưu myimage.png trong tệp
+<div class="section" id="luu-resource-file-trong-tap-tin-jar-voi-webjars-convention">
+<h4>Lưu resource file trong tập tin .jar với WebJars convention<a class="headerlink" href="#luu-resource-file-trong-tap-tin-jar-voi-webjars-convention" title="Permalink to this headline">¶</a></h4>
+<p>Nếu bạn là nhà phát triển thư viện và muốn phục vụ tập tin myimage.png từ trong thư
+viện của bạn, vốn đã là một tập tin .jar trong classpath, sau đó lưu myimage.png trong tập tin
 .jar với <a class="reference external" href="http://www.webjars.org/">WebJars</a> convention, ví dụ:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">META</span><span class="o">-</span><span class="n">INF</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">webjars</span><span class="o">/</span><span class="n">mylib</span><span class="o">/</span><span class="mf">1.0</span><span class="o">/</span><span class="n">myimage</span><span class="o">.</span><span class="n">png</span>
 </pre></div>
 </div>
-<p>Để cung cấp tệp:</p>
+<p>Để cung cấp tập tin:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;img src={webJarsUrl(&quot;mylib/1.0/myimage.png&quot;)} /&gt;
 </pre></div>
 </div>
@@ -1865,10 +1864,10 @@ viện của bạn, một tệp .jar trong classpath, sau đó lưu myimage.png 
 </pre></div>
 </div>
 </div>
-<div class="section" id="respond-mot-tep-trong-classpath">
-<h4>Respond một tệp trong classpath<a class="headerlink" href="#respond-mot-tep-trong-classpath" title="Permalink to this headline">¶</a></h4>
-<p>Để respond một tệp trong một classpath element (một tệp .jar hoặc một thư
-mục), kể cả khi tệp không được lưu với <a class="reference external" href="http://www.webjars.org/">WebJars</a>
+<div class="section" id="respond-mot-tap-tin-trong-classpath">
+<h4>Respond một tập tin trong classpath<a class="headerlink" href="#respond-mot-tap-tin-trong-classpath" title="Permalink to this headline">¶</a></h4>
+<p>Để respond một tập tin trong một classpath element (một tập tin .jar hoặc một thư
+mục), kể cả khi tập tin không được lưu với <a class="reference external" href="http://www.webjars.org/">WebJars</a>
 convention:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">respondResource</span><span class="p">(</span><span class="s">&quot;path/relative/to/the/classpath/element&quot;</span><span class="p">)</span>
 </pre></div>
@@ -1883,14 +1882,14 @@ convention:</p>
 </div>
 <div class="section" id="cache-o-phia-client-voi-etag-va-max-age">
 <h3>Cache ở phía client với ETag và max-age<a class="headerlink" href="#cache-o-phia-client-voi-etag-va-max-age" title="Permalink to this headline">¶</a></h3>
-<p>Xitrum tự động thêm <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_ETag">Etag</a> cho các tệp
+<p>Xitrum tự động thêm <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_ETag">Etag</a> cho các tập tin
 tĩnh trên đĩa và classpath.</p>
-<p>ETags sử dụng cho các tệp nhỏ như mã MD5 của file content. Chúng sẽ được cache
+<p>ETags sử dụng cho các tập tin nhỏ như mã MD5 của file content. Chúng sẽ được cache
 để sử dụng sau. Key của cache entry là <code class="docutils literal"><span class="pre">(file</span> <span class="pre">path,</span> <span class="pre">modified</span> <span class="pre">time)</span></code>. Bởi vì
 modified time ở các server khác nhau thì khác nhau, nên mỗi web server trong
 một cluster (nhóm) sẽ có riêng local ETag cache.</p>
-<p>Với các tệp lớn, chỉ khi sửa đổi tệp mới sử dụng Etag. Có vẻ không thực sự
-hoàn hảo bởi không thể đồng nhất các tệp trên các server khác nhau vì chúng có
+<p>Với các tập tin lớn, chỉ khi sửa đổi tập tin mới sử dụng Etag. Có vẻ không thực sự
+hoàn hảo bởi không thể đồng nhất các tập tin trên các server khác nhau vì chúng có
 nhiều ETag khác nhau, nhưng nó vẫn tốt hơn là không sử dụng ETag.</p>
 <p><code class="docutils literal"><span class="pre">publicUrl</span></code> và <code class="docutils literal"><span class="pre">webJarsUrl</span></code> tự động thêm ETag vào URL khi chúng được generate. Ví dụ:</p>
 <div class="highlight-python"><div class="highlight"><pre>webJarsUrl(&quot;jquery/2.1.1/jquery.min.js&quot;)
@@ -1899,21 +1898,21 @@ nhiều ETag khác nhau, nhưng nó vẫn tốt hơn là không sử dụng ETag
 </div>
 <p>Xitrum cũng đặt <code class="docutils literal"><span class="pre">max-age</span></code> và <code class="docutils literal"><span class="pre">Exprires</span></code> header thành
 <a class="reference external" href="https://developers.google.com/speed/docs/best-practices/caching">one year</a>. Bạn không
-cần lo lắng rằng trình duyệt không chọn tệp mới nhất khi bạn sửa đổi. Bởi vì khi một tệp
-trên ổ đĩa được sửa, thuộc tính <code class="docutils literal"><span class="pre">modified</span> <span class="pre">time</span></code> của tệp đó sẽ thay đổi, do đó URL tạo
-ra bởi <code class="docutils literal"><span class="pre">publicUrl</span></code> và <code class="docutils literal"><span class="pre">webJarUrl</span></code> cũng thay đổi theo. ETag cache của tệp cũng sẽ thay
+cần lo lắng rằng trình duyệt không chọn tập tin mới nhất khi bạn sửa đổi. Bởi vì khi một tập tin
+trên ổ đĩa được sửa, thuộc tính <code class="docutils literal"><span class="pre">modified</span> <span class="pre">time</span></code> của tập tin đó sẽ thay đổi, do đó URL tạo
+ra bởi <code class="docutils literal"><span class="pre">publicUrl</span></code> và <code class="docutils literal"><span class="pre">webJarUrl</span></code> cũng thay đổi theo. ETag cache của tập tin cũng sẽ thay
 đổi bởi cache key thay đổi.</p>
 </div>
 <div class="section" id="gzip">
 <h3>GZIP<a class="headerlink" href="#gzip" title="Permalink to this headline">¶</a></h3>
 <p>Xitrum thực hiện việc nén GZIP tự động. Thuộc tính <code class="docutils literal"><span class="pre">Content-Type</span></code> tại header sẽ cho biết
 định dạng của respond là <code class="docutils literal"><span class="pre">text/html</span></code> hay <code class="docutils literal"><span class="pre">xml/application</span></code> v.v.</p>
-<p>Xitrum luôn tự động nén GZIP với các tệp tĩnh, nhưng định dạng responses được tùy biến, để
+<p>Xitrum luôn tự động nén GZIP với các tập tin tĩnh, nhưng định dạng responses được tùy biến, để
 tối ưu hóa, Xitrum chỉ thực hiện GZIP với các response lớn hơn 1KB.</p>
 </div>
 <div class="section" id="cache-o-phia-server">
 <h3>Cache ở phía Server<a class="headerlink" href="#cache-o-phia-server" title="Permalink to this headline">¶</a></h3>
-<p>Để hạn chế load tệp từ đĩa, Xitrum cache các tệp tĩnh nhỏ trong bộ nhớ với quy tắc LRU (Lần cuối
+<p>Để hạn chế load tập tin từ đĩa, Xitrum cache các tập tin tĩnh nhỏ trong bộ nhớ với quy tắc LRU (Lần cuối
 sử dụng xa nhất). Xem <code class="docutils literal"><span class="pre">small_static_file_size_in_kb</span></code> và <code class="docutils literal"><span class="pre">max_cached_small_static_files</span></code>
 trong <code class="docutils literal"><span class="pre">config/xitrum.conf</span></code>.</p>
 </div>
@@ -1948,8 +1947,8 @@ trong <code class="docutils literal"><span class="pre">config/xitrum.conf</span>
 <p>Các parameter được gộp thành kiểu <code class="docutils literal"><span class="pre">textParams</span></code> (từ 1 đến 3, kiểu sau sẽ override kiểu trước).</p>
 <p><code class="docutils literal"><span class="pre">bodyFileParams</span></code> thuộc kiểu scala.collection.mutable.Map[String, Seq[<a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>]].</p>
 </div>
-<div class="section" id="accesing-parameter">
-<h4>Accesing parameter<a class="headerlink" href="#accesing-parameter" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="truy-xuat-cac-parameter">
+<h4>Truy xuất các parameter<a class="headerlink" href="#truy-xuat-cac-parameter" title="Permalink to this headline">¶</a></h4>
 <p>Từ một action, bạn có thể truy cập đến các parameter trực tiếp, hoặc bạn có thể
 sử dụng các accessor method.</p>
 <p>Để truy cập <code class="docutils literal"><span class="pre">textParams</span></code>:</p>
@@ -1963,7 +1962,7 @@ một các tự động bằng cách sử dụng <code class="docutils literal">
 các text parameter thành các kiểu khác, override
 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala-2.11/xitrum/scope/request/ParamAccess.scala">convertTextParam</a>.</p>
 <p>Với các file upload parameter: <code class="docutils literal"><span class="pre">param[FileUpload](&quot;x&quot;)</span></code>, <code class="docutils literal"><span class="pre">params[FileUpload](&quot;x&quot;)</span></code> v.v.
-Để biết chi tiết, hãy xem <a class="reference internal" href="index.html#document-upload"><em>Upload chapter</em></a>.</p>
+Để biết chi tiết, hãy xem <a class="reference internal" href="index.html#document-upload"><em>Chương Upload</em></a>.</p>
 </div>
 <div class="section" id="at">
 <h4>&#8220;at&#8221;<a class="headerlink" href="#at" title="Permalink to this headline">¶</a></h4>
@@ -2008,7 +2007,7 @@ trait AppAction extends Action {
 <div class="section" id="atjson">
 <h4>&#8220;atJson&#8221;<a class="headerlink" href="#atjson" title="Permalink to this headline">¶</a></h4>
 <p><code class="docutils literal"><span class="pre">atJson</span></code> là một helper method tự động convert <code class="docutils literal"><span class="pre">at(&quot;key&quot;)</span></code> sang JSON.
-Nếu bạn chuyển model từ Scala sang JavaScript.</p>
+Khi bạn cần chuyển model từ Scala sang JavaScript.</p>
 <p><code class="docutils literal"><span class="pre">atJson(&quot;key&quot;)</span></code> tương đương với <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.toJson(at(&quot;key&quot;))</span></code>:</p>
 <p>Action.scala</p>
 <div class="highlight-python"><div class="highlight"><pre>case class User(login: String, name: String)
@@ -2081,14 +2080,14 @@ trait AppAction extends Action {
 <h3>Cookie<a class="headerlink" href="#cookie" title="Permalink to this headline">¶</a></h3>
 <p>Bạn có thể đọc thêm Wikipedia về <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie">cookies</a>.</p>
 <p>Trong một action, sử dụng <code class="docutils literal"><span class="pre">requestCookies</span></code>, <code class="docutils literal"><span class="pre">Map[String,</span> <span class="pre">String]</span></code>, để đọc cookie
-gửi bởi browser.</p>
+gửi bởi trình duyệt.</p>
 <div class="highlight-python"><div class="highlight"><pre>requestCookies.get(&quot;myCookie&quot;) match {
   case None         =&gt; ...
   case Some(string) =&gt; ...
 }
 </pre></div>
 </div>
-<p>Để gửi cookie đến browser, tạo một <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/DefaultCookie.html">DefaultCookie</a>
+<p>Để gửi cookie đến trình duyệt, tạo một <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/DefaultCookie.html">DefaultCookie</a>
 và thêm nó vào <code class="docutils literal"><span class="pre">responseCookies</span></code>, một <code class="docutils literal"><span class="pre">ArrayBuffer</span></code> đã bao gồm <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/Cookie.html">Cookie</a>.</p>
 <div class="highlight-python"><div class="highlight"><pre>val cookie = new DefaultCookie(&quot;name&quot;, &quot;value&quot;)
 cookie.setHttpOnly(true)  // true: JavaScript cannot access this cookie
@@ -2096,26 +2095,25 @@ responseCookies.append(cookie)
 </pre></div>
 </div>
 <p>Nếu bạn không set path của cookie bằng cách gọi <code class="docutils literal"><span class="pre">cookie.setPath(cookiePath)</span></code>,
-đường path của nó sẽ được gán là root path của site (<code class="docutils literal"><span class="pre">xitrum.Config.withBaseUrl(&quot;/&quot;)</span></code>).
-Việc này đề phòng việc trùng lặp cookie.</p>
-<p>Để xóa cookie gửi bởi browser, gửi một cookie trùng tên và đặt max age của
-cookie này là 0. Browser sẽ giải phóng cookie này ngay lập tức. Để báo với browser
-xóa cookie khi tắt browser, đặt max age thành <code class="docutils literal"><span class="pre">Long.MinValue</span></code>:</p>
+path của nó sẽ là root path của site (<code class="docutils literal"><span class="pre">xitrum.Config.withBaseUrl(&quot;/&quot;)</span></code>).
+Việc này để tránh việc trùng lặp cookie.</p>
+<p>Để xóa cookie trên trình duyệt, gửi một cookie trùng tên và đặt max age của
+cookie này là 0. Trình duyệt sẽ giải phóng cookie này ngay lập tức. Để báo với trình duyệt
+xóa cookie khi tắt trình duyệt, đặt max age thành <code class="docutils literal"><span class="pre">Long.MinValue</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cookie</span><span class="o">.</span><span class="n">setMaxAge</span><span class="p">(</span><span class="n">Long</span><span class="o">.</span><span class="n">MinValue</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><a class="reference external" href="http://mrcoles.com/blog/cookies-max-age-vs-expires/">Internet Explorer không hỗ trợ &#8220;max-age&#8221;</a>,
-nhưng Netty có thể nhận diện và xuất ra &#8220;max-age&#8221; hoặc &#8220;expires&#8221; một cách chính xác. Don&#8217;t worry!</p>
-<p>Browser sẽ không gửi các cookie attribute ngược trở lại server. Browser
-sẽ <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes">only send the cookie name-value pairs</a>.</p>
+nhưng Netty có thể nhận diện và xuất ra &#8220;max-age&#8221; hoặc &#8220;expires&#8221; một cách chính xác. Đừng lo!</p>
+<p>Trình duyệt sẽ không gửi các thuộc tính của cookie ngược trở lại server. Trình duyệt
+sẽ <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes">chỉ gửi cặp name-value của cookie thôi</a>.</p>
 <p>Nếu bạn muốn ngăn chặn các người dùng khác giả mạo cookie, sử dụng
 <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.toSecureUrlSafeBase64</span></code> và <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri.fromSecureUrlSafeBase64</span></code>.
-Để biết thêm thông tin, xem <a class="reference internal" href="index.html#document-howto"><em>How to encrypt data</em></a>.</p>
+Để biết thêm thông tin, xem <a class="reference internal" href="index.html#document-howto"><em>Làm sao mã hoá dữ liệu</em></a>.</p>
 <div class="section" id="su-dung-ki-tu-trong-cookie">
 <h4>Sử dụng kí tự trong cookie<a class="headerlink" href="#su-dung-ki-tu-trong-cookie" title="Permalink to this headline">¶</a></h4>
-<p>Bạn không thế sử dụng
-<a class="reference external" href="http://stackoverflow.com/questions/1969232/allowed-characters-in-cookies">các ký tự động trong cookie</a>.
-Ví dụ, nếu bạn muốn sử dụng kí tự UTF-8, bạn cần phải encode, bằng cách sử
+<p>Bạn không thể sử dụng <a class="reference external" href="http://stackoverflow.com/questions/1969232/allowed-characters-in-cookies">các ký đặc biệt trong cookie</a>.
+Ví dụ, nếu bạn cần sử dụng kí tự UTF-8, bạn cần phải encode, bằng cách sử
 dụng <code class="docutils literal"><span class="pre">xitrum.utill.UrlSafeBase64</span></code> hoặc <code class="docutils literal"><span class="pre">xitrum.util.SeriDeseri</span></code>.</p>
 <p>Viết cookie:</p>
 <div class="highlight-python"><div class="highlight"><pre>import io.netty.util.CharsetUtil
@@ -2140,9 +2138,9 @@ responseCookies.append(cookie)
 </div>
 <div class="section" id="session">
 <h3>Session<a class="headerlink" href="#session" title="Permalink to this headline">¶</a></h3>
-<p>Xitrum tự động quản lý Session bao gồm lưu trữ, trả về dữ liệu, mã hóa, v.v.
-Bạn không cần phải bận tâm đến Session.</p>
-<p>Trong action, bạn có thể sử dụng action <code class="docutils literal"><span class="pre">session</span></code>, một instance
+<p>Việc tương tác Session bao gồm lưu trữ, trả về dữ liệu, mã hóa, v.v. được làm tự động trong Xitrum.
+Bạn không cần phải bận tâm về Session.</p>
+<p>Trong action, bạn có thể sử dụng biến <code class="docutils literal"><span class="pre">session</span></code>, là một instance của
 <code class="docutils literal"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Any]</span></code>. Mọi thứ lưu trữ trong <code class="docutils literal"><span class="pre">session</span></code>
 phải serializable.</p>
 <p>Ví dụ, để đánh dấu một người dùng đã đăng nhập, bạn có để đặt username của người
@@ -2155,9 +2153,9 @@ dùng vào session:</p>
 <div class="highlight-python"><div class="highlight"><pre>if (session.isDefinedAt(&quot;userId&quot;)) println(&quot;This user has logged in&quot;)
 </pre></div>
 </div>
-<p>Lưu trữ user ID và lấy thông tin người dùng từ database mỗi lần truy cập thường
-được sử dụng hơn, Cách này bạn có thể biết được thông tin người dùng đã được cập
-nhất (bao gồm quyền và xác thực) ở mỗi lần truy cập.</p>
+<p>Việc lưu trữ user ID và lấy thông tin người dùng từ database mỗi lần truy cập thường
+xuyên được sử dụng. Với cách này bạn sẽ luôn nhận được bản cập nhật thông tin người dùng
+(bao gồm quyền và xác thực) ở mỗi lần truy cập.</p>
 <div class="section" id="session-clear">
 <h4>session.clear()<a class="headerlink" href="#session-clear" title="Permalink to this headline">¶</a></h4>
 <p><a class="reference external" href="http://guides.rubyonrails.org/security.html#session-fixation">Với một dòng mã bạn có thể bảo vệ ứng xụng khỏi session fixation</a>.</p>
@@ -2261,7 +2259,7 @@ Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi
 <p>Có 2 hình thức lưu trữ session:</p>
 <ul class="simple">
 <li>Chỉ ở phía client</li>
-<li>Kết hợp cả 2 : client và server</li>
+<li>Kết hợp cả 2: client và server</li>
 </ul>
 <p>Với chỉ lưu trữ ở client:</p>
 <ul class="simple">
@@ -2269,7 +2267,7 @@ Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi
 <li>Phía server không cần phải lưu trữ bất cứ thứ gì.</li>
 <li>Khi có một request truyền tới, server sẽ tiến hành giải mã dữ liệu.</li>
 </ul>
-<p>Kết hợp cả 2 : client và server:</p>
+<p>Kết hợp cả 2, client và server:</p>
 <ul class="simple">
 <li>Một session có 2 phần: session ID và session data.</li>
 <li>Server lưu trữ dữ liệu trong session, theo cặp ID -&gt; data</li>
@@ -2278,7 +2276,7 @@ Lưu trữ session ở phía server (trong bộ nhớ hoặc Database) chỉ khi
 <li>Các này giống như sử dụng thẻ tín dụng. Số tiền không lưu trong thẻ tín dụng mà</li>
 </ul>
 <p>ở ID</p>
-<p>Trong cả 2 cách, client phải lưu trữ một vài thứ như cookie (dữ liệu được mã hóa
+<p>Trong cả 2 cách, client phải lưu trữ một vài thứ trong cookie (dữ liệu được mã hóa
 và ID được mã hóa). &#8220;Lưu trữ session ở server&#8221; có nghĩa là lưu trữ dữ liệu của
 session ở phía server.</p>
 </div>
@@ -2299,26 +2297,26 @@ object SVar {
 </pre></div>
 </div>
 <p>Đoạn code trên là đúng cú pháp và sẽ được biên dịch nhưng không chạy, bởi vì các
-Var bản thân chúng sử dụng class nameđể tìm kiếm. Khi sử dụng <code class="docutils literal"><span class="pre">val</span></code>, <code class="docutils literal"><span class="pre">title</span></code>
+Var bản thân chúng sử dụng class name để tìm kiếm. Khi sử dụng <code class="docutils literal"><span class="pre">val</span></code>, <code class="docutils literal"><span class="pre">title</span></code>
 và <code class="docutils literal"><span class="pre">category</span></code> sẽ có chung class name &#8220;xitrum.RequestVar&#8221;. Tương tự với <code class="docutils literal"><span class="pre">username</span></code>
 và <code class="docutils literal"><span class="pre">isAdmin</span></code>.</p>
 </div>
 </div>
 <span id="document-validation"></span><div class="section" id="validation">
 <h2>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum sử dụng <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
-vào mục đích validation ở phía client và cung cấp các validation helper cho phía server.</p>
+<p>Xitrum bao gồm <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
+để kiểm tra kiểu ở phía client và cung cấp các bộ kiểm tra kiểu cho phía server.</p>
 <div class="section" id="validator-mac-dinh">
 <h3>Validator mặc định<a class="headerlink" href="#validator-mac-dinh" title="Permalink to this headline">¶</a></h3>
-<p>Xitrum cung cấp validator trong package <code class="docutils literal"><span class="pre">xitrum.validator</span></code>.
-Chúng có những method sau:</p>
+<p>Xitrum cung cấp sẵn validator trong package <code class="docutils literal"><span class="pre">xitrum.validator</span></code>.
+Chúng có những hàm sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>check(value): Boolean
 message(name, value): Option[String]
 exception(name, value)
 </pre></div>
 </div>
-<p>Nếu validation báo lỗi, <code class="docutils literal"><span class="pre">message</span></code> sẽ trả về <code class="docutils literal"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
-<code class="docutils literal"><span class="pre">exception</span></code> sẽ throw <code class="docutils literal"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
+<p>Nếu validation báo lỗi, hàm <code class="docutils literal"><span class="pre">message</span></code> sẽ trả về <code class="docutils literal"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
+hàm <code class="docutils literal"><span class="pre">exception</span></code> sẽ throw <code class="docutils literal"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
 <p>Bạn có thể sử dụng validator bất cứ đâu.</p>
 <p>Ví dụ action:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.validator.Required
@@ -2331,7 +2329,7 @@ class CreateArticle {
     Required.exception(&quot;Title&quot;, title)
     Required.exception(&quot;Body&quot;,  body)
 
-    // Do with the valid title and body...
+    // Làm gì đó với title và body đúng...
   }
 }
 </pre></div>
@@ -2339,8 +2337,8 @@ class CreateArticle {
 <p>Nếu không sử dụng <code class="docutils literal"><span class="pre">try</span></code> và <code class="docutils literal"><span class="pre">catch</span></code>, khi có lỗi trong quá trình validation
 (not pass), Xitrum sẽ tự động <code class="docutils literal"><span class="pre">catch</span></code> các exception và respond thông báo lỗi
 về phía client. Điều này giúp cho việc viết các web API hoặc sử dụng validation
-ở phía client dễ dàng hơn.</p>
-<p>Model example:</p>
+ở phía client tiện lợi hơn.</p>
+<p>Ví dụ model:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.validator.Required
 
 case class Article(id: Int = 0, title: String = &quot;&quot;, body: String = &quot;&quot;) {
@@ -2360,7 +2358,7 @@ Bạn chỉ phải implement 2 method <code class="docutils literal"><span class
 </div>
 <span id="document-upload"></span><div class="section" id="tai-len-tep">
 <h2>Tải lên tệp<a class="headerlink" href="#tai-len-tep" title="Permalink to this headline">¶</a></h2>
-<p>Xem thêm <a class="reference internal" href="index.html#document-scopes"><em>Scopes chapter</em></a>.</p>
+<p>Xem thêm <a class="reference internal" href="index.html#document-scopes"><em>Chương Scopes</em></a>.</p>
 <p>Trong form tải lên (upload form), bạn cần đặt <code class="docutils literal"><span class="pre">enctype</span></code> thành <code class="docutils literal"><span class="pre">multipart/form-data</span></code>.</p>
 <p>MyUpload.scalate:</p>
 <div class="highlight-python"><div class="highlight"><pre>form(method=&quot;post&quot; action={url[MyUpload]} enctype=&quot;multipart/form-data&quot;)
@@ -2379,8 +2377,8 @@ val myFile = param[FileUpload](&quot;myFile&quot;)
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">myFile</span></code> là một instance của <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>.
-Sử dụng các method của chúng để lấy tên tệp, di chuyển tệp vào một thư mục v.v.</p>
-<p>Các tệp nhỏ (nhỏ hơn 16 KB) sẽ được lưu trong bộ nhớ. Các tệp lớn thường được lưu
+Sử dụng các method của chúng để lấy tên tập tin, di chuyển tệp vào một thư mục v.v.</p>
+<p>Các tập tin nhỏ (nhỏ hơn 16 KB) sẽ được lưu trong bộ nhớ. Các tệp lớn thường được lưu
 trong hệ thống thư mục lưu trữ tạm (hoặc một thư mục xác định bởi <code class="docutils literal"><span class="pre">xitrum.request.tmpUploadDir</span></code>
 trong xitrum.conf), và sẽ được xóa tự động khi đóng kết nối hoặc một respond được
 gửi đi.</p>
@@ -2389,7 +2387,7 @@ gửi đi.</p>
 <p>Có rất nhiều thư viện JavaScript hỗ trợ tải lên Ajax style. Chúng sử dụng iframe
 ẩn hoặc Flash để gửi <code class="docutils literal"><span class="pre">multipart/form-data</span></code> ở bên trên đến server.
 Nếu bạn không chắc chắn parameter nào của request trong thư viện sử dụng trong form
-để gửi tệp, hãy xem Xitrum access log.</p>
+để gửi tệp, hãy xem <a class="reference internal" href="index.html#document-log"><em>Xitrum access log</em></a>.</p>
 </div>
 </div>
 <span id="document-filter"></span><div class="section" id="bo-loc-filter-trong-action">
@@ -2675,12 +2673,12 @@ Bạn có thể sử dụng method <code class="docutils literal"><span class="p
 </div>
 <span id="document-i18n"></span><div class="section" id="i18n">
 <h2>I18n<a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h2>
-<p>Phong cách GNU gettext được sử dụng. Không giống như các i18n method khác, gettext
-hỗ trợ đa số các form.</p>
+<p>Phong cách GNU gettext được sử dụng. Không giống như các cách i18n khác, gettext
+hỗ trợ nhiều định dạng khác nhau.</p>
 <img alt="_images/poedit.png" src="_images/poedit.png" />
 <div class="section" id="viet-cac-internationalized-messages-vao-source-code">
 <h3>Viết các internationalized messages vào source code<a class="headerlink" href="#viet-cac-internationalized-messages-vao-source-code" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal"><span class="pre">xitrum.Action</span></code> kế thừa <code class="docutils literal"><span class="pre">xitrum.I18n</span></code>, và có 2 method sau:</p>
+<p><code class="docutils literal"><span class="pre">xitrum.Action</span></code> kế thừa <code class="docutils literal"><span class="pre">xitrum.I18n</span></code>, và khi đó có 2 method sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>t(&quot;Message&quot;)
 tc(&quot;Context&quot;, &quot;Message&quot;)
 
@@ -2703,7 +2701,7 @@ t(&quot;%,.3f&quot;, 1234.5678)
 </pre></div>
 </div>
 <p>Bạn có thể gọi trực tiếp 2 method trên từ trong action.
-Tại một nơi khác như model, bạn cần truyền current action vào đó và gọi <code class="docutils literal"><span class="pre">t</span></code> và
+Trong khi các nơi khác như model, bạn cần truyền current action vào đó và gọi <code class="docutils literal"><span class="pre">t</span></code> và
 <code class="docutils literal"><span class="pre">tc</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre>// In an action
 respondText(MyModel.hello(this))
@@ -2716,8 +2714,8 @@ object MyModel {
 </pre></div>
 </div>
 </div>
-<div class="section" id="trien-khai-cac-tin-nhan-den-tep-pot">
-<h3>Triển khai các tin nhắn đến tệp pot<a class="headerlink" href="#trien-khai-cac-tin-nhan-den-tep-pot" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="trien-khai-cac-message-den-tap-tin-pot">
+<h3>Triển khai các message đến tập tin pot<a class="headerlink" href="#trien-khai-cac-message-den-tap-tin-pot" title="Permalink to this headline">¶</a></h3>
 <p>Tạo một tệp i18n.pot trong thư mục gốc của project, sau đó biên dịch lại cả
 project.</p>
 <div class="highlight-python"><div class="highlight"><pre>sbt/sbt clean
@@ -2726,15 +2724,15 @@ touch i18n.pot
 sbt/sbt compile
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> dùng để xóa tất cả các tệp .class , bắt SBT biên dịch lại cả
+<p>Lệnh <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> dùng để xóa tất cả các tệp .class , yêu cầu SBT biên dịch lại cả
 project. Vì sau <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code>, SBT sẽ thử tải lại toàn bộ <a class="reference internal" href="index.html#document-deps"><em>dependencies</em></a>,
 bạn có thể tiến hành nhanh hơn một chút với lệnh <code class="docutils literal"><span class="pre">find</span> <span class="pre">target</span> <span class="pre">-name</span> <span class="pre">*.class</span> <span class="pre">-delete</span></code>,
 nó sẽ xóa toàn bộ các tệp . class trong thư mục <code class="docutils literal"><span class="pre">target</span></code>.</p>
-<p>Sau khi biên dịch lại, i18n.pot sẽ được lấp đầy với các gettext message triển khai
+<p>Sau khi biên dịch lại, i18n.pot sẽ được lấp đầy với các gettext message
 từ mã nguồn. Để làm điều này, <a class="reference external" href="http://www.scala-lang.org/node/140">Scala compiler plugin technique</a>
 được sử dụng.</p>
 <p>Tuy nhiên, phương pháp này sẽ chỉ trích rút dữ liệu từ mã nguồn. Nếu bạn có các
-tệp Java, bạn có thể sử dụng câu lệnh <code class="docutils literal"><span class="pre">xgettext</span></code> để trích xuất dữ liệu:</p>
+tập tin Java, bạn có thể sử dụng câu lệnh <code class="docutils literal"><span class="pre">xgettext</span></code> để trích xuất dữ liệu:</p>
 <div class="highlight-python"><div class="highlight"><pre>xgettext -kt -ktc:1c,2 -ktn:1,2 -ktcn:1c,2,3 -o i18n_java.pot --from-code=UTF-8 $(find src/main/java -name &quot;*.java&quot;)
 </pre></div>
 </div>
@@ -2779,7 +2777,7 @@ another.jar
 <div class="section" id="chon-ngon-ngu">
 <h3>Chọn ngôn ngữ<a class="headerlink" href="#chon-ngon-ngu" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Để lấy cấc ngôn ngữ trong <code class="docutils literal"><span class="pre">Accept-Language</span></code> request header bởi browser, gọi
+<li>Để lấy cấc ngôn ngữ trong <code class="docutils literal"><span class="pre">Accept-Language</span></code> request header bởi browser, gọi hàm
 <code class="docutils literal"><span class="pre">browserLanguages</span></code>. Kết quả sẽ được sắp xếp theo mức ưu tiên đặt bởi trình duyệt
 từ cao xuống thấp.</li>
 <li>Ngôn ngữ mặc định là &#8220;en&#8221;. Để chuyển ngôn ngữ, ví dụ Nhật Bản, gọi <code class="docutils literal"><span class="pre">language</span> <span class="pre">=</span> <span class="pre">&quot;ja&quot;</span></code></li>
@@ -2907,11 +2905,11 @@ do đó bạn không cần phải tự kiểm tra.</p>
 </div>
 <p>Dòng này có nghĩa rằng : mặc định <a class="reference external" href="http://logback.qos.ch/">Logback</a> được sử dụng.
 Tệp cấu hình Logback nằm tại <code class="docutils literal"><span class="pre">config/logback.xml</span></code>.</p>
-<p>Bạn có thể thay thê Logback bằng bất kì implementation nào khác của <a class="reference external" href="http://www.slf4j.org/">SLF4J</a>.</p>
+<p>Bạn có thể thay thế Logback bằng bất kì implementation nào khác của <a class="reference external" href="http://www.slf4j.org/">SLF4J</a>.</p>
 </div>
 <div class="section" id="log-vao-fluentd">
 <h3>Log vào Fluentd<a class="headerlink" href="#log-vao-fluentd" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="http://www.fluentd.org/">Fluentd</a> là một log collector phổ biến. Bạn có thể
+<p><a class="reference external" href="http://www.fluentd.org/">Fluentd</a> là một bộ thu thập log phổ biến. Bạn có thể
 cấu hình Logback để gửi log (từ nhiều nơi) đến một Fluentd server.</p>
 <p>Đầu tiên, thêm thư viện <a class="reference external" href="https://github.com/sndyuk/logback-more-appenders">logback-more-appenders</a>
 vào trong project:</p>
@@ -2922,7 +2920,7 @@ resolvers += &quot;Logback more appenders&quot; at &quot;http://sndyuk.github.co
 libraryDependencies += &quot;com.sndyuk&quot; % &quot;logback-more-appenders&quot; % &quot;1.1.0&quot;
 </pre></div>
 </div>
-<p>Sau đó trong tệp <code class="docutils literal"><span class="pre">config/logback.xml</span></code>:</p>
+<p>Sau đó trong tập tin <code class="docutils literal"><span class="pre">config/logback.xml</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre>...
 
 &lt;appender name=&quot;FLUENT&quot; class=&quot;ch.qos.logback.more.appenders.DataFluentAppender&quot;&gt;
@@ -3466,15 +3464,15 @@ handler:</p>
 </div>
 <span id="document-metrics"></span><div class="section" id="metrics">
 <h2>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum thu thập bộ nhớ JVM heap, CPU, và tình trạng thực thi các action từ mỗi node
-Akka cluster của ứng dụng. Nó xuất ra các số liệu trong định dạng dữ liệu JSON. Xitrum cũng để
-bạn thu thập cách các dữ liệu khác.</p>
-<p>This metrics feature is based on the library <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
-<div class="section" id="thu-thap-metrics">
-<h3>Thu thập metrics<a class="headerlink" href="#thu-thap-metrics" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum thu thập thông tin bộ nhớ JVM heap, CPU, và tình trạng thực thi của các action từ mỗi node
+trong Akka cluster của ứng dụng. Nó xuất ra các số liệu trong định dạng dữ liệu JSON. Xitrum cũng
+cho phép bạn thu thập cách các dữ liệu khác.</p>
+<p>Công cụ metrics này dựa theo thư viện <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
+<div class="section" id="thu-thap-thong-tin">
+<h3>Thu thập thông tin<a class="headerlink" href="#thu-thap-thong-tin" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="bo-nho-heap-va-cpu">
 <h4>Bộ nhớ heap và CPU<a class="headerlink" href="#bo-nho-heap-va-cpu" title="Permalink to this headline">¶</a></h4>
-<p>Bộ nhớ JVM heap và CPU sẽ được thu thập như
+<p>Bộ nhớ JVM heap và CPU sẽ được thu thập
 <a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
 từ mỗi node của hệ thống Akka actor.</p>
 <p>Bộ nhớ heap:</p>
@@ -3486,7 +3484,7 @@ từ mỗi node của hệ thống Akka actor.</p>
 <h4>Action metric<a class="headerlink" href="#action-metric" title="Permalink to this headline">¶</a></h4>
 <p>Xitrum thu thập tình trạng thực thi các action của mỗi node như một
 <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#histograms">Histogram</a>.
-Bạn có thể biết chính các bao nhiêu lần action được thực thim và thời gian
+Bạn có thể biết chính các bao nhiêu lần action được thực thi và thời gian
 thực thi của những non-async action.</p>
 <img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
 <p>Thời gian thực hiện lần gần nhất của một action:</p>
@@ -3494,12 +3492,12 @@ thực thi của những non-async action.</p>
 </div>
 <div class="section" id="thu-thap-cac-so-lieu-tuy-chinh">
 <h4>Thu thập các số liệu tùy chỉnh<a class="headerlink" href="#thu-thap-cac-so-lieu-tuy-chinh" title="Permalink to this headline">¶</a></h4>
-<p>Ngoài các số liệu mặc định bên trên, bạn có thể thu thập các dữ liệu cho riêng mình.
+<p>Ngoài các số liệu mặc định nêu trên, bạn có thể thu thập các dữ liệu cho riêng mình.
 <code class="docutils literal"><span class="pre">xitrum.Metrics</span></code> có thể truy cập vào <code class="docutils literal"><span class="pre">gauge</span></code>, <code class="docutils literal"><span class="pre">counter</span></code>, <code class="docutils literal"><span class="pre">meter</span></code>,
 <code class="docutils literal"><span class="pre">timer</span></code> và <code class="docutils literal"><span class="pre">histogram</span></code>. Vui lòng tham khảo
 <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a> và
-<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">its Scala implementation</a>
-để biết cách sử dụng chúng.</p>
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">bản hiện thực Scala của nó</a>
+để biết cách sử dụng.</p>
 <p>Ví dụ về timer:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, Metrics}
 import xitrum.annotation.GET
@@ -3620,7 +3618,7 @@ class MySubscriber extends MetricsViewer {
 <div class="section" id="luu-metric">
 <h4>Lưu metric<a class="headerlink" href="#luu-metric" title="Permalink to this headline">¶</a></h4>
 <p>Để tiết kiệm bộ nhớ, Xitrum không ghi nhớ các giá trị metric cũ. Nếu bạn muốn lưu metric vào
-cơ sở dữ liệu hoặc tệp, bạn cần implement vào subscriber của bạn.</p>
+cơ sở dữ liệu hoặc tập tin nào đó, bạn cần implement vào subscriber của bạn.</p>
 <p>Ví dụ:</p>
 <div class="highlight-python"><div class="highlight"><pre>import akka.actor.Actor
 import xitrum.metrics.PublisherLookUp
@@ -4065,7 +4063,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l2"><a class="reference internal" href="index.html#route-cache">Route cache</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#muc-do-uu-tien-cua-cac-route-first-last">Mức độ ưu tiên của các route (first, last)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#nhieu-duong-dan-cho-mot-action">Nhiều đường dẫn cho một action</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#dot-trong-route">Dot trong route</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#dau-cham-trong-route">Dấu chấm trong route</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#regular-expression-trong-route">Regular Expression trong route</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#xu-ly-cac-phan-con-lai-cua-route">Xử lý các phần còn lại của route</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#lien-ket-den-mot-action">Liên kết đến một action</a></li>
@@ -4092,7 +4090,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l2"><a class="reference internal" href="index.html#non-form">Non-form</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#hop-thoai-xac-nhan">Hộp thoại xác nhận</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#them-parameter-khac">Thêm parameter khác</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#hien-thi-anh-cho-khi-load-ajax">Hiện thị ảnh chờ khi load Ajax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#hien-thi-anh-cho-khi-load-ajax">Hiển thị ảnh chờ khi load Ajax</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#document-xml">XML</a><ul>
@@ -4121,14 +4119,14 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#document-static">Các tệp tĩnh</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="index.html#cung-cap-cac-tep-tinh-tren-dia">Cung cấp các tệp tĩnh trên đĩa</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-static">Các tập tin tĩnh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#phuc-vu-cac-tap-tin-tinh-tren-o-dia">Phục vụ các tập tin tĩnh trên ổ đĩa</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#index-html-fallback">index.html fallback</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#va-500">404 và 500</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#cung-cap-cac-tep-tai-nguyen-trong-classpath-voi-webjars-convention">Cung cấp các tệp tài nguyên trong classpath với WebJars convention</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#cung-cap-cac-tap-tin-tai-nguyen-trong-classpath-voi-webjars-convention">Cung cấp các tập tin tài nguyên trong classpath với WebJars convention</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="index.html#webjars">WebJars</a></li>
-<li class="toctree-l3"><a class="reference internal" href="index.html#luu-resource-file-trong-tep-jar-voi-webjars-convention">Lưu resource file trong tệp .jar với WebJars convention</a></li>
-<li class="toctree-l3"><a class="reference internal" href="index.html#respond-mot-tep-trong-classpath">Respond một tệp trong classpath</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#luu-resource-file-trong-tap-tin-jar-voi-webjars-convention">Lưu resource file trong tập tin .jar với WebJars convention</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#respond-mot-tap-tin-trong-classpath">Respond một tập tin trong classpath</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#cache-o-phia-client-voi-etag-va-max-age">Cache ở phía client với ETag và max-age</a></li>
@@ -4140,7 +4138,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l1"><a class="reference internal" href="index.html#document-scopes">Scopes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="index.html#request">Request</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="index.html#cac-loai-parameter">Các loại parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="index.html#accesing-parameter">Accesing parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#truy-xuat-cac-parameter">Truy xuất các parameter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#at">&#8220;at&#8221;</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#atjson">&#8220;atJson&#8221;</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#requestvar">RequestVar</a></li>
@@ -4187,7 +4185,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#document-i18n">I18n</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="index.html#viet-cac-internationalized-messages-vao-source-code">Viết các internationalized messages vào source code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#trien-khai-cac-tin-nhan-den-tep-pot">Triển khai các tin nhắn đến tệp pot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#trien-khai-cac-message-den-tap-tin-pot">Triển khai các message đến tập tin pot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#luu-cac-tep-po-tai-dau">Lưu các tệp .po tại đâu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#chon-ngon-ngu">Chọn ngôn ngữ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#validation-messages">Validation messages</a></li>
@@ -4237,7 +4235,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#document-metrics">Metrics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="index.html#thu-thap-metrics">Thu thập metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#thu-thap-thong-tin">Thu thập thông tin</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="index.html#bo-nho-heap-va-cpu">Bộ nhớ heap và CPU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#action-metric">Action metric</a></li>
 <li class="toctree-l3"><a class="reference internal" href="index.html#thu-thap-cac-so-lieu-tuy-chinh">Thu thập các số liệu tùy chỉnh</a></li>
@@ -4287,7 +4285,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Điều hướng</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

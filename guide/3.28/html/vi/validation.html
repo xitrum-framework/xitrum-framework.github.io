@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Validation &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Validation &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="Tải lên tệp" href="upload.html" />
     <link rel="prev" title="Scopes" href="scopes.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="scopes.html" title="Scopes"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,19 +52,19 @@
             
   <div class="section" id="validation">
 <h1>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h1>
-<p>Xitrum sử dụng <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
-vào mục đích validation ở phía client và cung cấp các validation helper cho phía server.</p>
+<p>Xitrum bao gồm <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
+để kiểm tra kiểu ở phía client và cung cấp các bộ kiểm tra kiểu cho phía server.</p>
 <div class="section" id="validator-mac-dinh">
 <h2>Validator mặc định<a class="headerlink" href="#validator-mac-dinh" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum cung cấp validator trong package <code class="docutils literal"><span class="pre">xitrum.validator</span></code>.
-Chúng có những method sau:</p>
+<p>Xitrum cung cấp sẵn validator trong package <code class="docutils literal"><span class="pre">xitrum.validator</span></code>.
+Chúng có những hàm sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>check(value): Boolean
 message(name, value): Option[String]
 exception(name, value)
 </pre></div>
 </div>
-<p>Nếu validation báo lỗi, <code class="docutils literal"><span class="pre">message</span></code> sẽ trả về <code class="docutils literal"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
-<code class="docutils literal"><span class="pre">exception</span></code> sẽ throw <code class="docutils literal"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
+<p>Nếu validation báo lỗi, hàm <code class="docutils literal"><span class="pre">message</span></code> sẽ trả về <code class="docutils literal"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
+hàm <code class="docutils literal"><span class="pre">exception</span></code> sẽ throw <code class="docutils literal"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
 <p>Bạn có thể sử dụng validator bất cứ đâu.</p>
 <p>Ví dụ action:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.validator.Required
@@ -77,7 +77,7 @@ class CreateArticle {
     Required.exception(&quot;Title&quot;, title)
     Required.exception(&quot;Body&quot;,  body)
 
-    // Do with the valid title and body...
+    // Làm gì đó với title và body đúng...
   }
 }
 </pre></div>
@@ -85,8 +85,8 @@ class CreateArticle {
 <p>Nếu không sử dụng <code class="docutils literal"><span class="pre">try</span></code> và <code class="docutils literal"><span class="pre">catch</span></code>, khi có lỗi trong quá trình validation
 (not pass), Xitrum sẽ tự động <code class="docutils literal"><span class="pre">catch</span></code> các exception và respond thông báo lỗi
 về phía client. Điều này giúp cho việc viết các web API hoặc sử dụng validation
-ở phía client dễ dàng hơn.</p>
-<p>Model example:</p>
+ở phía client tiện lợi hơn.</p>
+<p>Ví dụ model:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.validator.Required
 
 case class Article(id: Int = 0, title: String = &quot;&quot;, body: String = &quot;&quot;) {
@@ -162,7 +162,7 @@ Bạn chỉ phải implement 2 method <code class="docutils literal"><span class
         <li class="right" >
           <a href="scopes.html" title="Scopes"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

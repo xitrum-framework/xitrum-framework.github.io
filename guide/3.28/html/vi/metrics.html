@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Metrics &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Metrics &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="HOWTO" href="howto.html" />
     <link rel="prev" title="Netty handler" href="handler.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="handler.html" title="Netty handler"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,15 +52,15 @@
             
   <div class="section" id="metrics">
 <h1>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h1>
-<p>Xitrum thu thập bộ nhớ JVM heap, CPU, và tình trạng thực thi các action từ mỗi node
-Akka cluster của ứng dụng. Nó xuất ra các số liệu trong định dạng dữ liệu JSON. Xitrum cũng để
-bạn thu thập cách các dữ liệu khác.</p>
-<p>This metrics feature is based on the library <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
-<div class="section" id="thu-thap-metrics">
-<h2>Thu thập metrics<a class="headerlink" href="#thu-thap-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum thu thập thông tin bộ nhớ JVM heap, CPU, và tình trạng thực thi của các action từ mỗi node
+trong Akka cluster của ứng dụng. Nó xuất ra các số liệu trong định dạng dữ liệu JSON. Xitrum cũng
+cho phép bạn thu thập cách các dữ liệu khác.</p>
+<p>Công cụ metrics này dựa theo thư viện <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
+<div class="section" id="thu-thap-thong-tin">
+<h2>Thu thập thông tin<a class="headerlink" href="#thu-thap-thong-tin" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="bo-nho-heap-va-cpu">
 <h3>Bộ nhớ heap và CPU<a class="headerlink" href="#bo-nho-heap-va-cpu" title="Permalink to this headline">¶</a></h3>
-<p>Bộ nhớ JVM heap và CPU sẽ được thu thập như
+<p>Bộ nhớ JVM heap và CPU sẽ được thu thập
 <a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
 từ mỗi node của hệ thống Akka actor.</p>
 <p>Bộ nhớ heap:</p>
@@ -72,7 +72,7 @@ từ mỗi node của hệ thống Akka actor.</p>
 <h3>Action metric<a class="headerlink" href="#action-metric" title="Permalink to this headline">¶</a></h3>
 <p>Xitrum thu thập tình trạng thực thi các action của mỗi node như một
 <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#histograms">Histogram</a>.
-Bạn có thể biết chính các bao nhiêu lần action được thực thim và thời gian
+Bạn có thể biết chính các bao nhiêu lần action được thực thi và thời gian
 thực thi của những non-async action.</p>
 <img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
 <p>Thời gian thực hiện lần gần nhất của một action:</p>
@@ -80,12 +80,12 @@ thực thi của những non-async action.</p>
 </div>
 <div class="section" id="thu-thap-cac-so-lieu-tuy-chinh">
 <h3>Thu thập các số liệu tùy chỉnh<a class="headerlink" href="#thu-thap-cac-so-lieu-tuy-chinh" title="Permalink to this headline">¶</a></h3>
-<p>Ngoài các số liệu mặc định bên trên, bạn có thể thu thập các dữ liệu cho riêng mình.
+<p>Ngoài các số liệu mặc định nêu trên, bạn có thể thu thập các dữ liệu cho riêng mình.
 <code class="docutils literal"><span class="pre">xitrum.Metrics</span></code> có thể truy cập vào <code class="docutils literal"><span class="pre">gauge</span></code>, <code class="docutils literal"><span class="pre">counter</span></code>, <code class="docutils literal"><span class="pre">meter</span></code>,
 <code class="docutils literal"><span class="pre">timer</span></code> và <code class="docutils literal"><span class="pre">histogram</span></code>. Vui lòng tham khảo
 <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a> và
-<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">its Scala implementation</a>
-để biết cách sử dụng chúng.</p>
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">bản hiện thực Scala của nó</a>
+để biết cách sử dụng.</p>
 <p>Ví dụ về timer:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.{Action, Metrics}
 import xitrum.annotation.GET
@@ -206,7 +206,7 @@ class MySubscriber extends MetricsViewer {
 <div class="section" id="luu-metric">
 <h3>Lưu metric<a class="headerlink" href="#luu-metric" title="Permalink to this headline">¶</a></h3>
 <p>Để tiết kiệm bộ nhớ, Xitrum không ghi nhớ các giá trị metric cũ. Nếu bạn muốn lưu metric vào
-cơ sở dữ liệu hoặc tệp, bạn cần implement vào subscriber của bạn.</p>
+cơ sở dữ liệu hoặc tập tin nào đó, bạn cần implement vào subscriber của bạn.</p>
 <p>Ví dụ:</p>
 <div class="highlight-python"><div class="highlight"><pre>import akka.actor.Actor
 import xitrum.metrics.PublisherLookUp
@@ -252,7 +252,7 @@ class MySubscriber extends Actor with PublisherLookUp {
   <h3><a href="index.html">Mục Lục</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Metrics</a><ul>
-<li><a class="reference internal" href="#thu-thap-metrics">Thu thập metrics</a><ul>
+<li><a class="reference internal" href="#thu-thap-thong-tin">Thu thập thông tin</a><ul>
 <li><a class="reference internal" href="#bo-nho-heap-va-cpu">Bộ nhớ heap và CPU</a></li>
 <li><a class="reference internal" href="#action-metric">Action metric</a></li>
 <li><a class="reference internal" href="#thu-thap-cac-so-lieu-tuy-chinh">Thu thập các số liệu tùy chỉnh</a></li>
@@ -311,7 +311,7 @@ class MySubscriber extends Actor with PublisherLookUp {
         <li class="right" >
           <a href="handler.html" title="Netty handler"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

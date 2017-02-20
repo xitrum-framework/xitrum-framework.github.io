@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Log &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Log &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="Triển khai ứng dụng web trên server" href="deploy.html" />
     <link rel="prev" title="I18n" href="i18n.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="i18n.html" title="I18n"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -108,11 +108,11 @@ do đó bạn không cần phải tự kiểm tra.</p>
 </div>
 <p>Dòng này có nghĩa rằng : mặc định <a class="reference external" href="http://logback.qos.ch/">Logback</a> được sử dụng.
 Tệp cấu hình Logback nằm tại <code class="docutils literal"><span class="pre">config/logback.xml</span></code>.</p>
-<p>Bạn có thể thay thê Logback bằng bất kì implementation nào khác của <a class="reference external" href="http://www.slf4j.org/">SLF4J</a>.</p>
+<p>Bạn có thể thay thế Logback bằng bất kì implementation nào khác của <a class="reference external" href="http://www.slf4j.org/">SLF4J</a>.</p>
 </div>
 <div class="section" id="log-vao-fluentd">
 <h2>Log vào Fluentd<a class="headerlink" href="#log-vao-fluentd" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="http://www.fluentd.org/">Fluentd</a> là một log collector phổ biến. Bạn có thể
+<p><a class="reference external" href="http://www.fluentd.org/">Fluentd</a> là một bộ thu thập log phổ biến. Bạn có thể
 cấu hình Logback để gửi log (từ nhiều nơi) đến một Fluentd server.</p>
 <p>Đầu tiên, thêm thư viện <a class="reference external" href="https://github.com/sndyuk/logback-more-appenders">logback-more-appenders</a>
 vào trong project:</p>
@@ -123,7 +123,7 @@ resolvers += &quot;Logback more appenders&quot; at &quot;http://sndyuk.github.co
 libraryDependencies += &quot;com.sndyuk&quot; % &quot;logback-more-appenders&quot; % &quot;1.1.0&quot;
 </pre></div>
 </div>
-<p>Sau đó trong tệp <code class="docutils literal"><span class="pre">config/logback.xml</span></code>:</p>
+<p>Sau đó trong tập tin <code class="docutils literal"><span class="pre">config/logback.xml</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre>...
 
 &lt;appender name=&quot;FLUENT&quot; class=&quot;ch.qos.logback.more.appenders.DataFluentAppender&quot;&gt;
@@ -205,7 +205,7 @@ libraryDependencies += &quot;com.sndyuk&quot; % &quot;logback-more-appenders&quo
         <li class="right" >
           <a href="i18n.html" title="I18n"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Hướng dẫn &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.0</title>
+    <title>Hướng dẫn &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.0" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
     <link rel="next" title="Action and view" href="action_view.html" />
     <link rel="prev" title="Giới thiệu" href="intro.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="intro.html" title="Giới thiệu"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,7 +53,7 @@
   <div class="section" id="huong-dan">
 <h1>Hướng dẫn<a class="headerlink" href="#huong-dan" title="Permalink to this headline">¶</a></h1>
 <p>Chương này giới thiệu ngắn gọn cách tạo và chạy một project Xitrum.
-<strong>Việc tạo project được thực hiện với giả định bạn sử dụng Linux và đã cài Java.</strong></p>
+<strong>Việc tạo project được thực hiện với giả định bạn sử dụng Linux và đã cài Java 8.</strong></p>
 <div class="section" id="tao-mot-project-xitrum-moi">
 <h2>Tạo một project Xitrum mới<a class="headerlink" href="#tao-mot-project-xitrum-moi" title="Permalink to this headline">¶</a></h2>
 <p>Để tạo mới một project Xitrum bạn chỉ cần tải về tập tin
@@ -76,7 +76,7 @@ cd xitrum-new
 sbt/sbt run
 </pre></div>
 </div>
-<p>Câu lệnh này sẽ download tất cả <a class="reference internal" href="deps.html"><em>dependencies</em></a>, biên dịch toàn bộ project,
+<p>Câu lệnh này sẽ download tất cả <a class="reference internal" href="deps.html"><em>thư viện liên quan</em></a>, biên dịch toàn bộ project,
 và khởi động web server qua class <code class="docutils literal"><span class="pre">quickstart.Boot</span></code>. Trong cửa sổ dòng lệnh Terminal,
 bạn sẽ thấy tất cả các định tuyến:</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] Load routes.cache or recollect routes...
@@ -111,8 +111,7 @@ POST       /xitrum/metrics/channel/:serverId/:sessionId/websocket      xitrum.so
 </pre></div>
 </div>
 <p>Khi khởi động, tất cả các định tuyến (routers) sẽ được kiểm tra và lưu vào log. Bạn đã có luôn danh
-sách các định tuyến (routers), điều này rất thuận tiện với bạn để viết tài liệu về RESTful APIs của ứng dụng web
-cho bên thứ 3.</p>
+sách các định tuyến (routers), điều này rất thuận tiện với bạn để viết tài liệu về RESTful APIs của ứng dụng web cho bên thứ 3.</p>
 <p>Truy cập đến đường dẫn <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> hoặc <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a> bằng trình duyệt web. Trong cửa sổ
 dòng lệnh bạn sẽ thấy thông tin của các yêu cầu (request):</p>
 <div class="highlight-python"><div class="highlight"><pre>[INFO] GET quickstart.action.SiteIndex, 1 [ms]
@@ -257,7 +256,7 @@ tmp
         <li class="right" >
           <a href="intro.html" title="Giới thiệu"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.0</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
