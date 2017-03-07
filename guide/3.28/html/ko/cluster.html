@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Akka와 Hazelcast 클러스터링 &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>Akka와 Hazelcast 클러스터링 &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="index.html" />
     <link rel="next" title="Netty 핸들러" href="handler.html" />
     <link rel="prev" title="프로덕션 서버에 배포하기" href="deploy.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="deploy.html" title="프로덕션 서버에 배포하기"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,19 +51,19 @@
             
   <div class="section" id="akka-hazelcast">
 <h1>Akka와 Hazelcast 클러스터링<a class="headerlink" href="#akka-hazelcast" title="Permalink to this headline">¶</a></h1>
-<p>Xitrum가 프록시 서버와로드 밸런서 뒤에 클러스터 구성에서 움직일 수 있도록 설계되어 있습니다.</p>
+<p>Xitrum가 프록시 서버와 로드 밸런서 뒤에 클러스터 구성에서 동작할 수 있도록 설계되어 있습니다.</p>
 <div class="highlight-python"><div class="highlight"><pre>                         / Xitrum 인스턴스 1
 로드밸런서/프록시 서버      ---- Xitrum 인스턴스 2
                          \ Xitrum 인스턴스 3
 </pre></div>
 </div>
-<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Akka &lt;http://akka.io/&gt;`_와`Hazelcast</a>
-클러스터링 기능을 사용하여 캐시, 세션, SockJS세션 을 클러스터링 할 수 있습니다.</p>
-<p>Hazelcast가 Xitrum 인스턴스의 프로세스의 메모리 캐시 서버가 되므로.
+<p><a class="reference external" href="http://akka.io/">Akka</a> 와 <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>
+클러스터링 기능을 사용하여 캐시, 세션, SockJS세션을 클러스터링 할 수 있습니다.</p>
+<p>Hazelcast가 Xitrum 인스턴스의 프로세스의 메모리 캐시 서버가 되므로
 Memcache 같은 추가 서버는 필요하지 않습니다.</p>
-<p>Akka와 Hazelcast 클러스터링을 설정하려면``config / akka.conf```Akka 문서 &lt;<a class="reference external" href="http://akka.io/docs/">http://akka.io/docs/</a>&gt;`_
-<a href="#id1"><span class="problematic" id="id2">`</span></a>Hazelcast 문서 &lt;<a class="reference external" href="http://hazelcast.org/documentation/">http://hazelcast.org/documentation/</a>&gt;`_를 참고하십시오.</p>
-<p>참고 : 세션, :doc:<a href="#id3"><span class="problematic" id="id4">`</span></a>클라이언트 측 쿠키에 저장 &lt;/ scopes&gt;`할 수 있습니다.</p>
+<p>Akka와 Hazelcast 클러스터링을 설정하려면 <code class="docutils literal"><span class="pre">config</span> <span class="pre">/</span> <span class="pre">akka.conf</span></code> <a class="reference external" href="http://akka.io/docs/">Akka 문서</a>
+<a class="reference external" href="http://hazelcast.org/documentation/">Hazelcast 문서</a> 를 참고하십시오.</p>
+<p>참고 : 세션, <code class="xref doc docutils literal"><span class="pre">클라이언트</span> <span class="pre">측</span> <span class="pre">쿠키에</span> <span class="pre">저장</span></code> 할 수 있습니다.</p>
 </div>
 
 
@@ -114,7 +114,7 @@ Memcache 같은 추가 서버는 필요하지 않습니다.</p>
         <li class="right" >
           <a href="deploy.html" title="프로덕션 서버에 배포하기"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

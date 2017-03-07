@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>기본 검증 &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>검증 &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="index.html" />
     <link rel="next" title="파일 업로드" href="upload.html" />
     <link rel="prev" title="스코프" href="scopes.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="scopes.html" title="스코프"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,12 +49,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p>검증
-===</p>
+  <div class="section" id="id1">
+<h1>검증<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>Xitrum은 클라이언트 검증을 위해 <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
-내포하고 있고, 서버 검증을 위해 핼퍼를 제공합니다.</p>
-<div class="section" id="id1">
-<h1>기본 검증<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+내포하고 있고 서버 검증을 위해 핼퍼를 제공합니다.</p>
+<div class="section" id="id2">
+<h2>기본 검증<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal"><span class="pre">xitrum.validator</span></code> 패키지에 검증기를 제공합니다.
 다음과 같은 메소드를 가지고 있습니다:</p>
 <div class="highlight-python"><div class="highlight"><pre>check(value): Boolean
@@ -62,9 +62,9 @@ message(name, value): Option[String]
 exception(name, value)
 </pre></div>
 </div>
-<p>검증을 통과 하지 못하면, <code class="docutils literal"><span class="pre">message</span></code> 는 <code class="docutils literal"><span class="pre">Some(error</span> <span class="pre">message)</span></code> 를 반환하고,
+<p>검증을 통과 하지 못하면, <code class="docutils literal"><span class="pre">message</span></code> 는 <code class="docutils literal"><span class="pre">Some(error</span> <span class="pre">message)</span></code> 를 반환하고
 <code class="docutils literal"><span class="pre">exception</span></code> 은 <code class="docutils literal"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code> 를 호출합니다.</p>
-<p>어디서든지, 검증기를 사용할 수 있습니다.</p>
+<p>어디서든지 검증기를 사용할 수 있습니다.</p>
 <p>Action 예제:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.validator.Required
 
@@ -81,9 +81,9 @@ class CreateArticle {
 }
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">try</span></code> 、 <code class="docutils literal"><span class="pre">catch</span></code> 를 사용하지 않은 구문에서 검증을 통과하지 못하면,
+<p><code class="docutils literal"><span class="pre">try</span></code> 、 <code class="docutils literal"><span class="pre">catch</span></code> 를 사용하지 않은 구문에서 검증을 통과하지 못하면
 xitrum은 자동으로 예외를 탐지해서 클라이언트로 에러메세지를 전송합니다.
-이것은 클라이언트에서 검증을 사용하거나 웹 APIs를 작성할때 도움이 됩니다.</p>
+이것은 클라이언트에서 검증을 사용하거나 웹 APIs를 작성할 때 도움이 됩니다.</p>
 <p>Model 예제:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.validator.Required
 
@@ -96,11 +96,12 @@ case class Article(id: Int = 0, title: String = &quot;&quot;, body: String = &qu
 <p><a class="reference external" href="https://github.com/xitrum-framework/xitrum/tree/master/src/main/scala/xitrum/validator">xitrum.validator 패키지에는</a>
 모든 종류의 기본 검증기 리스트가 있습니다.</p>
 </div>
-<div class="section" id="id2">
-<h1>검증기 수정하기<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id3">
+<h2>검증기 수정하기<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/validator/Validator.scala">xitrum.validator.Validator</a> 를 확장할때
 <code class="docutils literal"><span class="pre">check</span></code> 나 <code class="docutils literal"><span class="pre">message</span></code> 메소드만 확장하면 됩니다.</p>
 <p>또한, <a class="reference external" href="http://commons.apache.org/proper/commons-validator/">Commons Validator</a> 를 사용해도 됩니다.</p>
+</div>
 </div>
 
 
@@ -111,8 +112,11 @@ case class Article(id: Int = 0, title: String = &quot;&quot;, body: String = &qu
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">기본 검증</a></li>
-<li><a class="reference internal" href="#id2">검증기 수정하기</a></li>
+<li><a class="reference internal" href="#">검증</a><ul>
+<li><a class="reference internal" href="#id2">기본 검증</a></li>
+<li><a class="reference internal" href="#id3">검증기 수정하기</a></li>
+</ul>
+</li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -157,7 +161,7 @@ case class Article(id: Int = 0, title: String = &quot;&quot;, body: String = &qu
         <li class="right" >
           <a href="scopes.html" title="스코프"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>JavaScript 와 JSON &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>JavaScript 와 JSON &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="index.html" />
     <link rel="next" title="비동기 응답" href="async.html" />
     <link rel="prev" title="XML" href="xml.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="xml.html" title="XML"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,11 +53,11 @@
 <h1>JavaScript 와 JSON<a class="headerlink" href="#javascript-json" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="javascript">
 <h2>JavaScript<a class="headerlink" href="#javascript" title="Permalink to this headline">¶</a></h2>
-<p>Xitrum 은 jQuery를 내포하고 있습니다.</p>
+<p>Xitrum은 jQuery를 내포하고 있습니다.</p>
 <p>또한 일부 jsXXX 헬퍼도 제공하고 있습니다.</p>
 <div class="section" id="javascript-view">
-<h3>JavaScript 조각을 View 에 추가하는 방법<a class="headerlink" href="#javascript-view" title="Permalink to this headline">¶</a></h3>
-<p>액션내에서 <code class="docutils literal"><span class="pre">jsAddToView</span></code> 를 호출합니다.（필요한 경우 여러번 호출이 가능합니다）:</p>
+<h3>JavaScript 조각을 View에 추가하는 방법<a class="headerlink" href="#javascript-view" title="Permalink to this headline">¶</a></h3>
+<p>액션 내에서 <code class="docutils literal"><span class="pre">jsAddToView</span></code> 를 호출합니다.（필요한 경우 여러 번 호출이 가능합니다）:</p>
 <div class="highlight-python"><div class="highlight"><pre>class MyAction extends AppAction {
   def execute() {
     ...
@@ -93,12 +93,12 @@ trait AppAction extends Action {
 </div>
 </div>
 <div class="section" id="id1">
-<h3>JavaScript를 직접호출 하는 경우<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>JavaScript를 직접 호출하는 경우<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Javascript의 응답:</p>
 <div class="highlight-python"><div class="highlight"><pre>jsRespond(&quot;$(&#39;#error&#39;).html(%s)&quot;.format(jsEscape(&lt;p class=&quot;error&quot;&gt;Could not login.&lt;/p&gt;)))
 </pre></div>
 </div>
-<p>Javascript로 리다이렉션 하는 경우:</p>
+<p>Javascript로 리다이렉션하는 경우:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">jsRedirectTo</span><span class="p">(</span><span class="s">&quot;http://cntt.tv/&quot;</span><span class="p">)</span>
 <span class="n">jsRedirectTo</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]()</span>
 </pre></div>
@@ -108,7 +108,7 @@ trait AppAction extends Action {
 <div class="section" id="json">
 <h2>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h2>
 <p>Xitrum은  <a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a> 를 내포하고 있습니다.
-JSON의 파싱과 생성은 JSON4S 을 읽어보세요.</p>
+JSON의 파싱과 생성은 JSON4S을 읽어보세요.</p>
 <p>Scala의 case 객체를 JSON으로 변환하는 경우:</p>
 <div class="highlight-python"><div class="highlight"><pre>import xitrum.util.SeriDeseri
 
@@ -123,7 +123,7 @@ val person2 = SeriDeseri.fromJson(json)
 respondJson(scalaData)
 </pre></div>
 </div>
-<p>JSON은 중접된 구조로 되어 있는 문장을 만들기에 적합합니다.</p>
+<p>JSON은 중첩된 구조로 되어 있는 문장을 만들기에 적합합니다.</p>
 <p>참고 <a class="reference internal" href="howto.html"><em>설정 파일 읽어들이기</em></a></p>
 </div>
 <div class="section" id="knockout-js">
@@ -142,8 +142,8 @@ respondJson(scalaData)
   <ul>
 <li><a class="reference internal" href="#">JavaScript 와 JSON</a><ul>
 <li><a class="reference internal" href="#javascript">JavaScript</a><ul>
-<li><a class="reference internal" href="#javascript-view">JavaScript 조각을 View 에 추가하는 방법</a></li>
-<li><a class="reference internal" href="#id1">JavaScript를 직접호출 하는 경우</a></li>
+<li><a class="reference internal" href="#javascript-view">JavaScript 조각을 View에 추가하는 방법</a></li>
+<li><a class="reference internal" href="#id1">JavaScript를 직접 호출하는 경우</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#json">JSON</a></li>
@@ -194,7 +194,7 @@ respondJson(scalaData)
         <li class="right" >
           <a href="xml.html" title="XML"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

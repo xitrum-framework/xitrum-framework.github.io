@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>XML &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>XML &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="index.html" />
     <link rel="next" title="JavaScript 와 JSON" href="js.html" />
     <link rel="prev" title="포스트백" href="postback.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="postback.html" title="포스트백"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,10 +51,10 @@
             
   <div class="section" id="xml">
 <h1>XML<a class="headerlink" href="#xml" title="Permalink to this headline">¶</a></h1>
-<p>Scala는 리터럴 문자를 표시할 수 있습니다.Xitrum에서는 이 기능을 템플릿 엔진으로 설명하고 있습니다.</p>
+<p>Scala는 리터럴 문자를 표시할 수 있습니다. Xitrum에서는 이 기능을 템플릿 엔진으로 사용하고 있습니다.</p>
 <ul class="simple">
-<li>Scala 는 XML구문을 컴파일때 체크합니다: View 는 typesafe합니다.</li>
-<li>Scala는 XML을 자동으로 빠져나갑니다 <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>　공격을 방지합니다.</li>
+<li>Scala는 XML 구문을 컴파일 때 체크합니다: View는 typesafe합니다.</li>
+<li>Scala는 XML의 자동적으로 이스케이프하여 <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>　공격을 방지합니다.</li>
 </ul>
 <p>일부 팁이 있습니다.</p>
 <div class="section" id="id1">
@@ -67,7 +67,7 @@
 &lt;/script&gt;
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">&lt;xml:unparsed&gt;</span></code> 를 사용하는 경:</p>
+<p><code class="docutils literal"><span class="pre">&lt;xml:unparsed&gt;</span></code> 를 사용하는 경우:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;script&gt;
   &lt;xml:unparsed&gt;
     if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);
@@ -98,7 +98,7 @@
 &lt;/div&gt;
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">&lt;xml:group&gt;</span></code> 는 실제 출력에 포함되지 않습니다.예를 들어 사용자가 로그인 한 경우:</p>
+<p><code class="docutils literal"><span class="pre">&lt;xml:group&gt;</span></code> 는 실제 출력에 포함되지 않습니다. 예를 들어 사용자가 로그인한 경우:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;div id=&quot;header&quot;&gt;
   &lt;b&gt;My username&lt;/b&gt;
   &lt;a href=&quot;/login&quot;&gt;Logout&lt;/a&gt;
@@ -109,11 +109,11 @@
 <div class="section" id="xhtml">
 <h2>XHTML 렌더링<a class="headerlink" href="#xhtml" title="Permalink to this headline">¶</a></h2>
 <p>Xitrum은 view 와 레이아웃을 자동으로 XHTML로 출력합니다.
-이것을 직접 출력으로 표시할경우 드믈지만 、다음 코드가 나타나는 것을 주의하세.</p>
+이것을 직접 출력으로 표시할경우 드믈지만 다음 코드가 나타나는 것을 주의하세요.</p>
 <div class="highlight-python"><div class="highlight"><pre>import scala.xml.Xhtml
 
 val br = &lt;br /&gt;
-br.toString            // =&gt; &lt;br&gt;&lt;/br&gt;, 이 경우 브라우저는 br이 두개가 있다고 판단합니다.
+br.toString            // =&gt; &lt;br&gt;&lt;/br&gt;, 이 경우에 브라우저는 br태그가 두 개 있다고 판단합니다.
 Xhtml.toXhtml(&lt;br /&gt;)  // =&gt; &quot;&lt;br /&gt;&quot;
 </pre></div>
 </div>
@@ -178,7 +178,7 @@ Xhtml.toXhtml(&lt;br /&gt;)  // =&gt; &quot;&lt;br /&gt;&quot;
         <li class="right" >
           <a href="postback.html" title="포스트백"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

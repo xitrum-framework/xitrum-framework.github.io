@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>포스트백 &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>포스트백 &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="index.html" />
     <link rel="next" title="XML" href="xml.html" />
     <link rel="prev" title="템플릿 엔진" href="template_engines.html" /> 
   </head>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="template_engines.html" title="템플릿 엔진"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,7 +51,7 @@
             
   <div class="section" id="id1">
 <h1>포스트백<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Web어플리케이션은 다음과 같은 두가지 경우로 많이 사용됩니다.</p>
+<p>Web 어플리케이션은 다음과 같은 두 가지 경우로 많이 사용됩니다.</p>
 <ul class="simple">
 <li>서버를 위해 사용하는 경우: 스마트폰을 위한 RESTful API를 만들거나, 다른 웹사이트를 위한 웹서비</li>
 <li>사람을 위해 사용하는 경우: 인터랙티브한 웹 서비스</li>
@@ -139,8 +139,8 @@ class ArticlesCreate extends AppAction {
 }
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">submit</span></code> 이벤트가 JavaScript 에서 실행될때、폼은 <code class="docutils literal"><span class="pre">ArticlesCreate</span></code> 으로 postback을 보냅니다.
-<code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> 의 <code class="docutils literal"><span class="pre">action</span></code> 속성은 암호화 되고、암호화된 URL은 CSRF토큰 대신 사용하게 됩니다.</p>
+<p><code class="docutils literal"><span class="pre">submit</span></code> 이벤트가 JavaScript 에서 실행될 때, 폼은 <code class="docutils literal"><span class="pre">ArticlesCreate</span></code> 으로 postback을 보냅니다.
+<code class="docutils literal"><span class="pre">&lt;form&gt;</span></code> 의 <code class="docutils literal"><span class="pre">action</span></code> 속성은 암호화 되고 암호화된 URL은 CSRF토큰 대신 사용하게 됩니다.</p>
 </div>
 <div class="section" id="form">
 <h2>form 이외의 사용<a class="headerlink" href="#form" title="Permalink to this headline">¶</a></h2>
@@ -149,7 +149,7 @@ class ArticlesCreate extends AppAction {
 <div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot; data-postback=&quot;click&quot; action={url[LogoutAction]}&gt;Logout&lt;/a&gt;
 </pre></div>
 </div>
-<p>링크를 클릭하게 되면 LogoutAction 으로 포스트백 메세지를 보냅니다.</p>
+<p>링크를 클릭하게 되면 LogoutAction으로 포스트백 메세지를 보냅니다.</p>
 </div>
 <div class="section" id="id4">
 <h2>확인 다이얼로그<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
@@ -163,8 +163,8 @@ class ArticlesCreate extends AppAction {
 </div>
 <div class="section" id="id5">
 <h2>매개 변수 추가<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
-<p>form의 요소중  <code class="docutils literal"><span class="pre">&lt;input</span> <span class="pre">type=&quot;hidden&quot;...</span></code> 를 추가하여 추가 매개변수를 postback메세지로 보낼 수 있습니다 .</p>
-<p>form요소 이외의 경우 、다음과 같이 사용하면 됩니다:</p>
+<p>form의 요소중  <code class="docutils literal"><span class="pre">&lt;input</span> <span class="pre">type=&quot;hidden&quot;...</span></code> 를 추가하여 추가 매개변수를 postback메세지로 보낼 수 있습니다.</p>
+<p>form요소 이외의 경우에는 다음과 같이 사용하면 됩니다:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;a href=&quot;#&quot;
    data-postback=&quot;click&quot;
    action={url[ArticlesDestroy](&quot;id&quot; -&gt; item.id)}
@@ -189,11 +189,10 @@ class ArticlesCreate extends AppAction {
 </div>
 <div class="section" id="ajax">
 <h2>Ajax로딩중 이미지 로딩<a class="headerlink" href="#ajax" title="Permalink to this headline">¶</a></h2>
-<p>By default, this animated GIF image is displayed while Ajax is loading:</p>
+<p>아래의 로딩 이미지가 Ajax 통신중에 표시됩니다:</p>
 <img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
-<p>To customize, please call this JS snippet after including <code class="docutils literal"><span class="pre">jsDefaults</span></code> (which includes
-<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>)
-in your view template:</p>
+<p>커스터마이즈 시에 템플릿 내에 <code class="docutils literal"><span class="pre">jsDefaults</span></code> (이것은 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>
+를 포함하기 위한 함수입니다.)의 뒤에 다음 내용을 추가합니다:</p>
 <div class="highlight-python"><div class="highlight"><pre>// target: The element that triggered the postback
 xitrum.ajaxLoading = function(target) {
   // Called when the animation should be displayed when the Ajax postback is being sent.
@@ -274,7 +273,7 @@ xitrum.ajaxLoading = function(target) {
         <li class="right" >
           <a href="template_engines.html" title="템플릿 엔진"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Xitrum 가이드 &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>Xitrum 가이드 &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="#" />
-    <link rel="next" title="기여자들" href="intro.html" /> 
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="#" />
+    <link rel="next" title="소개" href="intro.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -34,9 +34,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="intro.html" title="기여자들"
+          <a href="intro.html" title="소개"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,15 +54,19 @@
 </p>
 <div style="clear:both"></div>
 
-<p><a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum는 영어, 일본어, 러시아어, 베트남어 버전 형태로도 주문 가능합니다.</a></p>
+<p><a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum 가이드는 영어, 일본어, 러시아어, 베트남어 버전으로 제공됩니다.</a></p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">기여자들</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">소개</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#id3">기능</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#id7">기여자들</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">튜토리얼</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#xitrum">Xitrum 프로젝트 만들기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#id2">시작하기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#eclipse">Eclipse 프로젝트로 만들기</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial.html#intellij-idea">IntelliJ IDEA프로젝트 만들기</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#intellij-idea">IntelliJ IDEA 프로젝트 만들기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorial.html#id6">자동 리로드</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.html#ide">IDE를 사용하는 경우</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tutorial.html#id7">SBT를 사용하는 경우</a></li>
@@ -76,22 +80,22 @@
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#normal-action">Normal Action</a></li>
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#futureaction">FutureAction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#actor-action">Actor Action</a></li>
-<li class="toctree-l2"><a class="reference internal" href="action_view.html#id5">클라이언트로의 전송</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#id1">클라이언트로의 전송</a></li>
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#view">템플릿 View 파일 응답</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="action_view.html#currentaction">currentAction의 캐스팅</a></li>
-<li class="toctree-l3"><a class="reference internal" href="action_view.html#id8">Mustache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#id4">Mustache</a></li>
 <li class="toctree-l3"><a class="reference internal" href="action_view.html#coffeescript">CoffeeScript</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="action_view.html#id9">레이아웃</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="action_view.html#id10">독립적인 레이아웃 파일을 사용하지 않는 패턴</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#id5">레이아웃</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#id6">독립적인 레이아웃 파일을 사용하지 않는 패턴</a></li>
 <li class="toctree-l3"><a class="reference internal" href="action_view.html#respondview">respondView 레이아웃을 직접 패스</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#inline-view">Inline view</a></li>
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#render-fragment">Render fragment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="action_view.html#id13">다른 Action의 View를 응답하는 경우</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="action_view.html#id14">하나의 Action - 여러 View사용</a></li>
+<li class="toctree-l2"><a class="reference internal" href="action_view.html#id7">다른 Action의 View를 응답하는 경우</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="action_view.html#id8">하나의 Action - 여러 View사용</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="action_view.html#component">Component</a></li>
@@ -99,7 +103,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="restful.html">RESTful APIs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#id1">루트 캐싱</a></li>
-<li class="toctree-l2"><a class="reference internal" href="restful.html#firstlast">루트의 우선순위(first、last)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#first-last">루트의 우선순위(first, last)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#action">Action에 여러 경로를 연동</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#id2">점을 포함하는 루트</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#id3">정규 표현식을 이용한 라우팅</a></li>
@@ -107,12 +111,12 @@
 <li class="toctree-l2"><a class="reference internal" href="restful.html#id5">액션에 링크추가</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#id6">다른 액션으로 리디랙션</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#id7">다른 액션에 요청 전달</a></li>
-<li class="toctree-l2"><a class="reference internal" href="restful.html#ajax">Ajax 요청의 결정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#ajax">Ajax 요청 여부 확인</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#anti-csrf">Anti-CSRF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="restful.html#anticsrfinput-anticsrftoken">antiCsrfInput 와 antiCsrfToken</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#anticsrfinput-anticsrftoken">antiCsrfInput 과 antiCsrfToken</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#csrf">CSRF 체크 생략</a></li>
-<li class="toctree-l2"><a class="reference internal" href="restful.html#manipulate-collected-routes">Manipulate collected routes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="restful.html#id8">요청 내용 가져오기</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id8">라우팅 조작</a></li>
+<li class="toctree-l2"><a class="reference internal" href="restful.html#id9">요청 내용 가져오기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restful.html#swagger-api">Swagger로 API 문서화 하기</a></li>
 </ul>
 </li>
@@ -139,8 +143,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="js.html">JavaScript 와 JSON</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="js.html#javascript">JavaScript</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="js.html#javascript-view">JavaScript 조각을 View 에 추가하는 방법</a></li>
-<li class="toctree-l3"><a class="reference internal" href="js.html#id1">JavaScript를 직접호출 하는 경우</a></li>
+<li class="toctree-l3"><a class="reference internal" href="js.html#javascript-view">JavaScript 조각을 View에 추가하는 방법</a></li>
+<li class="toctree-l3"><a class="reference internal" href="js.html#id1">JavaScript를 직접 호출하는 경우</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="js.html#json">JSON</a></li>
@@ -151,7 +155,7 @@
 <li class="toctree-l2"><a class="reference internal" href="async.html#websocket">WebSocket</a></li>
 <li class="toctree-l2"><a class="reference internal" href="async.html#sockjs">SockJS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="async.html#chunk">Chunk응답</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="async.html#iframe">무한iframe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="async.html#iframe">무한 iframe</a></li>
 <li class="toctree-l3"><a class="reference internal" href="async.html#event-source">Event Source</a></li>
 </ul>
 </li>
@@ -174,39 +178,50 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="flash.html">Flash Socket 정책 파일</a></li>
 <li class="toctree-l1"><a class="reference internal" href="scopes.html">스코프</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#id2">매개변수</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#id3">매개변수 접근</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#at">&#8220;at&#8221;</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#atjson">&#8220;atJson&#8221;</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#requestvar">RequestVar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#id4">쿠키가 가능한 문자들</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#session-clear">session.clear()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#sessionvar">SessionVar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#id5">세션 스토어</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scopes.html#id6">클라이언트 세션저장과 서버 세션저장</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="scopes.html#object-vs-val">object vs. val</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#id2">요청</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id3">매개변수</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id4">매개변수 접근</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#at">&#8220;at&#8221;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#atjson">&#8220;atJson&#8221;</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#requestvar">RequestVar</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#id5">쿠키</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id6">쿠키가 가능한 문자들</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="validation.html">기본 검증</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation.html#id2">검증기 수정하기</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#id7">세션</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#session-clear">session.clear()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#sessionvar">SessionVar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id8">세션 스토어</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scopes.html#id9">클라이언트 세션 저장과 서버 세션 저장</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="scopes.html#object-vs-val">object vs. val</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validation.html">검증</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="validation.html#id2">기본 검증</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html#id3">검증기 수정하기</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="upload.html">파일 업로드</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="upload.html#ajax">Ajax 스타일 업로드</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="filter.html">액션 필터</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="filter.html#before">Before 필터</a></li>
-<li class="toctree-l2"><a class="reference internal" href="filter.html#after">After필터</a></li>
-<li class="toctree-l2"><a class="reference internal" href="filter.html#around">Around필터</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter.html#after">After 필터</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filter.html#around">Around 필터</a></li>
 <li class="toctree-l2"><a class="reference internal" href="filter.html#id2">필터의 수행 순서</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cache.html">서버측 캐시</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cache.html#id4">캐시페이지 혹은 액션</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cache.html#id7">캐시 오브젝트</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cache.html#id8">캐시 제거</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cache.html#id15">캐쉬의 동작원리</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id2">캐시페이지 혹은 액션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id3">캐시 오브젝트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id4">캐시 제거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id5">설정</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cache.html#id6">캐쉬의 동작원리</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cache.html#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
 </ul>
 </li>
@@ -221,7 +236,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="log.html">로그</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="log.html#xitrum-log">xitrum.Log 오브젝트를 바로 사용하기</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html#xitrum-log">xitrum.Log 오브젝트를 직접 사용하기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="log.html#xitrum-log-trait">xitrum.Log trait 사용하기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="log.html#id2">로깅하기 전에 로그레벨을 체크하지 않아도 됩니다</a></li>
 <li class="toctree-l2"><a class="reference internal" href="log.html#id4">로그레벨 및 출력파일 조정</a></li>
@@ -234,22 +249,22 @@
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#jvm-scala">실행중인 JVM 프로세스에 Scala 콘솔 연결</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#oracle-jdk-centos">Oracle JDK를 CentOS 나 우분투에 설차하기</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#xitrum">시스템이 구동될때 Xitrum을 시작하기</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#id10">포트포워딩 방법</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploy.html#id7">포트포워딩 방법</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#linux">대량연결에 대한 Linux 설정</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id13">파일 디스크립터 제한</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id14">커널 조정</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id15">백 로그에 대해</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id8">파일 디스크립터 제한</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id9">커널 조정</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id10">백 로그에 대해</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#haproxy">HAProxy 팁</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#nginx">Nginx 팁</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deploy.html#heroku">Heroku에 배포하기</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id29">가입 및 리파지토리 만들기</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id16">가입 및 저장소 만들기</a></li>
 <li class="toctree-l3"><a class="reference internal" href="deploy.html#procfile">Procfile 생성</a></li>
 <li class="toctree-l3"><a class="reference internal" href="deploy.html#port">Port설정 변경</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id31">로그 레벨 수정</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id32"><code class="docutils literal"><span class="pre">xitrum-package</span></code> 별칭부여</a></li>
-<li class="toctree-l3"><a class="reference internal" href="deploy.html#id33">Heroku에 푸시하기</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id18">로그 레벨 수정</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id19"><code class="docutils literal"><span class="pre">xitrum-package</span></code> 별칭 부여</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html#id20">Heroku에 푸시하기</a></li>
 </ul>
 </li>
 </ul>
@@ -285,14 +300,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="howto.html#id4">설정파일 로드</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="howto.html#json">JSON 파일</a></li>
-<li class="toctree-l3"><a class="reference internal" href="howto.html#id5">설정파일</a></li>
+<li class="toctree-l3"><a class="reference internal" href="howto.html#id5">설정 파일</a></li>
 <li class="toctree-l3"><a class="reference internal" href="howto.html#typesafe">Typesafe한 설정파일</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="howto.html#id7">직렬화 및 역직렬화</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto.html#id8">데이터 암호화</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto.html#id9">동일한 도매인내의 여러 사이트</a></li>
-<li class="toctree-l2"><a class="reference internal" href="howto.html#markdown-html">Markdown 텍스트를 HTML 로 변환</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#id9">동일한 도매인 내의 여러 사이트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto.html#markdown-html">Markdown 텍스트를 HTML로 변환</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto.html#id10">파일의 모니터링</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto.html#id11">임시 디렉토리</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto.html#id12">비디오 스트리밍</a></li>
@@ -300,7 +315,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="deps.html">의존도</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="deps.html#id2">라이브러리 의존도</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deps.html#id5">관련 프로젝트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deps.html#id3">관련 프로젝트</a></li>
 </ul>
 </li>
 </ul>
@@ -315,7 +330,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Next topic</h4>
   <p class="topless"><a href="intro.html"
-                        title="next chapter">기여자들</a></p>
+                        title="next chapter">소개</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -347,9 +362,9 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="intro.html" title="기여자들"
+          <a href="intro.html" title="소개"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

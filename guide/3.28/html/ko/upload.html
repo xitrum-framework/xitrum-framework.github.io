@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>파일 업로드 &mdash; Xitrum Scala Web Framework Guide 3.28.0 documentation</title>
+    <title>파일 업로드 &mdash; Xitrum Scala Web Framework Guide 3.28.2 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.0',
+        VERSION:     '3.28.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.0 documentation" href="index.html" />
+    <link rel="top" title="Xitrum Scala Web Framework Guide 3.28.2 documentation" href="index.html" />
     <link rel="next" title="액션 필터" href="filter.html" />
-    <link rel="prev" title="기본 검증" href="validation.html" /> 
+    <link rel="prev" title="검증" href="validation.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,9 +38,9 @@
           <a href="filter.html" title="액션 필터"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="validation.html" title="기본 검증"
+          <a href="validation.html" title="검증"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,13 +70,13 @@ val myFile = param[FileUpload](&quot;myFile&quot;)
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">myFile</span></code>  <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>
-의 인스턴스 입니다. 이 메소드를 이용하여 파일이름을 가져오거나, 파일의 이동등을 할 수 있습니다.</p>
-<p>작은파일 (16KB이하)는 메모리에 저장됩니다. 대용량 파일은 시스템의 임시 폴더에 저장됩니다(혹은 xitrum.conf에 정의된 <code class="docutils literal"><span class="pre">xitrum.request.tmpUploadDir</span></code>).
-그리고 나서, 커넥션이 닫히거나 응답이 전송되면 자동으로 삭제됩니다.</p>
+의 인스턴스 입니다. 이 메소드를 이용하여 파일 이름을 가져오거나 파일의 이동 등을 할 수 있습니다.</p>
+<p>작은 파일(16KB 이하)은 메모리에 저장됩니다. 대용량 파일은 시스템의 임시 폴더에 저장됩니다(혹은 xitrum.conf에 정의된 <code class="docutils literal"><span class="pre">xitrum.request.tmpUploadDir</span></code>).
+그리고 나서 커넥션이 닫히거나 응답이 전송되면 자동으로 삭제됩니다.</p>
 <div class="section" id="ajax">
 <h2>Ajax 스타일 업로드<a class="headerlink" href="#ajax" title="Permalink to this headline">¶</a></h2>
 <p>많은 자바스크립트 라이브러리는 Ajax 스타일의 업로드를 지원합니다. 숨겨진 iframe이나 플래시등으로 <code class="docutils literal"><span class="pre">multipart/form-data</span></code> 를 서버로 전송합니다.
-폼의 요청 파라미터가 전송될때, 어떤 라이브러리를 사용했는지는 Xitrum 억세스 로그를 확인하면 알 수 있습니다.</p>
+폼의 요청 파라미터가 전송될 때, 어떤 라이브러리를 사용했는지는 Xitrum 억세스 로그를 확인하면 알 수 있습니다.</p>
 </div>
 </div>
 
@@ -96,7 +96,7 @@ val myFile = param[FileUpload](&quot;myFile&quot;)
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="validation.html"
-                        title="previous chapter">기본 검증</a></p>
+                        title="previous chapter">검증</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="filter.html"
                         title="next chapter">액션 필터</a></p>
@@ -134,9 +134,9 @@ val myFile = param[FileUpload](&quot;myFile&quot;)
           <a href="filter.html" title="액션 필터"
              >next</a> |</li>
         <li class="right" >
-          <a href="validation.html" title="기본 검증"
+          <a href="validation.html" title="검증"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.28.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
