@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
+    <title>Tài liệu Xitrum Scala Web Framework Guide 3.28.6</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.2',
+        VERSION:     '3.28.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -30,7 +30,7 @@
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Điều hướng</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.6</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -2952,8 +2952,8 @@ libraryDependencies += &quot;com.sndyuk&quot; % &quot;logback-more-appenders&quo
                                             +---- Xitrum instance2
 </pre></div>
 </div>
-<div class="section" id="dong-gi-thu-muc">
-<h3>Đóng gí thư mục<a class="headerlink" href="#dong-gi-thu-muc" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="dong-goi-thu-muc">
+<h3>Đóng gói thư mục<a class="headerlink" href="#dong-goi-thu-muc" title="Permalink to this headline">¶</a></h3>
 <p>Chạy <code class="docutils literal"><span class="pre">sbt/sbt</span> <span class="pre">xitrum-package</span></code> để chuẩn bị cho thư mục <code class="docutils literal"><span class="pre">target/xitrum</span></code> sẵn sàng
 triển khai tại server sản phẩm:</p>
 <div class="highlight-python"><div class="highlight"><pre>target/xitrum
@@ -3006,7 +3006,7 @@ cài đặt Java bằng cách sử dụng trình quản lý gói.</p>
 <div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --list java
 </pre></div>
 </div>
-<p>Output example:</p>
+<p>Ví dụ output:</p>
 <div class="highlight-python"><div class="highlight"><pre>/usr/lib/jvm/jdk1.7.0_15/bin/java
 /usr/lib/jvm/jdk1.7.0_25/bin/java
 </pre></div>
@@ -3015,7 +3015,7 @@ cài đặt Java bằng cách sử dụng trình quản lý gói.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span>
 </pre></div>
 </div>
-<p>Output example:</p>
+<p>Ví dụ output:</p>
 <div class="highlight-python"><div class="highlight"><pre>/sbin/init: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c, stripped
 </pre></div>
 </div>
@@ -3041,7 +3041,7 @@ sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot
 <div class="highlight-python"><div class="highlight"><pre>sudo update-alternatives --config java
 </pre></div>
 </div>
-<p>Output example:</p>
+<p>Ví dụ output:</p>
 <div class="highlight-python"><div class="highlight"><pre>There are 3 choices for the alternative java (providing /usr/bin/java).
 
   Selection    Path                               Priority   Status
@@ -3059,7 +3059,7 @@ update-alternatives: using /usr/lib/jvm/jdk1.7.0_45/bin/java to provide /usr/bin
 <div class="highlight-python"><div class="highlight"><pre><span class="n">java</span> <span class="o">-</span><span class="n">version</span>
 </pre></div>
 </div>
-<p>Output example:</p>
+<p>Ví dụ output:</p>
 <div class="highlight-python"><div class="highlight"><pre>java version &quot;1.7.0_45&quot;
 Java(TM) SE Runtime Environment (build 1.7.0_45-b18)
 Java HotSpot(TM) 64-Bit Server VM (build 24.45-b08, mixed mode)
@@ -3716,7 +3716,7 @@ val myConfig = Loader.jsonFromClasspath[MyConfig](&quot;myconfig.json&quot;)
 </div>
 <p>Ghi chú:</p>
 <ul class="simple">
-<li>Các Key and string phải được dùng dấu nháy kép <code class="docutils literal"><span class="pre">&quot;</span></code>.</li>
+<li>Các key hoặc string phải được dùng dấu nháy kép <code class="docutils literal"><span class="pre">&quot;</span></code>.</li>
 <li>Hiện tại, bạn không thể viết comment trong tệp JSON</li>
 </ul>
 </div>
@@ -3776,7 +3776,7 @@ val bytes = SeriDeseri.toBytes(&quot;my serializable object&quot;)
 <span class="n">Loader</span><span class="o">.</span><span class="n">bytesToFile</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="s">&quot;myObject.bin&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To load from the file:</p>
+<p>Để load từ file:</p>
 <div class="highlight-python"><div class="highlight"><pre>val bytes = Loader.bytesFromFile(&quot;myObject.bin&quot;)
 </pre></div>
 </div>
@@ -3832,7 +3832,7 @@ sẽ được sử dụng.</p>
 </div>
 <div class="section" id="nhieu-site-voi-cung-mot-ten-mien">
 <h3>Nhiều site với cùng một tên miền<a class="headerlink" href="#nhieu-site-voi-cung-mot-ten-mien" title="Permalink to this headline">¶</a></h3>
-<p>Neus bạn muốn sử dụng một reverse proxy như Nginx để chạy nhiều site khác nhau
+<p>Nếu bạn muốn sử dụng một reverse proxy như Nginx để chạy nhiều site khác nhau
 tại cùng một tên miền:</p>
 <div class="highlight-python"><div class="highlight"><pre>http://example.com/site1/...
 http://example.com/site2/...
@@ -3847,9 +3847,9 @@ trong <a class="reference external" href="https://github.com/xitrum-framework/xi
 </pre></div>
 </div>
 </div>
-<div class="section" id="convert-markdown-sang-html">
-<h3>Convert Markdown sang HTML<a class="headerlink" href="#convert-markdown-sang-html" title="Permalink to this headline">¶</a></h3>
-<p>Nếu bạn đã configured project để sử dụng <a class="reference internal" href="index.html#document-template_engines"><em>Scalate template engine</em></a>,
+<div class="section" id="chuyen-tu-markdown-sang-html">
+<h3>Chuyển từ Markdown sang HTML<a class="headerlink" href="#chuyen-tu-markdown-sang-html" title="Permalink to this headline">¶</a></h3>
+<p>Nếu bạn đã cấu hình project để sử dụng <a class="reference internal" href="index.html#document-template_engines"><em>Scalate template engine</em></a>,
 Bạn chỉ cần phải làm như sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>import org.fusesource.scalamd.Markdown
 val html = Markdown(&quot;input&quot;)
@@ -4202,7 +4202,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="index.html#document-deploy">Triển khai ứng dụng web trên server</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="index.html#dong-gi-thu-muc">Đóng gí thư mục</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#dong-goi-thu-muc">Đóng gói thư mục</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#customize-xitrum-package">Customize xitrum-package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay">Kết nối Scala console đến một tiến trình JVM đang chạy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#cai-dat-oracle-jdk-tren-centos-hoac-ubuntu">Cài đặt Oracle JDK trên CentOS hoặc Ubuntu</a></li>
@@ -4265,7 +4265,7 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
 <li class="toctree-l2"><a class="reference internal" href="index.html#serialize-va-deserialize">Serialize và deserialize</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#ma-hoa-du-lieu">Mã hóa dữ liệu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#nhieu-site-voi-cung-mot-ten-mien">Nhiều site với cùng một tên miền</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#convert-markdown-sang-html">Convert Markdown sang HTML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#chuyen-tu-markdown-sang-html">Chuyển từ Markdown sang HTML</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#theo-doi-su-thay-doi-cua-tep">Theo dõi sự thay đổi của tệp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#thu-muc-tam-thoi">Thư mục tạm thời</a></li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#stream-video">Stream video</a></li>
@@ -4285,11 +4285,11 @@ mã nguồn của <a class="reference external" href="http://xitrum-framework.gi
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Điều hướng</h3>
       <ul>
-        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html#document-index">Tài liệu Xitrum Scala Web Framework Guide 3.28.6</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+        &copy; Bản quyền thuộc 2017, Ngoc Dao.
       Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>

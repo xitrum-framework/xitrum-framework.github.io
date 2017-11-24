@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HOWTO &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.2</title>
+    <title>HOWTO &mdash; Tài liệu Xitrum Scala Web Framework Guide 3.28.6</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '3.28.2',
+        VERSION:     '3.28.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/translations.js"></script>
-    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.2" href="index.html" />
+    <link rel="top" title="Tài liệu Xitrum Scala Web Framework Guide 3.28.6" href="index.html" />
     <link rel="next" title="Dependencies" href="deps.html" />
     <link rel="prev" title="Metrics" href="metrics.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="metrics.html" title="Metrics"
              accesskey="P">xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.6</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -112,7 +112,7 @@ val myConfig = Loader.jsonFromClasspath[MyConfig](&quot;myconfig.json&quot;)
 </div>
 <p>Ghi chú:</p>
 <ul class="simple">
-<li>Các Key and string phải được dùng dấu nháy kép <code class="docutils literal"><span class="pre">&quot;</span></code>.</li>
+<li>Các key hoặc string phải được dùng dấu nháy kép <code class="docutils literal"><span class="pre">&quot;</span></code>.</li>
 <li>Hiện tại, bạn không thể viết comment trong tệp JSON</li>
 </ul>
 </div>
@@ -172,7 +172,7 @@ val bytes = SeriDeseri.toBytes(&quot;my serializable object&quot;)
 <span class="n">Loader</span><span class="o">.</span><span class="n">bytesToFile</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="s">&quot;myObject.bin&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To load from the file:</p>
+<p>Để load từ file:</p>
 <div class="highlight-python"><div class="highlight"><pre>val bytes = Loader.bytesFromFile(&quot;myObject.bin&quot;)
 </pre></div>
 </div>
@@ -228,7 +228,7 @@ sẽ được sử dụng.</p>
 </div>
 <div class="section" id="nhieu-site-voi-cung-mot-ten-mien">
 <h2>Nhiều site với cùng một tên miền<a class="headerlink" href="#nhieu-site-voi-cung-mot-ten-mien" title="Permalink to this headline">¶</a></h2>
-<p>Neus bạn muốn sử dụng một reverse proxy như Nginx để chạy nhiều site khác nhau
+<p>Nếu bạn muốn sử dụng một reverse proxy như Nginx để chạy nhiều site khác nhau
 tại cùng một tên miền:</p>
 <div class="highlight-python"><div class="highlight"><pre>http://example.com/site1/...
 http://example.com/site2/...
@@ -243,9 +243,9 @@ trong <a class="reference external" href="https://github.com/xitrum-framework/xi
 </pre></div>
 </div>
 </div>
-<div class="section" id="convert-markdown-sang-html">
-<h2>Convert Markdown sang HTML<a class="headerlink" href="#convert-markdown-sang-html" title="Permalink to this headline">¶</a></h2>
-<p>Nếu bạn đã configured project để sử dụng <a class="reference internal" href="template_engines.html"><em>Scalate template engine</em></a>,
+<div class="section" id="chuyen-tu-markdown-sang-html">
+<h2>Chuyển từ Markdown sang HTML<a class="headerlink" href="#chuyen-tu-markdown-sang-html" title="Permalink to this headline">¶</a></h2>
+<p>Nếu bạn đã cấu hình project để sử dụng <a class="reference internal" href="template_engines.html"><em>Scalate template engine</em></a>,
 Bạn chỉ cần phải làm như sau:</p>
 <div class="highlight-python"><div class="highlight"><pre>import org.fusesource.scalamd.Markdown
 val html = Markdown(&quot;input&quot;)
@@ -335,7 +335,7 @@ của tệp phim một các xen kẽ mỗi 0.5 giây:</p>
 <li><a class="reference internal" href="#serialize-va-deserialize">Serialize và deserialize</a></li>
 <li><a class="reference internal" href="#ma-hoa-du-lieu">Mã hóa dữ liệu</a></li>
 <li><a class="reference internal" href="#nhieu-site-voi-cung-mot-ten-mien">Nhiều site với cùng một tên miền</a></li>
-<li><a class="reference internal" href="#convert-markdown-sang-html">Convert Markdown sang HTML</a></li>
+<li><a class="reference internal" href="#chuyen-tu-markdown-sang-html">Chuyển từ Markdown sang HTML</a></li>
 <li><a class="reference internal" href="#theo-doi-su-thay-doi-cua-tep">Theo dõi sự thay đổi của tệp</a></li>
 <li><a class="reference internal" href="#thu-muc-tam-thoi">Thư mục tạm thời</a></li>
 <li><a class="reference internal" href="#stream-video">Stream video</a></li>
@@ -385,11 +385,11 @@ của tệp phim một các xen kẽ mỗi 0.5 giây:</p>
         <li class="right" >
           <a href="metrics.html" title="Metrics"
              >xem lại</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.2</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.28.6</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Bản quyền thuộc 2016, Ngoc Dao.
+        &copy; Bản quyền thuộc 2017, Ngoc Dao.
       Được tạo nhờ <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
