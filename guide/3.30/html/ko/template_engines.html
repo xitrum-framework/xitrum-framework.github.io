@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>템플릿 엔진 &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="포스트백" href="postback.html" />
+    <link rel="prev" title="RESTful APIs" href="restful.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="postback.html" title="포스트백"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">템플릿 엔진</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>템플릿 엔진<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="action_view.html"><span class="doc">renderView 이나 renderFragment, respondView</span></a> 이 호출되면
+설정된 템플릿 엔진이 호출됩니다.</p>
+<div class="section" id="id2">
+<h2>템플릿 엔진 설정<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a> 에서 템플릿 엔진은 그 형식에 따라서 다음과 같이 두 종류로 설정이 가능합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>또는:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="p">{</span>
+  <span class="s2">&quot;my.template.EngineClassName&quot;</span> <span class="p">{</span>
+    <span class="n">option1</span> <span class="o">=</span> <span class="n">value1</span>
+    <span class="n">option2</span> <span class="o">=</span> <span class="n">value2</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>기본 템플릿 엔진은 <a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a> 입니다.</p>
+</div>
+<div class="section" id="id3">
+<h2>템플릿 엔진 제거<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>단지 RESTful API만을 만들 경우에 renderView, renderFragment, respondView를 호출할 필요가 없습니다. 이 경우 템플릿 엔진을 프로젝트에서 삭제해서 프로젝트를 더 가볍게 만들 수 있습니다.
+방법은 config/xitrum.conf 에서 <code class="docutils literal notranslate"><span class="pre">templateEngine</span></code> 을 지우거나 주석 처리하세요.</p>
+</div>
+<div class="section" id="id4">
+<h2>템플릿 엔진 만들기<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>나민의 템플릿 엔진을 만들려면 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/view/TemplateEngine.scala">xitrum.view.TemplateEngine</a> 을 상속받아 클래스를 만듭니다.
+그리고 나서 config/xitrum.conf 에 명시하면 됩니다.</p>
+<p>예제: <a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a></p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">템플릿 엔진</a><ul>
+<li><a class="reference internal" href="#id2">템플릿 엔진 설정</a></li>
+<li><a class="reference internal" href="#id3">템플릿 엔진 제거</a></li>
+<li><a class="reference internal" href="#id4">템플릿 엔진 만들기</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="restful.html"
+                        title="previous chapter">RESTful APIs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="postback.html"
+                        title="next chapter">포스트백</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/template_engines.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="postback.html" title="포스트백"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">템플릿 엔진</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

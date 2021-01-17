@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="HOWTO" href="howto.html" />
+    <link rel="prev" title="Netty handler" href="handler.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handler"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Metrics</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="metrics">
+<h1>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum thu thập thông tin bộ nhớ JVM heap, CPU, và tình trạng thực thi của các action từ mỗi node
+trong Akka cluster của ứng dụng. Nó xuất ra các số liệu trong định dạng dữ liệu JSON. Xitrum cũng
+cho phép bạn thu thập cách các dữ liệu khác.</p>
+<p>Công cụ metrics này dựa theo thư viện <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
+<div class="section" id="thu-thap-thong-tin">
+<h2>Thu thập thông tin<a class="headerlink" href="#thu-thap-thong-tin" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bo-nho-heap-va-cpu">
+<h3>Bộ nhớ heap và CPU<a class="headerlink" href="#bo-nho-heap-va-cpu" title="Permalink to this headline">¶</a></h3>
+<p>Bộ nhớ JVM heap và CPU sẽ được thu thập
+<a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
+từ mỗi node của hệ thống Akka actor.</p>
+<p>Bộ nhớ heap:</p>
+<img alt="_images/metrics_heapmemory.png" src="_images/metrics_heapmemory.png" />
+<p>CPU: số lượng tiến trình và tải trung bình</p>
+<img alt="_images/metrics_cpu.png" src="_images/metrics_cpu.png" />
+</div>
+<div class="section" id="action-metric">
+<h3>Action metric<a class="headerlink" href="#action-metric" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum thu thập tình trạng thực thi các action của mỗi node như một
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#histograms">Histogram</a>.
+Bạn có thể biết chính các bao nhiêu lần action được thực thi và thời gian
+thực thi của những non-async action.</p>
+<img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
+<p>Thời gian thực hiện lần gần nhất của một action:</p>
+<img alt="_images/metrics_action_time.png" src="_images/metrics_action_time.png" />
+</div>
+<div class="section" id="thu-thap-cac-so-lieu-tuy-chinh">
+<h3>Thu thập các số liệu tùy chỉnh<a class="headerlink" href="#thu-thap-cac-so-lieu-tuy-chinh" title="Permalink to this headline">¶</a></h3>
+<p>Ngoài các số liệu mặc định nêu trên, bạn có thể thu thập các dữ liệu cho riêng mình.
+<code class="docutils literal notranslate"><span class="pre">xitrum.Metrics</span></code> có thể truy cập vào <code class="docutils literal notranslate"><span class="pre">gauge</span></code>, <code class="docutils literal notranslate"><span class="pre">counter</span></code>, <code class="docutils literal notranslate"><span class="pre">meter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">timer</span></code> và <code class="docutils literal notranslate"><span class="pre">histogram</span></code>. Vui lòng tham khảo
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a> và
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">bản hiện thực Scala của nó</a>
+để biết cách sử dụng.</p>
+<p>Ví dụ về timer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">Metrics</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nb">object</span> <span class="n">MyAction</span> <span class="p">{</span>
+  <span class="n">lazy</span> <span class="n">val</span> <span class="n">myTimer</span> <span class="o">=</span> <span class="n">Metrics</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;myTimer&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;my/action&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="kn">import</span> <span class="nn">MyAction._</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">myTimer</span><span class="o">.</span><span class="n">time</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">Something</span> <span class="n">that</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">measure</span> <span class="n">execution</span> <span class="n">time</span>
+      <span class="o">...</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="xuat-ra-cac-metric">
+<h2>Xuất ra các metric<a class="headerlink" href="#xuat-ra-cac-metric" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum xuất ra giá trị mới nhất của metric dưới định đạng JSON sau một chu kỳ
+xác định.
+Các dữ liệu thu thập được có nhiều biến động, sẽ không được lưu trữ vĩnh viễn</p>
+<p>HeapMemory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;TYPE&quot;</span>      <span class="p">:</span> <span class="s2">&quot;heapMemory&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SYSTEM&quot;</span>    <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+  <span class="s2">&quot;HOST&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+  <span class="s2">&quot;PORT&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+  <span class="s2">&quot;HASH&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">hashCode</span><span class="p">,</span>
+  <span class="s2">&quot;TIMESTAMP&quot;</span> <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">NodeMetrics</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span>
+  <span class="s2">&quot;USED&quot;</span>      <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span><span class="p">,</span>
+  <span class="s2">&quot;COMMITTED&quot;</span> <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span><span class="p">,</span>
+  <span class="s2">&quot;MAX&quot;</span>       <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>CPU:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;TYPE&quot;</span>              <span class="p">:</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SYSTEM&quot;</span>            <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+  <span class="s2">&quot;HOST&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+  <span class="s2">&quot;PORT&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+  <span class="s2">&quot;HASH&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">hashCode</span><span class="p">,</span>
+  <span class="s2">&quot;TIMESTAMP&quot;</span>         <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">NodeMetrics</span><span class="o">.</span><span class="n">timestamp</span>
+  <span class="s2">&quot;SYSTEMLOADAVERAGE&quot;</span> <span class="p">:</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="s2">&quot;CPUCOMBINED&quot;</span>       <span class="p">:</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="s2">&quot;PROCESSORS&quot;</span>        <span class="p">:</span> <span class="n">Number</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>MetricsRegistry sẽ được phân tách bởi
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/json/">metrics-json</a>.</p>
+<div class="section" id="xitrum-viewer-mac-dinh">
+<h3>Xitrum viewer mặc định<a class="headerlink" href="#xitrum-viewer-mac-dinh" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum cung cấp metric viewer mặc định tại URL <code class="docutils literal notranslate"><span class="pre">/xitrum/metrics/viewer?api_key=&lt;see</span> <span class="pre">xitrum.conf&gt;</span></code>.
+URL này hiển thị các đồ thị như trên. Các đồ thị được tạo bởi <a class="reference external" href="http://d3js.org/">D3.js</a>.</p>
+<p>URL có thể được tạ ra với:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Config</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.XitrumMetricsViewer</span>
+
+<span class="n">url</span><span class="p">[</span><span class="n">XitrumMetricsViewer</span><span class="p">](</span><span class="s2">&quot;api_key&quot;</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">apiKey</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jconsole-viewer">
+<h3>Jconsole viewer<a class="headerlink" href="#jconsole-viewer" title="Permalink to this headline">¶</a></h3>
+<p>Bạn có thể xem nó với <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#reporting-via-jmx">JVM Reporter</a>.</p>
+<img alt="_images/metrics_jconsole.png" src="_images/metrics_jconsole.png" />
+<p>Khởi động JMX reporter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.codahale.metrics.JmxReporter</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">JmxReporter</span><span class="o">.</span><span class="n">forRegistry</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Metrics</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Sau đó chạy <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html">jconsole</a> command.</p>
+</div>
+<div class="section" id="hien-thi-metiric-voi-custom-viewer">
+<h3>Hiển thị metiric với custom viewer<a class="headerlink" href="#hien-thi-metiric-voi-custom-viewer" title="Permalink to this headline">¶</a></h3>
+<p>Metric sẽ được xuất ra tại SockJS URL <code class="docutils literal notranslate"><span class="pre">xitrum/metrics/channel</span></code> như JSON.
+<code class="docutils literal notranslate"><span class="pre">jsAddMetricsNameSpace</span></code> là một JavaScript snippet mà Xitrum cung cấp để tạo
+kết nối.</p>
+<p>Sử dụng JSON handler của bạn và gọi <code class="docutils literal notranslate"><span class="pre">initMetricsChannel</span></code> với handler đó.</p>
+<p>Ví dụ về action:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.MetricsViewer</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;my/metrics/viewer&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MySubscriber</span> <span class="n">extends</span> <span class="n">MetricsViewer</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">jsAddMetricsNameSpace</span><span class="p">(</span><span class="s2">&quot;window&quot;</span><span class="p">)</span>
+    <span class="n">jsAddToView</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">      function onValue(json) {</span>
+<span class="s2">        console.log(json);</span>
+<span class="s2">      }</span>
+<span class="s2">      function onClose(){</span>
+<span class="s2">        console.log(&quot;channel closed&quot;);</span>
+<span class="s2">      }</span>
+<span class="s2">      window.initMetricsChannel(onValue, onClose);</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="luu-metric">
+<h3>Lưu metric<a class="headerlink" href="#luu-metric" title="Permalink to this headline">¶</a></h3>
+<p>Để tiết kiệm bộ nhớ, Xitrum không ghi nhớ các giá trị metric cũ. Nếu bạn muốn lưu metric vào
+cơ sở dữ liệu hoặc tập tin nào đó, bạn cần implement vào subscriber của bạn.</p>
+<p>Ví dụ:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">akka.actor.Actor</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.PublisherLookUp</span>
+
+<span class="k">class</span> <span class="nc">MySubscriber</span> <span class="n">extends</span> <span class="n">Actor</span> <span class="k">with</span> <span class="n">PublisherLookUp</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">preStart</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">lookUpPublisher</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">receive</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="n">_</span> <span class="o">=&gt;</span>
+  <span class="p">}</span>
+
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">doWithPublisher</span><span class="p">(</span><span class="n">globalPublisher</span><span class="p">:</span> <span class="n">ActorRef</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">When</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">multinode</span> <span class="n">environment</span>
+      <span class="n">case</span> <span class="n">multinodeMetrics</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">NodeMetrics</span><span class="p">]</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="o">//</span> <span class="n">When</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">single</span> <span class="n">node</span> <span class="n">environment</span>
+      <span class="n">case</span> <span class="n">nodeMetrics</span><span class="p">:</span> <span class="n">NodeMetrics</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="n">case</span> <span class="n">Publish</span><span class="p">(</span><span class="n">registryAsJson</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="n">case</span> <span class="n">_</span> <span class="o">=&gt;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Metrics</a><ul>
+<li><a class="reference internal" href="#thu-thap-thong-tin">Thu thập thông tin</a><ul>
+<li><a class="reference internal" href="#bo-nho-heap-va-cpu">Bộ nhớ heap và CPU</a></li>
+<li><a class="reference internal" href="#action-metric">Action metric</a></li>
+<li><a class="reference internal" href="#thu-thap-cac-so-lieu-tuy-chinh">Thu thập các số liệu tùy chỉnh</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#xuat-ra-cac-metric">Xuất ra các metric</a><ul>
+<li><a class="reference internal" href="#xitrum-viewer-mac-dinh">Xitrum viewer mặc định</a></li>
+<li><a class="reference internal" href="#jconsole-viewer">Jconsole viewer</a></li>
+<li><a class="reference internal" href="#hien-thi-metiric-voi-custom-viewer">Hiển thị metiric với custom viewer</a></li>
+<li><a class="reference internal" href="#luu-metric">Lưu metric</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="handler.html"
+                        title="chương trước ">Netty handler</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="howto.html"
+                        title="chương tiếp">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/metrics.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handler"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Metrics</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

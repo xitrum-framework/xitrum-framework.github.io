@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Интернационализация &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Логирование" href="log.html" />
+    <link rel="prev" title="Кэш на стороне сервера" href="cache.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="log.html" title="Логирование"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="cache.html" title="Кэш на стороне сервера"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Интернационализация</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Интернационализация<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Для интернационализации используется GNU gettext. В отличии от других программ, gettext поддерживает множественные
+числа.</p>
+<img alt="_images/poedit.png" src="_images/poedit.png" />
+<div class="section" id="id2">
+<h2>Используйте интернационализированные сообщения непосредственно в коде<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">xitrum.Action</span></code> наследуется от <code class="docutils literal notranslate"><span class="pre">xitrum.I18n</span></code> и предоставляет методы:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>t(&quot;Message&quot;)
+tc(&quot;Context&quot;, &quot;Message&quot;)
+
+t(&quot;Hello %s&quot;).format(&quot;World&quot;)
+
+// 1$ and 2$ are placeholders
+t(&quot;%1$s says hello to %2$s, then %2$s says hello back to %1$s&quot;).format(&quot;Bill&quot;, &quot;Hillary&quot;)
+
+// {0} and {1} are placeholders
+java.text.MessageFormat.format(t(&quot;{0} says hello to {1}, then {1} says hello back to {0}&quot;), &quot;Bill&quot;, &quot;Hillary&quot;)
+
+t(&quot;%,.3f&quot;).format(1234.5678)                                // =&gt; 1,234.568
+t(&quot;%,.3f&quot;).formatLocal(java.util.Locale.FRENCH, 1234.5678)  // =&gt; 1 234,568
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Above</span><span class="p">,</span> <span class="n">you</span> <span class="n">explicitly</span> <span class="n">specify</span> <span class="n">locale</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">If</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">implicitly</span> <span class="n">use</span> <span class="n">locale</span> <span class="n">of</span> <span class="n">the</span> <span class="n">current</span> <span class="n">action</span><span class="p">:</span>
+<span class="o">//</span> <span class="n">when</span> <span class="n">English</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span><span class="mf">234.568</span><span class="p">,</span> <span class="n">when</span> <span class="n">French</span> <span class="o">=&gt;</span> <span class="mi">1</span> <span class="mi">234</span><span class="p">,</span><span class="mi">568</span>
+<span class="n">t</span><span class="p">(</span><span class="s2">&quot;%,.3f&quot;</span><span class="p">,</span> <span class="mf">1234.5678</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>В других местах, вам нужно передать текущий контроллер что бы использовать <code class="docutils literal notranslate"><span class="pre">t</span></code> и <code class="docutils literal notranslate"><span class="pre">tc</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">В</span> <span class="n">контроллере</span>
+<span class="n">respondText</span><span class="p">(</span><span class="n">MyModel</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="n">this</span><span class="p">))</span>
+
+<span class="o">//</span> <span class="n">В</span> <span class="n">модели</span>
+<span class="kn">import</span> <span class="nn">xitrum.I18n</span>
+<span class="nb">object</span> <span class="n">MyModel</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">i18n</span><span class="p">:</span> <span class="n">I18n</span><span class="p">)</span> <span class="o">=</span> <span class="n">i18n</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pot">
+<h2>Извлечение сообщений в pot файл<a class="headerlink" href="#pot" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Создайте пустой i18n.pot файл в корневой директории проекта, скомпилируйте проект.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="n">clean</span>
+<span class="n">rm</span> <span class="n">i18n</span><span class="o">.</span><span class="n">pot</span>
+<span class="n">touch</span> <span class="n">i18n</span><span class="o">.</span><span class="n">pot</span>
+<span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="nb">compile</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> удалит все .class файлы, тем самым принудит SBT выполнить компиляцию всего проекта.
+Поскольку после <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code>, SBT выполняет обновление всех <a class="reference internal" href="deps.html"><span class="doc">зависимостей</span></a>,
+вы можете ускорить процесс выполнив команду <code class="docutils literal notranslate"><span class="pre">find</span> <span class="pre">target</span> <span class="pre">-name</span> <span class="pre">*.class</span> <span class="pre">-delete</span></code>, которая удалит
+все .class файлы в директории <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+<p>После компиляции, i18n.pot будет заполнен сообщениями извлеченными из исходного кода. Такое поведение реализуется
+через <a class="reference external" href="http://www.scala-lang.org/node/140">плагин для компилятора Scala</a>.</p>
+<p>Единственный недостаток этого метода в том что сообщения извлекаются только из
+исходного кода Scala. Если у вас используются java файлы, вам придется добавить сообщения
+самостоятельно через командную строку используя интерфейс <code class="docutils literal notranslate"><span class="pre">xgettext</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>xgettext -kt -ktc:1c,2 -ktn:1,2 -ktcn:1c,2,3 -o i18n_java.pot --from-code=UTF-8 $(find src/main/java -name &quot;*.java&quot;)
+</pre></div>
+</div>
+<p>Затем вам необходимо объединить i18n_java.pot и i18n.pot.</p>
+</div>
+<div class="section" id="po">
+<h2>Где сохранять po файлы<a class="headerlink" href="#po" title="Ссылка на этот заголовок">¶</a></h2>
+<p>i18n.pot это шаблонный файл. Вы должны перевести его и сохранить как &lt;язык&gt;.po.</p>
+<p>Xitrum отслеживает директорию <code class="docutils literal notranslate"><span class="pre">i18n</span></code> в classpath.
+Файлы &lt;язык&gt;.po  из этой директории загружаются во время работы приложения,
+Xitrum автоматически перезагружает эти файлы если они изменились.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src</span>
+  <span class="n">main</span>
+    <span class="n">scala</span>
+    <span class="n">view</span>
+    <span class="n">resources</span>
+      <span class="n">i18n</span>
+        <span class="n">ja</span><span class="o">.</span><span class="n">po</span>
+        <span class="n">vi</span><span class="o">.</span><span class="n">po</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>Используйте <a class="reference external" href="http://www.poedit.net/">Poedit</a> для редактирования po файлов.
+Вы можете использовать его для добавления новых pot файлов в po файл.</p>
+<img alt="_images/update_from_pot.png" src="_images/update_from_pot.png" />
+<p>Вы можете поставлять po файлы в составе JAR. Xitrum  автоматически объединит их
+при запуске.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mylib</span><span class="o">.</span><span class="n">jar</span>
+  <span class="n">i18n</span>
+    <span class="n">ja</span><span class="o">.</span><span class="n">po</span>
+    <span class="n">vi</span><span class="o">.</span><span class="n">po</span>
+        <span class="o">...</span>
+
+<span class="n">another</span><span class="o">.</span><span class="n">jar</span>
+  <span class="n">i18n</span>
+    <span class="n">ja</span><span class="o">.</span><span class="n">po</span>
+    <span class="n">vi</span><span class="o">.</span><span class="n">po</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>Выбор языка<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<ul class="simple">
+<li><p>Для выбор языка согласно заголовку запроса <code class="docutils literal notranslate"><span class="pre">Accept-Language</span></code>,
+используйте метод <code class="docutils literal notranslate"><span class="pre">browserLanguages</span></code>. Результат выбора определяется согласно приоритету
+браузера.</p></li>
+<li><p>Язык по умолчанию устанавливается «en». Для смены текущего языка используйте присвоение переменной <code class="docutils literal notranslate"><span class="pre">language</span></code>.
+Например, для русского языка <code class="docutils literal notranslate"><span class="pre">language</span> <span class="pre">=</span> <span class="pre">&quot;ru&quot;</span></code>.</p></li>
+<li><p>Для выбора подходящего языка из доступных, используйте вызов
+<code class="docutils literal notranslate"><span class="pre">autosetLanguage(availableLanguages)</span></code>, где
+<code class="docutils literal notranslate"><span class="pre">availableLanguages</span></code> список доступных языков из директории
+<code class="docutils literal notranslate"><span class="pre">resources/i18n</span></code> и JAR файлов.
+Если подходящего языка нет, будет установлен язык «en».</p></li>
+<li><p>Для получения текущего языка используйте <code class="docutils literal notranslate"><span class="pre">language</span></code>.</p></li>
+</ul>
+<p>В контроллере обычно объявляют пре-фильтр для установки языка:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beforeFilter</span> <span class="p">{</span>
+  <span class="n">val</span> <span class="n">lango</span><span class="p">:</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">]</span> <span class="o">=</span> <span class="n">yourMethodToGetUserPreferenceLanguageInSession</span><span class="p">()</span>
+  <span class="n">lango</span> <span class="n">match</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="kc">None</span>       <span class="o">=&gt;</span> <span class="n">autosetLanguage</span><span class="p">(</span><span class="n">Locale</span><span class="o">.</span><span class="n">forLanguageTag</span><span class="p">(</span><span class="s2">&quot;ja&quot;</span><span class="p">),</span> <span class="n">Locale</span><span class="o">.</span><span class="n">forLanguageTag</span><span class="p">(</span><span class="s2">&quot;vi&quot;</span><span class="p">))</span>
+    <span class="n">case</span> <span class="n">Some</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">language</span> <span class="o">=</span> <span class="n">lang</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Валидационные сообщения<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Плагин jQuery Validation предоставляет возможности для <a class="reference external" href="https://github.com/jzaefferer/jquery-validation/tree/master/src/localization">интернационализации сообщений</a>.
+Xitrum автоматически подключает файл с сообщениями подходящими для данного языка.</p>
+<p>На стороне сервера для стандартных валидаторов из пакета <code class="docutils literal notranslate"><span class="pre">xitrum.validator</span></code> Xitrum предоставляет переводы.</p>
+</div>
+<div class="section" id="id6">
+<h2>Множественные числа<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tn</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="s2">&quot;Plural form&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">tcn</span><span class="p">(</span><span class="s2">&quot;Context&quot;</span><span class="p">,</span> <span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="s2">&quot;Plural form&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Xitrum может работать с множественными числами представленными ниже:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html#Plural-forms">What are plural forms</a></p></li>
+<li><p><a class="reference external" href="http://www.gnu.org/software/gettext/manual/html_node/Translating-plural-forms.html#Translating-plural-forms">Translating plural forms</a></p></li>
+</ul>
+<p>Шаблон множественных чисел может быть одним из:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>nplurals=1; plural=0
+nplurals=2; plural=n != 1
+nplurals=2; plural=n&gt;1
+nplurals=3; plural=n%10==1 &amp;&amp; n%100!=11 ? 0 : n != 0 ? 1 : 2
+nplurals=3; plural=n==1 ? 0 : n==2 ? 1 : 2
+nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 &gt; 0 &amp;&amp; n%100 &lt; 20)) ? 1 : 2
+nplurals=3; plural=n%10==1 &amp;&amp; n%100!=11 ? 0 : n%10&gt;=2 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2
+nplurals=3; plural=n%10==1 &amp;&amp; n%100!=11 ? 0 : n%10&gt;=2 &amp;&amp; n%10&lt;=4 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2
+nplurals=3; plural=(n==1) ? 0 : (n&gt;=2 &amp;&amp; n&lt;=4) ? 1 : 2
+nplurals=3; plural=n==1 ? 0 : n%10&gt;=2 &amp;&amp; n%10&lt;=4 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2
+nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Интернационализация</a><ul>
+<li><a class="reference internal" href="#id2">Используйте интернационализированные сообщения непосредственно в коде</a></li>
+<li><a class="reference internal" href="#pot">Извлечение сообщений в pot файл</a></li>
+<li><a class="reference internal" href="#po">Где сохранять po файлы</a></li>
+<li><a class="reference internal" href="#id3">Выбор языка</a></li>
+<li><a class="reference internal" href="#id4">Валидационные сообщения</a></li>
+<li><a class="reference internal" href="#id6">Множественные числа</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="cache.html"
+                        title="предыдущая глава">Кэш на стороне сервера</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="log.html"
+                        title="следующая глава">Логирование</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/i18n.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="log.html" title="Логирование"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="cache.html" title="Кэш на стороне сервера"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Интернационализация</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

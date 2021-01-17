@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Статичные файлы &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Serve flash socket policy file" href="flash.html" />
+    <link rel="prev" title="Асинхронная обработка запросов" href="async.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="flash.html" title="Serve flash socket policy file"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="async.html" title="Асинхронная обработка запросов"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Статичные файлы</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Статичные файлы<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id2">
+<h2>Отправка статических файлов с диска<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Шаблонная директория Xitrum проекта:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">config</span>
+<span class="n">public</span>
+  <span class="n">favicon</span><span class="o">.</span><span class="n">ico</span>
+  <span class="n">robots</span><span class="o">.</span><span class="n">txt</span>
+  <span class="mf">404.</span><span class="n">html</span>
+  <span class="mf">500.</span><span class="n">html</span>
+  <span class="n">img</span>
+    <span class="n">myimage</span><span class="o">.</span><span class="n">png</span>
+  <span class="n">css</span>
+    <span class="n">mystyle</span><span class="o">.</span><span class="n">css</span>
+  <span class="n">js</span>
+    <span class="n">myscript</span><span class="o">.</span><span class="n">js</span>
+<span class="n">src</span>
+<span class="n">build</span><span class="o">.</span><span class="n">sbt</span>
+</pre></div>
+</div>
+<p>Xitrum использует директорию <code class="docutils literal notranslate"><span class="pre">public</span></code> для хранения статических файлов.
+Для генерации ссылок на статические файлы:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">img</span><span class="o">/</span><span class="n">myimage</span><span class="o">.</span><span class="n">png</span>
+<span class="o">/</span><span class="n">css</span><span class="o">/</span><span class="n">mystyle</span><span class="o">.</span><span class="n">css</span>
+<span class="o">/</span><span class="n">css</span><span class="o">/</span><span class="n">mystyle</span><span class="o">.</span><span class="n">min</span><span class="o">.</span><span class="n">css</span>
+</pre></div>
+</div>
+<p>Используйте шаблон:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">publicUrl</span><span class="p">(</span><span class="s2">&quot;img/myimage.png&quot;</span><span class="p">)}</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<p>Для работы с обычными файлами в режиме разработчика и их минимизированными версиями
+(например, mystyle.css и mystyle.min.css), используйте шаблон:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">publicUrl</span><span class="p">(</span><span class="s2">&quot;css&quot;</span><span class="p">,</span> <span class="s2">&quot;mystyle.css&quot;</span><span class="p">,</span> <span class="s2">&quot;mystyle.min.css&quot;</span><span class="p">)}</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<p>Для отправки файла с диска из контроллера используйте метод <code class="docutils literal notranslate"><span class="pre">respondFile</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondFile</span><span class="p">(</span><span class="s2">&quot;/absolute/path&quot;</span><span class="p">)</span>
+<span class="n">respondFile</span><span class="p">(</span><span class="s2">&quot;path/relative/to/the/current/working/directory&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Для оптимизации работы со статическими файлами, вы можете избежать использование
+не нужны файлов ограничив их маской (фильтром на основе регулярного выражения).
+Если запрос не будет соответствовать регулярному выражению, Xitrum ответит страницей
+404 на этот зарос.</p>
+<p>Смотри <code class="docutils literal notranslate"><span class="pre">pathRegex</span></code> в <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code>.</p>
+</div>
+<div class="section" id="index-html">
+<h2>index.html и обработка отсутствующих маршрутов<a class="headerlink" href="#index-html" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Если не существует контроллера для данного URL, например <code class="docutils literal notranslate"><span class="pre">/foo/bar</span></code> (или <code class="docutils literal notranslate"><span class="pre">/foo/bar/</span></code>),
+Xitrum попытается найти подходящий статический файл <code class="docutils literal notranslate"><span class="pre">public/foo/bar/index.html</span></code>
+(в директории «public»). Если файл существует, то он будет отправлен клиенту.</p>
+</div>
+<div class="section" id="id3">
+<h2>404 и 500<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>404.html и 500.html в директории <code class="docutils literal notranslate"><span class="pre">public</span></code> используются когда маршрут не обнаружен или на сервере произошла ошибка.
+Пример использования своего собственного обработчика ошибок:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">Error404</span><span class="p">,</span> <span class="n">Error500</span><span class="p">}</span>
+
+<span class="nd">@Error404</span>
+<span class="k">class</span> <span class="nc">My404ErrorHandlerAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isAjax</span><span class="p">)</span>
+      <span class="n">jsRespond</span><span class="p">(</span><span class="s2">&quot;alert(&quot;</span> <span class="o">+</span> <span class="n">jsEscape</span><span class="p">(</span><span class="s2">&quot;Not Found&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="n">renderInlineView</span><span class="p">(</span><span class="s2">&quot;Not Found&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@Error500</span>
+<span class="k">class</span> <span class="nc">My500ErrorHandlerAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isAjax</span><span class="p">)</span>
+      <span class="n">jsRespond</span><span class="p">(</span><span class="s2">&quot;alert(&quot;</span> <span class="o">+</span> <span class="n">jsEscape</span><span class="p">(</span><span class="s2">&quot;Internal Server Error&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="n">renderInlineView</span><span class="p">(</span><span class="s2">&quot;Internal Server Error&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Код ответа устанавливается в 404 или 500 еще до того как код контроллера будет запущен,
+соответственно вам не нужно устанавливать его самостоятельно.</p>
+</div>
+<div class="section" id="webjars">
+<h2>Использование файлов ресурсов в соответствии с WebJars<a class="headerlink" href="#webjars" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="section" id="id4">
+<h3>WebJars<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h3>
+<p><a class="reference external" href="http://www.webjars.org/">WebJars</a> предоставляет множество библиотек которые вы можете
+объявить как зависимости вашего проекта.</p>
+<p>Например, для использования <a class="reference external" href="http://underscorejs.org/">Underscore.js</a>,
+достаточно прописать в <code class="docutils literal notranslate"><span class="pre">build.sbt</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s2">&quot;org.webjars&quot;</span> <span class="o">%</span> <span class="s2">&quot;underscorejs&quot;</span> <span class="o">%</span> <span class="s2">&quot;1.6.0-3&quot;</span>
+</pre></div>
+</div>
+<p>После этого, в шаблоне .jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s2">&quot;underscorejs/1.6.0&quot;</span><span class="p">,</span> <span class="s2">&quot;underscore.js&quot;</span><span class="p">,</span> <span class="s2">&quot;underscore-min.js&quot;</span><span class="p">)})</span>
+</pre></div>
+</div>
+<p>Xitrum будет автоматически использовать <code class="docutils literal notranslate"><span class="pre">underscore.js</span></code> в режиме разработчика, и
+<code class="docutils literal notranslate"><span class="pre">underscore-min.js</span></code> в боевом режиме.</p>
+<p>Результат будет таким:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/webjars/underscorejs/1.6.0/underscore.js?XOKgP8_KIpqz9yUqZ1aVzw
+</pre></div>
+</div>
+<p>Для использования в одного и того же файла во всех режимах:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s2">&quot;underscorejs/1.6.0/underscore.js&quot;</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jar-webjars">
+<h3>Хранение файлов ресурсов внутри .jar файла согласно WebJars<a class="headerlink" href="#jar-webjars" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Если вы разработчик библиотек и ваша библиотека включает myimage.png, то вы можете
+сохранить myimage.png внутри .jar файла. Используя <a class="reference external" href="http://www.webjars.org/">WebJars</a>, например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">META</span><span class="o">-</span><span class="n">INF</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">webjars</span><span class="o">/</span><span class="n">mylib</span><span class="o">/</span><span class="mf">1.0</span><span class="o">/</span><span class="n">myimage</span><span class="o">.</span><span class="n">png</span>
+</pre></div>
+</div>
+<p>Использование в проекте:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">webJarsUrl</span><span class="p">(</span><span class="s2">&quot;mylib/1.0/myimage.png&quot;</span><span class="p">)}</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<p>Во всех режимах URL будет:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/webjars/mylib/1.0/myimage.png?xyz123
+</pre></div>
+</div>
+</div>
+<div class="section" id="classpath">
+<h3>Ответ файлом из classpath<a class="headerlink" href="#classpath" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Для ответа файлом находящимся внутри classpath (или внутри .jar файла), даже если файл
+хранится не по стандарту <a class="reference external" href="http://www.webjars.org/">WebJars</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondResource</span><span class="p">(</span><span class="s2">&quot;path/relative/to/the/classpath/element&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondResource</span><span class="p">(</span><span class="s2">&quot;akka/actor/Actor.class&quot;</span><span class="p">)</span>
+<span class="n">respondResource</span><span class="p">(</span><span class="s2">&quot;META-INF/resources/webjars/underscorejs/1.6.0/underscore.js&quot;</span><span class="p">)</span>
+<span class="n">respondResource</span><span class="p">(</span><span class="s2">&quot;META-INF/resources/webjars/underscorejs/1.6.0/underscore-min.js&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="etag-max-age">
+<h2>Кэширование на стороне клиента с ETag и max-age<a class="headerlink" href="#etag-max-age" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum автоматически добавляет <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_ETag">Etag</a> для
+статических файлов на диске и в classpath.</p>
+<p>ETag для маленьких файлов - MD5 хэш от контента файла. Они кэшируются для последующего использования.
+Ключ кэша - <code class="docutils literal notranslate"><span class="pre">(путь</span> <span class="pre">до</span> <span class="pre">файла,</span> <span class="pre">время</span> <span class="pre">изменения)</span></code>. Поскольку время изменения на разных серверах
+может отличаться, каждый веб сервер в кластере имеет свой собственный ETag кэш.</p>
+<p>Для больших файлов, только время изменения используется как ETag. Такая система не совершенна
+поскольку идентичные файлы на разных серверах могут иметь различный ETag, но это все равно лучше
+чем не использовать ETag вовсе.</p>
+<p><code class="docutils literal notranslate"><span class="pre">publicUrl</span></code> и <code class="docutils literal notranslate"><span class="pre">webJarsUrl</span></code> автоматически добавляют ETag для ссылок. Например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>webJarsUrl(&quot;jquery/2.1.1/jquery.min.js&quot;)
+=&gt; /webjars/jquery/2.1.1/jquery.min.js?0CHJg71ucpG0OlzB-y6-mQ
+</pre></div>
+</div>
+<p>Xitrum так же устанавливает заголовки <code class="docutils literal notranslate"><span class="pre">max-age</span></code> и <code class="docutils literal notranslate"><span class="pre">Expires</span></code> в значение
+<a class="reference external" href="https://developers.google.com/speed/docs/best-practices/caching">1 год</a>.
+Не переживайте, браузер все равно получит последнею версию файла. Потому что для
+файлов хранящихся на диске, после изменении ссылка на файл меняется, т.к. генерируется с
+помощью <code class="docutils literal notranslate"><span class="pre">publicUrl</span></code> и <code class="docutils literal notranslate"><span class="pre">webJarsUrl</span></code>. Их ETag кэш так же обновляется.</p>
+</div>
+<div class="section" id="gzip">
+<h2>GZIP<a class="headerlink" href="#gzip" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum автоматически сжимает текстовые ответы. Проверяется заголовок <code class="docutils literal notranslate"><span class="pre">Content-Type</span></code>
+для определения текстового ответа: <code class="docutils literal notranslate"><span class="pre">text/html</span></code>, <code class="docutils literal notranslate"><span class="pre">xml/application</span></code> и пр.</p>
+<p>Xitrum всегда сжимает текстовые файлы, но для динамических ответов с целью
+повышения производительности ответы размером меньше 1 килобайта не сжимаются.</p>
+</div>
+<div class="section" id="id9">
+<h2>Кэш на стороне сервера<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для избежания загрузки файлов с диска, Xitrum кэширует маленькие файлы
+(не только текстовые) в LRU кэше (вытеснение давно неиспользуемых).
+Смотри <code class="docutils literal notranslate"><span class="pre">small_static_file_size_in_kb</span></code> и <code class="docutils literal notranslate"><span class="pre">max_cached_small_static_files</span></code>
+в <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Статичные файлы</a><ul>
+<li><a class="reference internal" href="#id2">Отправка статических файлов с диска</a></li>
+<li><a class="reference internal" href="#index-html">index.html и обработка отсутствующих маршрутов</a></li>
+<li><a class="reference internal" href="#id3">404 и 500</a></li>
+<li><a class="reference internal" href="#webjars">Использование файлов ресурсов в соответствии с WebJars</a><ul>
+<li><a class="reference internal" href="#id4">WebJars</a></li>
+<li><a class="reference internal" href="#jar-webjars">Хранение файлов ресурсов внутри .jar файла согласно WebJars</a></li>
+<li><a class="reference internal" href="#classpath">Ответ файлом из classpath</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#etag-max-age">Кэширование на стороне клиента с ETag и max-age</a></li>
+<li><a class="reference internal" href="#gzip">GZIP</a></li>
+<li><a class="reference internal" href="#id9">Кэш на стороне сервера</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="async.html"
+                        title="предыдущая глава">Асинхронная обработка запросов</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="flash.html"
+                        title="следующая глава">Serve flash socket policy file</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/static.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="flash.html" title="Serve flash socket policy file"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="async.html" title="Асинхронная обработка запросов"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Статичные файлы</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

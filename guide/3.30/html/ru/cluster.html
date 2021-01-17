@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Масштабирование вместе с Akka and Hazelcast &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Netty handlers" href="handler.html" />
+    <link rel="prev" title="Развертывание на сервере" href="deploy.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="Развертывание на сервере"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Масштабирование вместе с Akka and Hazelcast</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="akka-and-hazelcast">
+<h1>Масштабирование вместе с Akka and Hazelcast<a class="headerlink" href="#akka-and-hazelcast" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Xitrum спроектирован с расчетом на работу нескольких экземпляров приложения за
+балансировщиком нагрузки или прокси сервером:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                        <span class="o">/</span> <span class="n">экземпляр</span> <span class="n">Xitrum</span> <span class="mi">1</span>
+<span class="n">Балансировщик</span> <span class="n">нагрузки</span><span class="o">/</span><span class="n">Прокси</span> <span class="n">сервер</span> <span class="o">----</span> <span class="n">экземпляр</span> <span class="n">Xitrum</span> <span class="mi">2</span>
+                                        \ <span class="n">экземпляр</span> <span class="n">Xitrum</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Кэш, сессии и SockJS сессии могут быть кластеризованы из коробки благодаря использованию
+<a class="reference external" href="http://akka.io/">Akka</a> и <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>.</p>
+<p>Совместно с Hazelcast, экземпляр Xitrum становится одновременно кэширующим сервером. Вам не нужна
+дополнительная сущность вроде Memcache.</p>
+<p>Смотри конфигурацию <code class="docutils literal notranslate"><span class="pre">config/akka.conf</span></code>, <a class="reference external" href="http://akka.io/docs/">Akka doc</a> и
+<a class="reference external" href="http://hazelcast.org/documentation/">Hazelcast doc</a> что бы узнать как настроить
+Akka и Hazelcast для кластеризации.</p>
+<p>Важно: Сессию вы может так же хранить <a class="reference internal" href="scopes.html"><span class="doc">внутри куки</span></a>.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="предыдущая глава">Развертывание на сервере</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="handler.html"
+                        title="следующая глава">Netty handlers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cluster.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="Развертывание на сервере"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Масштабирование вместе с Akka and Hazelcast</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

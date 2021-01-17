@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOWTO &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Зависимости" href="deps.html" />
+    <link rel="prev" title="Метрики" href="metrics.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="deps.html" title="Зависимости"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="Метрики"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">HOWTO</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="howto">
+<h1>HOWTO<a class="headerlink" href="#howto" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Эта глава представляет некоторое число небольших примеров. Каждый пример достаточно
+мал что бы писать отдельную главу.</p>
+<div class="section" id="id1">
+<h2>Авторизация<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Вы можете защитить весь сайт или некоторые контроллеры с использованием
+<a class="reference external" href="http://en.wikipedia.org/wiki/Basic_access_authentication">basic authentication (базовая аутентификация)</a>.</p>
+<p>Важно: Xitrum не поддерживает
+<a class="reference external" href="http://en.wikipedia.org/wiki/Digest_access_authentication">digest authentication (цифровая аутентификация)</a>
+поскольку она не так безопасна как кажется. Она подвержена <code class="docutils literal notranslate"><span class="pre">man-in-the-middle</span></code> атаке.
+Для большей безопасности вы должны использовать HTTPS, поддержка которого встроена в Xitrum
+(не нужен дополнительный прокси вроде Apache или Nginx).</p>
+<div class="section" id="id2">
+<h3>Конфигурация для базовой аутентификации<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h3>
+<p>В config/xitrum.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;basicAuth&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;realm&quot;</span><span class="p">:</span>    <span class="s2">&quot;xitrum&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;xitrum&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;xitrum&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Базовая аутентификация на конкретный контроллер<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">beforeFilter</span> <span class="p">{</span>
+    <span class="n">basicAuth</span><span class="p">(</span><span class="s2">&quot;Realm&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="n">username</span> <span class="o">==</span> <span class="s2">&quot;username&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="s2">&quot;password&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Загрузка конфигурационных файлов<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="section" id="json">
+<h3>JSON файл<a class="headerlink" href="#json" title="Ссылка на этот заголовок">¶</a></h3>
+<p>JSON подходит для конфигурационных файлов со сложной структурой.</p>
+<p>Сохраняйте вашу конфигурацию в директорию «config». Эта директория попадает в classpath
+в режиме разработки благодаря build.sbt и в боевом режиме благодаря скрипту запуска script/runner (и script/runner.bat).</p>
+<p>myconfig.json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;God&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;Does God need a password?&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Adam&quot;</span><span class="p">,</span> <span class="s2">&quot;Eva&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Загрузка:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">MyConfig</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">children</span><span class="p">:</span> <span class="n">Seq</span><span class="p">[</span><span class="n">String</span><span class="p">])</span>
+<span class="n">val</span> <span class="n">myConfig</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">jsonFromClasspath</span><span class="p">[</span><span class="n">MyConfig</span><span class="p">](</span><span class="s2">&quot;myconfig.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Замечания:</p>
+<ul class="simple">
+<li><p>Ключи и строки должны быть в двойных кавычках</p></li>
+<li><p>На данный момент нельзя писать комментарии в JSON файле</p></li>
+</ul>
+</div>
+<div class="section" id="protperties">
+<h3>Файлы свойств (protperties)<a class="headerlink" href="#protperties" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Вы можете использовать файлы свойств, но рекомендуется использовать
+JSON везде где это возможно. Файлы свойств не безопасны относительно типа, не поддерживают
+UTF-8 и не подразумевают вложенность.</p>
+<p>myconfig.properties:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>username = God
+password = Does God need a password?
+children = Adam, Eva
+</pre></div>
+</div>
+<p>Загрузка:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+
+<span class="o">//</span> <span class="n">Here</span> <span class="n">you</span> <span class="n">get</span> <span class="n">an</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">Properties</span>
+<span class="n">val</span> <span class="n">properties</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">propertiesFromClasspath</span><span class="p">(</span><span class="s2">&quot;myconfig.properties&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="typesafe">
+<h3>Typesafe конфигурационный файл<a class="headerlink" href="#typesafe" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Xitrum включает Akka, которая включает
+<a class="reference external" href="https://github.com/typesafehub/config">конфигурационную библиотеку</a> от
+<a class="reference external" href="http://typesafe.com/company">Typesafe</a>.
+Возможно это самый лучший путь загрузки конфигурационных файлов.</p>
+<p>myconfig.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>username = God
+password = Does God need a password?
+children = [&quot;Adam&quot;, &quot;Eva&quot;]
+</pre></div>
+</div>
+<p>Загрузка:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.typesafe.config.</span><span class="p">{</span><span class="n">Config</span><span class="p">,</span> <span class="n">ConfigFactory</span><span class="p">}</span>
+
+<span class="n">val</span> <span class="n">config</span>   <span class="o">=</span> <span class="n">ConfigFactory</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;myconfig.conf&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">username</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">children</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getStringList</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Сериализация и десериализация<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Сериализация <code class="docutils literal notranslate"><span class="pre">Array[Byte]</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.SeriDeseri</span>
+<span class="n">val</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toBytes</span><span class="p">(</span><span class="s2">&quot;my serializable object&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Десериализация:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">option</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromBytes</span><span class="p">[</span><span class="n">MyType</span><span class="p">](</span><span class="nb">bytes</span><span class="p">)</span>  <span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">MyType</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Если вы хотите сохранить в файле:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+<span class="n">Loader</span><span class="o">.</span><span class="n">bytesToFile</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="s2">&quot;myObject.bin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Чтобы загрузить из файла:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">bytesFromFile</span><span class="p">(</span><span class="s2">&quot;myObject.bin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Шифрование данных<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum предоставляет встроенное шифрование:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Secure</span>
+
+<span class="o">//</span> <span class="n">Array</span><span class="p">[</span><span class="n">Byte</span><span class="p">]</span>
+<span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s2">&quot;my data&quot;</span><span class="o">.</span><span class="n">getBytes</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">Array</span><span class="p">[</span><span class="n">Byte</span><span class="p">]]</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Вы можете использовать <code class="docutils literal notranslate"><span class="pre">xitrum.util.UrlSafeBase64</span></code> для кодирования и декодирования бинарных данных
+в обычную строку.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Строка</span> <span class="n">которая</span> <span class="n">может</span> <span class="n">быть</span> <span class="n">использована</span> <span class="n">как</span> <span class="n">URL</span> <span class="n">или</span> <span class="n">в</span> <span class="n">куки</span>
+<span class="n">val</span> <span class="n">string</span> <span class="o">=</span> <span class="n">UrlSafeBase64</span><span class="o">.</span><span class="n">noPaddingEncode</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">Array</span><span class="p">[</span><span class="n">Byte</span><span class="p">]]</span>
+<span class="n">val</span> <span class="n">encrypted2</span> <span class="o">=</span> <span class="n">UrlSafeBase64</span><span class="o">.</span><span class="n">autoPaddingDecode</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Или короче:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.SeriDeseri</span>
+
+<span class="n">val</span> <span class="n">mySerializableObject</span> <span class="o">=</span> <span class="n">new</span> <span class="n">MySerializableClass</span>
+
+<span class="o">//</span> <span class="n">String</span>
+<span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toSecureUrlSafeBase64</span><span class="p">(</span><span class="n">mySerializableObject</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">MySerializableClass</span><span class="p">]</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromSecureUrlSafeBase64</span><span class="p">[</span><span class="n">MySerializableClass</span><span class="p">](</span><span class="n">encrypted</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">SeriDeseri</span></code> использует <a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>
+для сериализации и десериализации. Ваши данные должны быть сериализуемыми.</p>
+<p>Вы можете задать ключ шифрования.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s2">&quot;my data&quot;</span><span class="o">.</span><span class="n">getBytes</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toSecureUrlSafeBase64</span><span class="p">(</span><span class="n">mySerializableObject</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromSecureUrlSafeBase64</span><span class="p">[</span><span class="n">MySerializableClass</span><span class="p">](</span><span class="n">encrypted</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Если ключ не указан, то <code class="docutils literal notranslate"><span class="pre">secureKey</span></code> из xitrum.conf будет использован.</p>
+</div>
+<div class="section" id="id9">
+<h2>Множество сайтов на одном доменном имени<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h2>
+<p>При использовании прокси, например, Nginx, для запуска нескольких сайтов на одном
+доменном имени:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site1</span><span class="o">/...</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site2</span><span class="o">/...</span>
+</pre></div>
+</div>
+<p>Вы можете указать baseUrl в config/xitrum.conf.</p>
+<p>В JS коде, для того что бы использовать корректные ссылки в Ajax запросах, используйте <code class="docutils literal notranslate"><span class="pre">withBaseUrl</span></code>
+из <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Если текущий сайт имеет baseUrl &quot;site1&quot;, результат будет:</span>
+<span class="c1"># /site1/path/to/my/action</span>
+<span class="n">xitrum</span><span class="o">.</span><span class="n">withBaseUrl</span><span class="p">(</span><span class="s1">&#39;/path/to/my/action&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="markdown-html">
+<h2>Преобразование разметки (markdown) в HTML<a class="headerlink" href="#markdown-html" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Если ваш проект использует <a class="reference internal" href="template_engines.html"><span class="doc">шаблонизатор Scalate</span></a>,
+тогда:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.fusesource.scalamd.Markdown</span>
+<span class="n">val</span> <span class="n">html</span> <span class="o">=</span> <span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>В другом случае, вам нужно добавить зависимость в build.sbt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s2">&quot;org.fusesource.scalamd&quot;</span> <span class="o">%%</span> <span class="s2">&quot;scalamd&quot;</span> <span class="o">%</span> <span class="s2">&quot;1.6&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>Временные директории<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h2>
+<p>По умолчанию Xitrum использует директорию <code class="docutils literal notranslate"><span class="pre">tmp</span></code> в текущем (рабочем) каталоге
+для хранения генерируемых файлов Scalate, больших загружаемых и других файлов
+(настраивается опцией <code class="docutils literal notranslate"><span class="pre">tmpDir</span></code> в xitrum.conf).</p>
+<p>Получение пути временной директории:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="o">.</span><span class="n">getAbsolutePath</span>
+</pre></div>
+</div>
+<p>Создание нового файла или каталога во временной директории:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">file</span> <span class="o">=</span> <span class="n">new</span> <span class="n">java</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="p">,</span> <span class="s2">&quot;myfile&quot;</span><span class="p">)</span>
+
+<span class="n">val</span> <span class="nb">dir</span> <span class="o">=</span> <span class="n">new</span> <span class="n">java</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="p">,</span> <span class="s2">&quot;mydir&quot;</span><span class="p">)</span>
+<span class="nb">dir</span><span class="o">.</span><span class="n">mkdirs</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>Потоковые видео<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Существует несколько способов транслировать потоковое видео. Наиболее простой:</p>
+<ul class="simple">
+<li><p>На сервере хранить interleaved .mp4 видео файлы, пользователь сможет просматривать
+их в в процессе загрузки.</p></li>
+<li><p>Использовать HTTP сервер который поддерживает
+<a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range requests</a> (например, Xitrum),
+тогда пользователи смогут проматывать воспроизведение во время загрузки.</p></li>
+</ul>
+<p>Вы можете использовать <a class="reference external" href="http://gpac.wp.mines-telecom.fr/mp4box/">MP4Box</a> для генерации
+interleaved .mp4 с блоками по 500 milliseconds:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MP4Box</span> <span class="o">-</span><span class="n">inter</span> <span class="mi">500</span> <span class="n">movie</span><span class="o">.</span><span class="n">mp4</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HOWTO</a><ul>
+<li><a class="reference internal" href="#id1">Авторизация</a><ul>
+<li><a class="reference internal" href="#id2">Конфигурация для базовой аутентификации</a></li>
+<li><a class="reference internal" href="#id3">Базовая аутентификация на конкретный контроллер</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">Загрузка конфигурационных файлов</a><ul>
+<li><a class="reference internal" href="#json">JSON файл</a></li>
+<li><a class="reference internal" href="#protperties">Файлы свойств (protperties)</a></li>
+<li><a class="reference internal" href="#typesafe">Typesafe конфигурационный файл</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Сериализация и десериализация</a></li>
+<li><a class="reference internal" href="#id8">Шифрование данных</a></li>
+<li><a class="reference internal" href="#id9">Множество сайтов на одном доменном имени</a></li>
+<li><a class="reference internal" href="#markdown-html">Преобразование разметки (markdown) в HTML</a></li>
+<li><a class="reference internal" href="#id10">Временные директории</a></li>
+<li><a class="reference internal" href="#id11">Потоковые видео</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="metrics.html"
+                        title="предыдущая глава">Метрики</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="deps.html"
+                        title="следующая глава">Зависимости</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="deps.html" title="Зависимости"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="Метрики"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">HOWTO</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

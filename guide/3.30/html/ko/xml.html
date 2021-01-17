@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XML &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="JavaScript 와 JSON" href="js.html" />
+    <link rel="prev" title="포스트백" href="postback.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript 와 JSON"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="포스트백"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XML</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="xml">
+<h1>XML<a class="headerlink" href="#xml" title="Permalink to this headline">¶</a></h1>
+<p>Scala는 리터럴 문자를 표시할 수 있습니다. Xitrum에서는 이 기능을 템플릿 엔진으로 사용하고 있습니다.</p>
+<ul class="simple">
+<li><p>Scala는 XML 구문을 컴파일 때 체크합니다: View는 typesafe합니다.</p></li>
+<li><p>Scala는 XML의 자동적으로 이스케이프하여 <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>　공격을 방지합니다.</p></li>
+</ul>
+<p>일부 팁이 있습니다.</p>
+<div class="section" id="id1">
+<h2>XML의 이스케이프<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scala.xml.Unparsed</span></code> 를 사용하는 경우:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.xml.Unparsed</span>
+
+<span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="n">Unparsed</span><span class="p">(</span><span class="s2">&quot;if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);&quot;</span><span class="p">)}</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;xml:unparsed&gt;</span></code> 를 사용하는 경우:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">xml</span><span class="p">:</span><span class="n">unparsed</span><span class="o">&gt;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Xitrum rocks&#39;</span><span class="p">);</span>
+  <span class="o">&lt;/</span><span class="n">xml</span><span class="p">:</span><span class="n">unparsed</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;xml:unparsed&gt;</span></code> 는 실제 출력에 포함되지 않습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Xitrum rocks&#39;</span><span class="p">);</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>XML 요소의 그룹화<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;header&quot;</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">loggedIn</span><span class="p">)</span>
+    <span class="o">&lt;</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="p">{</span><span class="n">username</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">b</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">LogoutAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Logout</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span>
+  <span class="k">else</span>
+    <span class="o">&lt;</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Login</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">RegisterAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Register</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span><span class="p">}</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;xml:group&gt;</span></code> 는 실제 출력에 포함되지 않습니다. 예를 들어 사용자가 로그인한 경우:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;header&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">My</span> <span class="n">username</span><span class="o">&lt;/</span><span class="n">b</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;/login&quot;</span><span class="o">&gt;</span><span class="n">Logout</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xhtml">
+<h2>XHTML 렌더링<a class="headerlink" href="#xhtml" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum은 view 와 레이아웃을 자동으로 XHTML로 출력합니다.
+이것을 직접 출력으로 표시할경우 드믈지만 다음 코드가 나타나는 것을 주의하세요.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.xml.Xhtml</span>
+
+<span class="n">val</span> <span class="n">br</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
+<span class="n">br</span><span class="o">.</span><span class="n">toString</span>            <span class="o">//</span> <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="n">br</span><span class="o">&gt;&lt;/</span><span class="n">br</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">이</span> <span class="n">경우에</span> <span class="n">브라우저는</span> <span class="n">br태그가</span> <span class="n">두</span> <span class="n">개</span> <span class="n">있다고</span> <span class="n">판단합니다</span><span class="o">.</span>
+<span class="n">Xhtml</span><span class="o">.</span><span class="n">toXhtml</span><span class="p">(</span><span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span><span class="p">)</span>  <span class="o">//</span> <span class="o">=&gt;</span> <span class="s2">&quot;&lt;br /&gt;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XML</a><ul>
+<li><a class="reference internal" href="#id1">XML의 이스케이프</a></li>
+<li><a class="reference internal" href="#id2">XML 요소의 그룹화</a></li>
+<li><a class="reference internal" href="#xhtml">XHTML 렌더링</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="postback.html"
+                        title="previous chapter">포스트백</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="js.html"
+                        title="next chapter">JavaScript 와 JSON</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/xml.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript 와 JSON"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="포스트백"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XML</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

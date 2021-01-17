@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Асинхронная обработка запросов &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Статичные файлы" href="static.html" />
+    <link rel="prev" title="JavaScript и JSON" href="js.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="static.html" title="Статичные файлы"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript и JSON"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Асинхронная обработка запросов</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Асинхронная обработка запросов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Основные методы для отправки ответа сервером:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">respondView</span></code>: при ответе использует шаблон ассоциированный с контроллером</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code>: при ответе использует шаблон переданный как аргумент</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondText(&quot;hello&quot;)</span></code>: ответ строкой «plain/text»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></code>: ответ строкой «text/html»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></code>: преобразовать Scala объект в JSON и ответить</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></code>: совмещение предыдущих двух</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondBinary</span></code>: ответ массивом байт</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondFile</span></code>: переслать файл с использованием техники <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a>  (aka send-file)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></code></p></li>
+</ul>
+<p>Xitrum автоматически не осуществляет отправку ответа клиенту. Вы должны явно вызвать один из методов <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code>
+что бы отправить ответ клиенту. Если вы не вызовете метод``respondXXX``, Xitrum будет поддерживать HTTP соединение,
+до тех пор пока не будет вызван метод <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code>.</p>
+<p>Что бы убедиться что соединение открыто используйте метод <code class="docutils literal notranslate"><span class="pre">channel.isOpen</span></code>.
+Вы можете использовать добавить слушателя используя метод <code class="docutils literal notranslate"><span class="pre">addConnectionClosedListener</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">addConnectionClosedListener</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">Соединение</span> <span class="n">было</span> <span class="n">закрыто</span>
+  <span class="o">//</span> <span class="n">Необходимо</span> <span class="n">освободить</span> <span class="n">ресурсы</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Ввиду асинхронной природы, ответ сервера не посылается немедленно.
+<code class="docutils literal notranslate"><span class="pre">respondXXX</span></code> возвращает экземпляр <a class="reference external" href="http://netty.io/4.0/api/io/netty/channel/ChannelFuture.html">ChannelFuture</a>.
+Его можно использовать для выполнения действий в момент кода ответ будет действительно отправлен.</p>
+<p>Например, если вы хотите закрыть подключение сразу после отправки запроса:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">io.netty.channel.</span><span class="p">{</span><span class="n">ChannelFuture</span><span class="p">,</span> <span class="n">ChannelFutureListener</span><span class="p">}</span>
+
+<span class="n">val</span> <span class="n">future</span> <span class="o">=</span> <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+<span class="n">future</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">new</span> <span class="n">ChannelFutureListener</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">operationComplete</span><span class="p">(</span><span class="n">future</span><span class="p">:</span> <span class="n">ChannelFuture</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">future</span><span class="o">.</span><span class="n">getChannel</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>Или проще:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">ChannelFutureListener</span><span class="o">.</span><span class="n">CLOSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="websocket">
+<h2>WebSocket<a class="headerlink" href="#websocket" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.runtime.ScalaRunTime</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.WEBSOCKET</span>
+<span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">WebSocketAction</span><span class="p">,</span> <span class="n">WebSocketBinary</span><span class="p">,</span> <span class="n">WebSocketText</span><span class="p">,</span> <span class="n">WebSocketPing</span><span class="p">,</span> <span class="n">WebSocketPong</span><span class="p">}</span>
+
+<span class="nd">@WEBSOCKET</span><span class="p">(</span><span class="s2">&quot;echo&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">EchoWebSocketActor</span> <span class="n">extends</span> <span class="n">WebSocketAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">Here</span> <span class="n">you</span> <span class="n">can</span> <span class="n">extract</span> <span class="n">session</span> <span class="n">data</span><span class="p">,</span> <span class="n">request</span> <span class="n">headers</span> <span class="n">etc</span><span class="o">.</span>
+    <span class="o">//</span> <span class="n">but</span> <span class="n">do</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">respondText</span><span class="p">,</span> <span class="n">respondView</span> <span class="n">etc</span><span class="o">.</span>
+    <span class="o">//</span> <span class="n">To</span> <span class="n">respond</span><span class="p">,</span> <span class="n">use</span> <span class="n">respondWebSocketXXX</span> <span class="n">like</span> <span class="n">below</span><span class="o">.</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;onOpen&quot;</span><span class="p">)</span>
+
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">WebSocketText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;onTextMessage: &quot;</span> <span class="o">+</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">respondWebSocketText</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">toUpperCase</span><span class="p">)</span>
+
+      <span class="n">case</span> <span class="n">WebSocketBinary</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;onBinaryMessage: &quot;</span> <span class="o">+</span> <span class="n">ScalaRunTime</span><span class="o">.</span><span class="n">stringOf</span><span class="p">(</span><span class="nb">bytes</span><span class="p">))</span>
+        <span class="n">respondWebSocketBinary</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+
+      <span class="n">case</span> <span class="n">WebSocketPing</span> <span class="o">=&gt;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;onPing&quot;</span><span class="p">)</span>
+
+      <span class="n">case</span> <span class="n">WebSocketPong</span> <span class="o">=&gt;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;onPong&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">postStop</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;onClose&quot;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="o">.</span><span class="n">postStop</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Актор будет создан при открытии подключения. И остановлен когда:</p>
+<ul class="simple">
+<li><p>Соединение будет разорвано</p></li>
+<li><p>WebSocket закроет подключение</p></li>
+</ul>
+<p>Используйте следующие методы для отправки WebSocket сообщений (frame):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">respondWebSocketText</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondWebSocketBinary</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondWebSocketPing</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondWebSocketClose</span></code></p></li>
+</ul>
+<p>Метод respondWebSocketPong не предусмотрен, потому что Xitrum автоматически отправляет «pong» сообщение в ответ на «ping».</p>
+<p>Для получения ссылки на контроллер:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">url</span> <span class="o">=</span> <span class="n">absWebSocketUrl</span><span class="p">[</span><span class="n">EchoWebSocketActor</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sockjs">
+<h2>SockJS<a class="headerlink" href="#sockjs" title="Ссылка на этот заголовок">¶</a></h2>
+<p><a class="reference external" href="https://github.com/sockjs/sockjs-client">SockJS</a> предоставляет JavaScript объект
+эмитирующий поддержку WebSocket, для браузеров которые не поддерживают этот стандарт.
+SockJS пытается использовать WebSocket если он доступен в браузере. В другом случае
+будет создан эмитирующий объект.</p>
+<p>Если вы хотите использовать WebSocket API во всех браузерах, то следует использовать
+SockJS вместо WebSocket.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="n">var</span> <span class="n">sock</span> <span class="o">=</span> <span class="n">new</span> <span class="n">SockJS</span><span class="p">(</span><span class="s1">&#39;http://mydomain.com/path_prefix&#39;</span><span class="p">);</span>
+  <span class="n">sock</span><span class="o">.</span><span class="n">onopen</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="n">sock</span><span class="o">.</span><span class="n">onmessage</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">data</span><span class="p">);</span>
+  <span class="p">};</span>
+  <span class="n">sock</span><span class="o">.</span><span class="n">onclose</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">);</span>
+  <span class="p">};</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Xitrum включает файл SockJS по умолчанию.
+В шаблоне следует написать:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">html</span>
+  <span class="n">head</span>
+    <span class="o">!=</span> <span class="n">jsDefaults</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>SockJS подразумевает наличие части реализации <a class="reference external" href="https://github.com/sockjs/sockjs-protocol">на сервере</a>.
+Xitrum автоматически ее реализует:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SockJsAction</span><span class="p">,</span> <span class="n">SockJsText</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.SOCKJS</span>
+
+<span class="nd">@SOCKJS</span><span class="p">(</span><span class="s2">&quot;echo&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">EchoSockJsActor</span> <span class="n">extends</span> <span class="n">SockJsAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">To</span> <span class="n">respond</span><span class="p">,</span> <span class="n">use</span> <span class="n">respondSockJsXXX</span> <span class="n">like</span> <span class="n">below</span>
+
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;onOpen&quot;</span><span class="p">)</span>
+
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">SockJsText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;onMessage: &quot;</span> <span class="o">+</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">respondSockJsText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">postStop</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;onClose&quot;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="o">.</span><span class="n">postStop</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Актор будет создан при открытии новой SockJS сессии. И остановлен когда сессия будет закрыта.</p>
+<p>Для отправки SockJS сообщений используйте методы:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">respondSockJsText</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondSockJsClose</span></code></p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/sockjs/sockjs-node#various-issues-and-design-considerations">Рекомендации по реализации</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Обычно</span> <span class="n">использование</span> <span class="n">кук</span> <span class="n">не</span> <span class="n">подходит</span> <span class="n">для</span> <span class="n">SockJS</span><span class="o">.</span> <span class="n">Если</span> <span class="n">вам</span> <span class="n">нужна</span> <span class="n">авторизация</span> <span class="n">внутри</span> <span class="n">сессии</span><span class="p">,</span> <span class="n">то</span>
+<span class="n">для</span> <span class="n">каждой</span> <span class="n">страницы</span> <span class="n">присвойте</span> <span class="n">токен</span> <span class="n">и</span> <span class="n">используйте</span> <span class="n">его</span> <span class="n">в</span> <span class="n">SockJS</span> <span class="n">сессии</span><span class="p">,</span> <span class="n">для</span> <span class="n">валидации</span> <span class="n">на</span> <span class="n">серверной</span> <span class="n">стороне</span><span class="o">.</span>
+<span class="n">В</span> <span class="n">сущности</span> <span class="n">это</span> <span class="n">повторение</span> <span class="n">механизма</span> <span class="n">куки</span> <span class="n">для</span> <span class="n">SockJS</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Подробнее о настройке кластера SockJS, смотрите раздел <a class="reference internal" href="cluster.html"><span class="doc">Кластерезация с Akka</span></a>.</p>
+</div>
+<div class="section" id="chunked">
+<h2>Chunked ответ<a class="headerlink" href="#chunked" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для отправки <a class="reference external" href="http://en.wikipedia.org/wiki/Chunked_transfer_encoding">chunked ответа</a>:</p>
+<ol class="arabic simple">
+<li><p>Вызовите метод <code class="docutils literal notranslate"><span class="pre">setChunked</span></code></p></li>
+<li><p>Отправляйте данные методами <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code>, столько раз сколько нужно</p></li>
+<li><p>Последний ответ отправьте методом <code class="docutils literal notranslate"><span class="pre">respondLastChunk</span></code></p></li>
+</ol>
+<p>Chunked ответы имеют множество применений. Например, когда нужно генерировать большой
+документ который не помещается в памяти, вы можете генерировать этот документ частями
+и отправлять их последовательно:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="s2">&quot;Cache-Control&quot;</span> <span class="n">загаловок</span> <span class="n">будет</span> <span class="n">установлен</span> <span class="n">в</span><span class="p">:</span>
+<span class="o">//</span> <span class="s2">&quot;no-store, no-cache, must-revalidate, max-age=0&quot;</span>
+<span class="o">//</span>
+<span class="o">//</span> <span class="n">Важно</span> <span class="s2">&quot;Pragma: no-cache&quot;</span> <span class="n">привязывается</span> <span class="n">к</span> <span class="n">запросу</span><span class="p">,</span> <span class="n">а</span> <span class="n">не</span> <span class="n">к</span> <span class="n">ответу</span><span class="p">:</span>
+<span class="o">//</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">palizine</span><span class="o">.</span><span class="n">plynt</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">issues</span><span class="o">/</span><span class="mi">2008</span><span class="n">Jul</span><span class="o">/</span><span class="n">cache</span><span class="o">-</span><span class="n">control</span><span class="o">-</span><span class="n">attributes</span><span class="o">/</span>
+<span class="n">setChunked</span><span class="p">()</span>
+
+<span class="n">val</span> <span class="n">generator</span> <span class="o">=</span> <span class="n">new</span> <span class="n">MyCsvGenerator</span>
+
+<span class="n">generator</span><span class="o">.</span><span class="n">onFirstLine</span> <span class="p">{</span> <span class="n">line</span> <span class="o">=&gt;</span>
+  <span class="n">val</span> <span class="n">future</span> <span class="o">=</span> <span class="n">respondText</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="s2">&quot;text/csv&quot;</span><span class="p">)</span>
+  <span class="n">future</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">new</span> <span class="n">ChannelFutureListener</span> <span class="p">{</span>
+    <span class="k">def</span> <span class="nf">operationComplete</span><span class="p">(</span><span class="n">future</span><span class="p">:</span> <span class="n">ChannelFuture</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">isSuccess</span><span class="p">)</span> <span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">generator</span><span class="o">.</span><span class="n">onNextLine</span> <span class="p">{</span> <span class="n">line</span> <span class="o">=&gt;</span>
+  <span class="n">val</span> <span class="n">future</span> <span class="o">=</span> <span class="n">respondText</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+  <span class="n">future</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">new</span> <span class="n">ChannelFutureListener</span> <span class="p">{</span>
+    <span class="k">def</span> <span class="nf">operationComplete</span><span class="p">(</span><span class="n">future</span><span class="p">:</span> <span class="n">ChannelFuture</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">isSuccess</span><span class="p">)</span> <span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="n">generator</span><span class="o">.</span><span class="n">onLastLine</span> <span class="p">{</span> <span class="n">line</span> <span class="o">=&gt;</span>
+  <span class="n">val</span> <span class="n">future</span> <span class="o">=</span> <span class="n">respondText</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+  <span class="n">future</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">new</span> <span class="n">ChannelFutureListener</span> <span class="p">{</span>
+    <span class="k">def</span> <span class="nf">operationComplete</span><span class="p">(</span><span class="n">future</span><span class="p">:</span> <span class="n">ChannelFuture</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">isSuccess</span><span class="p">)</span> <span class="n">respondLastChunk</span><span class="p">()</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="n">generator</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Замечания:</p>
+<ul class="simple">
+<li><p>Заголовки отправляются при первом вызове <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code>.</p></li>
+<li><p>Опционально, вы можете отправить дополнительные заголовки с вызовом метода <code class="docutils literal notranslate"><span class="pre">respondLastChunk</span></code></p></li>
+<li><p><a class="reference internal" href="cache.html"><span class="doc">Кэш страницы и контроллера</span></a> не может быть использован совместно с chunked ответами.</p></li>
+</ul>
+<p>Используя chunked ответ вместе с <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code>, легко реализовать
+<a class="reference external" href="http://www.cubrid.org/blog/dev-platform/faster-web-page-loading-with-facebook-bigpipe/">Facebook BigPipe</a>.</p>
+<div class="section" id="iframe">
+<h3>Бесконечный iframe<a class="headerlink" href="#iframe" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Chunked ответ <a class="reference external" href="http://www.shanison.com/2010/05/10/stop-the-browser-%E2%80%9Cthrobber-of-doom%E2%80%9D-while-loading-comet-forever-iframe/">может быть использован</a>
+для реализации <a class="reference external" href="http://en.wikipedia.org/wiki/Comet_%28programming%29">Comet</a>.</p>
+<p>Страница которая включает iframe:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="n">var</span> <span class="n">functionForForeverIframeSnippetsToCall</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+<span class="o">...</span>
+<span class="o">&lt;</span><span class="n">iframe</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="n">height</span><span class="o">=</span><span class="s2">&quot;1&quot;</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;path/to/forever/iframe&quot;</span><span class="o">&gt;&lt;/</span><span class="n">iframe</span><span class="o">&gt;</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Контроллер который последовательно отправляет <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// Подготовка к вечному iframe
+
+setChunked()
+
+// Необходимо отправить например &quot;123&quot; для некоторых браузеров
+respondText(&quot;&lt;html&gt;&lt;body&gt;123&quot;, &quot;text/html&quot;)
+
+// Большинство клиентов (даже curl!) не выполняют тело &lt;script&gt; немедленно,
+// необходимо отправить около 2KB данных что бы обойти эту проблему
+for (i &lt;- 1 to 100) respondText(&quot;&lt;script&gt;&lt;/script&gt;\n&quot;)
+</pre></div>
+</div>
+<p>Позднее, когда вам нужно отправить данные браузеру, просто используйте шаблон:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>if (channel.isOpen)
+  respondText(&quot;&lt;script&gt;parent.functionForForeverIframeSnippetsToCall()&lt;/script&gt;\n&quot;)
+else
+  // Соединение было закрыто, необходимо освободить ресурсы
+  // Вы можете использовать так же ``addConnectionClosedListener``.
+</pre></div>
+</div>
+</div>
+<div class="section" id="event-source">
+<h3>Event Source<a class="headerlink" href="#event-source" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Смотри <a class="reference external" href="http://dev.w3.org/html5/eventsource/">http://dev.w3.org/html5/eventsource/</a></p>
+<p>Event Source ответ, это специальный тип chunked ответа.
+Данные должны быть в кодировке UTF-8.</p>
+<p>Для ответа в формате event source, используйте метод <code class="docutils literal notranslate"><span class="pre">respondEventSource</span></code> столько раз сколько нужно.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondEventSource</span><span class="p">(</span><span class="s2">&quot;data1&quot;</span><span class="p">,</span> <span class="s2">&quot;event1&quot;</span><span class="p">)</span>  <span class="o">//</span> <span class="n">Имя</span> <span class="n">события</span> <span class="s2">&quot;event1&quot;</span>
+<span class="n">respondEventSource</span><span class="p">(</span><span class="s2">&quot;data2&quot;</span><span class="p">)</span>            <span class="o">//</span> <span class="n">Имя</span> <span class="n">события</span> <span class="n">устанавливается</span> <span class="n">в</span> <span class="s2">&quot;message&quot;</span> <span class="n">по</span> <span class="n">умолчанию</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Асинхронная обработка запросов</a><ul>
+<li><a class="reference internal" href="#websocket">WebSocket</a></li>
+<li><a class="reference internal" href="#sockjs">SockJS</a></li>
+<li><a class="reference internal" href="#chunked">Chunked ответ</a><ul>
+<li><a class="reference internal" href="#iframe">Бесконечный iframe</a></li>
+<li><a class="reference internal" href="#event-source">Event Source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="js.html"
+                        title="предыдущая глава">JavaScript и JSON</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="static.html"
+                        title="следующая глава">Статичные файлы</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/async.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="static.html" title="Статичные файлы"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript и JSON"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Асинхронная обработка запросов</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

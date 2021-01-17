@@ -1,0 +1,597 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Контроллеры и представления &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="RESTful APIs" href="restful.html" />
+    <link rel="prev" title="Как начать" href="tutorial.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Как начать"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Контроллеры и представления</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Контроллеры и представления<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Xitrum располагает тремя видами контроллеров или действий (actions):
+стандартный контроллер <code class="docutils literal notranslate"><span class="pre">Action</span></code>, <code class="docutils literal notranslate"><span class="pre">FutureAction</span></code> и актор контроллер <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code>.</p>
+<div class="section" id="normal-action">
+<h2>Стандартный контроллер (normal action)<a class="headerlink" href="#normal-action" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Реализация данного контроллера синхронная.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>В случае наследования от xitrum.Action, ваш код будет выполнятся в потоке Netty’s IO.
+Это допустимо только в случае если ваш контроллер очень легковесный и не блокирующий
+(возвращает ответ немедленно). Иначе Netty не сможет принимать новые подключения или
+отправлять запросы клиентам.</p>
+</div>
+<div class="section" id="futureaction">
+<h2>FutureAction<a class="headerlink" href="#futureaction" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.FutureAction</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">FutureAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>В случае наследования от xitrum.FutureAction, код контроллера будет выполнятся в отдельном потоке (в том же пуле что и <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code>) не занимая потоки Netty.</p>
+</div>
+<div class="section" id="actor-action">
+<h2>Актор контроллер (actor action)<a class="headerlink" href="#actor-action" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Если вы хотите что бы контроллер был актором Akka наследуйтесь от <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.concurrent.duration._</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.ActorAction</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">ActorAction</span> <span class="k">with</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">See</span> <span class="n">Akka</span> <span class="n">doc</span> <span class="n">about</span> <span class="n">scheduler</span>
+    <span class="kn">import</span> <span class="nn">context.dispatcher</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">scheduleOnce</span><span class="p">(</span><span class="mi">3</span> <span class="n">seconds</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">currentTimeMillis</span><span class="p">())</span>
+
+    <span class="o">//</span> <span class="n">See</span> <span class="n">Akka</span> <span class="n">doc</span> <span class="n">about</span> <span class="s2">&quot;become&quot;</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">pastTime</span> <span class="o">=&gt;</span>
+        <span class="n">respondInlineView</span><span class="p">(</span><span class="n">s</span><span class="s2">&quot;It&#39;s $pastTime Unix ms 3s ago.&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Экземпляр актора будет создан на каждый запрос. Актор будет остановлен в момент закрытия подключения
+или когда ответ будет отправлен клиенту. Для chunked запросов актор будет остановлен когда будет
+отправлен последний chunk.</p>
+<p>Актор будет выполняться в пуле потоков Akka в системе с именем «xitrum».</p>
+</div>
+<div class="section" id="id2">
+<h2>Отправка ответа клиенту<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Что бы отправить данные клиенту используются функции:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">respondView</span></code>: при ответе использует шаблон ассоциированный с контроллером</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code>: при ответе использует шаблон переданный как аргумент</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondText(&quot;hello&quot;)</span></code>: ответ строкой «plain/text»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></code>: ответ строкой «text/html»</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></code>: преобразовать Scala объект в JSON и ответить</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></code>: совмещение предыдущих двух</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondBinary</span></code>: ответ массивом байт</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondFile</span></code>: переслать файл с использованием техники <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a>  (aka send-file)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>Шаблонизация<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Каждый контроллер может быть связан с шаблоном <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>.
+В этом случае при вызове метода <cite>respondView</cite> будет задействован данный шаблон для формирования
+ответа.</p>
+<p>scr/main/scala/mypackage/MyAction.scala:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;myAction&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- import mypackage.MyAction
+
+!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    a(href={url}) Path to the current action
+    p= currentAction.asInstanceOf[MyAction].hello(&quot;World&quot;)
+
+    != jsForView
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xitrumCss</span></code> подключает стандартные CSS встроенные в Xitrum. Вы можете убрать их если
+они не требуются</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code> подключает jQuery, jQuery Validate и пр. Если используется, вызов должен
+быть размешен в секции &lt;head&gt;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsForView</span></code> использует функцию контроллера <code class="docutils literal notranslate"><span class="pre">jsAddToView</span></code> и  включает JS фаргмент в шаблон.
+Если используется, вызов должен быть в конце шаблона</p></li>
+</ul>
+<p>В шаблонах допускается использование любых методов из трейта <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>. Дополнительно можно использовать утильные методы Scalate,
+такие как <code class="docutils literal notranslate"><span class="pre">unescape</span></code> (см. <a class="reference external" href="http://scalate.fusesource.org/documentation/index.html">Scalate doc</a>).</p>
+<p>Синтаксис <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a> используется по умолчанию для Scalate.
+Так же вы можете использовать синтаксис <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
+<a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">Scaml</a> или
+<a class="reference external" href="http://scalate.fusesource.org/documentation/ssp-reference.html">Ssp</a>.
+Что бы установить предпочитаемый синтаксис, отредактируйте файл xitrum.conf в директории config.</p>
+<p>Кроме этого, метод <cite>respondView</cite> позволяет переопределять синтаксис шаблона.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondView</span><span class="p">(</span><span class="n">Map</span><span class="p">(</span><span class="s2">&quot;type&quot;</span> <span class="o">-&gt;</span><span class="s2">&quot;mustache&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="section" id="currentaction">
+<h3>currentAction и приведение типов<a class="headerlink" href="#currentaction" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Если известен подкласс контроллера который используется с шаблоном, то можно выполнить
+приведение <code class="docutils literal notranslate"><span class="pre">currentAction</span></code> к этому подклассу.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Или так:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">val</span> <span class="n">myAction</span> <span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">];</span> <span class="kn">import</span> <span class="nn">myAction._</span>
+
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Scala&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Xitrum&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Mustache<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Важно:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://mustache.github.com/mustache.5.html">Mustache syntax</a></p></li>
+<li><p><a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Scalate implementation</a></p></li>
+</ul>
+<p>Mustache намеренно ограничивает возможности шаблонизации до минимума логики. Поэтому многие
+возможности используемые в Jade не применимы в Mustache.</p>
+<p>Для передачи моделей из контроллера в шаблон необходимо использовать <code class="docutils literal notranslate"><span class="pre">at</span></code>:</p>
+<p>Контролер:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">at</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Jack&quot;</span>
+<span class="n">at</span><span class="p">(</span><span class="s2">&quot;xitrumCss&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">xitrumCss</span>
+</pre></div>
+</div>
+<p>Шаблон Mustache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Мое</span> <span class="n">имя</span> <span class="p">{{</span><span class="n">name</span><span class="p">}}</span>
+<span class="p">{{</span><span class="n">xitrumCss</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>Примечание: следующие слова зарезервированы и не могут быть использованы
+как ключ в <code class="docutils literal notranslate"><span class="pre">at</span></code>:</p>
+<ul class="simple">
+<li><p>«context»: Scalate объект предоставляющий методы <code class="docutils literal notranslate"><span class="pre">unescape</span></code> и пр.</p></li>
+<li><p>«helper»: текущий контроллер</p></li>
+</ul>
+</div>
+<div class="section" id="coffeescript">
+<h3>CoffeeScript<a class="headerlink" href="#coffeescript" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Scalate позволяет включать CoffeeScript в шаблоны
+<a class="reference external" href="http://scalate.fusesource.org/documentation/jade-syntax.html#filters">:coffeescript filter</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">body</span>
+  <span class="p">:</span><span class="n">coffeescript</span>
+    <span class="n">alert</span> <span class="s2">&quot;Hello, Coffee!&quot;</span>
+</pre></div>
+</div>
+<p>Результат:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;body&gt;
+  &lt;script type=&#39;text/javascript&#39;&gt;
+    //&lt;![CDATA[
+      (function() {
+        alert(&quot;Hello, Coffee!&quot;);
+      }).call(this);
+    //]]&gt;
+  &lt;/script&gt;
+&lt;/body&gt;
+</pre></div>
+</div>
+<p>Однако, эта возможность работает достаточно <a class="reference external" href="http://groups.google.com/group/xitrum-framework/browse_thread/thread/6667a7608f0dc9c7">медленно</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jade</span><span class="o">+</span><span class="n">javascript</span><span class="o">+</span><span class="mi">1</span><span class="n">thread</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">coffesscript</span><span class="o">+</span><span class="mi">1</span><span class="n">thread</span><span class="p">:</span> <span class="mi">40</span><span class="o">-</span><span class="mi">70</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">javascript</span><span class="o">+</span><span class="mi">100</span><span class="n">threads</span><span class="p">:</span> <span class="o">~</span><span class="mi">40</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">coffesscript</span><span class="o">+</span><span class="mi">100</span><span class="n">threads</span><span class="p">:</span> <span class="mi">400</span><span class="o">-</span><span class="mi">700</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+</pre></div>
+</div>
+<p>Рекомендуется самостоятельно компилировать CoffeeScript в JavaScript для оптимизации производительности.</p>
+</div>
+</div>
+<div class="section" id="layout">
+<h2>Макет (Layout)<a class="headerlink" href="#layout" title="Ссылка на этот заголовок">¶</a></h2>
+<p>При использовании <code class="docutils literal notranslate"><span class="pre">respondView</span></code> или <code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code>, Xitrum
+выполняет шаблонизацию в строку, и присваивает результат в переменную <code class="docutils literal notranslate"><span class="pre">renderedView</span></code>.
+Затем, Xitrum вызывает метод <code class="docutils literal notranslate"><span class="pre">layout</span></code> текущего контроллера и отправляет результат работы
+этого метода как ответ сервера.</p>
+<p>По умолчанию метод <code class="docutils literal notranslate"><span class="pre">layout</span></code> просто возвращает переменную <code class="docutils literal notranslate"><span class="pre">renderedView</span></code>.
+В случае перекрытия этого метода появляется возможность декорировать шаблон.
+Таким образом достаточно просто реализовать произвольный макет (layout) для всех контроллеров.</p>
+<p>Механизм <code class="docutils literal notranslate"><span class="pre">layout</span></code> очень простой и понятный. Никакой магии. Для удобства, вы можете
+думать что Xitrum не поддерживает макеты (layout), есть только метод <code class="docutils literal notranslate"><span class="pre">layout</span></code> и вы вольны
+делать с ним все что захотите.</p>
+<p>Обычно, создается базовый класс для реализация стандартного макета:</p>
+<p>src/main/scala/mypackage/AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">renderViewNoLayout</span><span class="p">[</span><span class="n">AppAction</span><span class="p">]()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>src/main/scalate/mypackage/AppAction.jade</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    != renderedView
+    != jsForView
+</pre></div>
+</div>
+<p>src/main/scala/mypackage/MyAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;myAction&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="kn">import</span> <span class="nn">mypackage.MyAction</span>
+
+<span class="n">a</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">})</span> <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">current</span> <span class="n">action</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="id6">
+<h3>Макет в отдельном файле<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h3>
+<p>AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="respondview">
+<h3>Использование макета непосредственно в respondView<a class="headerlink" href="#respondview" title="Ссылка на этот заголовок">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">specialLayout</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span>
+  <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+
+<span class="n">respondView</span><span class="p">(</span><span class="n">specialLayout</span> <span class="n">_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Внутренние представления<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Обычно, шаблон описывается в отдельном файле, но существует возможность писать
+шаблоны непосредственно в контроллере:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;myAction&quot;)
+class MyAction extends Action {
+  def execute() {
+    val s = &quot;World&quot;  // Will be automatically HTML-escaped
+    respondInlineView(
+      &lt;p&gt;Hello &lt;em&gt;{s}&lt;/em&gt;!&lt;/p&gt;
+    )
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Фрагменты<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<p>MyAction.jade:
+<code class="docutils literal notranslate"><span class="pre">scr/main/scalate/mypackage/MyAction.jade</span></code></p>
+<p>Шаблонизация с помощью фрагмента
+<code class="docutils literal notranslate"><span class="pre">scr/main/scalate/mypackage/_MyFragment.jade</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">renderFragment</span><span class="p">[</span><span class="n">MyAction</span><span class="p">](</span><span class="s2">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Можно записать короче, если <code class="docutils literal notranslate"><span class="pre">MyAction</span></code> - текущий контроллер:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">renderFragment</span><span class="p">(</span><span class="s2">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id9">
+<h2>Использование шаблона смежного контроллера<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Использование метода <code class="docutils literal notranslate"><span class="pre">respondView[ClassName]()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginFormAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">Respond</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">LoginFormAction</span><span class="o">.</span><span class="n">jade</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DoLoginAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">authenticated</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">authenticated</span><span class="p">)</span>
+      <span class="n">redirectTo</span><span class="p">[</span><span class="n">HomeAction</span><span class="p">]()</span>
+    <span class="k">else</span>
+      <span class="o">//</span> <span class="n">Reuse</span> <span class="n">the</span> <span class="n">view</span> <span class="n">of</span> <span class="n">LoginFormAction</span>
+      <span class="n">respondView</span><span class="p">[</span><span class="n">LoginFormAction</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id10">
+<h3>Один контроллер - много представлений<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Использование нескольких шаблонов для одного контроллера:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="o">//</span> <span class="n">Шаблоны</span> <span class="n">автоматически</span> <span class="n">не</span> <span class="n">маршрутизируются</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_NormalUser</span><span class="o">.</span><span class="n">jade</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_Moderator</span><span class="o">.</span><span class="n">jade</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_Admin</span><span class="o">.</span><span class="n">jade</span>
+<span class="n">trait</span> <span class="n">HomeAction_NormalUser</span> <span class="n">extends</span> <span class="n">Action</span>
+<span class="n">trait</span> <span class="n">HomeAction_Moderator</span>  <span class="n">extends</span> <span class="n">Action</span>
+<span class="n">trait</span> <span class="n">HomeAction_Admin</span>      <span class="n">extends</span> <span class="n">Action</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HomeAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">userType</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">userType</span> <span class="n">match</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">NormalUser</span> <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_NormalUser</span><span class="p">]()</span>
+      <span class="n">case</span> <span class="n">Moderator</span>  <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_Moderator</span><span class="p">]()</span>
+      <span class="n">case</span> <span class="n">Admin</span>      <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_Admin</span><span class="p">]()</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Использование дополнительных не автоматических маршрутов выглядит утомительно, однако
+это более безопасно относительно типов (typesafe).</p>
+<p>Вы также можете использовать `` String`` указать местоположение шаблона:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_NormalUser&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_Moderator&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_Admin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>Компонент<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Компоненты позволяют создавать переиспользуемое поведение и могут быть включены
+во множество представлений. Концептуально компонент очень близок к контроллеру, но:</p>
+<ul class="simple">
+<li><p>Не имеет маршрутов, поэтому отсутствует метод <code class="docutils literal notranslate"><span class="pre">execute</span></code>.</p></li>
+<li><p>Компонент не отправляет ответ сервера, он просто выполняет шаблонизацию фрагмента.
+Поэтому внутри компонента, вместо вызовов <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code>, необходимо использовать <code class="docutils literal notranslate"><span class="pre">renderXXX</span></code>.</p></li>
+<li><p>Как и контроллеры, компонент может иметь ни одного, одно или множество связанных представлений.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package mypackage
+
+import xitrum.{FutureAction, Component}
+import xitrum.annotation.GET
+
+class CompoWithView extends Component {
+  def render() = {
+    // Render associated view template, e.g. CompoWithView.jade
+    // Note that this is renderView, not respondView!
+    renderView()
+  }
+}
+
+class CompoWithoutView extends Component {
+  def render() = {
+    &quot;Hello World&quot;
+  }
+}
+
+@GET(&quot;foo/bar&quot;)
+class MyAction extends FutureAction {
+  def execute() {
+    respondView()
+  }
+}
+</pre></div>
+</div>
+<p>MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="kn">import</span> <span class="nn">mypackage._</span>
+
+<span class="o">!=</span> <span class="n">newComponent</span><span class="p">[</span><span class="n">CompoWithView</span><span class="p">]()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+<span class="o">!=</span> <span class="n">newComponent</span><span class="p">[</span><span class="n">CompoWithoutView</span><span class="p">]()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Контроллеры и представления</a><ul>
+<li><a class="reference internal" href="#normal-action">Стандартный контроллер (normal action)</a></li>
+<li><a class="reference internal" href="#futureaction">FutureAction</a></li>
+<li><a class="reference internal" href="#actor-action">Актор контроллер (actor action)</a></li>
+<li><a class="reference internal" href="#id2">Отправка ответа клиенту</a></li>
+<li><a class="reference internal" href="#id3">Шаблонизация</a><ul>
+<li><a class="reference internal" href="#currentaction">currentAction и приведение типов</a></li>
+<li><a class="reference internal" href="#id4">Mustache</a></li>
+<li><a class="reference internal" href="#coffeescript">CoffeeScript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#layout">Макет (Layout)</a><ul>
+<li><a class="reference internal" href="#id6">Макет в отдельном файле</a></li>
+<li><a class="reference internal" href="#respondview">Использование макета непосредственно в respondView</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Внутренние представления</a></li>
+<li><a class="reference internal" href="#id8">Фрагменты</a></li>
+<li><a class="reference internal" href="#id9">Использование шаблона смежного контроллера</a><ul>
+<li><a class="reference internal" href="#id10">Один контроллер - много представлений</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id11">Компонент</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="предыдущая глава">Как начать</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="restful.html"
+                        title="следующая глава">RESTful APIs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/action_view.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Как начать"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Контроллеры и представления</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

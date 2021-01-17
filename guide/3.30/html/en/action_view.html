@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Action and view &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RESTful APIs" href="restful.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Action and view</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="action-and-view">
+<h1>Action and view<a class="headerlink" href="#action-and-view" title="Permalink to this headline">¶</a></h1>
+<p>To be flexible, Xitrum provides 3 kinds of actions:
+normal <code class="docutils literal notranslate"><span class="pre">Action</span></code>, <code class="docutils literal notranslate"><span class="pre">FutureAction</span></code>, and <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code>.</p>
+<div class="section" id="normal-action">
+<h2>Normal action<a class="headerlink" href="#normal-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Because the action will run on directly Netty’s IO thread, it should not do blocking
+processing that may take a long time, otherwise Netty can’t accept new connections
+or send response back to clients.</p>
+</div>
+<div class="section" id="futureaction">
+<h2>FutureAction<a class="headerlink" href="#futureaction" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.FutureAction</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">FutureAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The action will run on the same thread pool for <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code> (see below),
+separated from the thread pool of Netty.</p>
+</div>
+<div class="section" id="actor-action">
+<h2>Actor action<a class="headerlink" href="#actor-action" title="Permalink to this headline">¶</a></h2>
+<p>If you want your action to be an Akka actor, extend <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.concurrent.duration._</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.ActorAction</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;actor&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">ActorAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">See</span> <span class="n">Akka</span> <span class="n">doc</span> <span class="n">about</span> <span class="n">scheduler</span>
+    <span class="kn">import</span> <span class="nn">context.dispatcher</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">scheduleOnce</span><span class="p">(</span><span class="mi">3</span> <span class="n">seconds</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">currentTimeMillis</span><span class="p">())</span>
+
+    <span class="o">//</span> <span class="n">See</span> <span class="n">Akka</span> <span class="n">doc</span> <span class="n">about</span> <span class="s2">&quot;become&quot;</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">pastTime</span> <span class="o">=&gt;</span>
+        <span class="n">respondInlineView</span><span class="p">(</span><span class="n">s</span><span class="s2">&quot;It&#39;s $pastTime Unix ms 3s ago.&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An actor instance will be created when there’s request. It will be stopped when the
+connection is closed or when the response has been sent by <code class="docutils literal notranslate"><span class="pre">respondText</span></code>,
+<code class="docutils literal notranslate"><span class="pre">respondView</span></code> etc. methods. For chunked response, it is not stopped right away.
+It is stopped when the last chunk is sent.</p>
+<p>The actor will run on the thread pool of the Akka actor system named “xitrum”.</p>
+</div>
+<div class="section" id="respond-to-client">
+<h2>Respond to client<a class="headerlink" href="#respond-to-client" title="Permalink to this headline">¶</a></h2>
+<p>From an action, to respond something to client, use:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">respondView</span></code>: responds view template file, with or without layout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code>: responds embedded template (not separate template file), with or without layout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondText(&quot;hello&quot;)</span></code>: responds a string without layout</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></code>: same as above, with content type set to “text/html”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></code>: converts Scala object to JSON object then responds</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></code>: combination of the above two</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondBinary</span></code>: responds an array of bytes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondFile</span></code>: sends a file directly from disk, very fast
+because <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a>
+(aka send-file) is used</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="respond-template-view-file">
+<h2>Respond template view file<a class="headerlink" href="#respond-template-view-file" title="Permalink to this headline">¶</a></h2>
+<p>Each action may have an associated <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
+template view file. Instead of responding directly in the action with the above
+methods, you can use a separate view file.</p>
+<p>scr/main/scala/mypackage/MyAction.scala:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;myAction&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- import mypackage.MyAction
+
+!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    a(href={url}) Path to the current action
+    p= currentAction.asInstanceOf[MyAction].hello(&quot;World&quot;)
+
+    != jsForView
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xitrumCss</span></code> includes the default CSS for Xitrum. You may remove it if you
+don’t like.xitrum-framework</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code> includes jQuery, jQuery Validate plugin etc.
+should be put at layout’s &lt;head&gt;.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsForView</span></code> contains JS fragments added by <code class="docutils literal notranslate"><span class="pre">jsAddToView</span></code>,
+should be put at layout’s bottom.</p></li>
+</ul>
+<p>In templates you can use all methods of the class <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a>.
+Also, you can use utility methods provided by Scalate like <code class="docutils literal notranslate"><span class="pre">unescape</span></code>.
+See the <a class="reference external" href="http://scalate.fusesource.org/documentation/index.html">Scalate doc</a>.</p>
+<p>The default Scalate template type is <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a>.
+You can also use <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a>,
+<a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">Scaml</a>, or
+<a class="reference external" href="http://scalate.fusesource.org/documentation/ssp-reference.html">Ssp</a>.
+To config the default template type, see xitrum.conf file in the config directory
+of your Xitrum application.</p>
+<p>You can override the default template type by passing “jade”, “mustache”, “scaml”,
+or “ssp” to <cite>respondView</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">options</span> <span class="o">=</span> <span class="n">Map</span><span class="p">(</span><span class="s2">&quot;type&quot;</span> <span class="o">-&gt;</span><span class="s2">&quot;mustache&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="type-casting-currentaction">
+<h3>Type casting currentAction<a class="headerlink" href="#type-casting-currentaction" title="Permalink to this headline">¶</a></h3>
+<p>If you want to have exactly instance of the current action, cast <code class="docutils literal notranslate"><span class="pre">currentAction</span></code> to
+the action you wish.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you have multiple lines like above, you can cast only one time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">val</span> <span class="n">myAction</span> <span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">];</span> <span class="kn">import</span> <span class="nn">myAction._</span>
+
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Scala&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Xitrum&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Mustache<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Must read:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://mustache.github.com/mustache.5.html">Mustache syntax</a></p></li>
+<li><p><a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Scalate implementation</a></p></li>
+</ul>
+<p>You can’t do some things with Mustache like with Jade, because Mustache syntax
+is stricter.</p>
+<p>To pass things from action to Mustache template, you must use <code class="docutils literal notranslate"><span class="pre">at</span></code>:</p>
+<p>Action:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">at</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Jack&quot;</span>
+<span class="n">at</span><span class="p">(</span><span class="s2">&quot;xitrumCss&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">xitrumCss</span>
+</pre></div>
+</div>
+<p>Mustache template:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">My</span> <span class="n">name</span> <span class="ow">is</span> <span class="p">{{</span><span class="n">name</span><span class="p">}}</span>
+<span class="p">{{</span><span class="n">xitrumCss</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>Note that you can’t use the below keys for <code class="docutils literal notranslate"><span class="pre">at</span></code> map to pass things to Scalate
+template, because they’re already used:</p>
+<ul class="simple">
+<li><p>“context”: for Sclate utility object, which contains methods like <code class="docutils literal notranslate"><span class="pre">unescape</span></code></p></li>
+<li><p>“helper”: for the current action object</p></li>
+</ul>
+</div>
+<div class="section" id="coffeescript">
+<h3>CoffeeScript<a class="headerlink" href="#coffeescript" title="Permalink to this headline">¶</a></h3>
+<p>You can embed CoffeeScript in Scalate template using
+<a class="reference external" href="http://scalate.fusesource.org/documentation/jade-syntax.html#filters">:coffeescript filter</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">body</span>
+  <span class="p">:</span><span class="n">coffeescript</span>
+    <span class="n">alert</span> <span class="s2">&quot;Hello, Coffee!&quot;</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;body&gt;
+  &lt;script type=&#39;text/javascript&#39;&gt;
+    //&lt;![CDATA[
+      (function() {
+        alert(&quot;Hello, Coffee!&quot;);
+      }).call(this);
+    //]]&gt;
+  &lt;/script&gt;
+&lt;/body&gt;
+</pre></div>
+</div>
+<p>But note that it is <a class="reference external" href="http://groups.google.com/group/xitrum-framework/browse_thread/thread/6667a7608f0dc9c7">slow</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jade</span><span class="o">+</span><span class="n">javascript</span><span class="o">+</span><span class="mi">1</span><span class="n">thread</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">coffesscript</span><span class="o">+</span><span class="mi">1</span><span class="n">thread</span><span class="p">:</span> <span class="mi">40</span><span class="o">-</span><span class="mi">70</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">javascript</span><span class="o">+</span><span class="mi">100</span><span class="n">threads</span><span class="p">:</span> <span class="o">~</span><span class="mi">40</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">coffesscript</span><span class="o">+</span><span class="mi">100</span><span class="n">threads</span><span class="p">:</span> <span class="mi">400</span><span class="o">-</span><span class="mi">700</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+</pre></div>
+</div>
+<p>You pre-generate CoffeeScript to JavaScript if you need speed.</p>
+</div>
+</div>
+<div class="section" id="layout">
+<h2>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<p>When you respond a view with <code class="docutils literal notranslate"><span class="pre">respondView</span></code> or <code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code>, Xitrum
+renders it to a String, and sets the String to <code class="docutils literal notranslate"><span class="pre">renderedView</span></code> variable. Xitrum
+then calls <code class="docutils literal notranslate"><span class="pre">layout</span></code> method of the current action, finally Xitrum responds
+the result of this method to the browser.</p>
+<p>By default <code class="docutils literal notranslate"><span class="pre">layout</span></code> method just returns <code class="docutils literal notranslate"><span class="pre">renderedView</span></code> itself. If you want
+to decorate your view with something, override this method. If you include
+<code class="docutils literal notranslate"><span class="pre">renderedView</span></code> in the method, the view will be included as part of your layout.</p>
+<p>The point is <code class="docutils literal notranslate"><span class="pre">layout</span></code> is called after your action’s view, and whatever returned
+is what responded to the browser. This mechanism is simple and straight forward.
+No magic. For convenience, you may think that there’s no layout in Xitrum at all.
+There’s just the <code class="docutils literal notranslate"><span class="pre">layout</span></code> method and you do whatever you want with it.</p>
+<p>Typically, you create a parent class which has a common layout for many views:</p>
+<p>src/main/scala/mypackage/AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">renderViewNoLayout</span><span class="p">[</span><span class="n">AppAction</span><span class="p">]()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>src/main/scalate/mypackage/AppAction.jade</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    != renderedView
+    != jsForView
+</pre></div>
+</div>
+<p>src/main/scala/mypackage/MyAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;myAction&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="kn">import</span> <span class="nn">mypackage.MyAction</span>
+
+<span class="n">a</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">})</span> <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">current</span> <span class="n">action</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="layout-without-separate-file">
+<h3>Layout without separate file<a class="headerlink" href="#layout-without-separate-file" title="Permalink to this headline">¶</a></h3>
+<p>AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pass-layout-directly-to-respondview">
+<h3>Pass layout directly to respondView<a class="headerlink" href="#pass-layout-directly-to-respondview" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">specialLayout</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span>
+  <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+
+<span class="n">respondView</span><span class="p">(</span><span class="n">specialLayout</span> <span class="n">_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="inline-view">
+<h2>Inline view<a class="headerlink" href="#inline-view" title="Permalink to this headline">¶</a></h2>
+<p>Normally, you write view in a Scalate file. You can also write it directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;myAction&quot;)
+class MyAction extends Action {
+  def execute() {
+    val s = &quot;World&quot;  // Will be automatically HTML-escaped
+    respondInlineView(
+      &lt;p&gt;Hello &lt;em&gt;{s}&lt;/em&gt;!&lt;/p&gt;
+    )
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="render-fragment">
+<h2>Render fragment<a class="headerlink" href="#render-fragment" title="Permalink to this headline">¶</a></h2>
+<p>Suppose MyAction.jade is at:
+scr/main/scalate/mypackage/MyAction.jade</p>
+<p>If you want to render the fragment file in the same directory:
+scr/main/scalate/mypackage/_MyFragment.jade</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">renderFragment</span><span class="p">[</span><span class="n">MyAction</span><span class="p">](</span><span class="s2">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">MyAction</span></code> is the current action, you can skip it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">renderFragment</span><span class="p">(</span><span class="s2">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="respond-view-of-other-action">
+<h2>Respond view of other action<a class="headerlink" href="#respond-view-of-other-action" title="Permalink to this headline">¶</a></h2>
+<p>Use the syntax <code class="docutils literal notranslate"><span class="pre">respondView[ClassName]()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginFormAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">Respond</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">LoginFormAction</span><span class="o">.</span><span class="n">jade</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DoLoginAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">authenticated</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">authenticated</span><span class="p">)</span>
+      <span class="n">redirectTo</span><span class="p">[</span><span class="n">HomeAction</span><span class="p">]()</span>
+    <span class="k">else</span>
+      <span class="o">//</span> <span class="n">Reuse</span> <span class="n">the</span> <span class="n">view</span> <span class="n">of</span> <span class="n">LoginFormAction</span>
+      <span class="n">respondView</span><span class="p">[</span><span class="n">LoginFormAction</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="one-action-multiple-views">
+<h3>One action - multiple views<a class="headerlink" href="#one-action-multiple-views" title="Permalink to this headline">¶</a></h3>
+<p>If you want to have multiple views for one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="o">//</span> <span class="n">These</span> <span class="n">are</span> <span class="n">non</span><span class="o">-</span><span class="n">routed</span> <span class="n">actions</span><span class="p">,</span> <span class="k">for</span> <span class="n">mapping</span> <span class="n">to</span> <span class="n">view</span> <span class="n">template</span> <span class="n">files</span><span class="p">:</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_NormalUser</span><span class="o">.</span><span class="n">jade</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_Moderator</span><span class="o">.</span><span class="n">jade</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_Admin</span><span class="o">.</span><span class="n">jade</span>
+<span class="n">trait</span> <span class="n">HomeAction_NormalUser</span> <span class="n">extends</span> <span class="n">Action</span>
+<span class="n">trait</span> <span class="n">HomeAction_Moderator</span>  <span class="n">extends</span> <span class="n">Action</span>
+<span class="n">trait</span> <span class="n">HomeAction_Admin</span>      <span class="n">extends</span> <span class="n">Action</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HomeAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">userType</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">userType</span> <span class="n">match</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">NormalUser</span> <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_NormalUser</span><span class="p">]()</span>
+      <span class="n">case</span> <span class="n">Moderator</span>  <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_Moderator</span><span class="p">]()</span>
+      <span class="n">case</span> <span class="n">Admin</span>      <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_Admin</span><span class="p">]()</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Using addional non-routed actions like above seems to be tedious, but this way
+your program will be typesafe.</p>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">String</span></code> to specify template location:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_NormalUser&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_Moderator&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_Admin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="component">
+<h2>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h2>
+<p>You can create reusable view components that can be embedded to multiple views.
+In concept, a component is similar to an action:</p>
+<ul class="simple">
+<li><p>But it does not have routes, thus <code class="docutils literal notranslate"><span class="pre">execute</span></code> method is not needed.</p></li>
+<li><p>It does not “responds” a full response, it just “renders” a view fragment.
+So inside a component, instead of calling <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code>, please call <code class="docutils literal notranslate"><span class="pre">renderXXX</span></code>.</p></li>
+<li><p>Just like an action, a component can have none, one, or multiple associated view
+templates.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package mypackage
+
+import xitrum.{FutureAction, Component}
+import xitrum.annotation.GET
+
+class CompoWithView extends Component {
+  def render() = {
+    // Render associated view template, e.g. CompoWithView.jade
+    // Note that this is renderView, not respondView!
+    renderView()
+  }
+}
+
+class CompoWithoutView extends Component {
+  def render() = {
+    &quot;Hello World&quot;
+  }
+}
+
+@GET(&quot;foo/bar&quot;)
+class MyAction extends FutureAction {
+  def execute() {
+    respondView()
+  }
+}
+</pre></div>
+</div>
+<p>MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="kn">import</span> <span class="nn">mypackage._</span>
+
+<span class="o">!=</span> <span class="n">newComponent</span><span class="p">[</span><span class="n">CompoWithView</span><span class="p">]()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+<span class="o">!=</span> <span class="n">newComponent</span><span class="p">[</span><span class="n">CompoWithoutView</span><span class="p">]()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Action and view</a><ul>
+<li><a class="reference internal" href="#normal-action">Normal action</a></li>
+<li><a class="reference internal" href="#futureaction">FutureAction</a></li>
+<li><a class="reference internal" href="#actor-action">Actor action</a></li>
+<li><a class="reference internal" href="#respond-to-client">Respond to client</a></li>
+<li><a class="reference internal" href="#respond-template-view-file">Respond template view file</a><ul>
+<li><a class="reference internal" href="#type-casting-currentaction">Type casting currentAction</a></li>
+<li><a class="reference internal" href="#id1">Mustache</a></li>
+<li><a class="reference internal" href="#coffeescript">CoffeeScript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#layout">Layout</a><ul>
+<li><a class="reference internal" href="#layout-without-separate-file">Layout without separate file</a></li>
+<li><a class="reference internal" href="#pass-layout-directly-to-respondview">Pass layout directly to respondView</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inline-view">Inline view</a></li>
+<li><a class="reference internal" href="#render-fragment">Render fragment</a></li>
+<li><a class="reference internal" href="#respond-view-of-other-action">Respond view of other action</a><ul>
+<li><a class="reference internal" href="#one-action-multiple-views">One action - multiple views</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#component">Component</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="restful.html"
+                        title="next chapter">RESTful APIs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/action_view.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Action and view</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

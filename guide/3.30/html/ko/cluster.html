@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akka와 Hazelcast 클러스터링 &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Netty 핸들러" href="handler.html" />
+    <link rel="prev" title="프로덕션 서버에 배포하기" href="deploy.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty 핸들러"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="프로덕션 서버에 배포하기"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Akka와 Hazelcast 클러스터링</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="akka-hazelcast">
+<h1>Akka와 Hazelcast 클러스터링<a class="headerlink" href="#akka-hazelcast" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum가 프록시 서버와 로드 밸런서 뒤에 클러스터 구성에서 동작할 수 있도록 설계되어 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                         <span class="o">/</span> <span class="n">Xitrum</span> <span class="n">인스턴스</span> <span class="mi">1</span>
+<span class="n">로드밸런서</span><span class="o">/</span><span class="n">프록시</span> <span class="n">서버</span>      <span class="o">----</span> <span class="n">Xitrum</span> <span class="n">인스턴스</span> <span class="mi">2</span>
+                         \ <span class="n">Xitrum</span> <span class="n">인스턴스</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://akka.io/">Akka</a> 와 <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>
+클러스터링 기능을 사용하여 캐시, 세션, SockJS세션을 클러스터링 할 수 있습니다.</p>
+<p>Hazelcast가 Xitrum 인스턴스의 프로세스의 메모리 캐시 서버가 되므로
+Memcache 같은 추가 서버는 필요하지 않습니다.</p>
+<p>Akka와 Hazelcast 클러스터링을 설정하려면 <code class="docutils literal notranslate"><span class="pre">config</span> <span class="pre">/</span> <span class="pre">akka.conf</span></code> <a class="reference external" href="http://akka.io/docs/">Akka 문서</a>
+<a class="reference external" href="http://hazelcast.org/documentation/">Hazelcast 문서</a> 를 참고하십시오.</p>
+<p>참고 : 세션, <span class="xref std std-doc">클라이언트 측 쿠키에 저장</span> 할 수 있습니다.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="previous chapter">프로덕션 서버에 배포하기</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="handler.html"
+                        title="next chapter">Netty 핸들러</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cluster.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty 핸들러"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="프로덕션 서버에 배포하기"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Akka와 Hazelcast 클러스터링</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

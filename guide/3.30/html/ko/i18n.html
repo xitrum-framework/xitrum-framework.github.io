@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>I18n &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="로그" href="log.html" />
+    <link rel="prev" title="서버측 캐시" href="cache.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="log.html" title="로그"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cache.html" title="서버측 캐시"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">I18n</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="i18n">
+<h1>I18n<a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h1>
+<p>GNU gettext 가 사용됩니다. gettext는 다른 국제화 방법과는 다르게 복수형을 지원합니다.</p>
+<img alt="http://poedit.net/images/home_image2-big.png" src="http://poedit.net/images/home_image2-big.png" />
+<div class="section" id="id1">
+<h2>소스코드에 국제화 메세지 작성<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">xitrum.Action</span></code> 은 <code class="docutils literal notranslate"><span class="pre">xitrum.I18n</span></code> 확장했으며 다음의 메소드가 있습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>t(&quot;Message&quot;)
+tc(&quot;Context&quot;, &quot;Message&quot;)
+
+t(&quot;Hello %s&quot;).format(&quot;World&quot;)
+
+// 1$ and 2$ are placeholders
+t(&quot;%1$s says hello to %2$s, then %2$s says hello back to %1$s&quot;).format(&quot;Bill&quot;, &quot;Hillary&quot;)
+
+// {0} and {1} are placeholders
+java.text.MessageFormat.format(t(&quot;{0} says hello to {1}, then {1} says hello back to {0}&quot;), &quot;Bill&quot;, &quot;Hillary&quot;)
+
+t(&quot;%,.3f&quot;).format(1234.5678)                                // =&gt; 1,234.568
+t(&quot;%,.3f&quot;).formatLocal(java.util.Locale.FRENCH, 1234.5678)  // =&gt; 1 234,568
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Above</span><span class="p">,</span> <span class="n">you</span> <span class="n">explicitly</span> <span class="n">specify</span> <span class="n">locale</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">If</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">implicitly</span> <span class="n">use</span> <span class="n">locale</span> <span class="n">of</span> <span class="n">the</span> <span class="n">current</span> <span class="n">action</span><span class="p">:</span>
+<span class="o">//</span> <span class="n">when</span> <span class="n">English</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span><span class="mf">234.568</span><span class="p">,</span> <span class="n">when</span> <span class="n">French</span> <span class="o">=&gt;</span> <span class="mi">1</span> <span class="mi">234</span><span class="p">,</span><span class="mi">568</span>
+<span class="n">t</span><span class="p">(</span><span class="s2">&quot;%,.3f&quot;</span><span class="p">,</span> <span class="mf">1234.5678</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>action 안에서나 혹은 액션에서 호출할 수 있습니다.
+model과 같은 곳에서의 사용은 현재의 액션에서 <code class="docutils literal notranslate"><span class="pre">t</span></code> 나 <code class="docutils literal notranslate"><span class="pre">tc</span></code> 를 호출하여 넘겨줘야 합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">In</span> <span class="n">an</span> <span class="n">action</span>
+<span class="n">respondText</span><span class="p">(</span><span class="n">MyModel</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="n">this</span><span class="p">))</span>
+
+<span class="o">//</span> <span class="n">In</span> <span class="n">the</span> <span class="n">model</span>
+<span class="kn">import</span> <span class="nn">xitrum.I18n</span>
+<span class="nb">object</span> <span class="n">MyModel</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">i18n</span><span class="p">:</span> <span class="n">I18n</span><span class="p">)</span> <span class="o">=</span> <span class="n">i18n</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pot">
+<h2>pot에 메세지 추출하기<a class="headerlink" href="#pot" title="Permalink to this headline">¶</a></h2>
+<p>프로젝트 루트에 빈 i18n.pot 파일을 생성하여 전체 프로젝트를 다시 컴파일 하면 됩니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="n">clean</span>
+<span class="n">rm</span> <span class="n">i18n</span><span class="o">.</span><span class="n">pot</span>
+<span class="n">touch</span> <span class="n">i18n</span><span class="o">.</span><span class="n">pot</span>
+<span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="nb">compile</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> 는 모든 .class파일을 삭제하고 전체를 다시 컴파일 합니다.
+<code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">clean</span></code> 명령은 SBT가 모든 <a class="reference internal" href="deps.html"><span class="doc">의존된</span></a> 라이브러리를 다운받기 때문에
+<code class="docutils literal notranslate"><span class="pre">find</span> <span class="pre">target</span> <span class="pre">-name</span> <span class="pre">*.class</span> <span class="pre">-delete</span></code> 명령이 조금 더 빠르지만
+<code class="docutils literal notranslate"><span class="pre">target</span></code> 내부의 .class 파일을 삭제하는것은 동일합니다.</p>
+<p>재컴파일 후에 i18n.pot는 소스코드로 부터 추출된 gettext 메세지를 채웁니다.
+마법같은 이 동작은 <a class="reference external" href="http://www.scala-lang.org/node/140">Scala compiler plugin technique</a> 에 기술되어 있습니다.</p>
+<p>한 가지 이 메소드의 주의점은 gettext는 Scala 소스 코드로부터 메세지를 추출합니다. 만약 자바 파일을 사용한다면 다음과 같이 <code class="docutils literal notranslate"><span class="pre">xgettext</span></code>
+커맨드 라인을 사용하여야 합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>xgettext -kt -ktc:1c,2 -ktn:1,2 -ktcn:1c,2,3 -o i18n_java.pot --from-code=UTF-8 $(find src/main/java -name &quot;*.java&quot;)
+</pre></div>
+</div>
+<p>그리고 나서 수동으로 i18n_java.pot 파일과 i18n.pot파일을 병합해야 합니다.</p>
+</div>
+<div class="section" id="po">
+<h2>po 파일 저장위치<a class="headerlink" href="#po" title="Permalink to this headline">¶</a></h2>
+<p>i18n.pot은 임시 파일입니다. 파일들을 &lt;language&gt;.po 로 복사하여 번역해야 합니다.</p>
+<p>Xitrum은 클래스 패스상의 <code class="docutils literal notranslate"><span class="pre">i18n</span></code> 디렉토리를 모니터링합니다.
+만약 런타임시 디렉토리 상의 &lt;language&gt;.po 파일이 변경되거나 추가된다면
+Xitrum은 자동으로 &lt;language&gt;.po 파일들을 다시 로드합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src</span>
+  <span class="n">main</span>
+    <span class="n">scala</span>
+    <span class="n">view</span>
+    <span class="n">resources</span>
+      <span class="n">i18n</span>
+        <span class="n">ja</span><span class="o">.</span><span class="n">po</span>
+        <span class="n">vi</span><span class="o">.</span><span class="n">po</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>po 파일을 수정하기 위해서는 <a class="reference external" href="http://www.poedit.net/">Poedit</a> 와 같은 툴을 사용하면 됩니다.
+툴을 사용하여 새로운 pot 파일을 기존의 po 파일에 추가 할수 있습니다.</p>
+<p>po 파일들은 여러 JAR파일들에 패키징할 수 있고 Xitrum은 실행시에 자동으로 병합합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mylib</span><span class="o">.</span><span class="n">jar</span>
+  <span class="n">i18n</span>
+    <span class="n">ja</span><span class="o">.</span><span class="n">po</span>
+    <span class="n">vi</span><span class="o">.</span><span class="n">po</span>
+        <span class="o">...</span>
+
+<span class="n">another</span><span class="o">.</span><span class="n">jar</span>
+  <span class="n">i18n</span>
+    <span class="n">ja</span><span class="o">.</span><span class="n">po</span>
+    <span class="n">vi</span><span class="o">.</span><span class="n">po</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>언어설정<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>브라우저의 요청 헤더의 <code class="docutils literal notranslate"><span class="pre">Accept-Language</span></code> 에서 언어 셋을 가져오려면
+<code class="docutils literal notranslate"><span class="pre">browserLanguages</span></code> 를 호출하면 됩니다. 결과는 브라우저의 우선순위에 따라 정렬됩니다.</p></li>
+<li><p>기본 언어는 “en” 입니다. 현재의 언어로 세팅하기 위해서는, 예를 들어, 일어일 경우 <code class="docutils literal notranslate"><span class="pre">language</span> <span class="pre">=</span> <span class="pre">&quot;ja&quot;</span></code> 로 하면 됩니다.</p></li>
+<li><p>가장 적절한 언어를 리소스에서 찾아 자동세팅을 위해서는
+<code class="docutils literal notranslate"><span class="pre">autosetLanguage(availableLanguages)</span></code> 을 호출하면 됩니다.
+<code class="docutils literal notranslate"><span class="pre">availableLanguages</span></code> 는 <code class="docutils literal notranslate"><span class="pre">resources/i18n</span></code> 디렉토리와 JAR파일들의 가능한 언어들의 리스트를 가지고 있습니다.
+만약 적절한 언어가 없을 경우에는 기본언어인 “en”으로 설정합니다.</p></li>
+<li><p>현재의 언어셋을 확인하려면 <code class="docutils literal notranslate"><span class="pre">language</span></code> 를 사용하면 됩니다.</p></li>
+</ul>
+<p>일반적으로 액션의 before 필터에서 언어를 세팅합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">beforeFilter</span> <span class="p">{</span>
+  <span class="n">val</span> <span class="n">lango</span><span class="p">:</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">]</span> <span class="o">=</span> <span class="n">yourMethodToGetUserPreferenceLanguageInSession</span><span class="p">()</span>
+  <span class="n">lango</span> <span class="n">match</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="kc">None</span>       <span class="o">=&gt;</span> <span class="n">autosetLanguage</span><span class="p">(</span><span class="n">Locale</span><span class="o">.</span><span class="n">forLanguageTag</span><span class="p">(</span><span class="s2">&quot;ja&quot;</span><span class="p">),</span> <span class="n">Locale</span><span class="o">.</span><span class="n">forLanguageTag</span><span class="p">(</span><span class="s2">&quot;vi&quot;</span><span class="p">))</span>
+    <span class="n">case</span> <span class="n">Some</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">language</span> <span class="o">=</span> <span class="n">lang</span>
+  <span class="p">}</span>
+  <span class="n">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>검증 메세지<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>jQuery Validation 플러그인은 <a class="reference external" href="https://github.com/jzaefferer/jquery-validation/tree/master/src/localization">i18n error messages</a>
+제공합니다.
+Xitrum은 자동으로 현재의 언어에 상응하는 메세지를 가져옵니다.</p>
+<p>서버의 기본 검증인 <code class="docutils literal notranslate"><span class="pre">xitrum.validator</span></code> 패키지, 또한
+Xitrum은 제공하고 있습니다.</p>
+</div>
+<div class="section" id="id4">
+<h2>복수형<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tn</span><span class="p">(</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="s2">&quot;Plural form&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">tcn</span><span class="p">(</span><span class="s2">&quot;Context&quot;</span><span class="p">,</span> <span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="s2">&quot;Plural form&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Xitrum은 다음에 정의된 복수형만을 사용합니다:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html#Plural-forms">What are plural forms</a></p></li>
+<li><p><a class="reference external" href="http://www.gnu.org/software/gettext/manual/html_node/Translating-plural-forms.html#Translating-plural-forms">Translating plural forms</a></p></li>
+</ul>
+<p>복수형은 다음 중 하나를 사용해야 합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>nplurals=1; plural=0
+nplurals=2; plural=n != 1
+nplurals=2; plural=n&gt;1
+nplurals=3; plural=n%10==1 &amp;&amp; n%100!=11 ? 0 : n != 0 ? 1 : 2
+nplurals=3; plural=n==1 ? 0 : n==2 ? 1 : 2
+nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 &gt; 0 &amp;&amp; n%100 &lt; 20)) ? 1 : 2
+nplurals=3; plural=n%10==1 &amp;&amp; n%100!=11 ? 0 : n%10&gt;=2 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2
+nplurals=3; plural=n%10==1 &amp;&amp; n%100!=11 ? 0 : n%10&gt;=2 &amp;&amp; n%10&lt;=4 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2
+nplurals=3; plural=(n==1) ? 0 : (n&gt;=2 &amp;&amp; n&lt;=4) ? 1 : 2
+nplurals=3; plural=n==1 ? 0 : n%10&gt;=2 &amp;&amp; n%10&lt;=4 &amp;&amp; (n%100&lt;10 || n%100&gt;=20) ? 1 : 2
+nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>날짜와 시간 포멧<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>만약 Scalate 템플릿 엔진을 사용한다면 날짜와 시간 포멧은 현재 액션의 언어 포멧을 따르게 됩니다.</p>
+<p>다른 포멧을 사용하고자 하는 경우:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">java.text.</span><span class="p">{</span><span class="n">DateFormat</span><span class="p">,</span> <span class="n">NumberFormat</span><span class="p">}</span>
+
+<span class="n">val</span> <span class="n">myDateFormat</span>   <span class="o">=</span> <span class="o">...</span>
+<span class="n">val</span> <span class="n">myNumberFormat</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">val</span> <span class="n">options</span>        <span class="o">=</span> <span class="n">Map</span><span class="p">(</span><span class="s2">&quot;date&quot;</span> <span class="o">-&gt;</span> <span class="n">myDateFormat</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span> <span class="o">-&gt;</span> <span class="n">myNumberFormat</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">I18n</a><ul>
+<li><a class="reference internal" href="#id1">소스코드에 국제화 메세지 작성</a></li>
+<li><a class="reference internal" href="#pot">pot에 메세지 추출하기</a></li>
+<li><a class="reference internal" href="#po">po 파일 저장위치</a></li>
+<li><a class="reference internal" href="#id2">언어설정</a></li>
+<li><a class="reference internal" href="#id3">검증 메세지</a></li>
+<li><a class="reference internal" href="#id4">복수형</a></li>
+<li><a class="reference internal" href="#id5">날짜와 시간 포멧</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cache.html"
+                        title="previous chapter">서버측 캐시</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="log.html"
+                        title="next chapter">로그</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/i18n.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="log.html" title="로그"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cache.html" title="서버측 캐시"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">I18n</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

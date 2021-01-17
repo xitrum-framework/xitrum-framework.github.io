@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript and JSON &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Async response" href="async.html" />
+    <link rel="prev" title="XML" href="xml.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="async.html" title="Async response"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">JavaScript and JSON</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="javascript-and-json">
+<h1>JavaScript and JSON<a class="headerlink" href="#javascript-and-json" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="javascript">
+<h2>JavaScript<a class="headerlink" href="#javascript" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum includes jQuery. There are some jsXXX helpers.</p>
+<div class="section" id="add-javascript-fragments-to-view">
+<h3>Add JavaScript fragments to view<a class="headerlink" href="#add-javascript-fragments-to-view" title="Permalink to this headline">¶</a></h3>
+<p>In your action, call <code class="docutils literal notranslate"><span class="pre">jsAddToView</span></code> (multiple times if you need):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="n">jsAddToView</span><span class="p">(</span><span class="s2">&quot;alert(&#39;Hello&#39;)&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="n">jsAddToView</span><span class="p">(</span><span class="s2">&quot;alert(&#39;Hello again&#39;)&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="n">respondInlineView</span><span class="p">(</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">My</span> <span class="n">view</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In your layout, call <code class="docutils literal notranslate"><span class="pre">jsForView</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;flash&quot;</span><span class="o">&gt;</span><span class="p">{</span><span class="n">jsFlash</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="respond-javascript-directly-without-view">
+<h3>Respond JavaScript directly without view<a class="headerlink" href="#respond-javascript-directly-without-view" title="Permalink to this headline">¶</a></h3>
+<p>To respond JavaScript:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jsRespond</span><span class="p">(</span><span class="s2">&quot;$(&#39;#error&#39;).html(</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">jsEscape</span><span class="p">(</span><span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;error&quot;</span><span class="o">&gt;</span><span class="n">Could</span> <span class="ow">not</span> <span class="n">login</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>To redirect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jsRedirectTo</span><span class="p">(</span><span class="s2">&quot;http://cntt.tv/&quot;</span><span class="p">)</span>
+<span class="n">jsRedirectTo</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="json">
+<h2>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum includes <a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>.
+Please read about it to know how to parse and generate JSON.</p>
+<p>To convert between Scala case object and JSON string:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.SeriDeseri</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">phone</span><span class="p">:</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">])</span>
+<span class="n">val</span> <span class="n">person1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s2">&quot;Jack&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">json</span>    <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toJson</span><span class="p">(</span><span class="n">person1</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">person2</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromJson</span><span class="p">[</span><span class="n">Person</span><span class="p">](</span><span class="n">json</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To respond JSON:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">scalaData</span> <span class="o">=</span> <span class="n">List</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="o">//</span> <span class="n">An</span> <span class="n">example</span>
+<span class="n">respondJson</span><span class="p">(</span><span class="n">scalaData</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>JSON is also neat for config files that need nested structures.
+See <a class="reference internal" href="howto.html"><span class="doc">Load config files</span></a>.</p>
+</div>
+<div class="section" id="plugin-for-knockout-js">
+<h2>Plugin for Knockout.js<a class="headerlink" href="#plugin-for-knockout-js" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">https://github.com/xitrum-framework/xitrum-ko</a></p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JavaScript and JSON</a><ul>
+<li><a class="reference internal" href="#javascript">JavaScript</a><ul>
+<li><a class="reference internal" href="#add-javascript-fragments-to-view">Add JavaScript fragments to view</a></li>
+<li><a class="reference internal" href="#respond-javascript-directly-without-view">Respond JavaScript directly without view</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json">JSON</a></li>
+<li><a class="reference internal" href="#plugin-for-knockout-js">Plugin for Knockout.js</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xml.html"
+                        title="previous chapter">XML</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="async.html"
+                        title="next chapter">Async response</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/js.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="async.html" title="Async response"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">JavaScript and JSON</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

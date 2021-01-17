@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrics &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HOWTO" href="howto.html" />
+    <link rel="prev" title="Netty handlers" href="handler.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Metrics</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="metrics">
+<h1>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum collects JVM heap memory, CPU, and actions’ execution status from each
+node of your application’s Akka cluster. It publishes the metrics as JSON data.
+Xitrum also lets you publish your own metrics.</p>
+<p>This metrics feature is based on the library <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
+<div class="section" id="collect-metrics">
+<h2>Collect metrics<a class="headerlink" href="#collect-metrics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="heap-memory-and-cpu">
+<h3>Heap memory and CPU<a class="headerlink" href="#heap-memory-and-cpu" title="Permalink to this headline">¶</a></h3>
+<p>JVM heap memory and CPU will be collected as
+<a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
+of Akka actor system from each node.</p>
+<p>Heap memory:</p>
+<img alt="_images/metrics_heapmemory.png" src="_images/metrics_heapmemory.png" />
+<p>CPU: Number of processors and load average</p>
+<img alt="_images/metrics_cpu.png" src="_images/metrics_cpu.png" />
+</div>
+<div class="section" id="action-metrics">
+<h3>Action metrics<a class="headerlink" href="#action-metrics" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum measure actions’ execution status of each node as a
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#histograms">Histogram</a>.
+You can know how many times actions were executed, and execution time of
+non-async actions.</p>
+<img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
+<p>Latest execution time of a specific action:</p>
+<img alt="_images/metrics_action_time.png" src="_images/metrics_action_time.png" />
+</div>
+<div class="section" id="collect-your-custom-metrics">
+<h3>Collect your custom metrics<a class="headerlink" href="#collect-your-custom-metrics" title="Permalink to this headline">¶</a></h3>
+<p>In addition to default metrics above, you can collect your custom metrics.
+<code class="docutils literal notranslate"><span class="pre">xitrum.Metrics</span></code> is a shortcut for <code class="docutils literal notranslate"><span class="pre">gauge</span></code>, <code class="docutils literal notranslate"><span class="pre">counter</span></code>, <code class="docutils literal notranslate"><span class="pre">meter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">timer</span></code> and <code class="docutils literal notranslate"><span class="pre">histogram</span></code>. Please read about
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a> and
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">its Scala implementation</a>
+to know how to use them.</p>
+<p>Timer example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">Metrics</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nb">object</span> <span class="n">MyAction</span> <span class="p">{</span>
+  <span class="n">lazy</span> <span class="n">val</span> <span class="n">myTimer</span> <span class="o">=</span> <span class="n">Metrics</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;myTimer&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;my/action&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="kn">import</span> <span class="nn">MyAction._</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">myTimer</span><span class="o">.</span><span class="n">time</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">Something</span> <span class="n">that</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">measure</span> <span class="n">execution</span> <span class="n">time</span>
+      <span class="o">...</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="publish-metrics">
+<h2>Publish metrics<a class="headerlink" href="#publish-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum publish latest value of metrics as JSON format with specified interval.
+This is a volatile value and not be kept in persistently.</p>
+<p>HeapMemory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;TYPE&quot;</span>      <span class="p">:</span> <span class="s2">&quot;heapMemory&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SYSTEM&quot;</span>    <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+  <span class="s2">&quot;HOST&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+  <span class="s2">&quot;PORT&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+  <span class="s2">&quot;HASH&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">hashCode</span><span class="p">,</span>
+  <span class="s2">&quot;TIMESTAMP&quot;</span> <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">NodeMetrics</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span>
+  <span class="s2">&quot;USED&quot;</span>      <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span><span class="p">,</span>
+  <span class="s2">&quot;COMMITTED&quot;</span> <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span><span class="p">,</span>
+  <span class="s2">&quot;MAX&quot;</span>       <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>CPU:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;TYPE&quot;</span>              <span class="p">:</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SYSTEM&quot;</span>            <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+  <span class="s2">&quot;HOST&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+  <span class="s2">&quot;PORT&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+  <span class="s2">&quot;HASH&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">hashCode</span><span class="p">,</span>
+  <span class="s2">&quot;TIMESTAMP&quot;</span>         <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">NodeMetrics</span><span class="o">.</span><span class="n">timestamp</span>
+  <span class="s2">&quot;SYSTEMLOADAVERAGE&quot;</span> <span class="p">:</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="s2">&quot;CPUCOMBINED&quot;</span>       <span class="p">:</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="s2">&quot;PROCESSORS&quot;</span>        <span class="p">:</span> <span class="n">Number</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>MetricsRegistry will be parsed with <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/json/">metrics-json</a>.</p>
+<div class="section" id="xitrum-default-viewer">
+<h3>Xitrum default viewer<a class="headerlink" href="#xitrum-default-viewer" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum provides default metrics viewer at URL <code class="docutils literal notranslate"><span class="pre">/xitrum/metrics/viewer?api_key=&lt;see</span> <span class="pre">xitrum.conf&gt;</span></code>.
+This URL shows graphs like above. The graphs are created using <a class="reference external" href="http://d3js.org/">D3.js</a>.</p>
+<p>The URL can be generated with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Config</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.XitrumMetricsViewer</span>
+
+<span class="n">url</span><span class="p">[</span><span class="n">XitrumMetricsViewer</span><span class="p">](</span><span class="s2">&quot;api_key&quot;</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">apiKey</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jconsole-viewer">
+<h3>Jconsole viewer<a class="headerlink" href="#jconsole-viewer" title="Permalink to this headline">¶</a></h3>
+<p>You can see it with <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#reporting-via-jmx">JVM Reporter</a>.</p>
+<img alt="_images/metrics_jconsole.png" src="_images/metrics_jconsole.png" />
+<p>Start JMX reporter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.codahale.metrics.JmxReporter</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">JmxReporter</span><span class="o">.</span><span class="n">forRegistry</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Metrics</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then run the <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html">jconsole</a> command.</p>
+</div>
+<div class="section" id="display-metrics-with-custom-viewer">
+<h3>Display metrics with custom viewer<a class="headerlink" href="#display-metrics-with-custom-viewer" title="Permalink to this headline">¶</a></h3>
+<p>The metrics will be published at SockJS URL <code class="docutils literal notranslate"><span class="pre">xitrum/metrics/channel</span></code> as JSON.
+<code class="docutils literal notranslate"><span class="pre">jsAddMetricsNameSpace</span></code> is a convenient JavaScript snippet that Xitrum provides
+for creating connection to this endpoint.</p>
+<p>Implement your own JSON handler, and call <code class="docutils literal notranslate"><span class="pre">initMetricsChannel</span></code> with your handler.</p>
+<p>Action example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.MetricsViewer</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;my/metrics/viewer&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MySubscriber</span> <span class="n">extends</span> <span class="n">MetricsViewer</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">jsAddMetricsNameSpace</span><span class="p">(</span><span class="s2">&quot;window&quot;</span><span class="p">)</span>
+    <span class="n">jsAddToView</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">      function onValue(json) {</span>
+<span class="s2">        console.log(json);</span>
+<span class="s2">      }</span>
+<span class="s2">      function onClose(){</span>
+<span class="s2">        console.log(&quot;channel closed&quot;);</span>
+<span class="s2">      }</span>
+<span class="s2">      window.initMetricsChannel(onValue, onClose);</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-metrics">
+<h3>Save metrics<a class="headerlink" href="#save-metrics" title="Permalink to this headline">¶</a></h3>
+<p>To save memory, Xitrum doesn’t remember old metrics values. If you want to save
+metrics to the database or files for later use, you need to implement your custom
+subscriber.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">akka.actor.Actor</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.PublisherLookUp</span>
+
+<span class="k">class</span> <span class="nc">MySubscriber</span> <span class="n">extends</span> <span class="n">Actor</span> <span class="k">with</span> <span class="n">PublisherLookUp</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">preStart</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">lookUpPublisher</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">receive</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="n">_</span> <span class="o">=&gt;</span>
+  <span class="p">}</span>
+
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">doWithPublisher</span><span class="p">(</span><span class="n">globalPublisher</span><span class="p">:</span> <span class="n">ActorRef</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">When</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">multinode</span> <span class="n">environment</span>
+      <span class="n">case</span> <span class="n">multinodeMetrics</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">NodeMetrics</span><span class="p">]</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="o">//</span> <span class="n">When</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">single</span> <span class="n">node</span> <span class="n">environment</span>
+      <span class="n">case</span> <span class="n">nodeMetrics</span><span class="p">:</span> <span class="n">NodeMetrics</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="n">case</span> <span class="n">Publish</span><span class="p">(</span><span class="n">registryAsJson</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="n">case</span> <span class="n">_</span> <span class="o">=&gt;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Metrics</a><ul>
+<li><a class="reference internal" href="#collect-metrics">Collect metrics</a><ul>
+<li><a class="reference internal" href="#heap-memory-and-cpu">Heap memory and CPU</a></li>
+<li><a class="reference internal" href="#action-metrics">Action metrics</a></li>
+<li><a class="reference internal" href="#collect-your-custom-metrics">Collect your custom metrics</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#publish-metrics">Publish metrics</a><ul>
+<li><a class="reference internal" href="#xitrum-default-viewer">Xitrum default viewer</a></li>
+<li><a class="reference internal" href="#jconsole-viewer">Jconsole viewer</a></li>
+<li><a class="reference internal" href="#display-metrics-with-custom-viewer">Display metrics with custom viewer</a></li>
+<li><a class="reference internal" href="#save-metrics">Save metrics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="handler.html"
+                        title="previous chapter">Netty handlers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="howto.html"
+                        title="next chapter">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/metrics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Metrics</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

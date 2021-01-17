@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>검증 &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="파일 업로드" href="upload.html" />
+    <link rel="prev" title="스코프" href="scopes.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="upload.html" title="파일 업로드"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="스코프"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">검증</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>검증<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum은 클라이언트 검증을 위해 <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
+내포하고 있고 서버 검증을 위해 핼퍼를 제공합니다.</p>
+<div class="section" id="id2">
+<h2>기본 검증<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">xitrum.validator</span></code> 패키지에 검증기를 제공합니다.
+다음과 같은 메소드를 가지고 있습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="n">Boolean</span>
+<span class="n">message</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="n">exception</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>검증을 통과 하지 못하면, <code class="docutils literal notranslate"><span class="pre">message</span></code> 는 <code class="docutils literal notranslate"><span class="pre">Some(error</span> <span class="pre">message)</span></code> 를 반환하고
+<code class="docutils literal notranslate"><span class="pre">exception</span></code> 은 <code class="docutils literal notranslate"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code> 를 호출합니다.</p>
+<p>어디서든지 검증기를 사용할 수 있습니다.</p>
+<p>Action 예제:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateArticle</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">title</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;tite&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">body</span>  <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">,</span>  <span class="n">body</span><span class="p">)</span>
+
+    <span class="o">//</span> <span class="n">Do</span> <span class="k">with</span> <span class="n">the</span> <span class="n">valid</span> <span class="n">title</span> <span class="ow">and</span> <span class="n">body</span><span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">try</span></code> 、 <code class="docutils literal notranslate"><span class="pre">catch</span></code> 를 사용하지 않은 구문에서 검증을 통과하지 못하면
+xitrum은 자동으로 예외를 탐지해서 클라이언트로 에러메세지를 전송합니다.
+이것은 클라이언트에서 검증을 사용하거나 웹 APIs를 작성할 때 도움이 됩니다.</p>
+<p>Model 예제:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">isValid</span>           <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>   <span class="o">&amp;&amp;</span>     <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">validationMessage</span> <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="n">orElse</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum/tree/master/src/main/scala/xitrum/validator">xitrum.validator 패키지에는</a>
+모든 종류의 기본 검증기 리스트가 있습니다.</p>
+</div>
+<div class="section" id="id3">
+<h2>검증기 수정하기<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/validator/Validator.scala">xitrum.validator.Validator</a> 를 확장할때
+<code class="docutils literal notranslate"><span class="pre">check</span></code> 나 <code class="docutils literal notranslate"><span class="pre">message</span></code> 메소드만 확장하면 됩니다.</p>
+<p>또한, <a class="reference external" href="http://commons.apache.org/proper/commons-validator/">Commons Validator</a> 를 사용해도 됩니다.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">검증</a><ul>
+<li><a class="reference internal" href="#id2">기본 검증</a></li>
+<li><a class="reference internal" href="#id3">검증기 수정하기</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scopes.html"
+                        title="previous chapter">스코프</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="upload.html"
+                        title="next chapter">파일 업로드</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/validation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="upload.html" title="파일 업로드"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="스코프"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">검증</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Postbacks &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="XML" href="xml.html" />
+    <link rel="prev" title="Шаблонизация" href="template_engines.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Postbacks</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="postbacks">
+<h1>Postbacks<a class="headerlink" href="#postbacks" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Клиентами веб приложения могут быть:</p>
+<ul class="simple">
+<li><p>другие приложения или устройства: например, RESTful APIs которое широко используется смартфонами, другими веб сайтами</p></li>
+<li><p>люди: например, интерактивные веб сайты предполагающие сложные взаимодействия</p></li>
+</ul>
+<p>Как фреймворк, Xitrum нацелен на создание легких решений для этих задача.
+Для решения первой задачи, используются <a class="reference internal" href="restful.html"><span class="doc">RESTful контроллеры</span></a>.
+Для решения второй задачи, в том числе существует возможность использовать postback.
+Подробнее о технологии postback:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://en.wikipedia.org/wiki/Postback">http://en.wikipedia.org/wiki/Postback</a></p></li>
+<li><p><a class="reference external" href="http://nitrogenproject.com/doc/tutorial.html">http://nitrogenproject.com/doc/tutorial.html</a></p></li>
+</ul>
+<p>Реализация в Xitrum’s сделана в стиле <a class="reference external" href="http://nitrogenproject.com/">Nitrogen</a>.</p>
+<div class="section" id="id1">
+<h2>Шаблон<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Форма<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Articles.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">,</span> <span class="n">First</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.validator._</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">id</span>      <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">respondInlineView</span><span class="p">(</span>
+      <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="p">{</span><span class="n">article</span><span class="o">.</span><span class="n">title</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span><span class="p">{</span><span class="n">article</span><span class="o">.</span><span class="n">body</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@First</span>  <span class="o">//</span> <span class="n">Этот</span> <span class="n">маршрут</span> <span class="n">будет</span> <span class="n">обработан</span> <span class="n">перед</span> <span class="s2">&quot;show&quot;</span>
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/new&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesNew</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondInlineView</span><span class="p">(</span>
+      <span class="o">&lt;</span><span class="n">form</span> <span class="n">data</span><span class="o">-</span><span class="n">postback</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">ArticlesCreate</span><span class="p">]}</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">label</span><span class="o">&gt;</span><span class="n">Title</span><span class="o">&lt;/</span><span class="n">label</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;title&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;required&quot;</span> <span class="o">/&gt;&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
+
+        <span class="o">&lt;</span><span class="n">label</span><span class="o">&gt;</span><span class="n">Body</span><span class="o">&lt;/</span><span class="n">label</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">textarea</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;body&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;required&quot;</span><span class="o">&gt;&lt;/</span><span class="n">textarea</span><span class="o">&gt;&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
+
+        <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Save&quot;</span> <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesCreate</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">title</span>   <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">body</span>    <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+
+    <span class="n">flash</span><span class="p">(</span><span class="s2">&quot;Article has been saved.&quot;</span><span class="p">)</span>
+    <span class="n">jsRedirectTo</span><span class="p">(</span><span class="n">show</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span> <span class="o">-&gt;</span> <span class="n">article</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>При возникновении события <code class="docutils literal notranslate"><span class="pre">submit</span></code> формы, состояние формы будет отправлено на сервер в контроллер <code class="docutils literal notranslate"><span class="pre">ArticlesCreate</span></code>.</p>
+<p>Атрибут <code class="docutils literal notranslate"><span class="pre">action</span></code> формы зашифрован. Зашифрованный URL выступает в роли anti-CSRF токена.</p>
+</div>
+<div class="section" id="id3">
+<h2>Другие элементы (не формы)<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Postback может быть отправлен для любого элемента, не только для формы.</p>
+<p>Вот пример для ссылки:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span> <span class="n">data</span><span class="o">-</span><span class="n">postback</span><span class="o">=</span><span class="s2">&quot;click&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">postbackUrl</span><span class="p">[</span><span class="n">LogoutAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Logout</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Переход по ссылке выполнит отправку состояния в LogoutAction.</p>
+</div>
+<div class="section" id="id4">
+<h2>Диалог подтверждения<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Отображение диалоговых окон подтверждения:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span> <span class="n">data</span><span class="o">-</span><span class="n">postback</span><span class="o">=</span><span class="s2">&quot;click&quot;</span>
+            <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">postbackUrl</span><span class="p">[</span><span class="n">LogoutAction</span><span class="p">]}</span>
+            <span class="n">data</span><span class="o">-</span><span class="n">confirm</span><span class="o">=</span><span class="s2">&quot;Do you want to logout?&quot;</span><span class="o">&gt;</span><span class="n">Logout</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>В случае отказа от продолжения (при нажатии кнопки «Cancel») postback не будет отправлен.</p>
+</div>
+<div class="section" id="id5">
+<h2>Дополнительные параметры<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В случае формы вы можете добавлять дополнительные поля <code class="docutils literal notranslate"><span class="pre">&lt;input</span> <span class="pre">type=&quot;hidden&quot;...</span></code> для отправки
+дополнительных параметров как часть postback.</p>
+<p>Для других элементов, вы можете поступать так:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span>
+   <span class="n">data</span><span class="o">-</span><span class="n">postback</span><span class="o">=</span><span class="s2">&quot;click&quot;</span>
+   <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">postbackUrl</span><span class="p">[</span><span class="n">ArticlesDestroy</span><span class="p">](</span><span class="s2">&quot;id&quot;</span> <span class="o">-&gt;</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span>
+   <span class="n">data</span><span class="o">-</span><span class="n">params</span><span class="o">=</span><span class="s2">&quot;_method=delete&quot;</span>
+   <span class="n">data</span><span class="o">-</span><span class="n">confirm</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Do you want to delete </span><span class="si">%s</span><span class="s2">?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)}</span><span class="o">&gt;</span><span class="n">Delete</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Или вы можете поместить дополнительные параметры в смежную форму:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">form</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;myform&quot;</span> <span class="n">data</span><span class="o">-</span><span class="n">postback</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">postbackUrl</span><span class="p">[</span><span class="n">SiteSearch</span><span class="p">]}</span><span class="o">&gt;</span>
+  <span class="n">Search</span><span class="p">:</span>
+  <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;keyword&quot;</span> <span class="o">/&gt;</span>
+
+  <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;pagination&quot;</span>
+     <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span>
+     <span class="n">data</span><span class="o">-</span><span class="n">postback</span><span class="o">=</span><span class="s2">&quot;click&quot;</span>
+     <span class="n">data</span><span class="o">-</span><span class="n">form</span><span class="o">=</span><span class="s2">&quot;#myform&quot;</span>
+     <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">postbackUrl</span><span class="p">[</span><span class="n">SiteSearch</span><span class="p">](</span><span class="s2">&quot;page&quot;</span> <span class="o">-&gt;</span> <span class="n">page</span><span class="p">)}</span><span class="o">&gt;</span><span class="p">{</span><span class="n">page</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Используйте селектор <code class="docutils literal notranslate"><span class="pre">#myform</span></code> для получения формы с дополнительными параметрами.</p>
+</div>
+<div class="section" id="ajax">
+<h2>Отображение анимации во время Ajax загрузки<a class="headerlink" href="#ajax" title="Ссылка на этот заголовок">¶</a></h2>
+<p>By default, this animated GIF image is displayed while Ajax is loading:</p>
+<img alt="_images/ajax_loading.gif" src="_images/ajax_loading.gif" />
+<p>To customize, please call this JS snippet after including <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code> (which includes
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>)
+in your view template:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">target</span><span class="p">:</span> <span class="n">The</span> <span class="n">element</span> <span class="n">that</span> <span class="n">triggered</span> <span class="n">the</span> <span class="n">postback</span>
+<span class="n">xitrum</span><span class="o">.</span><span class="n">ajaxLoading</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">Called</span> <span class="n">when</span> <span class="n">the</span> <span class="n">animation</span> <span class="n">should</span> <span class="n">be</span> <span class="n">displayed</span> <span class="n">when</span> <span class="n">the</span> <span class="n">Ajax</span> <span class="n">postback</span> <span class="ow">is</span> <span class="n">being</span> <span class="n">sent</span><span class="o">.</span>
+  <span class="n">var</span> <span class="n">show</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+  <span class="p">};</span>
+
+  <span class="o">//</span> <span class="n">Called</span> <span class="n">when</span> <span class="n">the</span> <span class="n">animation</span> <span class="n">should</span> <span class="n">be</span> <span class="n">stopped</span> <span class="n">after</span> <span class="n">the</span> <span class="n">Ajax</span> <span class="n">postback</span> <span class="n">completes</span><span class="o">.</span>
+  <span class="n">var</span> <span class="n">hide</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">{</span><span class="n">show</span><span class="p">:</span> <span class="n">show</span><span class="p">,</span> <span class="n">hide</span><span class="p">:</span> <span class="n">hide</span><span class="p">};</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Postbacks</a><ul>
+<li><a class="reference internal" href="#id1">Шаблон</a></li>
+<li><a class="reference internal" href="#id2">Форма</a></li>
+<li><a class="reference internal" href="#id3">Другие элементы (не формы)</a></li>
+<li><a class="reference internal" href="#id4">Диалог подтверждения</a></li>
+<li><a class="reference internal" href="#id5">Дополнительные параметры</a></li>
+<li><a class="reference internal" href="#ajax">Отображение анимации во время Ajax загрузки</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="предыдущая глава">Шаблонизация</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="xml.html"
+                        title="следующая глава">XML</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/postback.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="xml.html" title="XML"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Postbacks</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

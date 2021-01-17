@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>はじめに &#8212; Xitrum Scala Web Framework Guide 3.30.0 ドキュメント</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="チュートリアル" href="tutorial.html" />
+    <link rel="prev" title="Xitrum ガイド" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="チュートリアル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xitrum ガイド"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">はじめに</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>はじめに<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+--------------------+</span>
+<span class="o">|</span>      <span class="n">Clients</span>       <span class="o">|</span>
+<span class="o">+--------------------+</span>
+          <span class="o">|</span>
+<span class="o">+--------------------+</span>
+<span class="o">|</span>       <span class="n">Netty</span>        <span class="o">|</span>
+<span class="o">+--------------------+</span>
+<span class="o">|</span>       <span class="n">Xitrum</span>       <span class="o">|</span>
+<span class="o">|</span> <span class="o">+----------------+</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">HTTP</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="n">Server</span> <span class="o">|</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">|----------------|</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">Web</span> <span class="n">framework</span>  <span class="o">|</span> <span class="o">|</span>  <span class="o">&lt;-</span> <span class="n">Akka</span><span class="p">,</span> <span class="n">Hazelcast</span> <span class="o">-&gt;</span> <span class="n">Other</span> <span class="n">instances</span>
+<span class="o">|</span> <span class="o">+----------------+</span> <span class="o">|</span>
+<span class="o">+--------------------+</span>
+<span class="o">|</span>      <span class="n">Your</span> <span class="n">app</span>      <span class="o">|</span>
+<span class="o">+--------------------+</span>
+</pre></div>
+</div>
+<p>Xitrumは <a class="reference external" href="http://netty.io/">Netty</a> と <a class="reference external" href="http://akka.io/">Akka</a> をベースに構築された非同期でスケーラブルなHTTP(S) WEBフレームワークです。</p>
+<p>Xitrum <a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">ユーザーの声</a>:</p>
+<blockquote>
+<div><p>これは本当に印象的な作品である。Liftを除いておそらく最も完全な（そしてとても簡単に使える）Scalaフレームワークです。</p>
+<p>XitrumはWebアプリケーションフレームワークの基本的な機能を全て満たしている本物のフルスタックのWebフレームワークである。
+とてもうれしいことにそこには、ETag、静的ファイルキャッシュ、自動gzip圧縮があり、
+組込みのJSONのコンバータ、インターセプタ、リクエスト/セッション/クッキー/フラッシュの各種スコープ、
+サーバー・クライアントにおける統合的バリデーション、内蔵キャッシュ(<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>)、i18N、そしてNettyが組み込まれている。
+これらの機能を直ぐに使うことができる。ワオ。</p>
+</div></blockquote>
+<div class="section" id="id3">
+<h2>特徴<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>Scalaの思想に基づく型安全。 全てのAPIは型安全であるべくデザインされています。</p></li>
+<li><p>Nettyの思想に基づく非同期。 リクエストを捌くアクションは直ぐにレスポンスを返す必要はありません。
+ロングポーリング、チャンクレスポンス（ストリーミング）、WebSocket、そしてSockJSをサポートしています。</p></li>
+<li><p><a class="reference external" href="http://netty.io/">Netty</a> 上に構築された高速HTTP(S) サーバー。
+(HTTPSはJavaエンジンとOpenSSLエンジン選択できます。)
+Xitrumの静的ファイル配信速度は <a class="reference external" href="https://gist.github.com/3293596">Nginxに匹敵</a> します。</p></li>
+<li><p>高速なレスポンスを実現する大規模なサーバサイドおよびクライアントサイド双方のキャッシュシステム。
+サーバーレイヤでは小さなファイルはメモリにキャッシュされ、大きなファイルはNIOのzero copyを使用して送信されます。
+ウェブフレームワークとしてpage、action、そしてobjectをRailsのスタイルでキャッシュすることができます。
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google's best practices</a> にあるように、
+条件付きGETに対してはクライアントサイドキャッシュが適用されます。
+もちろんブラウザにリクエストの再送信を強制させることもできます。</p></li>
+<li><p>静的ファイルに対する <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">Range requests</a> サポート。
+この機能により、スマートフォンに対する動画配信や、全てのクライアントに対するファイルダウンロードの停止と再開を実現できます。</p></li>
+<li><p><a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a> 対応。</p></li>
+<li><p>JAX-RSとRailsエンジンの思想に基づく自動ルートコレクション。全てのルートを１箇所に宣言する必要はありません。
+この機能は分散ルーティングと捉えることができます。この機能のおかげでアプリケーションを他のアプリケーションに取り込むことが可能になります。
+もしあなたがブログエンジンを作ったならそれをJARにして別のアプリケーションに取り込むだけですぐにブログ機能が使えるようになるでしょう。
+ルーティングには更に2つの特徴があります。
+ルートの作成（リバースルーティング）は型安全に実施され、
+<a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a> を使用したルーティングに関するドキュメント作成も可能となります。</p></li>
+<li><p>クラスファイルおよびルートは開発時にはXitrumによって自動的にリロードされます。</p></li>
+<li><p>Viewは独立した <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> テンプレートとして、
+またはScalaによるインラインXMLとして、どちらも型安全に記述することが可能です。</p></li>
+<li><p>クッキーによる（よりスケーラブルな）、<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> クラスターによる(よりセキュアな)セッション管理。
+Hazelcastは（とても早くて、簡単に）プロセス間分散キャッシュも提供してくれます。
+このため別のキャッシュサーバーを用意する必要はなくなります。これはAkkaのpubsub機能にも言えることです。</p></li>
+<li><p><a class="reference external" href="http://jqueryvalidation.org/">jQuery Validation</a> によるブラウザー、サーバーサイド双方でのバリデーション。</p></li>
+<li><p><a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a> を使用した国際化対応。
+翻訳テキストの抽出は自動で行われるため、プロパティファイルに煩わされることはなくなるでしょう。
+翻訳とマージ作業には <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a> のようなパワフルなツールが使えます。
+gettextは、他のほとんどのソリューションとは異なり、単数系と複数系の両方の形式をサポートしています。</p></li>
+</ul>
+<p>Xitrumは <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a> よりパワフルに、
+<a class="reference external" href="http://liftweb.net/">Lift</a> より簡単であることで両者のスペクトルを満たすことを目的としています。
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> はScalatraのようにcontroller-firstであり、Liftのような <a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> ではありません。
+多くの開発者にとって馴染み部会controller-firstスタイルです。</p>
+<p><a class="reference internal" href="deps.html"><span class="doc">関係プロジェクト</span></a> サンプルやプラグインなどのプロジェクト一覧をご覧ください。</p>
+</div>
+<div class="section" id="id6">
+<h2>貢献者<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> は <a class="reference external" href="https://github.com/xitrum-framework/xitrum">オープンソース</a> プロジェクトです。
+<a class="reference external" href="http://groups.google.com/group/xitrum-framework">Google group</a>. のコミュニティに参加してみてください。</p>
+<p>貢献者の一覧が <a class="reference external" href="https://github.com/xitrum-framework/xitrum/graphs/contributors">最初の貢献</a> の順番で記載されています:</p>
+<p>(*): 現在アクティブなコアメンバー</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/ngocdaothanh">Ngoc Dao (*)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/alide">Linh Tran</a></p></li>
+<li><p><a class="reference external" href="https://github.com/earldouglas">James Earl Douglas</a></p></li>
+<li><p><a class="reference external" href="https://github.com/caiiiycuk">Aleksander Guryanov</a></p></li>
+<li><p><a class="reference external" href="https://github.com/georgeOsdDev">Takeharu Oshida (*)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/kimkha">Nguyen Kim Kha</a></p></li>
+<li><p><a class="reference external" href="https://github.com/murz">Michael Murray</a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">はじめに</a><ul>
+<li><a class="reference internal" href="#id3">特徴</a></li>
+<li><a class="reference internal" href="#id6">貢献者</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="index.html"
+                        title="前の章へ">Xitrum ガイド</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="次の章へ">チュートリアル</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="チュートリアル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Xitrum ガイド"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">はじめに</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

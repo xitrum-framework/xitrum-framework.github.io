@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giới thiệu &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="Hướng dẫn" href="tutorial.html" />
+    <link rel="prev" title="Hướng dẫn sử dụng Xitrum" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Hướng dẫn"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Hướng dẫn sử dụng Xitrum"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Giới thiệu</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gioi-thieu">
+<h1>Giới thiệu<a class="headerlink" href="#gioi-thieu" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+--------------------+</span>
+<span class="o">|</span>      <span class="n">Clients</span>       <span class="o">|</span>
+<span class="o">+--------------------+</span>
+          <span class="o">|</span>
+<span class="o">+--------------------+</span>
+<span class="o">|</span>       <span class="n">Netty</span>        <span class="o">|</span>
+<span class="o">+--------------------+</span>
+<span class="o">|</span>       <span class="n">Xitrum</span>       <span class="o">|</span>
+<span class="o">|</span> <span class="o">+----------------+</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">HTTP</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="n">Server</span> <span class="o">|</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">|----------------|</span> <span class="o">|</span>
+<span class="o">|</span> <span class="o">|</span> <span class="n">Web</span> <span class="n">framework</span>  <span class="o">|</span> <span class="o">|</span>  <span class="o">&lt;-</span> <span class="n">Akka</span><span class="p">,</span> <span class="n">Hazelcast</span> <span class="o">-&gt;</span> <span class="n">Other</span> <span class="n">instances</span>
+<span class="o">|</span> <span class="o">+----------------+</span> <span class="o">|</span>
+<span class="o">+--------------------+</span>
+<span class="o">|</span>      <span class="n">Your</span> <span class="n">app</span>      <span class="o">|</span>
+<span class="o">+--------------------+</span>
+</pre></div>
+</div>
+<p>Xitrum là một Scala web framework bất đồng bộ, <cite>clustered</cite> và cũng là một HTTPS (server) trên nền của
+<a class="reference external" href="http://netty.io/">Netty</a> và <a class="reference external" href="http://akka.io/">Akka</a>.</p>
+<p><a class="reference external" href="https://groups.google.com/group/xitrum-framework/msg/d6de4865a8576d39">Một người dùng Xiturm</a> đã nói rằng:</p>
+<blockquote>
+<div><p>Wow, đây thực sự là một sản phẩm tuyệt vời, có thể coi như một Scala framework
+hoàn chỉnh tới mức có thể so sánh với Lift (nhưng dễ sử dụng hơn nhiều).</p>
+<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> một web framework <cite>full-stack</cite> đúng nghĩa, đáp ứng tất cả các
+chức năng cơ bản của một web framework, ngoài ra còn có những phần mở rộng như ETags, file cache tĩnh, công cụ nén
+Gzip tự động. Tích hợp công cụ chuyển đổi JSON, before/around/after interceptors, request/session/cookie/flash scopes,
+các bộ chuẩn hóa input tích hợp ở cả server và client, tích hợp cả tính năng cache (<a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a>),
+tính năng đa ngôn ngữ i18n theo phong cách GNU gettext, Netty (nhanh không kém Nginx), v.v . Và bạn có thể sử dụng nhiều tính năng khác nữa.</p>
+</div></blockquote>
+<div class="section" id="tinh-nang">
+<h2>Tính năng<a class="headerlink" href="#tinh-nang" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Typesafe, theo tinh thần của Scala. Tất cả các API đều cố gắng trở thành an toàn kiểu (typesafe) nhất có thể.</p></li>
+<li><p>Bất đồng bộ, theo tinh thần của Netty. Việc xử lý các yêu cầu (request) không cần phải đáp ứng (response) ngay lập lức.
+Long polling, chunked response (streaming), WebSocket, và SockJS đều được hỗ trợ.</p></li>
+<li><p>Tích hợp sẵn HTTP và HTTPS server có tốc độ nhanh dựa trên <a class="reference external" href="http://netty.io/">Netty</a>
+(HTTPS có thể sử dụng nền tảng Java hoặc nền tảng OpenSSL).
+Tốc độ phục vụ tập tin tĩnh của Xitrum <a class="reference external" href="https://gist.github.com/3293596">tương đương Nginx</a>.</p></li>
+<li><p>Tối ưu hóa cache cả ở phía máy chủ (server) và máy khách (client) để tăng tốc độ đáp ứng.
+Ở tầng máy chủ web, các tập tin nhỏ được cache thẳng vào bộ nhớ, đối với các tập tin lớn thì sử dụng kỹ thuật
+zero copy của NIO.
+Ở tầng web framework bạn có thể khai báo cache ở các mức page, action và object theo phong cách <a class="reference external" href="https://github.com/rails/rails">Rails framework</a>.
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">Tất cả thủ thuật mà Google khuyên nên dùng để tăng tốc trang web</a>
+như method GET có điều kiện được áp dụng để cache phía client.
+Bạn cũng có thể buộc trình duyệt gửi yêu cầu đến máy chủ để kiểm tra lại cache trước khi sử dụng.</p></li>
+<li><p>Tính năng <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range request</a> hỗ trợ các tập tin tĩnh.
+Việc gửi trả video cho điện thoại thông minh cần tính năng này.
+Khi đó, bạn có thể tạm dừng/tiếp tục việc tải tập tin video.</p></li>
+<li><p>Hỗ trợ <a class="reference external" href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</p></li>
+<li><p>Tính năng định tuyến (route) được thực hiện tự động trên tinh thần của JAX-RS và Rails Engines.
+Bạn không cần phải khai báo mọi định tuyến tại một nơi.
+Tuy nhiên, chúng được phân tán ra nhiều nơi. Và bạn có thể cài cắm ứng dụng này vào một ứng dụng khác.
+Ví dụ như bạn tạo một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đưa tập tin JAR đó
+trong một ứng dụng khác, như vậy ứng dụng đó sẽ có thêm tính năng blog.
+Việc định tuyến bao gồm 2 chiều: bạn có thể dựng lại đường dẫn URL (reverse routing) từ action cụ thể một cách an toàn.
+Bạn còn có thể tạo tài liệu về các định tuyến của bạn bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p></li>
+<li><p>Các lớp (class) và định tuyến (route) được tải lại tự động trong lúc phát triển (development mode).</p></li>
+<li><p>Các View có thể viết trong các tập tin mẫu dạng <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a>
+hoặc bằng Scala inline XML. Cả hai cách đều an toàn.</p></li>
+<li><p>Phiên làm việc (session) có thể lưu trữ ngay trong cookies (giúp dễ scale) hoặc lưu trữ bằng <a class="reference external" href="http://www.hazelcast.org/">Hazelcast</a> (tính bảo mật cao hơn).
+Hazelcast cũng chạy ngay trong cùng process với việc sử dụng cache phân tán (do đó nhanh hơn và dễ sử dụng hơn) ,
+vì vậy bạn không cần phải có một máy chủ cache riêng biệt. Điều này cũng tương tự trong chức năng pubsub của Akka.</p></li>
+<li><p><a class="reference external" href="http://jqueryvalidation.org/">jQuery Validation</a> được tích hợp trong việc chuẩn hóa dữ liệu ở cả
+máy chủ (server) và máy khách (client)</p></li>
+<li><p>i18n theo phong cách <a class="reference external" href="http://en.wikipedia.org/wiki/GNU_gettext">GNU gettext</a>.
+Việc trích các chuổi văn bản ra ngoài để thực hiện dịch được thực hiện tự động, bạn sẽ không cần làm thủ công với properties file.
+Bạn cũng có thể sử dụng các công cụ mạnh như <a class="reference external" href="http://www.poedit.net/screenshots.php">Poedit</a> để dịch và hợp nhất các bản dịch.
+gettext, không giống như hầu hết các giải pháp khác, hỗ trợ các định dạng của cả số ít và số nhiều.</p></li>
+</ul>
+<p>Xitrum cố gắng khắc phục các nhược điểm của <a class="reference external" href="https://github.com/scalatra/scalatra">Scalatra</a>
+và <a class="reference external" href="http://liftweb.net/">Lift</a>: mạnh hơn Scalatra và dễ sử dụng hơn Lift. Bạn có thể dễ dàng tạo cả RESTful APIs và postbacks.
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> là hệ thống controller-first như Scalatra, không phải là
+<a class="reference external" href="http://www.assembla.com/wiki/show/liftweb/View_First">view-first</a> như Lift.
+Đa số mọi người đã quen thuộc với phong cách controller-first.</p>
+<p>Hãy xem <a class="reference internal" href="deps.html"><span class="doc">các dự án liên quan</span></a> để có được danh sách các bản demos, plugins v.v.</p>
+</div>
+<div class="section" id="dong-gop">
+<h2>Đóng góp<a class="headerlink" href="#dong-gop" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://xitrum-framework.github.io/">Xitrum</a> là một framework mã nguồn mở, mã nguồn của Xitrum có thể tìm thấy
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum">tại đây</a>,
+bạn có thể tham gia vào <a class="reference external" href="http://groups.google.com/group/xitrum-framework">Google group</a> của chúng tôi.</p>
+<p>Những người đóng góp dưới đây được xếp theo thứ tự
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/graphs/contributors">đóng góp đầu tiên của họ</a>.</p>
+<p>(*): Hiện tại là thành viên hoạt động chính.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/ngocdaothanh">Ngoc Dao (*)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/alide">Linh Tran</a></p></li>
+<li><p><a class="reference external" href="https://github.com/earldouglas">James Earl Douglas</a></p></li>
+<li><p><a class="reference external" href="https://github.com/caiiiycuk">Aleksander Guryanov</a></p></li>
+<li><p><a class="reference external" href="https://github.com/georgeOsdDev">Takeharu Oshida (*)</a></p></li>
+<li><p><a class="reference external" href="https://github.com/kimkha">Nguyen Kim Kha</a></p></li>
+<li><p><a class="reference external" href="https://github.com/murz">Michael Murray</a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Giới thiệu</a><ul>
+<li><a class="reference internal" href="#tinh-nang">Tính năng</a></li>
+<li><a class="reference internal" href="#dong-gop">Đóng góp</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="index.html"
+                        title="chương trước ">Hướng dẫn sử dụng Xitrum</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="chương tiếp">Hướng dẫn</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="Hướng dẫn"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Hướng dẫn sử dụng Xitrum"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Giới thiệu</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

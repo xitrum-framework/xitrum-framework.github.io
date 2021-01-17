@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clustering with Akka and Hazelcast &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Netty handlers" href="handler.html" />
+    <link rel="prev" title="Deploy to production server" href="deploy.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="Deploy to production server"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Clustering with Akka and Hazelcast</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="clustering-with-akka-and-hazelcast">
+<h1>Clustering with Akka and Hazelcast<a class="headerlink" href="#clustering-with-akka-and-hazelcast" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum is designed in mind to run in production environment as multiple instances
+behind a proxy server or load balancer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                              <span class="o">/</span> <span class="n">Xitrum</span> <span class="n">instance</span> <span class="mi">1</span>
+<span class="n">Load</span> <span class="n">balancer</span><span class="o">/</span><span class="n">proxy</span> <span class="n">server</span> <span class="o">----</span> <span class="n">Xitrum</span> <span class="n">instance</span> <span class="mi">2</span>
+                              \ <span class="n">Xitrum</span> <span class="n">instance</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Cache, sessions, and SockJS sessions can be clustered out of the box thanks to
+<a class="reference external" href="http://akka.io/">Akka</a> and <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>.</p>
+<p>With Hazelcast, Xitrum instances become in-process memory cache servers. You don’t
+need seperate things like Memcache.</p>
+<p>Please see <code class="docutils literal notranslate"><span class="pre">config/akka.conf</span></code>, and read <a class="reference external" href="http://akka.io/docs/">Akka doc</a> and
+<a class="reference external" href="http://hazelcast.org/documentation/">Hazelcast doc</a> to know how to config Akka and
+Hazelcast clustering.</p>
+<p>Note: For sessions, you can also <a class="reference internal" href="scopes.html"><span class="doc">store them at client side in cookie</span></a>.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="previous chapter">Deploy to production server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="handler.html"
+                        title="next chapter">Netty handlers</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cluster.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="Deploy to production server"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Clustering with Akka and Hazelcast</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

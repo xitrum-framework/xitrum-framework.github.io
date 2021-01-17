@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그 &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="프로덕션 서버에 배포하기" href="deploy.html" />
+    <link rel="prev" title="I18n" href="i18n.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="deploy.html" title="프로덕션 서버에 배포하기"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">로그</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>로그<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="xitrum-log">
+<h2>xitrum.Log 오브젝트를 직접 사용하기<a class="headerlink" href="#xitrum-log" title="Permalink to this headline">¶</a></h2>
+<p>어디서든지 다음과 같이 직접 호출할 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xitrum</span><span class="o">.</span><span class="n">Log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;My debug msg&quot;</span><span class="p">)</span>
+<span class="n">xitrum</span><span class="o">.</span><span class="n">Log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;My info msg&quot;</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum-log-trait">
+<h2>xitrum.Log trait 사용하기<a class="headerlink" href="#xitrum-log-trait" title="Permalink to this headline">¶</a></h2>
+<p>만약 로그가 사용된 위치(클래스)를 알고 싶다면 xitrum.log를 확장하면 됩니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">my_package</span>
+<span class="kn">import</span> <span class="nn">xitrum.Log</span>
+
+<span class="nb">object</span> <span class="n">MyModel</span> <span class="n">extends</span> <span class="n">Log</span> <span class="p">{</span>
+  <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;My debug msg&quot;</span><span class="p">)</span>
+  <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;My info msg&quot;</span><span class="p">)</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">log/xitrum.log</span></code> 파일에서  <code class="docutils literal notranslate"><span class="pre">MyModel</span></code> 로부터 나오는 로그 메세지를 확인할 수 있습니다.</p>
+<p>Xitrum 액션은 xitrum.Log를 확장하고 있어서 어느 액션에서도 다음과 같이 사용할 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>로깅하기 전에 로그레벨을 체크하지 않아도 됩니다<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">xitrum.Log</span></code> 는 <a class="reference external" href="http://slf4s.org/">SLF4S</a> (<a class="reference external" href="http://slf4s.org/api/1.7.7/">API</a>) 를 바탕으로 합니다.
+SLF4S <a class="reference external" href="http://www.slf4j.org/">SLF4J</a> 위에 구축되어 있습니다.</p>
+<p>전통적으로 로그 결과를 확인하기 전에 계산으로 인한 과도한 CPU사용을 방지하기 위해 로그레벨을 체크하였지만
+<a class="reference external" href="https://github.com/mattroberts297/slf4s/blob/master/src/main/scala/org/slf4s/Logger.scala">SLF4S의 자동체크</a> 기능이 있어서
+일부러 체크할 필요가 없습니다.</p>
+<p>이전 버전(이 코드는 3.13 이후로는 동작하지 않습니다):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">isTraceEnabled</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">val</span> <span class="n">result</span> <span class="o">=</span> <span class="n">heavyCalculation</span><span class="p">()</span>
+  <span class="n">log</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="s2">&quot;Output: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>현재:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">s</span><span class="s2">&quot;Output: #{heavyCalculation()}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>로그레벨 및 출력파일 조정<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>build.sbt 파일에 다음과 같은 라인이 있습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s2">&quot;ch.qos.logback&quot;</span> <span class="o">%</span> <span class="s2">&quot;logback-classic&quot;</span> <span class="o">%</span> <span class="s2">&quot;1.1.2&quot;</span>
+</pre></div>
+</div>
+<p>이것의 의미는 <a class="reference external" href="http://logback.qos.ch/">Logback</a> 을 기본으로 사용한다는 뜻입니다.
+Logback의 설정파일은  <code class="docutils literal notranslate"><span class="pre">config/logback.xml</span></code> 에 있습니다.</p>
+<p>Logback을 <a class="reference external" href="http://www.slf4j.org/">SLF4J</a> 으로 교체 할 수도 있습니다.</p>
+</div>
+<div class="section" id="fluentd">
+<h2>Fluentd 에 로그를 출력<a class="headerlink" href="#fluentd" title="Permalink to this headline">¶</a></h2>
+<p>매우 대중적인 <a class="reference external" href="http://www.fluentd.org/">Fluentd</a> 로그 수집장치가 있습니다.
+Logback을 수정하여 로그를 Fluentd 서버로 전송(여러곳에서 전송된)할 수 있습니다.</p>
+<p>먼저, <a class="reference external" href="https://github.com/sndyuk/logback-more-appenders">logback-more-appenders</a> 라이브러리를 추가합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s2">&quot;org.fluentd&quot;</span> <span class="o">%</span> <span class="s2">&quot;fluent-logger&quot;</span> <span class="o">%</span> <span class="s2">&quot;0.2.11&quot;</span>
+
+<span class="n">resolvers</span> <span class="o">+=</span> <span class="s2">&quot;Logback more appenders&quot;</span> <span class="n">at</span> <span class="s2">&quot;http://sndyuk.github.com/maven&quot;</span>
+
+<span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s2">&quot;com.sndyuk&quot;</span> <span class="o">%</span> <span class="s2">&quot;logback-more-appenders&quot;</span> <span class="o">%</span> <span class="s2">&quot;1.1.0&quot;</span>
+</pre></div>
+</div>
+<p>그리고 <code class="docutils literal notranslate"><span class="pre">config/logback.xml</span></code> 파일을 수정합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>...
+
+&lt;appender name=&quot;FLUENT&quot; class=&quot;ch.qos.logback.more.appenders.DataFluentAppender&quot;&gt;
+  &lt;tag&gt;mytag&lt;/tag&gt;
+  &lt;label&gt;mylabel&lt;/label&gt;
+  &lt;remoteHost&gt;localhost&lt;/remoteHost&gt;
+  &lt;port&gt;24224&lt;/port&gt;
+  &lt;maxQueueSize&gt;20000&lt;/maxQueueSize&gt;  &lt;!-- Save to memory when remote server is down --&gt;
+&lt;/appender&gt;
+
+&lt;root level=&quot;DEBUG&quot;&gt;
+  &lt;appender-ref ref=&quot;FLUENT&quot;/&gt;
+  &lt;appender-ref ref=&quot;OTHER_APPENDER&quot;/&gt;
+&lt;/root&gt;
+
+...
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">로그</a><ul>
+<li><a class="reference internal" href="#xitrum-log">xitrum.Log 오브젝트를 직접 사용하기</a></li>
+<li><a class="reference internal" href="#xitrum-log-trait">xitrum.Log trait 사용하기</a></li>
+<li><a class="reference internal" href="#id2">로깅하기 전에 로그레벨을 체크하지 않아도 됩니다</a></li>
+<li><a class="reference internal" href="#id4">로그레벨 및 출력파일 조정</a></li>
+<li><a class="reference internal" href="#fluentd">Fluentd 에 로그를 출력</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="previous chapter">I18n</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="next chapter">프로덕션 서버에 배포하기</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/log.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="deploy.html" title="프로덕션 서버에 배포하기"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">로그</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

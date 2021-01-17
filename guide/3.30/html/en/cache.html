@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server-side cache &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="I18n" href="i18n.html" />
+    <link rel="prev" title="Action filters" href="filter.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Action filters"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Server-side cache</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="server-side-cache">
+<h1>Server-side cache<a class="headerlink" href="#server-side-cache" title="Permalink to this headline">¶</a></h1>
+<p>Also see the chaper about <a class="reference internal" href="cluster.html"><span class="doc">clustering</span></a>.</p>
+<p>Xitrum provides extensive client-side and server-side caching for faster responding.
+At the web server layer, small files are cached in memory, big files are sent
+using NIO’s zero copy. Xitrum’s static file serving speed is
+<a class="reference external" href="https://gist.github.com/3293596">similar to that of Nginx</a>.
+At the web framework layer you have can declare page, action, and object cache
+in the Rails style.
+<a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">All Google’s best practices</a>
+like conditional GET are applied for client-side caching.</p>
+<p>For dynamic content, if the content does not change after created (as if it is
+a static file), you may set headers for clients to cache aggressively.
+In that case, call <code class="docutils literal notranslate"><span class="pre">setClientCacheAggressively()</span></code> in your action.</p>
+<p>Sometimes you may want to prevent client-side caching.
+In that case, call <code class="docutils literal notranslate"><span class="pre">setNoClientCache()</span></code> in your action.</p>
+<p>Server-side cache is discussed in more details below.</p>
+<div class="section" id="cache-page-or-action">
+<h2>Cache page or action<a class="headerlink" href="#cache-page-or-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">CacheActionMinute</span><span class="p">,</span> <span class="n">CachePageMinute</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="nd">@CachePageMinute</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="nd">@CacheActionMinute</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The terms “page cache” and “action cache” came from
+<a class="reference external" href="http://guides.rubyonrails.org/caching_with_rails.html">Ruby on Rails</a>.</p>
+<p>The order of processing a request is designed like this:
+(1) request -&gt; (2) before filter methods -&gt; (3) action’s execute method -&gt; (4) response</p>
+<p>At the 1st request, Xitrum will cache the response for the time period specified.
+<code class="docutils literal notranslate"><span class="pre">&#64;CachePageMinute(1)</span></code> or <code class="docutils literal notranslate"><span class="pre">&#64;CacheActionMinute(1)</span></code> both mean caching for 1 minute.
+Xitrum only caches when the response status is “200 OK”. For example, response
+with status “500 Internal Server Error” or “302 Found” (redirect) will not be cached.</p>
+<p>At the following requests to the same action, if the cached response is still
+within the specified time, Xitrum will just respond the cached response:</p>
+<ul class="simple">
+<li><p>For page cache, the order is (1) -&gt; (4).</p></li>
+<li><p>For action cache, the order is (1) -&gt; (2) -&gt; (4), or just (1) -&gt; (2)
+if one of the before filters return “false”.</p></li>
+</ul>
+<p>So the difference is: For page cache, the before filters are not run.</p>
+<p>Usually, page cache is used when the same response can be used for all users.
+Action cache is used when you want to run a before filter to “guard” the cached
+response, like checking if the user has logged in:</p>
+<ul class="simple">
+<li><p>If the user has logged in, he can use the cached response.</p></li>
+<li><p>If the user has not logged in, redirect him to the login page.</p></li>
+</ul>
+</div>
+<div class="section" id="cache-object">
+<h2>Cache object<a class="headerlink" href="#cache-object" title="Permalink to this headline">¶</a></h2>
+<p>You use methods in <code class="docutils literal notranslate"><span class="pre">xitrum.Config.xitrum.cache</span></code>, it’s an instance of
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.Cache">xitrum.Cache</a>.</p>
+<p>Without an explicit TTL (time to live):</p>
+<ul class="simple">
+<li><p>put(key, value)</p></li>
+</ul>
+<p>With an explicit TTL:</p>
+<ul class="simple">
+<li><p>putSecond(key, value, seconds)</p></li>
+<li><p>putMinute(key, value, minutes)</p></li>
+<li><p>putHour(key, value, hours)</p></li>
+<li><p>putDay(key, value, days)</p></li>
+</ul>
+<p>Only if absent:</p>
+<ul class="simple">
+<li><p>putIfAbsent(key, value)</p></li>
+<li><p>putIfAbsentSecond(key, value, seconds)</p></li>
+<li><p>putIfAbsentMinute(key, value, minutes)</p></li>
+<li><p>putIfAbsentHour(key, value, hours)</p></li>
+<li><p>putIfAbsentDay(key, value, days)</p></li>
+</ul>
+</div>
+<div class="section" id="remove-cache">
+<h2>Remove cache<a class="headerlink" href="#remove-cache" title="Permalink to this headline">¶</a></h2>
+<p>Remove page or action cache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">removeAction</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Remove object cache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Remove all keys that start with a prefix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">removePrefix</span><span class="p">(</span><span class="n">keyPrefix</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">removePrefix</span></code>, you have the power to form hierarchical cache based on prefix.
+For example you want to cache things related to an article, then when the article
+changes, you want to remove all those things.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Config.xitrum.cache</span>
+
+<span class="o">//</span> <span class="n">Cache</span> <span class="k">with</span> <span class="n">a</span> <span class="n">prefix</span>
+<span class="n">val</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;articles/&quot;</span> <span class="o">+</span> <span class="n">article</span><span class="o">.</span><span class="n">id</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;/likes&quot;</span><span class="p">,</span> <span class="n">likes</span><span class="p">)</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;/comments&quot;</span><span class="p">,</span> <span class="n">comments</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Later</span><span class="p">,</span> <span class="n">when</span> <span class="n">something</span> <span class="n">happens</span> <span class="ow">and</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">remove</span> <span class="nb">all</span> <span class="n">cache</span> <span class="n">related</span> <span class="n">to</span> <span class="n">the</span> <span class="n">article</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>The cache feature in Xitrum is provided by cache engines. You can choose the
+engine that suits your need.</p>
+<p>In <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a>,
+you can config cache engine in one of the following 2 forms, depending on the engine you choose:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="p">{</span>
+  <span class="s2">&quot;my.cache.EngineClassName&quot;</span> <span class="p">{</span>
+    <span class="n">option1</span> <span class="o">=</span> <span class="n">value1</span>
+    <span class="n">option2</span> <span class="o">=</span> <span class="n">value2</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Xitrum provides this one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="p">{</span>
+  <span class="c1"># Simple in-memory cache</span>
+  <span class="s2">&quot;xitrum.local.LruCache&quot;</span> <span class="p">{</span>
+    <span class="n">maxElems</span> <span class="o">=</span> <span class="mi">10000</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you have a cluster of servers, you can use <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>.</p>
+<p>If you want to create your own cache engine, implement the
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Cache.scala">interface</a>
+<code class="docutils literal notranslate"><span class="pre">xitrum.Cache</span></code>.</p>
+</div>
+<div class="section" id="how-cache-works">
+<h2>How cache works<a class="headerlink" href="#how-cache-works" title="Permalink to this headline">¶</a></h2>
+<p>Inbound:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               the action response
+               should be cached and
+request        the cache already exists?
+-------------------------+---------------NO---------------&gt;
+                         |
+&lt;---------YES------------+
+  respond from cache
+</pre></div>
+</div>
+<p>Outbound:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               the action response
+               should be cached and
+               the cache does not exist?           response
+&lt;---------NO-------------+---------------------------------
+                         |
+&lt;---------YES------------+
+  store response to cache
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum-util-locallrucache">
+<h2>xitrum.util.LocalLruCache<a class="headerlink" href="#xitrum-util-locallrucache" title="Permalink to this headline">¶</a></h2>
+<p>The above cache is the cache shared by the whole system. If you only want a
+small convenient cache, you can use <code class="docutils literal notranslate"><span class="pre">xitrum.util.LocalLruCache</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.LocalLruCache</span>
+
+<span class="o">//</span> <span class="n">LRU</span> <span class="p">(</span><span class="n">Least</span> <span class="n">Recently</span> <span class="n">Used</span><span class="p">)</span> <span class="n">cache</span> <span class="n">that</span> <span class="n">can</span> <span class="n">contain</span> <span class="mi">1000</span> <span class="n">elements</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">Keys</span> <span class="ow">and</span> <span class="n">values</span> <span class="n">are</span> <span class="n">both</span> <span class="n">of</span> <span class="nb">type</span> <span class="n">String</span><span class="o">.</span>
+<span class="n">val</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">LocalLruCache</span><span class="p">[</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">](</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The returned <code class="docutils literal notranslate"><span class="pre">cache</span></code> is a <a class="reference external" href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html">java.util.LinkedHashMap</a>.
+You can call <code class="docutils literal notranslate"><span class="pre">LinkedHashMap</span></code> methods from it.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Server-side cache</a><ul>
+<li><a class="reference internal" href="#cache-page-or-action">Cache page or action</a></li>
+<li><a class="reference internal" href="#cache-object">Cache object</a></li>
+<li><a class="reference internal" href="#remove-cache">Remove cache</a></li>
+<li><a class="reference internal" href="#config">Config</a></li>
+<li><a class="reference internal" href="#how-cache-works">How cache works</a></li>
+<li><a class="reference internal" href="#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filter.html"
+                        title="previous chapter">Action filters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="next chapter">I18n</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cache.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Action filters"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Server-side cache</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

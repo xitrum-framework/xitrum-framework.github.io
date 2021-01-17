@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Валидация &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Загрузка файлов" href="upload.html" />
+    <link rel="prev" title="Запросы, параметры, куки, сессии" href="scopes.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="upload.html" title="Загрузка файлов"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="Запросы, параметры, куки, сессии"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Валидация</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Валидация<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Xitrum включает <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">плагин jQuery Validation</a>
+для выполнения валидации на стороне клиента и предоставляет наоборот утильных методов на серверной стороне.</p>
+<div class="section" id="id2">
+<h2>Стандартные валидаторы<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum предоставляет набор валидаторов из пакета <code class="docutils literal notranslate"><span class="pre">xitrum.validator</span></code>.
+Интерфейс валидатора:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="n">Boolean</span>
+<span class="n">message</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="n">exception</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>В случае если проверка не проходит, <code class="docutils literal notranslate"><span class="pre">message</span></code> возвращает <code class="docutils literal notranslate"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
+а <code class="docutils literal notranslate"><span class="pre">exception</span></code> выбрасывает <code class="docutils literal notranslate"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
+<p>Вы можете использовать валидаторы везде где захотите.</p>
+<p>Пример контроллера:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateArticle</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">title</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;tite&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">body</span>  <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">,</span>  <span class="n">body</span><span class="p">)</span>
+
+    <span class="o">//</span> <span class="n">дальнейшая</span> <span class="n">обработка</span> <span class="n">валидных</span> <span class="n">title</span> <span class="n">и</span> <span class="n">body</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Если вы не используете блок <code class="docutils literal notranslate"><span class="pre">try</span></code> и <code class="docutils literal notranslate"><span class="pre">catch</span></code>, когда валидация не проходит,
+Xitrum автоматически обработает исключение и отправит сообщение клиенту. Это удобно
+при написании API и когда у вас уже есть проверка на клиенте.</p>
+<p>Пример модели:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">isValid</span>           <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>   <span class="o">&amp;&amp;</span>     <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">validationMessage</span> <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="n">orElse</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Смотри <a class="reference external" href="https://github.com/xitrum-framework/xitrum/tree/master/src/main/scala/xitrum/validator">пакет xitrum.validator</a>
+для получения полного списка стандартных валидаторов.</p>
+</div>
+<div class="section" id="id3">
+<h2>Написание своих валидаторов<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Наследуйтесь от <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/validator/Validator.scala">xitrum.validator.Validator</a> для создания своего валидатора. Необходимо реализовать только методы <code class="docutils literal notranslate"><span class="pre">check</span></code> и <code class="docutils literal notranslate"><span class="pre">message</span></code>.</p>
+<p>Так же вы можете использовать библиотеку <a class="reference external" href="http://commons.apache.org/proper/commons-validator/">Commons Validator</a>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Валидация</a><ul>
+<li><a class="reference internal" href="#id2">Стандартные валидаторы</a></li>
+<li><a class="reference internal" href="#id3">Написание своих валидаторов</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="scopes.html"
+                        title="предыдущая глава">Запросы, параметры, куки, сессии</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="upload.html"
+                        title="следующая глава">Загрузка файлов</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/validation.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="upload.html" title="Загрузка файлов"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="Запросы, параметры, куки, сессии"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Валидация</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

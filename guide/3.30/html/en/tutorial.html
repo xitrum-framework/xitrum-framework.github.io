@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Action and view" href="action_view.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Tutorial</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This chapter shortly describes how to create and run a Xitrum project.
+<strong>It assumes that you are using Linux and you have installed Java 8.</strong></p>
+<div class="section" id="create-a-new-empty-xitrum-project">
+<h2>Create a new empty Xitrum project<a class="headerlink" href="#create-a-new-empty-xitrum-project" title="Permalink to this headline">¶</a></h2>
+<p>To create a new empty project, download
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/archive/master.zip">xitrum-new.zip</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="n">xitrum</span><span class="o">-</span><span class="n">new</span><span class="o">.</span><span class="n">zip</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">xitrum</span><span class="o">-</span><span class="n">framework</span><span class="o">/</span><span class="n">xitrum</span><span class="o">-</span><span class="n">new</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">master</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">L</span> <span class="o">-</span><span class="n">o</span> <span class="n">xitrum</span><span class="o">-</span><span class="n">new</span><span class="o">.</span><span class="n">zip</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">xitrum</span><span class="o">-</span><span class="n">framework</span><span class="o">/</span><span class="n">xitrum</span><span class="o">-</span><span class="n">new</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">master</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run">
+<h2>Run<a class="headerlink" href="#run" title="Permalink to this headline">¶</a></h2>
+<p>The de facto stardard way of building Scala projects is using
+<a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">SBT</a>. The newly created project
+has already included SBT 0.13 in <code class="docutils literal notranslate"><span class="pre">sbt</span></code> directory. If you want to install
+SBT yourself, see its <a class="reference external" href="https://github.com/harrah/xsbt/wiki/Setup">setup guide</a>.</p>
+<p>Change to the newly created project directory and run <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">fgRun</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unzip</span> <span class="n">xitrum</span><span class="o">-</span><span class="n">new</span><span class="o">.</span><span class="n">zip</span>
+<span class="n">cd</span> <span class="n">xitrum</span><span class="o">-</span><span class="n">new</span>
+<span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="n">fgRun</span>
+</pre></div>
+</div>
+<p>This command will download all <a class="reference internal" href="deps.html"><span class="doc">dependencies</span></a>, compile the project,
+and run the class <code class="docutils literal notranslate"><span class="pre">quickstart.Boot</span></code>, which starts the web server. In the console,
+you will see all the routes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Load</span> <span class="n">routes</span><span class="o">.</span><span class="n">cache</span> <span class="ow">or</span> <span class="n">recollect</span> <span class="n">routes</span><span class="o">...</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Normal</span> <span class="n">routes</span><span class="p">:</span>
+<span class="n">GET</span>  <span class="o">/</span>  <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">SiteIndex</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">SockJS</span> <span class="n">routes</span><span class="p">:</span>
+<span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span>  <span class="n">xitrum</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">XitrumMetricsChannel</span>  <span class="n">websocket</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span> <span class="n">cookie_needed</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Error</span> <span class="n">routes</span><span class="p">:</span>
+<span class="mi">404</span>  <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">NotFoundError</span>
+<span class="mi">500</span>  <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ServerError</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Xitrum</span> <span class="n">routes</span><span class="p">:</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">webjars</span><span class="o">/</span><span class="n">swagger</span><span class="o">-</span><span class="n">ui</span><span class="o">/</span><span class="mf">2.0</span><span class="o">.</span><span class="mi">17</span><span class="o">/</span><span class="n">index</span>                            <span class="n">xitrum</span><span class="o">.</span><span class="n">routing</span><span class="o">.</span><span class="n">SwaggerUiVersioned</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">xitrum</span><span class="o">.</span><span class="n">js</span>                                           <span class="n">xitrum</span><span class="o">.</span><span class="n">js</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span>                                     <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">Greeting</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">eventsource</span>    <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">EventSourceReceive</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">htmlfile</span>       <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">HtmlFileReceive</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">jsonp</span>          <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">JsonPPollingReceive</span>
+<span class="n">POST</span>       <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">jsonp_send</span>     <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">JsonPPollingSend</span>
+<span class="n">WEBSOCKET</span>  <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">websocket</span>      <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">WebSocket</span>
+<span class="n">POST</span>       <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">xhr</span>            <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">XhrPollingReceive</span>
+<span class="n">POST</span>       <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">xhr_send</span>       <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">XhrSend</span>
+<span class="n">POST</span>       <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">xhr_streaming</span>  <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">XhrStreamingReceive</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="n">info</span>                                <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">InfoGET</span>
+<span class="n">WEBSOCKET</span>  <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="n">websocket</span>                           <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">RawWebSocket</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">viewer</span>                                      <span class="n">xitrum</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">XitrumMetricsViewer</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">iframe</span>                             <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">Iframe</span>
+<span class="n">GET</span>        <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">websocket</span>      <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">WebSocketGET</span>
+<span class="n">POST</span>       <span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">metrics</span><span class="o">/</span><span class="n">channel</span><span class="o">/</span><span class="p">:</span><span class="n">serverId</span><span class="o">/</span><span class="p">:</span><span class="n">sessionId</span><span class="o">/</span><span class="n">websocket</span>      <span class="n">xitrum</span><span class="o">.</span><span class="n">sockjs</span><span class="o">.</span><span class="n">WebSocketPOST</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">HTTP</span> <span class="n">server</span> <span class="n">started</span> <span class="n">on</span> <span class="n">port</span> <span class="mi">8000</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">HTTPS</span> <span class="n">server</span> <span class="n">started</span> <span class="n">on</span> <span class="n">port</span> <span class="mi">4430</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Xitrum</span> <span class="n">started</span> <span class="ow">in</span> <span class="n">development</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>On startup, all routes will be collected and output to log. It is very
+convenient for you to have a list of routes if you want to write documentation
+for 3rd parties about the RESTful APIs in your web application.</p>
+<p>Open <a class="reference external" href="http://localhost:8000/">http://localhost:8000/</a> or <a class="reference external" href="https://localhost:4430/">https://localhost:4430/</a> in your browser. In the
+console you will see request information:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">GET</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">SiteIndex</span><span class="p">,</span> <span class="mi">1</span> <span class="p">[</span><span class="n">ms</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="import-the-project-to-eclipse">
+<h2>Import the project to Eclipse<a class="headerlink" href="#import-the-project-to-eclipse" title="Permalink to this headline">¶</a></h2>
+<p>You can <a class="reference external" href="http://scala-ide.org/">use Eclipse to write Scala code</a>.</p>
+<p>From the project directory, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="n">eclipse</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">.project</span></code> file for Eclipse will be generated from definitions in <code class="docutils literal notranslate"><span class="pre">build.sbt</span></code>.
+Now open Eclipse, and import the project.</p>
+</div>
+<div class="section" id="import-the-project-to-intellij">
+<h2>Import the project to IntelliJ<a class="headerlink" href="#import-the-project-to-intellij" title="Permalink to this headline">¶</a></h2>
+<p>You can also use <a class="reference external" href="http://www.jetbrains.com/idea/">IntelliJ</a>.</p>
+<p>With its Scala plugin installed, simply open your SBT project,
+you don’t need to generate project files as with Eclipse.</p>
+</div>
+<div class="section" id="autoreload">
+<h2>Autoreload<a class="headerlink" href="#autoreload" title="Permalink to this headline">¶</a></h2>
+<p>You can autoreload .class files (hot swap) without having to restart your
+program. However, to avoid performance and stability problems, you should only
+autoreload .class files while developing (development mode).</p>
+<div class="section" id="run-with-ides">
+<h3>Run with IDEs<a class="headerlink" href="#run-with-ides" title="Permalink to this headline">¶</a></h3>
+<p>While developing, when you run project in advanced IDEs like Eclipse or IntelliJ,
+by default the IDEs will automatically reload code for you.</p>
+</div>
+<div class="section" id="run-with-sbt">
+<h3>Run with SBT<a class="headerlink" href="#run-with-sbt" title="Permalink to this headline">¶</a></h3>
+<p>When you run with SBT, you need to open 2 console windows:</p>
+<ul class="simple">
+<li><p>One to run <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">fgRun</span></code>. This will run the program and reload .class files
+when they are changed.</p></li>
+<li><p>One to run <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">~compile</span></code>. Whenever you edit source code files, this
+will compile the source code to .class files.</p></li>
+</ul>
+<p>In the sbt directory, there’s <a class="reference external" href="https://github.com/xitrum-framework/agent7">agent7.jar</a>.
+It’s in charge of reloading .class files in the current working directory (and its subdirectories).
+If you see the <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span></code> script, you’ll see the option like <code class="docutils literal notranslate"><span class="pre">-javaagent:agent7.jar</span></code>.</p>
+</div>
+<div class="section" id="dcevm">
+<h3>DCEVM<a class="headerlink" href="#dcevm" title="Permalink to this headline">¶</a></h3>
+<p>Normal JVM only allows only changing method bodies. You may use
+<a class="reference external" href="https://github.com/dcevm/dcevm">DCEVM</a>, which is an open source modification
+of the Java HotSpot VM that allows unlimited redefinition of loaded classes.</p>
+<p>You can install DCEVM in 2 ways:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/dcevm/dcevm/releases">Patch</a> your existing Java installation.</p></li>
+<li><p>Install a <a class="reference external" href="http://dcevm.nentjes.com/">prebuilt</a> version (easier).</p></li>
+</ul>
+<p>If you choose to patch:</p>
+<ul class="simple">
+<li><p>You can enable DCEVM permanently.</p></li>
+<li><p>Or set it as an “alternative” JVM. In this case, to enable DCEVM, every time
+you run <code class="docutils literal notranslate"><span class="pre">java</span></code> command, you need to specify <code class="docutils literal notranslate"><span class="pre">-XXaltjvm=dcevm</span></code> option.
+For example, you need to add <code class="docutils literal notranslate"><span class="pre">-XXaltjvm=dcevm</span></code> option to the <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span></code> script.</p></li>
+</ul>
+<p>If you use IDEs like Eclipse or IntelliJ, you need to configure them to use DCEVM
+(not the default JVM) to run your project.</p>
+<p>If you use SBT, you need to configure the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable so that
+the <code class="docutils literal notranslate"><span class="pre">java</span></code> command is from DCEVM (not from the default JVM). You still need
+the <code class="docutils literal notranslate"><span class="pre">javaagent</span></code> above, because although DCEVM supports advanced class changes,
+it itself doesn’t reload classes.</p>
+<p>See <a class="reference external" href="http://javainformed.blogspot.jp/2014/01/jrebel-free-alternative.html">DCEVM - A JRebel free alternative</a>
+for more info.</p>
+</div>
+</div>
+<div class="section" id="ignore-files">
+<h2>Ignore files<a class="headerlink" href="#ignore-files" title="Permalink to this headline">¶</a></h2>
+<p>Normally, these file should be
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/.gitignore">ignored</a>
+(not commited to your SVN or Git repository):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.*</span>
+<span class="n">log</span>
+<span class="n">project</span><span class="o">/</span><span class="n">project</span>
+<span class="n">project</span><span class="o">/</span><span class="n">target</span>
+<span class="n">target</span>
+<span class="n">tmp</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#create-a-new-empty-xitrum-project">Create a new empty Xitrum project</a></li>
+<li><a class="reference internal" href="#run">Run</a></li>
+<li><a class="reference internal" href="#import-the-project-to-eclipse">Import the project to Eclipse</a></li>
+<li><a class="reference internal" href="#import-the-project-to-intellij">Import the project to IntelliJ</a></li>
+<li><a class="reference internal" href="#autoreload">Autoreload</a><ul>
+<li><a class="reference internal" href="#run-with-ides">Run with IDEs</a></li>
+<li><a class="reference internal" href="#run-with-sbt">Run with SBT</a></li>
+<li><a class="reference internal" href="#dcevm">DCEVM</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ignore-files">Ignore files</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="next chapter">Action and view</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Tutorial</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

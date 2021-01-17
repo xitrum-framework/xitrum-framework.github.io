@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RESTful APIs &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="템플릿 엔진" href="template_engines.html" />
+    <link rel="prev" title="Action 과 view" href="action_view.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="템플릿 엔진"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action 과 view"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RESTful APIs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum으로 iPhone, Android 등의 앱을 위한 RESTful APIs를 간단하게 만들 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span><span class="n">다</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>POST, PUT, PATCH, DELETE, OPTIONS 뿐만 아니라
+Xitrum은 HEAD의 GET 요청을 빈 바디응답으로 자동으로 처리합니다.</p>
+<p>일반 브라우저처럼 PUT과 DELETE를 지원하지 않는 HTTP 클라이언트에서도
+PUT과 DELETE를 구현하려면 응답 본문에 <code class="docutils literal notranslate"><span class="pre">_method=put</span></code> 나 <code class="docutils literal notranslate"><span class="pre">_method=delete</span></code> 를 포함하여
+사용할 수 있습니다.</p>
+<p>어플리케이션을 시작할때 Xitrum 어플리케이션을 스캔하여 라우팅 테이블을 만들고 출력합니다.
+다음과 같은 로그에서 어플리케이션이 어떤 API를 지원하고 있는지 알 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Routes</span><span class="p">:</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">articles</span>     <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ArticlesIndex</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="p">:</span><span class="nb">id</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ArticlesShow</span>
+</pre></div>
+</div>
+<p>라우팅은 JAX-RS과 Rails의 철학에 따라 자동으로 수집됩니다.
+모든 경로를 한군데에 설정할 필요가 없습니다.
+분산 라우팅처럼 이 기능 덕분에 어플리케이션을 다른 어플리케이션에 통합할 수 있습니다.
+만약 블로그 엔진을 만든다면 패키징된 JAR파일을 다른 어플리케이션으로 가져와서 즉시 블로그 기능을 사용할 수 있습니다.
+라우팅에는 두 가지 특징이 있습니다.
+안전한 방법으로 루트를 재생성하거나(리버스 라우팅)
+<a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a> 이라고 하는 문서를 통해서 만들 수 있습니다.</p>
+<div class="section" id="id1">
+<h2>루트 캐싱<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>어플리케이션 시작시 속도 향상을 위해 루트는 <code class="docutils literal notranslate"><span class="pre">routes.cache</span></code> 파일에 캐쉬됩니다.
+개발 시에는 <code class="docutils literal notranslate"><span class="pre">target</span></code> 파일에 있는 클래스 파일의 루트는 캐쉬되지 않습니다.
+만약 루트를 포함하여 라이브러리가 업데이트 된 경우에는 <code class="docutils literal notranslate"><span class="pre">routes.cache</span></code> 파일을 삭제하세요.
+또한, 이 파일은 소스 저장소에 커밋되지 않도록 주의해야 합니다.</p>
+</div>
+<div class="section" id="first-last">
+<h2>루트의 우선순위(first, last)<a class="headerlink" href="#first-last" title="Permalink to this headline">¶</a></h2>
+<p>다음과 같은 루트를 만든 경우</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="p">:</span><span class="nb">id</span> <span class="o">--&gt;</span> <span class="n">ArticlesShow</span>
+<span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="n">new</span> <span class="o">--&gt;</span> <span class="n">ArticlesNew</span>
+</pre></div>
+</div>
+<p>두 번째 루트를 우선시 할 경우 <code class="docutils literal notranslate"><span class="pre">&#64;First</span></code> 주석을 추가시킵니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">First</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@First</span>  <span class="o">//</span> <span class="n">This</span> <span class="n">route</span> <span class="n">has</span> <span class="n">higher</span> <span class="n">priority</span> <span class="n">than</span> <span class="s2">&quot;ArticlesShow&quot;</span> <span class="n">above</span>
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/new&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesNew</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Last</span></code> 도 똑같이 사용할 수 있습니다.</p>
+</div>
+<div class="section" id="action">
+<h2>Action에 여러 경로를 연동<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image/:format&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Image</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">format</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>점을 포함하는 루트<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">,</span> <span class="s2">&quot;articles/:id.:format&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">id</span>     <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="nb">format</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>정규 표현식을 이용한 라우팅<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>정규 표현식을 이용하여 라우팅할 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>경로의 나머지 부분 이용<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">/</span></code> 문자는 특수문자라서 매개변수에 포함되지 않습니다. <code class="docutils literal notranslate"><span class="pre">/</span></code> 문자를 사용하려면 다음과 같이 씁니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span><span class="p">(</span><span class="s2">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>다음의 경로를 가져오게 됩니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">service</span><span class="o">/</span><span class="mi">123</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">foo</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bar</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">:*</span></code> 를 가져오게 됩니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">url</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>  <span class="o">//</span> <span class="s2">&quot;http://foo.com/bar&quot;</span> <span class="n">입니다</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>액션에 링크추가<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum은 typesafe하므로 URL을 직접 사용하면 안 됩니다. 다음처럼 사용하세요:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">ArticlesShow</span><span class="p">](</span><span class="s2">&quot;id&quot;</span> <span class="o">-&gt;</span> <span class="n">myArticle</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span><span class="o">&gt;</span><span class="p">{</span><span class="n">myArticle</span><span class="o">.</span><span class="n">title</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>다른 액션으로 리디랙션<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>참고 <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">what redirection is</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginInput</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DoLogin</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="o">//</span> <span class="n">After</span> <span class="n">login</span> <span class="n">success</span>
+    <span class="n">redirectTo</span><span class="p">[</span><span class="n">AdminIndex</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">GET</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AdminIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="o">//</span> <span class="n">Check</span> <span class="k">if</span> <span class="n">the</span> <span class="n">user</span> <span class="n">has</span> <span class="ow">not</span> <span class="n">logged</span> <span class="ow">in</span><span class="p">,</span> <span class="n">redirect</span> <span class="n">him</span> <span class="n">to</span> <span class="n">the</span> <span class="n">login</span> <span class="n">page</span>
+    <span class="n">redirectTo</span><span class="p">[</span><span class="n">LoginInput</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>현재 액션을 다음을 이용하여 변경할 수도 있습니다. <code class="docutils literal notranslate"><span class="pre">redirecToThis()</span></code>.</p>
+</div>
+<div class="section" id="id7">
+<h2>다른 액션에 요청 전달<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">forwardTo[AnotherAction]()</span></code> 사용시에는  <code class="docutils literal notranslate"><span class="pre">redirectTo</span></code> 은 다른 요청을 만들어서 전달하지만</dt><dd><p><code class="docutils literal notranslate"><span class="pre">forwardTo</span></code> 는 요청이 유지됩니다.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="ajax">
+<h2>Ajax 요청 여부 확인<a class="headerlink" href="#ajax" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">isAjax</span></code> 을 사용합니다.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">In</span> <span class="n">an</span> <span class="n">action</span>
+<span class="n">val</span> <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A message&quot;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">isAjax</span><span class="p">)</span>
+  <span class="n">jsRender</span><span class="p">(</span><span class="s2">&quot;alert(&quot;</span> <span class="o">+</span> <span class="n">jsEscape</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+<span class="k">else</span>
+  <span class="n">respondText</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Permalink to this headline">¶</a></h2>
+<p>GET 이외의 요청에 Xitrum은 기본적으로 <a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Cross-site request forgery</a> 방식을 고수합니다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">antiCsrfMeta</span></code> Tags의 레이아웃에 명시한 경우:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>출력되는 <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> 는 다음과 같습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<dl class="simple">
+<dt><a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a> 이 템플릿 내에서 사용되는 경우,</dt><dd><p>토큰은 GET 요청을 제외한 모든 jQuery 의 Ajax 요청에 <code class="docutils literal notranslate"><span class="pre">X-CSRF-Token</span></code> 을 포함합니다.</p>
+</dd>
+</dl>
+<p>xitrum.js은 <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code> 에 포함되어 있습니다.
+만약 <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code> 를 사용하지 않고 xitrum.js를 사용하고 싶다면 다음과 같이 사용합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">xitrum</span><span class="o">.</span><span class="n">js</span><span class="p">]}</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-anticsrftoken">
+<h2>antiCsrfInput 과 antiCsrfToken<a class="headerlink" href="#anticsrfinput-anticsrftoken" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum은 CSRF토큰을 <code class="docutils literal notranslate"><span class="pre">X-CSRF-Token</span></code> 의 요청헤더에서 가져옵니다.
+만약 요청헤더가 없다면 <code class="docutils literal notranslate"><span class="pre">csrf-token</span></code> 의 바디 파라미터에서 가져옵니다.
+（URL의 파라미터가 아닙니다）</p>
+<p>Form을 직접 작성할 때에 메타 태그와 xitrum.js을 사용하지 않는다면 <code class="docutils literal notranslate"><span class="pre">antiCsrfInput</span></code> 또는
+<code class="docutils literal notranslate"><span class="pre">antiCsrfToken</span></code> 을 사용해야 합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">AdminAddGroup</span><span class="p">]})</span>
+  <span class="o">!=</span> <span class="n">antiCsrfInput</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">AdminAddGroup</span><span class="p">]})</span>
+  <span class="nb">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;csrf-token&quot;</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">antiCsrfToken</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="csrf">
+<h2>CSRF 체크 생략<a class="headerlink" href="#csrf" title="Permalink to this headline">¶</a></h2>
+<p>스마트폰과 같은 기기를 위해서 API를 작성할 경우 CSRF체크를 생략할 수 있습니다.
+<code class="docutils literal notranslate"><span class="pre">xitrum.SkipCsrfCheck</span></code> 를 Action에 추가하면 됩니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SkipCsrfCheck</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.POST</span>
+
+<span class="n">trait</span> <span class="n">Api</span> <span class="n">extends</span> <span class="n">Action</span> <span class="k">with</span> <span class="n">SkipCsrfCheck</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;api/positions&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LogPositionAPI</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;api/todos&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateTodoAPI</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>라우팅 조작<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum 은 시작 시에 자동으로 경로를 수집합니다.
+경로를 수정하고 싶다면 다음을 이용하세요
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Config</span><span class="p">,</span> <span class="n">Server</span><span class="p">}</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">You</span> <span class="n">can</span> <span class="n">modify</span> <span class="n">routes</span> <span class="n">before</span> <span class="n">starting</span> <span class="n">the</span> <span class="n">server</span>
+    <span class="n">val</span> <span class="n">routes</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">routes</span>
+
+    <span class="o">//</span> <span class="n">Remove</span> <span class="n">routes</span> <span class="n">to</span> <span class="n">an</span> <span class="n">action</span> <span class="n">by</span> <span class="n">its</span> <span class="k">class</span>
+    <span class="nc">routes</span><span class="o">.</span><span class="n">removeByClass</span><span class="p">[</span><span class="n">MyClass</span><span class="p">]()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">demoVersion</span><span class="p">)</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">Remove</span> <span class="n">routes</span> <span class="n">to</span> <span class="n">actions</span> <span class="n">by</span> <span class="n">a</span> <span class="n">prefix</span>
+      <span class="n">routes</span><span class="o">.</span><span class="n">removeByPrefix</span><span class="p">(</span><span class="s2">&quot;premium/features&quot;</span><span class="p">)</span>
+
+      <span class="o">//</span> <span class="n">This</span> <span class="n">also</span> <span class="n">works</span>
+      <span class="n">routes</span><span class="o">.</span><span class="n">removeByPrefix</span><span class="p">(</span><span class="s2">&quot;/premium/features&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="o">...</span>
+
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id9">
+<h2>요청 내용 가져오기<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>요청에 대한 타입이 <code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code> 이 아닐 경우에는
+요청에 대한 내용을 가져오고 수동으로 파싱이 가능합니다.</p>
+<p>문자열로 가져오기:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">body</span> <span class="o">=</span> <span class="n">requestContentString</span>
+</pre></div>
+</div>
+<p>문자열로 가져와서 JSON형식으로 변경합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">myJValue</span> <span class="o">=</span> <span class="n">requestContentJValue</span>  <span class="o">//</span> <span class="o">=&gt;</span> <span class="n">JSON4S</span> <span class="p">(</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">json4s</span><span class="o">.</span><span class="n">org</span><span class="p">)</span> <span class="n">JValue</span>
+<span class="n">val</span> <span class="n">myMap</span> <span class="o">=</span> <span class="n">xitrum</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromJValue</span><span class="p">[</span><span class="n">Map</span><span class="p">[</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">]](</span><span class="n">myJValue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>요청 전체를 컨트롤 하려면 <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a> 을 사용하면 됩니다.
+<a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a> 타입으로 리턴합니다.</p>
+</div>
+<div class="section" id="swagger-api">
+<h2>Swagger로 API 문서화 하기<a class="headerlink" href="#swagger-api" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a> 를 이용하여 API문서를 만들수 있습니다.
+<code class="docutils literal notranslate"><span class="pre">&#64;Swagger</span></code> 태그를 문서화하고 싶은 API에 명시하면 됩니다.
+Xitrum은 문서파일을 <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a> 에 생성합니다.
+이 파일들은 <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a> 를 이용하여 인터렉티브한 API문서를 생성합니다.
+Xitrum은Swagger UI 를 내포하고 있으며 <code class="docutils literal notranslate"><span class="pre">/xitrum/swagger-ui</span></code> 에서 확인할 수 있습니다.
+: <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">예제</a> 는 여기에 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SkipCsrfCheck</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">Swagger</span><span class="p">}</span>
+
+<span class="nd">@Swagger</span><span class="p">(</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Tags</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;APIs to create images&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Description</span><span class="p">(</span><span class="s2">&quot;Dimensions should not be bigger than 2000 x 2000&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">OptStringQuery</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;Text to render on the image, default: Placeholder&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Produces</span><span class="p">(</span><span class="s2">&quot;image/png&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;PNG image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Width or height is invalid or too big&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">trait</span> <span class="n">ImageApi</span> <span class="n">extends</span> <span class="n">Action</span> <span class="k">with</span> <span class="n">SkipCsrfCheck</span> <span class="p">{</span>
+  <span class="n">lazy</span> <span class="n">val</span> <span class="n">text</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;Placeholder&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image/:width/:height&quot;</span><span class="p">)</span>
+<span class="nd">@Swagger</span><span class="p">(</span>  <span class="o">//</span> <span class="o">&lt;--</span> <span class="n">Inherits</span> <span class="n">other</span> <span class="n">info</span> <span class="kn">from</span> <span class="nn">ImageApi</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Generate rectangle image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">RectImageApi</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">width</span>  <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">height</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image/:width&quot;</span><span class="p">)</span>
+<span class="nd">@Swagger</span><span class="p">(</span>  <span class="o">//</span> <span class="o">&lt;--</span> <span class="n">Inherits</span> <span class="n">other</span> <span class="n">info</span> <span class="kn">from</span> <span class="nn">ImageApi</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Generate square image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">SquareImageApi</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">width</span>  <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">/xitrum/swagger</span></code> 에 접근할때
+<a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON For Swagger</a>
+가 생성됩니다.</p>
+<p>Swagger UI는 이 JSON 정보를 바탕으로 인터랙티브한 API 문서를 만듭니다.</p>
+<p>여기에 있는 Swagger.IntPath, Swagger.OptStringQuery, 이외에도 BytePath, IntQuery, OptStringForm 등이
+form에 명시되어 있습니다.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (필수 값)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Opt&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (옵션 값)</p></li>
+</ul>
+<p>Value type: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Param type: Path, Query, Body, Header, Form</p>
+<p>자세한 내용은 <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">value type</a> ,
+<a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">param type</a> 를 참고하세요.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#id1">루트 캐싱</a></li>
+<li><a class="reference internal" href="#first-last">루트의 우선순위(first, last)</a></li>
+<li><a class="reference internal" href="#action">Action에 여러 경로를 연동</a></li>
+<li><a class="reference internal" href="#id2">점을 포함하는 루트</a></li>
+<li><a class="reference internal" href="#id3">정규 표현식을 이용한 라우팅</a></li>
+<li><a class="reference internal" href="#id4">경로의 나머지 부분 이용</a></li>
+<li><a class="reference internal" href="#id5">액션에 링크추가</a></li>
+<li><a class="reference internal" href="#id6">다른 액션으로 리디랙션</a></li>
+<li><a class="reference internal" href="#id7">다른 액션에 요청 전달</a></li>
+<li><a class="reference internal" href="#ajax">Ajax 요청 여부 확인</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-anticsrftoken">antiCsrfInput 과 antiCsrfToken</a></li>
+<li><a class="reference internal" href="#csrf">CSRF 체크 생략</a></li>
+<li><a class="reference internal" href="#id8">라우팅 조작</a></li>
+<li><a class="reference internal" href="#id9">요청 내용 가져오기</a></li>
+<li><a class="reference internal" href="#swagger-api">Swagger로 API 문서화 하기</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="previous chapter">Action 과 view</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="next chapter">템플릿 엔진</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/restful.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="템플릿 엔진"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action 과 view"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RESTful APIs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

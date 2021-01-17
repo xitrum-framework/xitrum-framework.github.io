@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validation &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="File upload" href="upload.html" />
+    <link rel="prev" title="Scopes" href="scopes.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="upload.html" title="File upload"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="Scopes"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Validation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="validation">
+<h1>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum includes <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
+for validation at client side and provides validation helpers for server side.</p>
+<div class="section" id="default-validators">
+<h2>Default validators<a class="headerlink" href="#default-validators" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum provides validators in <code class="docutils literal notranslate"><span class="pre">xitrum.validator</span></code> package.
+They have these methods:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="n">Boolean</span>
+<span class="n">message</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="n">exception</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If the validation check does not pass, <code class="docutils literal notranslate"><span class="pre">message</span></code> will return <code class="docutils literal notranslate"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exception</span></code> will throw <code class="docutils literal notranslate"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
+<p>You can use validators anywhere you want.</p>
+<p>Action example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateArticle</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">title</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;tite&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">body</span>  <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">,</span>  <span class="n">body</span><span class="p">)</span>
+
+    <span class="o">//</span> <span class="n">Do</span> <span class="k">with</span> <span class="n">the</span> <span class="n">valid</span> <span class="n">title</span> <span class="ow">and</span> <span class="n">body</span><span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If you don’t <code class="docutils literal notranslate"><span class="pre">try</span></code> and <code class="docutils literal notranslate"><span class="pre">catch</span></code>, when the validation check does not pass,
+Xitrum will automatically catch the exception and respond the error message to
+the requesting client. This is convenient when writing web APIs or when you
+already have validation at the client side.</p>
+<p>Model example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">isValid</span>           <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>   <span class="o">&amp;&amp;</span>     <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">validationMessage</span> <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="n">orElse</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://github.com/xitrum-framework/xitrum/tree/master/src/main/scala/xitrum/validator">xitrum.validator pakage</a>
+for the full list of default validators.</p>
+</div>
+<div class="section" id="write-custom-validators">
+<h2>Write custom validators<a class="headerlink" href="#write-custom-validators" title="Permalink to this headline">¶</a></h2>
+<p>Extend <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/validator/Validator.scala">xitrum.validator.Validator</a>.
+You only have to implement <code class="docutils literal notranslate"><span class="pre">check</span></code> and <code class="docutils literal notranslate"><span class="pre">message</span></code> method.</p>
+<p>You can also use <a class="reference external" href="http://commons.apache.org/proper/commons-validator/">Commons Validator</a>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Validation</a><ul>
+<li><a class="reference internal" href="#default-validators">Default validators</a></li>
+<li><a class="reference internal" href="#write-custom-validators">Write custom validators</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scopes.html"
+                        title="previous chapter">Scopes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="upload.html"
+                        title="next chapter">File upload</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/validation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="upload.html" title="File upload"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="Scopes"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Validation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

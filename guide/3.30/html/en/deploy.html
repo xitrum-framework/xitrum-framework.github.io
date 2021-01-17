@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deploy to production server &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Clustering with Akka and Hazelcast" href="cluster.html" />
+    <link rel="prev" title="Log" href="log.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering with Akka and Hazelcast"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Deploy to production server</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="deploy-to-production-server">
+<h1>Deploy to production server<a class="headerlink" href="#deploy-to-production-server" title="Permalink to this headline">¶</a></h1>
+<p>You may run Xitrum directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Browser</span> <span class="o">------</span> <span class="n">Xitrum</span> <span class="n">instance</span>
+</pre></div>
+</div>
+<p>Or behind a load balancer like HAProxy, or reverse proxy like Apache or Nginx:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Browser</span> <span class="o">------</span> <span class="n">Load</span> <span class="n">balancer</span><span class="o">/</span><span class="n">Reverse</span> <span class="n">proxy</span> <span class="o">-+----</span> <span class="n">Xitrum</span> <span class="n">instance1</span>
+                                            <span class="o">+----</span> <span class="n">Xitrum</span> <span class="n">instance2</span>
+</pre></div>
+</div>
+<div class="section" id="package-directory">
+<h2>Package directory<a class="headerlink" href="#package-directory" title="Permalink to this headline">¶</a></h2>
+<p>Run <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">xitrumPackage</span></code> to prepare <code class="docutils literal notranslate"><span class="pre">target/xitrum</span></code> directory, ready to
+deploy to production server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">target</span><span class="o">/</span><span class="n">xitrum</span>
+  <span class="n">config</span>
+    <span class="p">[</span><span class="n">config</span> <span class="n">files</span><span class="p">]</span>
+  <span class="n">public</span>
+    <span class="p">[</span><span class="n">static</span> <span class="n">public</span> <span class="n">files</span><span class="p">]</span>
+  <span class="n">lib</span>
+    <span class="p">[</span><span class="n">dependencies</span> <span class="ow">and</span> <span class="n">packaged</span> <span class="n">project</span> <span class="n">file</span><span class="p">]</span>
+  <span class="n">script</span>
+    <span class="n">runner</span>
+    <span class="n">runner</span><span class="o">.</span><span class="n">bat</span>
+    <span class="n">scalive</span>
+    <span class="n">scalive</span><span class="o">.</span><span class="n">jar</span>
+    <span class="n">scalive</span><span class="o">.</span><span class="n">bat</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="customize-xitrum-package">
+<h2>Customize xitrum-package<a class="headerlink" href="#customize-xitrum-package" title="Permalink to this headline">¶</a></h2>
+<p>By default <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">xitrumPackage</span></code> command is configured to copy directories
+<code class="docutils literal notranslate"><span class="pre">config</span></code>, <code class="docutils literal notranslate"><span class="pre">public</span></code>, and <code class="docutils literal notranslate"><span class="pre">script</span></code> to <code class="docutils literal notranslate"><span class="pre">target/xitrum</span></code>. If you want it to
+copy additional directories or files change <code class="docutils literal notranslate"><span class="pre">build.sbt</span></code> like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">XitrumPackage</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;public, &quot;</span><span class="n">script</span><span class="s2">&quot;, &quot;</span><span class="n">doc</span><span class="o">/</span><span class="n">README</span><span class="o">.</span><span class="n">txt</span><span class="s2">&quot;, &quot;</span><span class="n">etc</span><span class="o">.</span><span class="s2">&quot;)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package homepage</a>
+for more information.</p>
+</div>
+<div class="section" id="connect-a-scala-console-to-a-running-jvm-process">
+<h2>Connect a Scala console to a running JVM process<a class="headerlink" href="#connect-a-scala-console-to-a-running-jvm-process" title="Permalink to this headline">¶</a></h2>
+<p>In production environment, without prior setup, you can use
+<a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>
+to connect a Scala console to a running JVM process for live debugging.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">scalive</span></code> in the script directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span>
+  <span class="n">runner</span>
+  <span class="n">runner</span><span class="o">.</span><span class="n">bat</span>
+  <span class="n">scalive</span>
+  <span class="n">scalive</span><span class="o">.</span><span class="n">jar</span>
+  <span class="n">scalive</span><span class="o">.</span><span class="n">bat</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-oracle-jdk-on-centos-or-ubuntu-manually">
+<h2>Install Oracle JDK on CentOS or Ubuntu manually<a class="headerlink" href="#install-oracle-jdk-on-centos-or-ubuntu-manually" title="Permalink to this headline">¶</a></h2>
+<p>This guide is here for convenient reference. You can certainly install Java from
+a package manager.</p>
+<p>Check installed alternatives:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="nb">list</span> <span class="n">java</span>
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_15</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_25</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>
+</pre></div>
+</div>
+<p>Check machine environment (32 bit or 64 bit):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span>
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span><span class="p">:</span> <span class="n">ELF</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">LSB</span> <span class="n">shared</span> <span class="nb">object</span><span class="p">,</span> <span class="n">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">,</span> <span class="n">version</span> <span class="mi">1</span> <span class="p">(</span><span class="n">SYSV</span><span class="p">),</span> <span class="n">dynamically</span> <span class="n">linked</span> <span class="p">(</span><span class="n">uses</span> <span class="n">shared</span> <span class="n">libs</span><span class="p">),</span> <span class="k">for</span> <span class="n">GNU</span><span class="o">/</span><span class="n">Linux</span> <span class="mf">2.6</span><span class="o">.</span><span class="mi">24</span><span class="p">,</span> <span class="n">BuildID</span><span class="p">[</span><span class="n">sha1</span><span class="p">]</span><span class="o">=</span><span class="mh">0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c</span><span class="p">,</span> <span class="n">stripped</span>
+</pre></div>
+</div>
+<p>Download JDK from <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Oracle</a>.
+There’s a <a class="reference external" href="http://stackoverflow.com/questions/10268583/how-to-automate-download-and-instalation-of-java-jdk-on-linux">trick</a>
+to download jdk without browser:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cookies</span> <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Cookie: gpw_e24=http%3A</span><span class="si">%2F%2F</span><span class="s2">www.oracle.com&quot;</span> <span class="s2">&quot;http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-linux-x64.tar.gz&quot;</span>
+</pre></div>
+</div>
+<p>Unarchive and move it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">jdk</span><span class="o">-</span><span class="mi">7</span><span class="n">u45</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">sudo</span> <span class="n">mv</span> <span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span>
+</pre></div>
+</div>
+<p>Register commands as an alternative:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/java&quot;</span> <span class="s2">&quot;java&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/java&quot;</span> <span class="mi">1</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/javac&quot;</span> <span class="s2">&quot;javac&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/javac&quot;</span> <span class="mi">1</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/javap&quot;</span> <span class="s2">&quot;javap&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/javap&quot;</span> <span class="mi">1</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/javaws&quot;</span> <span class="s2">&quot;javaws&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/javaws&quot;</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Chose new path with interactive shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">java</span>
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="n">are</span> <span class="mi">3</span> <span class="n">choices</span> <span class="k">for</span> <span class="n">the</span> <span class="n">alternative</span> <span class="n">java</span> <span class="p">(</span><span class="n">providing</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span><span class="p">)</span><span class="o">.</span>
+
+  <span class="n">Selection</span>    <span class="n">Path</span>                               <span class="n">Priority</span>   <span class="n">Status</span>
+<span class="o">------------------------------------------------------------</span>
+<span class="o">*</span> <span class="mi">0</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_25</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">50001</span>     <span class="n">auto</span> <span class="n">mode</span>
+  <span class="mi">1</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_15</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">50000</span>     <span class="n">manual</span> <span class="n">mode</span>
+  <span class="mi">2</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_25</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">50001</span>     <span class="n">manual</span> <span class="n">mode</span>
+  <span class="mi">3</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">1</span>         <span class="n">manual</span> <span class="n">mode</span>
+
+<span class="n">Press</span> <span class="n">enter</span> <span class="n">to</span> <span class="n">keep</span> <span class="n">the</span> <span class="n">current</span> <span class="n">choice</span><span class="p">[</span><span class="o">*</span><span class="p">],</span> <span class="ow">or</span> <span class="nb">type</span> <span class="n">selection</span> <span class="n">number</span><span class="p">:</span> <span class="mi">3</span>
+<span class="n">update</span><span class="o">-</span><span class="n">alternatives</span><span class="p">:</span> <span class="n">using</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span> <span class="n">to</span> <span class="n">provide</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span> <span class="p">(</span><span class="n">java</span><span class="p">)</span> <span class="ow">in</span> <span class="n">manual</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>Check version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="o">-</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>Output example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="n">version</span> <span class="s2">&quot;1.7.0_45&quot;</span>
+<span class="n">Java</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="n">SE</span> <span class="n">Runtime</span> <span class="n">Environment</span> <span class="p">(</span><span class="n">build</span> <span class="mf">1.7</span><span class="o">.</span><span class="mi">0_45</span><span class="o">-</span><span class="n">b18</span><span class="p">)</span>
+<span class="n">Java</span> <span class="n">HotSpot</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="mi">64</span><span class="o">-</span><span class="n">Bit</span> <span class="n">Server</span> <span class="n">VM</span> <span class="p">(</span><span class="n">build</span> <span class="mf">24.45</span><span class="o">-</span><span class="n">b08</span><span class="p">,</span> <span class="n">mixed</span> <span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Do also:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">javac</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">javap</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">javaws</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-xitrum-in-production-mode-when-the-system-starts">
+<h2>Start Xitrum in production mode when the system starts<a class="headerlink" href="#start-xitrum-in-production-mode-when-the-system-starts" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">script/runner</span></code> (for <a href="#id1"><span class="problematic" id="id2">*</span></a>nix) and <code class="docutils literal notranslate"><span class="pre">script/runner.bat</span></code> (for Windows) are the script to
+run any object with <code class="docutils literal notranslate"><span class="pre">main</span></code> method. Use it to start the web server in production
+environment.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span><span class="o">/</span><span class="n">runner</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">Boot</span>
+</pre></div>
+</div>
+<p>You may want to modify <code class="docutils literal notranslate"><span class="pre">runner</span></code> (or <code class="docutils literal notranslate"><span class="pre">runner.bat</span></code>) to tune
+<a class="reference external" href="http://www.oracle.com/technetwork/java/hotspotfaq-138619.html">JVM settings</a>.
+Also see <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code>.</p>
+<p>To start Xitrum in background on Linux when the system starts, a simple approach
+is to add a line to <code class="docutils literal notranslate"><span class="pre">/etc/rc.local</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">su</span> <span class="o">-</span> <span class="n">user_foo_bar</span> <span class="o">-</span><span class="n">c</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">the</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">script</span><span class="o">/</span><span class="n">above</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://cr.yp.to/daemontools.html">daemontools</a> is another approach. To install it on CentOS, see
+<a class="reference external" href="http://whomwah.com/2008/11/04/installing-daemontools-on-centos5-x86_64/">this instruction</a>.</p>
+<p>Or use <a class="reference external" href="http://supervisord.org/">Supervisord</a>.
+<code class="docutils literal notranslate"><span class="pre">/etc/supervisord.conf</span></code> example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">program</span><span class="p">:</span><span class="n">my_app</span><span class="p">]</span>
+<span class="n">directory</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_app</span>
+<span class="n">command</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_app</span><span class="o">/</span><span class="n">script</span><span class="o">/</span><span class="n">runner</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">Boot</span>
+<span class="n">autostart</span><span class="o">=</span><span class="n">true</span>
+<span class="n">autorestart</span><span class="o">=</span><span class="n">true</span>
+<span class="n">startsecs</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">user</span><span class="o">=</span><span class="n">my_user</span>
+<span class="n">redirect_stderr</span><span class="o">=</span><span class="n">true</span>
+<span class="n">stdout_logfile</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_app</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">stdout</span><span class="o">.</span><span class="n">log</span>
+<span class="n">stdout_logfile_maxbytes</span><span class="o">=</span><span class="mi">10</span><span class="n">MB</span>
+<span class="n">stdout_logfile_backups</span><span class="o">=</span><span class="mi">7</span>
+<span class="n">stdout_capture_maxbytes</span><span class="o">=</span><span class="mi">1</span><span class="n">MB</span>
+<span class="n">stdout_events_enabled</span><span class="o">=</span><span class="n">false</span>
+<span class="n">environment</span><span class="o">=</span><span class="n">PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">aws</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">~/</span><span class="nb">bin</span>
+</pre></div>
+</div>
+<p>Other alternatives:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://smarden.org/runit/">runit</a></p></li>
+<li><p><a class="reference external" href="http://upstart.ubuntu.com/">upstart</a></p></li>
+</ul>
+</div>
+<div class="section" id="set-up-port-forwarding">
+<h2>Set up port forwarding<a class="headerlink" href="#set-up-port-forwarding" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum listens on port 8000 and 4430 by default.
+You can change these ports in <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code>.</p>
+<p>You can update <code class="docutils literal notranslate"><span class="pre">/etc/sysconfig/iptables</span></code> with these commands to forward port
+80 to 8000 and 443 to 4430:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">su</span> <span class="o">-</span> <span class="n">root</span>
+<span class="n">chmod</span> <span class="mi">700</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+<span class="n">iptables</span><span class="o">-</span><span class="n">restore</span> <span class="o">&lt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="n">PREROUTING</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">i</span> <span class="n">eth0</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">80</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">port</span> <span class="mi">8000</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="n">PREROUTING</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">i</span> <span class="n">eth0</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">443</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">port</span> <span class="mi">4430</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">I</span> <span class="n">OUTPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">d</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">80</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">ports</span> <span class="mi">8000</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">I</span> <span class="n">OUTPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">d</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">443</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">ports</span> <span class="mi">4430</span>
+<span class="n">iptables</span><span class="o">-</span><span class="n">save</span> <span class="o">-</span><span class="n">c</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+<span class="n">chmod</span> <span class="mi">644</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+</pre></div>
+</div>
+<p>Of course for example if you have Apache running on port 80 and 443, you have to stop it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">httpd</span> <span class="n">stop</span>
+<span class="n">sudo</span> <span class="n">chkconfig</span> <span class="n">httpd</span> <span class="n">off</span>
+</pre></div>
+</div>
+<p>Good read:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.frozentux.net/iptables-tutorial/chunkyhtml/">Iptables tutorial</a></p></li>
+</ul>
+</div>
+<div class="section" id="tune-linux-for-massive-connections">
+<h2>Tune Linux for massive connections<a class="headerlink" href="#tune-linux-for-massive-connections" title="Permalink to this headline">¶</a></h2>
+<p>Note that on Mac, <a class="reference external" href="https://groups.google.com/forum/#!topic/spray-user/S-SNR2m0BWU">JDKs suffer from a serious problem with IO (NIO) performance</a>.</p>
+<p>Good read:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/linux/">Linux Performance Tuning (Riak)</a></p></li>
+<li><p><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/aws/">AWS Performance Tuning (Riak)</a></p></li>
+<li><p><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/">Ipsysctl tutorial</a></p></li>
+<li><p><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/tcpvariables.html">TCP variables</a></p></li>
+</ul>
+<div class="section" id="increase-open-file-limit">
+<h3>Increase open file limit<a class="headerlink" href="#increase-open-file-limit" title="Permalink to this headline">¶</a></h3>
+<p>Each connection is seen by Linux as an open file.
+The default maximum number of open file is 1024.
+To increase this limit, modify /etc/security/limits.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>  <span class="n">soft</span>  <span class="n">nofile</span>  <span class="mi">1024000</span>
+<span class="o">*</span>  <span class="n">hard</span>  <span class="n">nofile</span>  <span class="mi">1024000</span>
+</pre></div>
+</div>
+<p>You need to logout and login again for the above config to take effect.
+To confirm, run <code class="docutils literal notranslate"><span class="pre">ulimit</span> <span class="pre">-n</span></code>.</p>
+</div>
+<div class="section" id="tune-kernel">
+<h3>Tune kernel<a class="headerlink" href="#tune-kernel" title="Permalink to this headline">¶</a></h3>
+<p>As instructed in the article
+<a class="reference external" href="http://www.metabrew.com/article/a-million-user-comet-application-with-mochiweb-part-1">A Million-user Comet Application with Mochiweb</a>,
+modify /etc/sysctl.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># General gigabit tuning</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">rmem_max</span> <span class="o">=</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wmem_max</span> <span class="o">=</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_rmem</span> <span class="o">=</span> <span class="mi">4096</span> <span class="mi">87380</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_wmem</span> <span class="o">=</span> <span class="mi">4096</span> <span class="mi">65536</span> <span class="mi">16777216</span>
+
+<span class="c1"># This gives the kernel more memory for TCP</span>
+<span class="c1"># which you need with many (100k+) open socket connections</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_mem</span> <span class="o">=</span> <span class="mi">50576</span> <span class="mi">64768</span> <span class="mi">98152</span>
+
+<span class="c1"># Backlog</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">netdev_max_backlog</span> <span class="o">=</span> <span class="mi">2048</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">somaxconn</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_max_syn_backlog</span> <span class="o">=</span> <span class="mi">2048</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_syncookies</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># If you run clients</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">ip_local_port_range</span> <span class="o">=</span> <span class="mi">1024</span> <span class="mi">65535</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_tw_recycle</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_tw_reuse</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_fin_timeout</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">sysctl</span> <span class="pre">-p</span></code> to apply.
+No need to reboot, now your kernel should be able to handle a lot more open connections.</p>
+</div>
+<div class="section" id="note-about-backlog">
+<h3>Note about backlog<a class="headerlink" href="#note-about-backlog" title="Permalink to this headline">¶</a></h3>
+<p>TCP does the 3-way handshake for making a connection.
+When a remote client connects to the server,
+it sends SYN packet, and the server OS replies with SYN-ACK packet,
+then again that remote client sends ACK packet and the connection is established.
+Xitrum gets the connection when it is completely established.</p>
+<p>According to the article
+<a class="reference external" href="https://sites.google.com/site/beingroot/articles/apache/socket-backlog-tuning-for-apache">Socket backlog tuning for Apache</a>,
+connection timeout happens because of SYN packet loss which happens because
+backlog queue for the web server is filled up with connections sending SYN-ACK
+to slow clients.</p>
+<p>According to the
+<a class="reference external" href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/configtuning-kernel-limits.html">FreeBSD Handbook</a>,
+the default value of 128 is typically too low for robust handling of new
+connections in a heavily loaded web server environment. For such environments,
+it is recommended to increase this value to 1024 or higher.
+Large listen queues also do a better job of avoiding Denial of Service (DoS) attacks.</p>
+<p>The backlog size of Xitrum is set to 1024 (memcached also uses this value),
+but you also need to tune the kernel as above.</p>
+<p>To check the backlog config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">somaxconn</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sysctl</span> <span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">somaxconn</span>
+</pre></div>
+</div>
+<p>To tune temporarily, you can do like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">sysctl</span> <span class="o">-</span><span class="n">w</span> <span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">somaxconn</span><span class="o">=</span><span class="mi">1024</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="haproxy-tips">
+<h2>HAProxy tips<a class="headerlink" href="#haproxy-tips" title="Permalink to this headline">¶</a></h2>
+<p>To config HAProxy for SockJS, see <a class="reference external" href="https://github.com/sockjs/sockjs-node/blob/master/examples/haproxy.cfg">this example</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">defaults</span>
+    <span class="n">mode</span> <span class="n">http</span>
+    <span class="n">timeout</span> <span class="n">connect</span> <span class="mi">10</span><span class="n">s</span>
+    <span class="n">timeout</span> <span class="n">client</span>  <span class="mi">10</span><span class="n">h</span>  <span class="c1"># Set to long time to avoid WebSocket connections being closed when there&#39;s no network activity</span>
+    <span class="n">timeout</span> <span class="n">server</span>  <span class="mi">10</span><span class="n">h</span>  <span class="c1"># Set to long time to avoid ERR_INCOMPLETE_CHUNKED_ENCODING on Chrome</span>
+
+<span class="n">frontend</span> <span class="n">xitrum_with_discourse</span>
+    <span class="n">bind</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">80</span>
+
+    <span class="n">option</span> <span class="n">forwardfor</span>
+
+    <span class="n">acl</span> <span class="n">is_discourse</span> <span class="n">path_beg</span> <span class="o">/</span><span class="n">forum</span>
+    <span class="n">use_backend</span> <span class="n">discourse</span> <span class="k">if</span> <span class="n">is_discourse</span>
+    <span class="n">default_backend</span> <span class="n">xitrum</span>
+
+<span class="n">backend</span> <span class="n">xitrum</span>
+    <span class="n">server</span> <span class="n">srv_xitrum</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8000</span>
+
+<span class="n">backend</span> <span class="n">discourse</span>
+    <span class="n">server</span> <span class="n">srv_discourse</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">3000</span>
+</pre></div>
+</div>
+<p>To have HAProxy reload config file without restarting, see <a class="reference external" href="http://serverfault.com/questions/165883/is-there-a-way-to-add-more-backend-server-to-haproxy-without-restarting-haproxy">this discussion</a>.</p>
+<p>HAProxy is much easier to use than Nginx. It suits Xitrum because as mentioned in
+<a class="reference internal" href="cache.html"><span class="doc">the section about caching</span></a>, Xitrum serves static files
+<a class="reference external" href="https://gist.github.com/3293596">very fast</a>. You don’t have to use the static file
+serving feature in Nginx.</p>
+</div>
+<div class="section" id="nginx-tips">
+<h2>Nginx tips<a class="headerlink" href="#nginx-tips" title="Permalink to this headline">¶</a></h2>
+<p>If you use WebSocket or SockJS feature in Xitrum and want to run Xitrum behind
+Nginx 1.2, you must install additional module like
+<a class="reference external" href="https://github.com/yaoweibin/nginx_tcp_proxy_module">nginx_tcp_proxy_module</a>.
+Nginx 1.3+ supports WebSocket natively.</p>
+<p>Nginx by default uses HTTP 1.0 protocol for reverse proxy. If your backend server
+returns chunked response, you need to tell Nginx to use HTTP 1.1 like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
+  <span class="n">proxy_http_version</span> <span class="mf">1.1</span><span class="p">;</span>
+  <span class="n">proxy_set_header</span> <span class="n">Connection</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+  <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8000</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive">documentation</a> states that for http keepalive, you should also set proxy_set_header Connection “”;</p>
+</div>
+<div class="section" id="deploy-to-heroku">
+<h2>Deploy to Heroku<a class="headerlink" href="#deploy-to-heroku" title="Permalink to this headline">¶</a></h2>
+<p>You may run Xitrum at <a class="reference external" href="https://www.heroku.com/">Heroku</a>.</p>
+<div class="section" id="sign-up-and-create-repository">
+<h3>Sign up and create repository<a class="headerlink" href="#sign-up-and-create-repository" title="Permalink to this headline">¶</a></h3>
+<p>Following the <a class="reference external" href="https://devcenter.heroku.com/articles/quickstart">Official Document</a>,
+sign up and create git repository.</p>
+</div>
+<div class="section" id="create-procfile">
+<h3>Create Procfile<a class="headerlink" href="#create-procfile" title="Permalink to this headline">¶</a></h3>
+<p>Create Procfile and save it at project root directory. Heroku reads this file and
+executes on start.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">web</span><span class="p">:</span> <span class="n">target</span><span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">script</span><span class="o">/</span><span class="n">runner</span> <span class="o">&lt;</span><span class="n">YOUR_PACKAGE</span><span class="o">.</span><span class="n">YOUR_MAIN_CLASS</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="change-port-setting">
+<h3>Change port setting<a class="headerlink" href="#change-port-setting" title="Permalink to this headline">¶</a></h3>
+<p>Because Heroku assigns port automatically, you need to do like this:</p>
+<p>config/xitrum.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>port {
+  http              = ${PORT}
+  # https             = 4430
+  # flashSocketPolicy = 8430  # flash_socket_policy.xml will be returned
+}
+</pre></div>
+</div>
+<p>If you want to use SSL, you need <a class="reference external" href="https://addons.heroku.com/ssl">add on</a>.</p>
+</div>
+<div class="section" id="see-log-level">
+<h3>See log level<a class="headerlink" href="#see-log-level" title="Permalink to this headline">¶</a></h3>
+<p>config/logback.xml:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">root</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">appender</span><span class="o">-</span><span class="n">ref</span> <span class="n">ref</span><span class="o">=</span><span class="s2">&quot;CONSOLE&quot;</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">root</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Tail log from Heroku command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">heroku</span> <span class="n">logs</span> <span class="o">-</span><span class="n">tail</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-alias-for-xitrum-package">
+<h3>Create alias for <code class="docutils literal notranslate"><span class="pre">xitrum-package</span></code><a class="headerlink" href="#create-alias-for-xitrum-package" title="Permalink to this headline">¶</a></h3>
+<p>At deploy time, Heroku runs <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">clean</span> <span class="pre">compile</span> <span class="pre">stage</span></code>. So you need to add alias
+for <code class="docutils literal notranslate"><span class="pre">xitrumPackage</span></code>.</p>
+<p>build.sbt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">addCommandAlias</span><span class="p">(</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="s2">&quot;;xitrumPackage&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-to-heroku">
+<h3>Push to Heroku<a class="headerlink" href="#push-to-heroku" title="Permalink to this headline">¶</a></h3>
+<p>Deploy process is hooked by git push.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">heroku</span> <span class="n">master</span>
+</pre></div>
+</div>
+<p>See also <a class="reference external" href="https://devcenter.heroku.com/articles/getting-started-with-scala">Official document for Scala</a>.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Deploy to production server</a><ul>
+<li><a class="reference internal" href="#package-directory">Package directory</a></li>
+<li><a class="reference internal" href="#customize-xitrum-package">Customize xitrum-package</a></li>
+<li><a class="reference internal" href="#connect-a-scala-console-to-a-running-jvm-process">Connect a Scala console to a running JVM process</a></li>
+<li><a class="reference internal" href="#install-oracle-jdk-on-centos-or-ubuntu-manually">Install Oracle JDK on CentOS or Ubuntu manually</a></li>
+<li><a class="reference internal" href="#start-xitrum-in-production-mode-when-the-system-starts">Start Xitrum in production mode when the system starts</a></li>
+<li><a class="reference internal" href="#set-up-port-forwarding">Set up port forwarding</a></li>
+<li><a class="reference internal" href="#tune-linux-for-massive-connections">Tune Linux for massive connections</a><ul>
+<li><a class="reference internal" href="#increase-open-file-limit">Increase open file limit</a></li>
+<li><a class="reference internal" href="#tune-kernel">Tune kernel</a></li>
+<li><a class="reference internal" href="#note-about-backlog">Note about backlog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#haproxy-tips">HAProxy tips</a></li>
+<li><a class="reference internal" href="#nginx-tips">Nginx tips</a></li>
+<li><a class="reference internal" href="#deploy-to-heroku">Deploy to Heroku</a><ul>
+<li><a class="reference internal" href="#sign-up-and-create-repository">Sign up and create repository</a></li>
+<li><a class="reference internal" href="#create-procfile">Create Procfile</a></li>
+<li><a class="reference internal" href="#change-port-setting">Change port setting</a></li>
+<li><a class="reference internal" href="#see-log-level">See log level</a></li>
+<li><a class="reference internal" href="#create-alias-for-xitrum-package">Create alias for <code class="docutils literal notranslate"><span class="pre">xitrum-package</span></code></a></li>
+<li><a class="reference internal" href="#push-to-heroku">Push to Heroku</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="log.html"
+                        title="previous chapter">Log</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cluster.html"
+                        title="next chapter">Clustering with Akka and Hazelcast</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/deploy.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering with Akka and Hazelcast"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Deploy to production server</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

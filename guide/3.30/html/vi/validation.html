@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validation &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="Tải lên tệp" href="upload.html" />
+    <link rel="prev" title="Scopes" href="scopes.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="upload.html" title="Tải lên tệp"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="Scopes"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Validation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="validation">
+<h1>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum bao gồm <a class="reference external" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation/">jQuery Validation plugin</a>
+để kiểm tra kiểu ở phía client và cung cấp các bộ kiểm tra kiểu cho phía server.</p>
+<div class="section" id="validator-mac-dinh">
+<h2>Validator mặc định<a class="headerlink" href="#validator-mac-dinh" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum cung cấp sẵn validator trong package <code class="docutils literal notranslate"><span class="pre">xitrum.validator</span></code>.
+Chúng có những hàm sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="n">Boolean</span>
+<span class="n">message</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span> <span class="n">Option</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="n">exception</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Nếu validation báo lỗi, hàm <code class="docutils literal notranslate"><span class="pre">message</span></code> sẽ trả về <code class="docutils literal notranslate"><span class="pre">Some(error</span> <span class="pre">message)</span></code>,
+hàm <code class="docutils literal notranslate"><span class="pre">exception</span></code> sẽ throw <code class="docutils literal notranslate"><span class="pre">xitrum.exception.InvalidInput(error</span> <span class="pre">message)</span></code>.</p>
+<p>Bạn có thể sử dụng validator bất cứ đâu.</p>
+<p>Ví dụ action:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateArticle</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">title</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;tite&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">body</span>  <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+    <span class="n">Required</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Body&quot;</span><span class="p">,</span>  <span class="n">body</span><span class="p">)</span>
+
+    <span class="o">//</span> <span class="n">Làm</span> <span class="n">gì</span> <span class="n">đó</span> <span class="n">với</span> <span class="n">title</span> <span class="n">và</span> <span class="n">body</span> <span class="n">đúng</span><span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Nếu không sử dụng <code class="docutils literal notranslate"><span class="pre">try</span></code> và <code class="docutils literal notranslate"><span class="pre">catch</span></code>, khi có lỗi trong quá trình validation
+(not pass), Xitrum sẽ tự động <code class="docutils literal notranslate"><span class="pre">catch</span></code> các exception và respond thông báo lỗi
+về phía client. Điều này giúp cho việc viết các web API hoặc sử dụng validation
+ở phía client tiện lợi hơn.</p>
+<p>Ví dụ model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.validator.Required</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">String</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">isValid</span>           <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>   <span class="o">&amp;&amp;</span>     <span class="n">Required</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="k">def</span> <span class="nf">validationMessage</span> <span class="o">=</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="n">orElse</span> <span class="n">Required</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum/tree/master/src/main/scala/xitrum/validator">package xitrum.validator</a> để có đầy đủ các validator mặc định.</p>
+</div>
+<div class="section" id="tao-mot-validator">
+<h2>Tạo một validator<a class="headerlink" href="#tao-mot-validator" title="Permalink to this headline">¶</a></h2>
+<p>Kế thừa <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/validator/Validator.scala">xitrum.validator.Validator</a>.
+Bạn chỉ phải implement 2 method <code class="docutils literal notranslate"><span class="pre">check</span></code> và <code class="docutils literal notranslate"><span class="pre">message</span></code>.</p>
+<p>Bạn cũng có thể sử dụng <a class="reference external" href="http://commons.apache.org/proper/commons-validator/">Commons Validator</a>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Validation</a><ul>
+<li><a class="reference internal" href="#validator-mac-dinh">Validator mặc định</a></li>
+<li><a class="reference internal" href="#tao-mot-validator">Tạo một validator</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="scopes.html"
+                        title="chương trước ">Scopes</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="upload.html"
+                        title="chương tiếp">Tải lên tệp</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/validation.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="upload.html" title="Tải lên tệp"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="scopes.html" title="Scopes"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Validation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

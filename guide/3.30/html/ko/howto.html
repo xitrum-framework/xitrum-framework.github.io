@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOWTO &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="의존도" href="deps.html" />
+    <link rel="prev" title="매트릭스" href="metrics.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="deps.html" title="의존도"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="매트릭스"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">HOWTO</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="howto">
+<h1>HOWTO<a class="headerlink" href="#howto" title="Permalink to this headline">¶</a></h1>
+<p>이 장에서는 몇가지 작은 팁들을 제공합니다.</p>
+<div class="section" id="id1">
+<h2>기본적인 인증<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>사이트나 특정 액션에 <a class="reference external" href="http://ja.wikipedia.org/wiki/Basic%E8%AA%8D%E8%A8%BC">Basic authentication</a> 을 이용하여 보호할 수 있습니다.</p>
+<p>Xitrum은 <a class="reference external" href="http://ja.wikipedia.org/wiki/Digest%E8%AA%8D%E8%A8%BC">digest authentication</a> 을 지원하지 않습니다
+잘못된 보안 방법으로 인해 man-in-the-middle attack에 취약하므로 보다 나은 방법으로서 Xitrum을 이용하여 HTTPS를 사용하는 것을 권장합니다.
+(Apache나 Nginx와 같은 리버스 프록시를 따로 구축할 필요가 없습니다)</p>
+<div class="section" id="id2">
+<h3>전체 프로젝트에 기본적인 인증을 설정하는 방법<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code> 내부에 설정:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;basicAuth&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;realm&quot;</span><span class="p">:</span>    <span class="s2">&quot;xitrum&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;xitrum&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;xitrum&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>특정 액션에 기본 인증을 추가<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">beforeFilter</span> <span class="p">{</span>
+    <span class="n">basicAuth</span><span class="p">(</span><span class="s2">&quot;Realm&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="n">username</span> <span class="o">==</span> <span class="s2">&quot;username&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="s2">&quot;password&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>설정파일 로드<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="json">
+<h3>JSON 파일<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h3>
+<p>JSON은 중첩된 구조를 설명하기에 알맞습니다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">config</span></code> 디렉토리에 설정 파일을 저장합니다.
+이 디렉토리는, 개발 모드에서 build.sbt에 의해, 프로덕션 모드에서는 <code class="docutils literal notranslate"><span class="pre">script/runner</span></code> (또는 <code class="docutils literal notranslate"><span class="pre">script/runner.bat</span></code>) 에 의해 자동적으로 클래스 패스에 포함됩니다.</p>
+<p>myconfig.json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;God&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;Does God need a password?&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Adam&quot;</span><span class="p">,</span> <span class="s2">&quot;Eva&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>로드방법:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+
+<span class="n">case</span> <span class="k">class</span> <span class="nc">MyConfig</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">children</span><span class="p">:</span> <span class="n">Seq</span><span class="p">[</span><span class="n">String</span><span class="p">])</span>
+<span class="n">val</span> <span class="n">myConfig</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">jsonFromClasspath</span><span class="p">[</span><span class="n">MyConfig</span><span class="p">](</span><span class="s2">&quot;myconfig.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>주의:</p>
+<ul class="simple">
+<li><p>키와 스트링은 큰따옴표로 둘러싸여 있어야 합니다.</p></li>
+<li><p>현재는 JSON파일에 주석을 달 수 없습니다.</p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h3>설정 파일<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>설정 파일을 사용할 수도 있습니다만 설정 파일은 안전하지 않고 UTF-8을 지원하지 않을뿐더러 중첩된 구조도 지원하지 않으므로
+JSON을 사용하는 것이 훨씬 좋습니다.</p>
+<p>myconfig.properties:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>username = God
+password = Does God need a password?
+children = Adam, Eva
+</pre></div>
+</div>
+<p>로드 방법:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+
+<span class="o">//</span> <span class="n">Here</span> <span class="n">you</span> <span class="n">get</span> <span class="n">an</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">Properties</span>
+<span class="n">val</span> <span class="n">properties</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">propertiesFromClasspath</span><span class="p">(</span><span class="s2">&quot;myconfig.properties&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="typesafe">
+<h3>Typesafe한 설정파일<a class="headerlink" href="#typesafe" title="Permalink to this headline">¶</a></h3>
+<p>Xitrum은 Akka를 포함하고 있습니다. Akka는 <a class="reference external" href="http://typesafe.com/company">Typesafe</a> 사의 <a class="reference external" href="https://github.com/typesafehub/config">config library</a> 라고 하는 라이브러리를 포함하고 있으며 더 나은 설정 방법을 제시합니다.</p>
+<p>myconfig.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>username = God
+password = Does God need a password?
+children = [&quot;Adam&quot;, &quot;Eva&quot;]
+</pre></div>
+</div>
+<p>로드 방법:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.typesafe.config.</span><span class="p">{</span><span class="n">Config</span><span class="p">,</span> <span class="n">ConfigFactory</span><span class="p">}</span>
+
+<span class="n">val</span> <span class="n">config</span>   <span class="o">=</span> <span class="n">ConfigFactory</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;myconfig.conf&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">username</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">children</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getStringList</span><span class="p">(</span><span class="s2">&quot;children&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>직렬화 및 역직렬화<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Array[Byte]</span></code> 를 직렬화:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.SeriDeseri</span>
+<span class="n">val</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toBytes</span><span class="p">(</span><span class="s2">&quot;my serializable object&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>다시 역직렬화:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">option</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromBytes</span><span class="p">[</span><span class="n">MyType</span><span class="p">](</span><span class="nb">bytes</span><span class="p">)</span>  <span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">MyType</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>파일에 저장 시:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Loader</span>
+<span class="n">Loader</span><span class="o">.</span><span class="n">bytesToFile</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="s2">&quot;myObject.bin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>파일에서 로드 시:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">bytesFromFile</span><span class="p">(</span><span class="s2">&quot;myObject.bin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>데이터 암호화<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>다시 해독할 필요가 없는 데이터일 경우에는 MD5등을 사용할 수 있습니다.(단방향 암호화)
+다시 해독할 필요가 있는 데이터일 경우에는 Xitrum에서 제공하는 라이브러리를 사용하면 됩니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.Secure</span>
+
+<span class="o">//</span> <span class="n">Array</span><span class="p">[</span><span class="n">Byte</span><span class="p">]</span>
+<span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s2">&quot;my data&quot;</span><span class="o">.</span><span class="n">getBytes</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">Array</span><span class="p">[</span><span class="n">Byte</span><span class="p">]]</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">xitrum.util.UrlSafeBase64</span></code> 을 이용하여 바이너리 데이터(HTML을 이용한 응답 등을 포함)를 일반적인 스트링값으로 암복호화가 가능합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">cookie와</span> <span class="n">같이</span> <span class="n">URL내에</span> <span class="n">포함된</span> <span class="n">스트링</span>
+<span class="n">val</span> <span class="n">string</span> <span class="o">=</span> <span class="n">UrlSafeBase64</span><span class="o">.</span><span class="n">noPaddingEncode</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">Array</span><span class="p">[</span><span class="n">Byte</span><span class="p">]]</span>
+<span class="n">val</span> <span class="n">encrypted2</span> <span class="o">=</span> <span class="n">UrlSafeBase64</span><span class="o">.</span><span class="n">autoPaddingDecode</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>두 가지를 한 번에 결합할 수 있습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.SeriDeseri</span>
+
+<span class="n">val</span> <span class="n">mySerializableObject</span> <span class="o">=</span> <span class="n">new</span> <span class="n">MySerializableClass</span>
+
+<span class="o">//</span> <span class="n">String</span>
+<span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toSecureUrlSafeBase64</span><span class="p">(</span><span class="n">mySerializableObject</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Option</span><span class="p">[</span><span class="n">MySerializableClass</span><span class="p">]</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromSecureUrlSafeBase64</span><span class="p">[</span><span class="n">MySerializableClass</span><span class="p">](</span><span class="n">encrypted</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">SeriDeseri</span></code> 는 <a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a> 를 사용하여 직렬화 및 역직렬화를 합니다.
+데이터는 반드시 직렬화가 가능 해야 합니다.</p>
+<p>특정한 키를 암호화:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="s2">&quot;my data&quot;</span><span class="o">.</span><span class="n">getBytes</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">Secure</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">encrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">toSecureUrlSafeBase64</span><span class="p">(</span><span class="n">mySerializableObject</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+<span class="n">val</span> <span class="n">decrypted</span> <span class="o">=</span> <span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromSecureUrlSafeBase64</span><span class="p">[</span><span class="n">MySerializableClass</span><span class="p">](</span><span class="n">encrypted</span><span class="p">,</span> <span class="s2">&quot;my key&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>키가 지정되어 있지 않은 경우에는 <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code> 파일 내의 <code class="docutils literal notranslate"><span class="pre">secureKey</span></code> 가 사용됩니다.</p>
+</div>
+<div class="section" id="id9">
+<h2>동일한 도매인 내의 여러 사이트<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>Nginx와 같은 리버스 프록시를 사용하여 같은 도메인 내의 여러 다른 사이트를 실행:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site1</span><span class="o">/...</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site2</span><span class="o">/...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code> 내의 <code class="docutils literal notranslate"><span class="pre">baseUrl</span></code> 을 정의합니다.</p>
+<p>JavaScript코드 내에서 Ajax 요청에 정확한 URLs을 얻으려면 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a> 내의 <code class="docutils literal notranslate"><span class="pre">withBaseUrl</span></code> 을 사용하면 됩니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># 만약 현재 사이트의 baseUrl이 &quot;site1&quot; 일 경우에 결과는:</span>
+<span class="c1"># 다음과 같습니다. /site1/path/to/my/action</span>
+<span class="n">xitrum</span><span class="o">.</span><span class="n">withBaseUrl</span><span class="p">(</span><span class="s1">&#39;/path/to/my/action&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="markdown-html">
+<h2>Markdown 텍스트를 HTML로 변환<a class="headerlink" href="#markdown-html" title="Permalink to this headline">¶</a></h2>
+<p>프로젝트가 이미 <a class="reference internal" href="template_engines.html"><span class="doc">Scalate</span></a> 을 사용하고 있다면 다음과 같이 해야 합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.fusesource.scalamd.Markdown</span>
+<span class="n">val</span> <span class="n">html</span> <span class="o">=</span> <span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>아니라면 라이브러리를 프로젝트의 build.sbt에 추가해야 합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s2">&quot;org.fusesource.scalamd&quot;</span> <span class="o">%%</span> <span class="s2">&quot;scalamd&quot;</span> <span class="o">%</span> <span class="s2">&quot;1.6&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>임시 디렉토리<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>기본적으로 Xitrum은 <code class="docutils literal notranslate"><span class="pre">tmp</span></code> 디렉토리 (<code class="docutils literal notranslate"><span class="pre">xitrum.conf</span></code> 의 <code class="docutils literal notranslate"><span class="pre">tmpDir</span></code> 에서 확인가능)를 생성된 scala파일의 저장이나 큰 업로드용 파일들을
+저장하기 위해 사용합니다.</p>
+<p>파일 경로 얻어오기:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="o">.</span><span class="n">getAbsolutePath</span>
+</pre></div>
+</div>
+<p>파일이나 디렉토리 생성:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">file</span> <span class="o">=</span> <span class="n">new</span> <span class="n">java</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="p">,</span> <span class="s2">&quot;myfile&quot;</span><span class="p">)</span>
+
+<span class="n">val</span> <span class="nb">dir</span> <span class="o">=</span> <span class="n">new</span> <span class="n">java</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">tmpDir</span><span class="p">,</span> <span class="s2">&quot;mydir&quot;</span><span class="p">)</span>
+<span class="nb">dir</span><span class="o">.</span><span class="n">mkdirs</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>비디오 스트리밍<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<p>다양한 비디오 스트리밍 방법 중 쉬운 방법은:</p>
+<ul class="simple">
+<li><p>.mp4 비디오 파일들에 간격을 주어서 플래이하는 동안 다운로드를 합니다.</p></li>
+<li><p>그리고 Xitrum이 지원하는 HTTP서버와 같이 <a class="reference external" href="http://en.wikipedia.org/wiki/Byte_serving">range requests</a> 사용자는 다운로드 받지 않은 부분에 대하여
+건너뛰기가 가능합니다.</p></li>
+</ul>
+<p><a class="reference external" href="http://gpac.wp.mines-telecom.fr/mp4box/">MP4Box</a> 를 이용하는 것으로 500 밀리초마다 데이터를 넣을 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MP4Box</span> <span class="o">-</span><span class="n">inter</span> <span class="mi">500</span> <span class="n">movie</span><span class="o">.</span><span class="n">mp4</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HOWTO</a><ul>
+<li><a class="reference internal" href="#id1">기본적인 인증</a><ul>
+<li><a class="reference internal" href="#id2">전체 프로젝트에 기본적인 인증을 설정하는 방법</a></li>
+<li><a class="reference internal" href="#id3">특정 액션에 기본 인증을 추가</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">설정파일 로드</a><ul>
+<li><a class="reference internal" href="#json">JSON 파일</a></li>
+<li><a class="reference internal" href="#id5">설정 파일</a></li>
+<li><a class="reference internal" href="#typesafe">Typesafe한 설정파일</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">직렬화 및 역직렬화</a></li>
+<li><a class="reference internal" href="#id8">데이터 암호화</a></li>
+<li><a class="reference internal" href="#id9">동일한 도매인 내의 여러 사이트</a></li>
+<li><a class="reference internal" href="#markdown-html">Markdown 텍스트를 HTML로 변환</a></li>
+<li><a class="reference internal" href="#id10">임시 디렉토리</a></li>
+<li><a class="reference internal" href="#id11">비디오 스트리밍</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="metrics.html"
+                        title="previous chapter">매트릭스</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="deps.html"
+                        title="next chapter">의존도</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/howto.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="deps.html" title="의존도"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="metrics.html" title="매트릭스"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">HOWTO</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

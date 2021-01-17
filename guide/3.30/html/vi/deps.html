@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dependencies &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="prev" title="HOWTO" href="howto.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Dependencies</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="dependencies">
+<h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="thu-vien-dependency">
+<h2>Thư viện Dependency<a class="headerlink" href="#thu-vien-dependency" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum bao gồm một vài thư viện. Trong Xiturm project, bạn có thẻ sử dụng chúng
+một cách trực tiếp.</p>
+<img alt="_images/deps.png" src="_images/deps.png" />
+<p>Các dependency chính:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.scala-lang.org/">Scala</a>:
+Xitrum được viết bằng ngôn ngữ Scala.</p></li>
+<li><p><a class="reference external" href="https://netty.io/">Netty</a>:
+Với async HTTP(S) server. Nhiều tính năng trong Xitrum dựa trên Netty như
+WebSocket và cung cấp tệp bằng zero copy.</p></li>
+<li><p><a class="reference external" href="http://akka.io/">Akka</a>:
+Với SockJS. Akka phụ thuộc vào <a class="reference external" href="https://github.com/typesafehub/config">Typesafe Config</a>,
+Typesafe Config lại được sử dụng trong Xitrum.</p></li>
+</ul>
+<p>Các dependencies khác:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://commons.apache.org/lang/">Commons Lang</a>:
+Để escaping dữ liệu JSON.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/glokka">Glokka</a>:
+Để clustering SockJS actors.</p></li>
+<li><p><a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>:
+Để phân tích và tạo dữ liệu JSON. JSON4S phụ thuộc
+<a class="reference external" href="http://paranamer.codehaus.org/">Paranamer</a>.</p></li>
+<li><p><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Rhino">Rhino</a>:
+Để Scalate cho việc biên dịch CoffeeScript thành JavaScript.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/sclasner">Sclasner</a>:
+For scanning HTTP routes in action classes in .class and .jar files.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scaposer">Scaposer</a>:
+For i18n.</p></li>
+<li><p><a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>:
+Để serializing và deserializing cookie và sessions.
+Chill dựa trên <a class="reference external" href="http://code.google.com/p/kryo/">Kryo</a>.</p></li>
+<li><p><a class="reference external" href="http://slf4s.org/">SLF4S</a>, <a class="reference external" href="http://logback.qos.ch/">Logback</a>:
+Để logging.</p></li>
+</ul>
+<p><a href="#id1"><span class="problematic" id="id2">`Skeleton project mới của Xitrum&lt;https://github.com/xitrum-framework/xitrum-new&gt;`_</span></a>'
+bao gồm các công cụ sau:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scala-xgettext">scala-xgettext</a>:
+Để <a class="reference internal" href="i18n.html"><span class="doc">trích chuỗi i18n</span></a> từ tệp .scala files khi biên dịch chúng.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package</a>:
+Để <a class="reference internal" href="deploy.html"><span class="doc">đóng gói project</span></a>, sẵn sàng cho việc deploy trên production
+server.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>:
+Để két nối Scala console đến một tiến trình JVM đang chạy phục vụ gỡ lỗi trực tiếp.</p></li>
+</ul>
+</div>
+<div class="section" id="cac-project-lien-quan">
+<h2>Các project liên quan<a class="headerlink" href="#cac-project-lien-quan" title="Permalink to this headline">¶</a></h2>
+<p>Demos:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a>:
+Xitrum new project skeleton.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">xitrum-demos</a>:
+Bản demo các tính năng của Xitrum.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">xitrum-placeholder</a>:
+Bản demo API lấy hình ảnh.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/comy">comy</a>:
+Bản demo service rút ngon URL.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">xitrum-multimodule-demo</a>:
+Ví dụ về tạo project multimodule <a class="reference external" href="http://www.scala-sbt.org/">SBT</a>.</p></li>
+</ul>
+<p>Plugins:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>:
+Đây là template engine mặc định của Xitrum, preconfigured trong
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum new project skeleton</a>.
+Bạn có thể thay nó bằng các template engine khác, hoặc loại bỏ hoàng toàn nó
+nếu project của bạn không cần bất kì template engine nào. Nó phụ thuộc vào
+<a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> và
+<a class="reference external" href="https://github.com/chirino/scalamd">Scalamd</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">xitrum-hazelcast</a>:
+Để clustering cache và session tại server.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">xitrum-ko</a>:
+Cung cấp một số helper cho <a class="reference external" href="http://knockoutjs.com/">Knockoutjs</a>.</p></li>
+</ul>
+<p>Các project khác:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-doc">xitrum-doc</a>:
+mã nguồn của <a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum Guide</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-framework.github.io">xitrum-hp</a>:
+mã nguồn của <a class="reference external" href="http://xitrum-framework.github.io/">Xitrum Homepage</a>.</p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Dependencies</a><ul>
+<li><a class="reference internal" href="#thu-vien-dependency">Thư viện Dependency</a></li>
+<li><a class="reference internal" href="#cac-project-lien-quan">Các project liên quan</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="howto.html"
+                        title="chương trước ">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/deps.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Dependencies</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

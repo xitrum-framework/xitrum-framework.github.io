@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RESTful APIs &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="Template engines" href="template_engines.html" />
+    <link rel="prev" title="Action and view" href="action_view.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Template engines"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RESTful APIs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Permalink to this headline">¶</a></h1>
+<p>Bạn có thể tạo RESTful APIs cho ứng dụng trên iPhone, Android v.v một cách rất dễ dàng.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Tương tự cho các method POST, PUT, PATCH, DELETE, và OPTIONS.
+Xitrum tự động kiểm soát phần HEAD như một method GET với phần response body rỗng.</p>
+<p>Với các HTTP client như các trình duyệt web thông thường không hỗ trợ method PUT và DELETE, để mô phỏng PUT và DELETE, một thủ thuật được sử dụng là gửi một method POST với <code class="docutils literal notranslate"><span class="pre">_method=put</span></code> hoặc <code class="docutils literal notranslate"><span class="pre">_method=delete</span></code> trong request body.</p>
+<p>Khi các ứng dụng web được khởi chạy, Xitrum sẽ quét tất cả các annotation, xây dựng bảng định tuyến (route) và ghi ra output để thông báo cho bạn biết bạn có APIs nào:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Routes</span><span class="p">:</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">articles</span>     <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ArticlesIndex</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="p">:</span><span class="nb">id</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ArticlesShow</span>
+</pre></div>
+</div>
+<p>Các Route được tự động gom lại theo tinh thần của JAX-RS và Rails Engines. Bạn không cần khai báo tất cả các route tại cùng một nơi. Hãy xem tính năng này tương tự như distributed route. Bạn có thể sử dụng một ứng dụng trong một ứng dụng khác. Nếu bạn có một blog engine, bạn có thể đóng gói nó thành một tập tin JAR và đặt tập tin JAR đó trong một ứng dụng khác, với cách làm như vậy ứng dụng đó sẽ có thêm tính năng blog.
+Việc định tuyến thì bao gồm 2 chiều: bạn có thể tái tạo đường dẫn URL (reverse routing) một cách an toàn từ action.
+Bạn có thể tạo tài liệu về các định tuyến bằng cách sử dụng <a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
+<div class="section" id="route-cache">
+<h2>Route cache<a class="headerlink" href="#route-cache" title="Permalink to this headline">¶</a></h2>
+<p>Để khởi động nhanh hơn, route được cache trong file <code class="docutils literal notranslate"><span class="pre">routes.cache</span></code>.
+Trong quá trình phát triển, các route trong các tệp <code class="docutils literal notranslate"><span class="pre">*.class</span></code> tại thư mục <code class="docutils literal notranslate"><span class="pre">target</span></code> sẽ không được cache. Nếu bạn thực hiện cập nhật các thư viện phụ thuộc có chứa route, bạn có thể cần phải xóa tệp <code class="docutils literal notranslate"><span class="pre">routes.cache</span></code>. Tệp này không nên được commit đến kho mã nguồn.</p>
+</div>
+<div class="section" id="muc-do-uu-tien-cua-cac-route-first-last">
+<h2>Mức độ ưu tiên của các route (first, last)<a class="headerlink" href="#muc-do-uu-tien-cua-cac-route-first-last" title="Permalink to this headline">¶</a></h2>
+<p>;
+Nếu bạn muốn các route như sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="p">:</span><span class="nb">id</span> <span class="o">--&gt;</span> <span class="n">ArticlesShow</span>
+<span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="n">new</span> <span class="o">--&gt;</span> <span class="n">ArticlesNew</span>
+</pre></div>
+</div>
+<p>Bạn phải chắc chắn rằng route thứ 2 sẽ được kiểm tra trước.
+Nếu bạn muốn ngược lại, annotation <code class="docutils literal notranslate"><span class="pre">&#64;First</span></code> sẽ được thêm vào:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">First</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@First</span>  <span class="o">//</span> <span class="n">This</span> <span class="n">route</span> <span class="n">has</span> <span class="n">higher</span> <span class="n">priority</span> <span class="n">than</span> <span class="s2">&quot;ArticlesShow&quot;</span> <span class="n">above</span>
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/new&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesNew</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Tương tự cho <code class="docutils literal notranslate"><span class="pre">&#64;Last</span></code>.</p>
+</div>
+<div class="section" id="nhieu-duong-dan-cho-mot-action">
+<h2>Nhiều đường dẫn cho một action<a class="headerlink" href="#nhieu-duong-dan-cho-mot-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image/:format&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Image</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">format</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dau-cham-trong-route">
+<h2>Dấu chấm trong route<a class="headerlink" href="#dau-cham-trong-route" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">,</span> <span class="s2">&quot;articles/:id.:format&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">id</span>     <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="nb">format</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="regular-expression-trong-route">
+<h2>Regular Expression trong route<a class="headerlink" href="#regular-expression-trong-route" title="Permalink to this headline">¶</a></h2>
+<p>Regex có thể được sử dụng trong route:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xu-ly-cac-phan-con-lai-cua-route">
+<h2>Xử lý các phần còn lại của route<a class="headerlink" href="#xu-ly-cac-phan-con-lai-cua-route" title="Permalink to this headline">¶</a></h2>
+<p>Kí tự đặc biệt <code class="docutils literal notranslate"><span class="pre">/</span></code> không được phép có mặt trong tên của parameter. Nếu bạn muốn sử dụng kí tự này, parameter phải được đặt cuối cùng và bạn phải sử dụng nó như dưới đây:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span><span class="p">(</span><span class="s2">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Đường dẫn dưới đây sẽ xuất hiện:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">service</span><span class="o">/</span><span class="mi">123</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">foo</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bar</span>
+</pre></div>
+</div>
+<p>để lấy ra phần <code class="docutils literal notranslate"><span class="pre">*</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">url</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>  <span class="o">//</span> <span class="n">Will</span> <span class="n">be</span> <span class="s2">&quot;http://foo.com/bar&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lien-ket-den-mot-action">
+<h2>Liên kết đến một action<a class="headerlink" href="#lien-ket-den-mot-action" title="Permalink to this headline">¶</a></h2>
+<p>Để bảo toàn tính typesafe của Xitrum, bạn không nên sử dụng URL một cách thủ công, hãy sử dụng cách dưới đây:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">ArticlesShow</span><span class="p">](</span><span class="s2">&quot;id&quot;</span> <span class="o">-&gt;</span> <span class="n">myArticle</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span><span class="o">&gt;</span><span class="p">{</span><span class="n">myArticle</span><span class="o">.</span><span class="n">title</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="redirect-den-mot-action-khac">
+<h2>Redirect đến một action khác<a class="headerlink" href="#redirect-den-mot-action-khac" title="Permalink to this headline">¶</a></h2>
+<p>Đọc thêm để biết <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">redirection là gì</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginInput</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DoLogin</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="o">//</span> <span class="n">After</span> <span class="n">login</span> <span class="n">success</span>
+    <span class="n">redirectTo</span><span class="p">[</span><span class="n">AdminIndex</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">GET</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AdminIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="o">//</span> <span class="n">Check</span> <span class="k">if</span> <span class="n">the</span> <span class="n">user</span> <span class="n">has</span> <span class="ow">not</span> <span class="n">logged</span> <span class="ow">in</span><span class="p">,</span> <span class="n">redirect</span> <span class="n">him</span> <span class="n">to</span> <span class="n">the</span> <span class="n">login</span> <span class="n">page</span>
+    <span class="n">redirectTo</span><span class="p">[</span><span class="n">LoginInput</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Bạn cũng có thể redirect đến action hiện tại (current action) với method <code class="docutils literal notranslate"><span class="pre">redirectToThis()</span></code>.</p>
+</div>
+<div class="section" id="forward-den-action-khac">
+<h2>Forward đến action khác<a class="headerlink" href="#forward-den-action-khac" title="Permalink to this headline">¶</a></h2>
+<p>Sử dụng method <code class="docutils literal notranslate"><span class="pre">forwardTo[AnotherAction]()</span></code>. Nếu bạn sử dụng method <code class="docutils literal notranslate"><span class="pre">redirectTo</span></code> ở trên đây, trình duyệt sẽ tạo một request khác, trong khi đó method <code class="docutils literal notranslate"><span class="pre">forwardTo</span></code> thì không.</p>
+</div>
+<div class="section" id="xac-dinh-ajax-request">
+<h2>Xác định Ajax request<a class="headerlink" href="#xac-dinh-ajax-request" title="Permalink to this headline">¶</a></h2>
+<p>Sử dụng method <code class="docutils literal notranslate"><span class="pre">isAjax</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">In</span> <span class="n">an</span> <span class="n">action</span>
+<span class="n">val</span> <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A message&quot;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">isAjax</span><span class="p">)</span>
+  <span class="n">jsRender</span><span class="p">(</span><span class="s2">&quot;alert(&quot;</span> <span class="o">+</span> <span class="n">jsEscape</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+<span class="k">else</span>
+  <span class="n">respondText</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Permalink to this headline">¶</a></h2>
+<p>Với các requests, Xitrum mặc định bảo vệ ứng dụng web của bạn khỏi kỹ thuật tấn công <a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Giả mạo Cross-site request</a>.</p>
+<p>Khi bạn incluede <code class="docutils literal notranslate"><span class="pre">antiCsrfMeta</span></code> trong layout của bạn:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Thẻ <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> sẽ tưong tự như sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>Các token sẽ được tự động include trong tất cả các non-GET Ajax requests như <code class="docutils literal notranslate"><span class="pre">X-CSRF-Token</span></code> header gửi bởi jQuery nếu bạn include <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a> trong view template. <code class="docutils literal notranslate"><span class="pre">xitrum.js</span></code> được include trong <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code>. Nếu bạn không sử dụng <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code>, bạn có thể include <code class="docutils literal notranslate"><span class="pre">xitrum.js</span></code> trong template như sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">xitrum</span><span class="o">.</span><span class="n">js</span><span class="p">]}</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-va-anticsrftoken">
+<h2>antiCsrfInput và antiCsrfToken<a class="headerlink" href="#anticsrfinput-va-anticsrftoken" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum lấy CSRF token từ <code class="docutils literal notranslate"><span class="pre">X-CSRF-Token</span></code> request header. Nếu header không tồn tại, Xitrum sẽ lấy token từ parameter <code class="docutils literal notranslate"><span class="pre">csrf-token</span></code> tại request body (chú ý: không phải parameter trong URL).</p>
+<p>Nếu bạn tự tạo form, và bạn không sử dụng thẻ meta và xitrum.js như đã trình bày ở trên, bạn cần sử dụng <code class="docutils literal notranslate"><span class="pre">antiCsrfInput</span></code> hoặc <code class="docutils literal notranslate"><span class="pre">antiCsrfToken</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">AdminAddGroup</span><span class="p">]})</span>
+  <span class="o">!=</span> <span class="n">antiCsrfInput</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">AdminAddGroup</span><span class="p">]})</span>
+  <span class="nb">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;csrf-token&quot;</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">antiCsrfToken</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="skipcsrfcheck">
+<h2>SkipCsrfCheck<a class="headerlink" href="#skipcsrfcheck" title="Permalink to this headline">¶</a></h2>
+<p>Khi bạn tạo các APIs cho thiết bị, ví dụ điện thoại thông minh, bạn có thể muốn bỏ qua việc tự động kiểm tra CSRS. Thêm trait xitrum.SkipCsrfCheck vào action của bạn:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SkipCsrfCheck</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.POST</span>
+
+<span class="n">trait</span> <span class="n">Api</span> <span class="n">extends</span> <span class="n">Action</span> <span class="k">with</span> <span class="n">SkipCsrfCheck</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;api/positions&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LogPositionAPI</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;api/todos&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateTodoAPI</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="kiem-soat-cac-route">
+<h2>Kiểm soát các route<a class="headerlink" href="#kiem-soat-cac-route" title="Permalink to this headline">¶</a></h2>
+<p>Khi khởi động Xitrum sẽ tự động gom các route lại. Nếu bạn muốn điều khiển các route theo cách của mình, bạn có thể sử dụng <a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Ví dụ:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Config</span><span class="p">,</span> <span class="n">Server</span><span class="p">}</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">You</span> <span class="n">can</span> <span class="n">modify</span> <span class="n">routes</span> <span class="n">before</span> <span class="n">starting</span> <span class="n">the</span> <span class="n">server</span>
+    <span class="n">val</span> <span class="n">routes</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">routes</span>
+
+    <span class="o">//</span> <span class="n">Remove</span> <span class="n">routes</span> <span class="n">to</span> <span class="n">an</span> <span class="n">action</span> <span class="n">by</span> <span class="n">its</span> <span class="k">class</span>
+    <span class="nc">routes</span><span class="o">.</span><span class="n">removeByClass</span><span class="p">[</span><span class="n">MyClass</span><span class="p">]()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">demoVersion</span><span class="p">)</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">Remove</span> <span class="n">routes</span> <span class="n">to</span> <span class="n">actions</span> <span class="n">by</span> <span class="n">a</span> <span class="n">prefix</span>
+      <span class="n">routes</span><span class="o">.</span><span class="n">removeByPrefix</span><span class="p">(</span><span class="s2">&quot;premium/features&quot;</span><span class="p">)</span>
+
+      <span class="o">//</span> <span class="n">This</span> <span class="n">also</span> <span class="n">works</span>
+      <span class="n">routes</span><span class="o">.</span><span class="n">removeByPrefix</span><span class="p">(</span><span class="s2">&quot;/premium/features&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="o">...</span>
+
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lay-tat-ca-cac-request-content">
+<h2>Lấy tất cẩ các request content<a class="headerlink" href="#lay-tat-ca-cac-request-content" title="Permalink to this headline">¶</a></h2>
+<p>Thông thường, nếu request content không phải là <code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code>, bạn có thể cần phải lấy tất cả các request content (và tự phân tích chúng).</p>
+<p>Để lấy ra một chuối ký tự (string):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">body</span> <span class="o">=</span> <span class="n">requestContentString</span>
+</pre></div>
+</div>
+<p>Để lấy ra một string và phân tích chúng thành JSON:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">myJValue</span> <span class="o">=</span> <span class="n">requestContentJValue</span>  <span class="o">//</span> <span class="o">=&gt;</span> <span class="n">JSON4S</span> <span class="p">(</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">json4s</span><span class="o">.</span><span class="n">org</span><span class="p">)</span> <span class="n">JValue</span>
+<span class="n">val</span> <span class="n">myMap</span> <span class="o">=</span> <span class="n">xitrum</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromJValue</span><span class="p">[</span><span class="n">Map</span><span class="p">[</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">]](</span><span class="n">myJValue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Nếu bạn muốn kiểm soát toàn bộ, sử dụng <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Nó sẽ trả về một <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+</div>
+<div class="section" id="viet-tai-lieu-api-voi-swagger">
+<h2>Viết tài liệu API với Swagger<a class="headerlink" href="#viet-tai-lieu-api-voi-swagger" title="Permalink to this headline">¶</a></h2>
+<p>Bạn có thể viết tài liệu cho API của bạn với <a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a>. Thêm annotation <code class="docutils literal notranslate"><span class="pre">&#64;Swagger</span></code> vào action cần được viết tài liệu.
+Xitrum sẽ generate <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a>.
+Tệp này có thể sử dụng với <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a> để tạo giao diện cho tài liệu của API.</p>
+<p>Xitrum đã bao gồm Swagger UI. Sử dụng chúng tại đường dẫn <a href="#id1"><span class="problematic" id="id2">``</span></a>/xitrum/swagger-ui` của chưong trình của bạn.
+Ví dụ <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p>Bạn có thể xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">một ví dụ</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SkipCsrfCheck</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">Swagger</span><span class="p">}</span>
+
+<span class="nd">@Swagger</span><span class="p">(</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Tags</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;APIs to create images&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Description</span><span class="p">(</span><span class="s2">&quot;Dimensions should not be bigger than 2000 x 2000&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">OptStringQuery</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;Text to render on the image, default: Placeholder&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Produces</span><span class="p">(</span><span class="s2">&quot;image/png&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;PNG image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Width or height is invalid or too big&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">trait</span> <span class="n">ImageApi</span> <span class="n">extends</span> <span class="n">Action</span> <span class="k">with</span> <span class="n">SkipCsrfCheck</span> <span class="p">{</span>
+  <span class="n">lazy</span> <span class="n">val</span> <span class="n">text</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;Placeholder&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image/:width/:height&quot;</span><span class="p">)</span>
+<span class="nd">@Swagger</span><span class="p">(</span>  <span class="o">//</span> <span class="o">&lt;--</span> <span class="n">Inherits</span> <span class="n">other</span> <span class="n">info</span> <span class="kn">from</span> <span class="nn">ImageApi</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Generate rectangle image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">RectImageApi</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">width</span>  <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">height</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image/:width&quot;</span><span class="p">)</span>
+<span class="nd">@Swagger</span><span class="p">(</span>  <span class="o">//</span> <span class="o">&lt;--</span> <span class="n">Inherits</span> <span class="n">other</span> <span class="n">info</span> <span class="kn">from</span> <span class="nn">ImageApi</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Generate square image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">SquareImageApi</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">width</span>  <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON cho Swagger</a> sẽ được tạo khi bạn sử dụng <code class="docutils literal notranslate"><span class="pre">/xitrum/swagger</span></code>.</p>
+<p>Swagger UI sử dụng JSON dưới đây để tạo giao diện cho tài liệu API.</p>
+<p>Ngoài các parameter như Swagger.IntPath và Swagger.OptStringQuery còn các tham số sau: BytePath, IntQuery, OptStringForm etc.
+Chúng ta có thể tạo theo mẫu
+They are in the form:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (required parameter)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Opt&lt;Value</span> <span class="pre">type&gt;&lt;Param</span> <span class="pre">type&gt;</span></code> (optional parameter)</p></li>
+</ul>
+<p>Kiểu dữ liệu: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Kiểu tham số: Path, Query, Body, Header, Form</p>
+<p>Đọc thêm về <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">kiểu dữ liệu</a> và  <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">kiểu tham số</a>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#route-cache">Route cache</a></li>
+<li><a class="reference internal" href="#muc-do-uu-tien-cua-cac-route-first-last">Mức độ ưu tiên của các route (first, last)</a></li>
+<li><a class="reference internal" href="#nhieu-duong-dan-cho-mot-action">Nhiều đường dẫn cho một action</a></li>
+<li><a class="reference internal" href="#dau-cham-trong-route">Dấu chấm trong route</a></li>
+<li><a class="reference internal" href="#regular-expression-trong-route">Regular Expression trong route</a></li>
+<li><a class="reference internal" href="#xu-ly-cac-phan-con-lai-cua-route">Xử lý các phần còn lại của route</a></li>
+<li><a class="reference internal" href="#lien-ket-den-mot-action">Liên kết đến một action</a></li>
+<li><a class="reference internal" href="#redirect-den-mot-action-khac">Redirect đến một action khác</a></li>
+<li><a class="reference internal" href="#forward-den-action-khac">Forward đến action khác</a></li>
+<li><a class="reference internal" href="#xac-dinh-ajax-request">Xác định Ajax request</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-va-anticsrftoken">antiCsrfInput và antiCsrfToken</a></li>
+<li><a class="reference internal" href="#skipcsrfcheck">SkipCsrfCheck</a></li>
+<li><a class="reference internal" href="#kiem-soat-cac-route">Kiểm soát các route</a></li>
+<li><a class="reference internal" href="#lay-tat-ca-cac-request-content">Lấy tất cẩ các request content</a></li>
+<li><a class="reference internal" href="#viet-tai-lieu-api-voi-swagger">Viết tài liệu API với Swagger</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="chương trước ">Action and view</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="chương tiếp">Template engines</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/restful.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Template engines"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Action and view"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RESTful APIs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

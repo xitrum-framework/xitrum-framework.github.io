@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Запросы, параметры, куки, сессии &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Валидация" href="validation.html" />
+    <link rel="prev" title="Serve flash socket policy file" href="flash.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="validation.html" title="Валидация"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="flash.html" title="Serve flash socket policy file"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Запросы, параметры, куки, сессии</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Запросы, параметры, куки, сессии<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id2">
+<h2>Запросы<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="section" id="id3">
+<h3>Типы параметров<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Доступны два вида параметров запроса: текстовые параметры и параметры файлы (file upload, бинарные данные)</p>
+<p>Текстовые параметры делятся на три вида, каждый имеет тип <code class="docutils literal notranslate"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Seq[String]]</span></code>:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">queryParams</span></code>: параметры после символа ? в ссылке, например: <a class="reference external" href="http://example.com/blah?x=1&amp;y=2">http://example.com/blah?x=1&amp;y=2</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bodyTextParams</span></code>: параметры в теле POST запроса</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pathParams</span></code>: параметры в пути запроса, например: <code class="docutils literal notranslate"><span class="pre">GET(&quot;articles/:id/:title&quot;)</span></code></p></li>
+</ol>
+<p>Параметры собираются воедино в переменной <code class="docutils literal notranslate"><span class="pre">textParams</span></code> в следующем порядке
+(от 1 к 3, более поздние перекрывают более ранние).</p>
+<p><code class="docutils literal notranslate"><span class="pre">bodyFileParams</span></code> имеет тип scala.collection.mutable.Map[String, Seq[<a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>]].</p>
+</div>
+<div class="section" id="id4">
+<h3>Доступ к параметрам<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Из контроллера в можете получить доступ к параметрам напрямую, или вы можете использовать
+методы доступа.</p>
+<p>Для доступа к <code class="docutils literal notranslate"><span class="pre">textParams</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">param(&quot;x&quot;)</span></code>: возвращает <code class="docutils literal notranslate"><span class="pre">String</span></code>, выбрасывает исключение если x не существует</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">paramo(&quot;x&quot;)</span></code>: возвращает <code class="docutils literal notranslate"><span class="pre">Option[String]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params(&quot;x&quot;)</span></code>: возвращает <code class="docutils literal notranslate"><span class="pre">Seq[String]</span></code></p></li>
+</ul>
+<p>Вы можете преобразовывать их к другим типам (Int, Long, Fload, Double) автоматически
+используя <code class="docutils literal notranslate"><span class="pre">param[Int](&quot;x&quot;)</span></code>, <code class="docutils literal notranslate"><span class="pre">params[Int](&quot;x&quot;)</span></code> и пр. Для преобразования текстовых параметров к
+другим типам, перекройте метод <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala-2.11/xitrum/scope/request/ParamAccess.scala">convertTextParam</a>.</p>
+<p>Для параметров файлов: <code class="docutils literal notranslate"><span class="pre">param[FileUpload](&quot;x&quot;)</span></code>, <code class="docutils literal notranslate"><span class="pre">params[FileUpload](&quot;x&quot;)</span></code> и пр.
+Более подробно, смотри <a class="reference internal" href="upload.html"><span class="doc">Загрузка файлов</span></a>.</p>
+</div>
+<div class="section" id="at">
+<h3>«at»<a class="headerlink" href="#at" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Для передачи данных из контроллера в представление вы можете использовать <code class="docutils literal notranslate"><span class="pre">at</span></code>.
+Тип <code class="docutils literal notranslate"><span class="pre">at</span></code> - <code class="docutils literal notranslate"><span class="pre">scala.collection.mutable.HashMap[String,</span> <span class="pre">Any]</span></code>.
+Если вы знакомы с Rails, <code class="docutils literal notranslate"><span class="pre">at</span></code> это аналог <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> из Rails.</p>
+<p>Articles.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span> <span class="o">=</span> <span class="o">...</span>  <span class="o">//</span> <span class="n">Например</span><span class="p">,</span> <span class="n">получаем</span> <span class="n">из</span> <span class="n">базы</span> <span class="n">данных</span>
+    <span class="n">at</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">title</span>
+    <span class="n">respondInlineView</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">at</span><span class="o">.</span><span class="n">isDefinedAt</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">))</span> <span class="s2">&quot;My Site - &quot;</span> <span class="o">+</span> <span class="n">at</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;My Site&quot;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="atjson">
+<h3>«atJson»<a class="headerlink" href="#atjson" title="Ссылка на этот заголовок">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">atJson</span></code> - утильный метод который автоматически конвертирует <code class="docutils literal notranslate"><span class="pre">at(&quot;key&quot;)</span></code> в JSON.
+Метод может быть полезен для передачи моделей напрямую из Scala в JavaScript.</p>
+<p><code class="docutils literal notranslate"><span class="pre">atJson(&quot;key&quot;)</span></code> эквивалент <code class="docutils literal notranslate"><span class="pre">xitrum.util.SeriDeseri.toJson(at(&quot;key&quot;))</span></code>:</p>
+<p>Action.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">case</span> <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">login</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span>
+
+<span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">at</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;Admin&quot;</span><span class="p">)</span>
+  <span class="n">respondView</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Action.ssp</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;script type=&quot;text/javascript&quot;&gt;
+  var user = ${atJson(&quot;user&quot;)};
+  alert(user.login);
+  alert(user.name);
+&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="requestvar">
+<h3>RequestVar<a class="headerlink" href="#requestvar" title="Ссылка на этот заголовок">¶</a></h3>
+<p>У <code class="docutils literal notranslate"><span class="pre">at</span></code> есть недостаток, он не безопасен относительно типов, т.к. основан на не типизированной коллекции. Если вам нужна большая безопасность, можно использовать идею RequestVar, которая оборачивает <code class="docutils literal notranslate"><span class="pre">at</span></code>.</p>
+<p>RVar.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.RequestVar</span>
+
+<span class="nb">object</span> <span class="n">RVar</span> <span class="p">{</span>
+  <span class="nb">object</span> <span class="n">title</span> <span class="n">extends</span> <span class="n">RequestVar</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Articles.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span> <span class="o">=</span> <span class="o">...</span>  <span class="o">//</span> <span class="n">Get</span> <span class="kn">from</span> <span class="nn">DB</span>
+    <span class="n">RVar</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">respondInlineView</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">RVar</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">isDefined</span><span class="p">)</span> <span class="s2">&quot;My Site - &quot;</span> <span class="o">+</span> <span class="n">RVar</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">get</span> <span class="k">else</span> <span class="s2">&quot;My Site&quot;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>Куки<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Подробнее о <a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie">куки</a>.</p>
+<p>Внутри контроллера, используйте <code class="docutils literal notranslate"><span class="pre">requestCookies</span></code>, для чтения кук отправленных браузером (тип <code class="docutils literal notranslate"><span class="pre">Map[String,</span> <span class="pre">String]</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">requestCookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;myCookie&quot;</span><span class="p">)</span> <span class="n">match</span> <span class="p">{</span>
+  <span class="n">case</span> <span class="kc">None</span>         <span class="o">=&gt;</span> <span class="o">...</span>
+  <span class="n">case</span> <span class="n">Some</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Для отправки куки браузеру, создайте экземпляр <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/DefaultCookie.html">DefaultCookie</a> и добавьте его к массиву <code class="docutils literal notranslate"><span class="pre">responseCookies</span></code> который хранит все <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/Cookie.html">куки</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">cookie</span> <span class="o">=</span> <span class="n">new</span> <span class="n">DefaultCookie</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="n">cookie</span><span class="o">.</span><span class="n">setHttpOnly</span><span class="p">(</span><span class="n">true</span><span class="p">)</span>  <span class="o">//</span> <span class="n">true</span><span class="p">:</span> <span class="n">JavaScript</span> <span class="n">не</span> <span class="n">может</span> <span class="n">получить</span> <span class="n">доступ</span> <span class="n">к</span> <span class="n">куки</span>
+<span class="n">responseCookies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Если вы не укажите путь для через метод <code class="docutils literal notranslate"><span class="pre">cookie.setPath(cookiePath)</span></code>, то
+будет использован корень сайта как путь (<code class="docutils literal notranslate"><span class="pre">xitrum.Config.withBaseUrl(&quot;/&quot;)</span></code>).
+Это позволяет избежать случайного дублирования кук.</p>
+<p>Что бы удалить куку отправленную браузером, отправить куку с тем же именем и с
+временем жизни 0. Браузер посчитает ее истекшей. Для того что бы создать куку
+удаляемую при закрытии браузере, установите время жизни в <code class="docutils literal notranslate"><span class="pre">Long.MinValue</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cookie</span><span class="o">.</span><span class="n">setMaxAge</span><span class="p">(</span><span class="n">Long</span><span class="o">.</span><span class="n">MinValue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://mrcoles.com/blog/cookies-max-age-vs-expires/">Internet Explorer не поддерживает «max-age»</a>,
+но Netty умеет это определять и устанавливает «max-age» и «expires» должны образом. Не беспокойтесь!</p>
+<p>Браузер не отправляет атрибуты куки обратно на сервер. Браузер отправляет
+<a class="reference external" href="http://en.wikipedia.org/wiki/HTTP_cookie#Cookie_attributes">только пары имя-значение</a>.</p>
+<p>Если вы хотите подписать ваши куки, что бы защититься от подделки, используйте
+<code class="docutils literal notranslate"><span class="pre">xitrum.util.SeriDeseri.toSecureUrlSafeBase64</span></code> и <code class="docutils literal notranslate"><span class="pre">xitrum.util.SeriDeseri.fromSecureUrlSafeBase64</span></code>.
+Подробнее смотри <a class="reference internal" href="howto.html"><span class="doc">Как шифровать данные</span></a>.</p>
+<div class="section" id="id9">
+<h3>Допустимые символы в куки<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Вы можете использовать только <a class="reference external" href="http://stackoverflow.com/questions/1969232/allowed-characters-in-cookies">ограниченный набор символов в куки</a>.
+Например, если вам нужно передать UTF-8 символы, вы должны закодировать их. Можно использовать, например, <code class="docutils literal notranslate"><span class="pre">xitrum.utill.UrlSafeBase64</span></code> или <code class="docutils literal notranslate"><span class="pre">xitrum.util.SeriDeseri</span></code>.</p>
+<p>Пример записи куки:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">io.netty.util.CharsetUtil</span>
+<span class="kn">import</span> <span class="nn">xitrum.util.UrlSafeBase64</span>
+
+<span class="n">val</span> <span class="n">value</span>   <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{&quot;identity&quot;:&quot;example@gmail.com&quot;,&quot;first_name&quot;:&quot;Alexander&quot;}&quot;&quot;&quot;</span>
+<span class="n">val</span> <span class="n">encoded</span> <span class="o">=</span> <span class="n">UrlSafeBase64</span><span class="o">.</span><span class="n">noPaddingEncode</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">getBytes</span><span class="p">(</span><span class="n">CharsetUtil</span><span class="o">.</span><span class="n">UTF_8</span><span class="p">))</span>
+<span class="n">val</span> <span class="n">cookie</span>  <span class="o">=</span> <span class="n">new</span> <span class="n">DefaultCookie</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="n">encoded</span><span class="p">)</span>
+<span class="n">responseCookies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Чтение куки:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">requestCookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">foreach</span> <span class="p">{</span> <span class="n">encoded</span> <span class="o">=&gt;</span>
+  <span class="n">UrlSafeBase64</span><span class="o">.</span><span class="n">autoPaddingDecode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span><span class="o">.</span><span class="n">foreach</span> <span class="p">{</span> <span class="nb">bytes</span> <span class="o">=&gt;</span>
+    <span class="n">val</span> <span class="n">value</span> <span class="o">=</span> <span class="n">new</span> <span class="n">String</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">CharsetUtil</span><span class="o">.</span><span class="n">UTF_8</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">&quot;profile: &quot;</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>Сессии<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Хранение сессии, восстановление, шифрование и прочее выполняются автоматически.</p>
+<p>В контроллере, вы можете использовать переменную <code class="docutils literal notranslate"><span class="pre">session</span></code>, которая имеет тип
+<code class="docutils literal notranslate"><span class="pre">scala.collection.mutable.Map[String,</span> <span class="pre">Any]</span></code>. Значения в <code class="docutils literal notranslate"><span class="pre">session</span></code> должны быть
+сериализуемые.</p>
+<p>Например, что бы сохранить что пользователь прошел авторизацию, вы можете сохранить
+его имя в сессии:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="p">(</span><span class="s2">&quot;userId&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">userId</span>
+</pre></div>
+</div>
+<p>Позднее, если вы хотите убедиться что пользователь авторизован, вы просто проверяете
+есть ли его имя в сессии:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">isDefinedAt</span><span class="p">(</span><span class="s2">&quot;userId&quot;</span><span class="p">))</span> <span class="n">println</span><span class="p">(</span><span class="s2">&quot;This user has logged in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Хранение идентификатора пользователя и загрузка его из базы данных при каждом запросе
+обычно является не плохим решением. В этом случае информация о пользователе обновляется
+при каждым запросе (включая изменения в правах доступа).</p>
+<div class="section" id="session-clear">
+<h3>session.clear()<a class="headerlink" href="#session-clear" title="Ссылка на этот заголовок">¶</a></h3>
+<p><a class="reference external" href="http://guides.rubyonrails.org/security.html#session-fixation">Одна строчка кода позволяет защититься от фиксации сессии</a>.</p>
+<p>Прочитайте статью по ссылке выше что бы узнать подробнее про эту атаку. Для защиты
+от атаки, в контроллере который использует логин пользователя, вызовете <code class="docutils literal notranslate"><span class="pre">session.clear()</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>  <span class="o">//</span> <span class="n">Сброс</span> <span class="n">сессии</span> <span class="n">прежде</span> <span class="n">чем</span> <span class="n">выполнять</span> <span class="n">какие</span> <span class="n">либо</span> <span class="n">дейтсвияthe</span> <span class="n">session</span>
+    <span class="n">session</span><span class="p">(</span><span class="s2">&quot;userId&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">userId</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Это касается так же контроллера, который выполняет «выход пользователя» (log out).</p>
+</div>
+<div class="section" id="sessionvar">
+<h3>SessionVar<a class="headerlink" href="#sessionvar" title="Ссылка на этот заголовок">¶</a></h3>
+<p>SessionVar, как и RequestVar, это способ сделать сессию более безопасной.</p>
+<p>Например, вы хотите хранить имя пользователя в сессии после того как он прошел авторизацию:</p>
+<p>Объявите session var:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.SessionVar</span>
+
+<span class="nb">object</span> <span class="n">SVar</span> <span class="p">{</span>
+  <span class="nb">object</span> <span class="n">username</span> <span class="n">extends</span> <span class="n">SessionVar</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Присвойте значение во время авторизации:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SVar</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Отобразите имя пользователя:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">SVar</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">isDefined</span><span class="p">)</span>
+  <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">{</span><span class="n">SVar</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">get</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span>
+<span class="k">else</span>
+  <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Login</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Для удаления используйте: <code class="docutils literal notranslate"><span class="pre">SVar.username.remove()</span></code></p></li>
+<li><p>Для сброса всей сессии используйте: <code class="docutils literal notranslate"><span class="pre">session.clear()</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h3>Хранилище сессии<a class="headerlink" href="#id13" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Из коробки Xitrum предоставляет 3 простых хранилища.
+В файле <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a>
+есть возможность настроить хранилище сессии:</p>
+<p>CookieSessionStore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Хранение сессии на стороне клиента в куках</span>
+<span class="n">store</span> <span class="o">=</span> <span class="n">xitrum</span><span class="o">.</span><span class="n">scope</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">CookieSessionStore</span>
+</pre></div>
+</div>
+<p>LruSessionStore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Простое хранилище на стороне сервера</span>
+<span class="n">store</span> <span class="p">{</span>
+  <span class="s2">&quot;xitrum.local.LruSessionStore&quot;</span> <span class="p">{</span>
+    <span class="n">maxElems</span> <span class="o">=</span> <span class="mi">10000</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Если вы запускаете несколько серверов, вы можете использовать
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast для хранения кластеризованных сессии</a>.</p>
+<p>Важно, если вы используете CookieSessionStore или Hazelcast, ваши данные должны быть сериализуемыми. Если
+ваши данные не подлежат сериализации используйте LruSessionStore.
+При использовании LruSessionStore вы можете кластеризовать сессии используя load balancer и sticky sessions.</p>
+<p>Эти три типа хранилища сессии обычно покрывают все необходимые случаи. Существует
+возможность определить свою реализацию хранилища сессии, используйте наследование от
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/SessionStore.scala">SessionStore</a>
+или
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/scope/session/ServerSessionStore.scala">ServerSessionStore</a> и реализуйте абстрактные методы.</p>
+<p>Хранилище может быть объявлено в двух видах:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">store</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">StoreClassName</span>
+</pre></div>
+</div>
+<p>Или:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">store</span> <span class="p">{</span>
+  <span class="s2">&quot;my.session.StoreClassName&quot;</span> <span class="p">{</span>
+    <span class="n">option1</span> <span class="o">=</span> <span class="n">value1</span>
+    <span class="n">option2</span> <span class="o">=</span> <span class="n">value2</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Используйте куки когда это возможно, поскольку они более масштабируемы
+(сериализуемым и меньше 4KB).
+Храните сессии на сервере (в памяти или базе данных) если это необходимо.</p>
+<p>Дальнейшее чтение:
+<a class="reference external" href="http://www.technicalinfo.net/papers/WebBasedSessionManagement.html">Web Based Session Management - Best practices in managing HTTP-based client sessions</a>.</p>
+</div>
+</div>
+<div class="section" id="object-vs-val">
+<h2>object vs. val<a class="headerlink" href="#object-vs-val" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Пожалуйста, используйте <code class="docutils literal notranslate"><span class="pre">object</span></code> вместо <code class="docutils literal notranslate"><span class="pre">val</span></code>.</p>
+<p><strong>Не делайте так</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">object</span> <span class="n">RVar</span> <span class="p">{</span>
+  <span class="n">val</span> <span class="n">title</span>    <span class="o">=</span> <span class="n">new</span> <span class="n">RequestVar</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+  <span class="n">val</span> <span class="n">category</span> <span class="o">=</span> <span class="n">new</span> <span class="n">RequestVar</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="nb">object</span> <span class="n">SVar</span> <span class="p">{</span>
+  <span class="n">val</span> <span class="n">username</span> <span class="o">=</span> <span class="n">new</span> <span class="n">SessionVar</span><span class="p">[</span><span class="n">String</span><span class="p">]</span>
+  <span class="n">val</span> <span class="n">isAdmin</span>  <span class="o">=</span> <span class="n">new</span> <span class="n">SessionVar</span><span class="p">[</span><span class="n">Boolean</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Приведенный код компилируется но не работает корректно, потому что Vars внутри
+себя используют имена классов что бы выполнять поиск. При использовании
+<code class="docutils literal notranslate"><span class="pre">val</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code> и <code class="docutils literal notranslate"><span class="pre">category</span></code> мы имеем тоже самое имя класса «xitrum.RequestVar».
+Одно и тоже как и для <code class="docutils literal notranslate"><span class="pre">username</span></code> и <code class="docutils literal notranslate"><span class="pre">isAdmin</span></code>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Запросы, параметры, куки, сессии</a><ul>
+<li><a class="reference internal" href="#id2">Запросы</a><ul>
+<li><a class="reference internal" href="#id3">Типы параметров</a></li>
+<li><a class="reference internal" href="#id4">Доступ к параметрам</a></li>
+<li><a class="reference internal" href="#at">«at»</a></li>
+<li><a class="reference internal" href="#atjson">«atJson»</a></li>
+<li><a class="reference internal" href="#requestvar">RequestVar</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">Куки</a><ul>
+<li><a class="reference internal" href="#id9">Допустимые символы в куки</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id11">Сессии</a><ul>
+<li><a class="reference internal" href="#session-clear">session.clear()</a></li>
+<li><a class="reference internal" href="#sessionvar">SessionVar</a></li>
+<li><a class="reference internal" href="#id13">Хранилище сессии</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#object-vs-val">object vs. val</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="flash.html"
+                        title="предыдущая глава">Serve flash socket policy file</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="validation.html"
+                        title="следующая глава">Валидация</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/scopes.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="validation.html" title="Валидация"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="flash.html" title="Serve flash socket policy file"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Запросы, параметры, куки, сессии</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Зависимости &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="prev" title="HOWTO" href="howto.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Зависимости</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Зависимости<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id2">
+<h2>Библиотеки<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum использует некоторые библиотеки. Вы можете использовать их напрямую
+если захотите.</p>
+<img alt="_images/deps.png" src="_images/deps.png" />
+<p>Главные зависимости:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.scala-lang.org/">Scala</a>:
+Xitrum написан на языке программирования Scala.</p></li>
+<li><p><a class="reference external" href="https://netty.io/">Netty</a>:
+В качестве асинхронного HTTP(S) сервера.
+Многие возможности Xitrum используют Netty,
+например WebSocket и zero copy.</p></li>
+<li><p><a class="reference external" href="http://akka.io/">Akka</a>:
+Для SockJS. Akka зависит от <a class="reference external" href="https://github.com/typesafehub/config">Typesafe Config</a>,
+который так же используется в Xitrum.</p></li>
+</ul>
+<p>Другие зависимости:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://commons.apache.org/lang/">Commons Lang</a>:
+Для экранирования JSON данных.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/glokka">Glokka</a>:
+Для кластеризация акторов SockJS.</p></li>
+<li><p><a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>:
+Для разбора и генерации JSON данных. JSON4S зависит от
+<a class="reference external" href="http://paranamer.codehaus.org/">Paranamer</a>.</p></li>
+<li><p><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Rhino">Rhino</a>:
+В Scalate для компиляции CoffeeScript в JavaScript.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/sclasner">Sclasner</a>:
+Для поиска HTTP маршрутов в контроллерах, .class и .jar файлах.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scaposer">Scaposer</a>:
+Для интернационализации.</p></li>
+<li><p><a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>:
+Для сериализации и десериализации куки и сессий.
+Chill базируется на <a class="reference external" href="http://code.google.com/p/kryo/">Kryo</a>.</p></li>
+<li><p><a class="reference external" href="http://slf4s.org/">SLF4S</a>, <a class="reference external" href="http://logback.qos.ch/">Logback</a>:
+Для логирования.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Шаблон пустого проекта Xitrum</a>
+включает утилиты:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scala-xgettext">scala-xgettext</a>:
+<a class="reference internal" href="i18n.html"><span class="doc">Извелечение сообщений</span></a> из .scala файлов во время компиляции.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package</a>:
+Для <a class="reference internal" href="deploy.html"><span class="doc">подготовки проекта к развертыванию</span></a> на сервере.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>:
+Для подключения Scala консоли к JVM процессу для живой отладки.</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>Связанные проекты<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Демо проекты:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a>:
+Шаблон пустого проекта Xitrum.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">xitrum-demos</a>:
+Демонстрационный проект возможностей Xitrum.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">xitrum-placeholder</a>:
+Демонстрационный проекта RESTful API который возвращает изображения.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/comy">comy</a>:
+Демонстрационный проект: короткие ссылки.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">xitrum-multimodule-demo</a>:
+Пример мульти модульного <a class="reference external" href="http://www.scala-sbt.org/">SBT</a> проекта.</p></li>
+</ul>
+<p>Проекты:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>:
+Стандартный шаблонизатор для Xitrum, подключенный в
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">шаблонном проекте</a>.
+Вы можете заменить его другим шаблонизатором, или вообще убрать если вам
+не нужен шаблонизатор. Он зависит от
+<a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> и
+<a class="reference external" href="https://github.com/chirino/scalamd">Scalamd</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">xitrum-hazelcast</a>:
+Для кластеризации кэша и сессии на стороне сервера.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">xitrum-ko</a>:
+Предоставляет дополнительные возможности для <a class="reference external" href="http://knockoutjs.com/">Knockoutjs</a>.</p></li>
+</ul>
+<p>Другие проекты:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-doc">xitrum-doc</a>:
+Исходный код <a class="reference external" href="http://xitrum-framework.github.io/guide.html">учебника Xitrum</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-framework.github.io">xitrum-hp</a>:
+Исходный код <a class="reference external" href="http://xitrum-framework.github.io/">домашней страниц Xitrum</a>.</p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Зависимости</a><ul>
+<li><a class="reference internal" href="#id2">Библиотеки</a></li>
+<li><a class="reference internal" href="#id3">Связанные проекты</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="howto.html"
+                        title="предыдущая глава">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/deps.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Зависимости</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

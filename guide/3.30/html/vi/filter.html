@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bộ lọc (filter) trong Action &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="Cache ở server" href="cache.html" />
+    <link rel="prev" title="Tải lên tệp" href="upload.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Cache ở server"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="upload.html" title="Tải lên tệp"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Bộ lọc (filter) trong Action</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="bo-loc-filter-trong-action">
+<h1>Bộ lọc (filter) trong Action<a class="headerlink" href="#bo-loc-filter-trong-action" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="before-filters">
+<h2>Before filters<a class="headerlink" href="#before-filters" title="Permalink to this headline">¶</a></h2>
+<p>Before filters chạy trước khi action chạy.
+Nếu một before filter respond bất kì thứ gì, tất cả các filter sau đó và cả action
+sẽ không chạy.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;before_filter&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">beforeFilter</span> <span class="p">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;I run therefore I am&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="o">//</span> <span class="n">Method</span> <span class="n">này</span> <span class="n">chạy</span> <span class="n">sau</span> <span class="nb">filter</span> <span class="n">bên</span> <span class="n">trên</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondInlineView</span><span class="p">(</span><span class="s2">&quot;Before filters should have been run, please check the log&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="after-filters">
+<h2>After filters<a class="headerlink" href="#after-filters" title="Permalink to this headline">¶</a></h2>
+<p>Before filters chạy sau khi action chạy.
+Chúng là các hàm (function) không tham số. Các giá trị trả về của các hàm này
+sẽ bị từ chối.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;after_filter&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">afterFilter</span> <span class="p">{</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Run at &quot;</span> <span class="o">+</span> <span class="n">System</span><span class="o">.</span><span class="n">currentTimeMillis</span><span class="p">())</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;After filter should have been run, please check the log&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="around-filters">
+<h2>Around filters<a class="headerlink" href="#around-filters" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;around_filter&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">aroundFilter</span> <span class="p">{</span> <span class="n">action</span> <span class="o">=&gt;</span>
+    <span class="n">val</span> <span class="n">begin</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">currentTimeMillis</span><span class="p">()</span>
+    <span class="n">action</span><span class="p">()</span>
+    <span class="n">val</span> <span class="n">end</span>   <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">currentTimeMillis</span><span class="p">()</span>
+    <span class="n">val</span> <span class="n">dt</span>    <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">begin</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">s</span><span class="s2">&quot;The action took $dt [ms]&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;Around filter should have been run, please check the log&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Nếu có nhiều around filter, chúng sẽ lồng nhau.</p>
+</div>
+<div class="section" id="thu-tu-thuc-hien-cua-cac-bo-loc-filter">
+<h2>Thứ tự thực hiện của các bộ lọc (filter)<a class="headerlink" href="#thu-tu-thuc-hien-cua-cac-bo-loc-filter" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Before filters được chạy đầu tiên, sau đó là  around filter, cuối cùng là after
+filter.</p></li>
+<li><p>Néu một trong nhưng before filter trả về false, các filter con lại ( bao gồm
+around và after filter) sẽ không được chạy.</p></li>
+<li><p>After filters luôn được chạy nếu ít nhát có một around filter được chạy.</p></li>
+<li><p>Nếu một around filter không gọi <code class="docutils literal notranslate"><span class="pre">action</span></code>, các around filter lồng bên trong
+filter này sẽ không được chạy.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">before1</span> <span class="o">-</span><span class="n">true</span><span class="o">-&gt;</span> <span class="n">before2</span> <span class="o">-</span><span class="n">true</span><span class="o">-&gt;</span> <span class="o">+--------------------+</span> <span class="o">--&gt;</span> <span class="n">after1</span> <span class="o">--&gt;</span> <span class="n">after2</span>
+                                <span class="o">|</span> <span class="n">around1</span> <span class="p">(</span><span class="mi">1</span> <span class="n">of</span> <span class="mi">2</span><span class="p">)</span>   <span class="o">|</span>
+                                <span class="o">|</span>   <span class="n">around2</span> <span class="p">(</span><span class="mi">1</span> <span class="n">of</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span>
+                                <span class="o">|</span>     <span class="n">action</span>         <span class="o">|</span>
+                                <span class="o">|</span>   <span class="n">around2</span> <span class="p">(</span><span class="mi">2</span> <span class="n">of</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span>
+                                <span class="o">|</span> <span class="n">around1</span> <span class="p">(</span><span class="mi">2</span> <span class="n">of</span> <span class="mi">2</span><span class="p">)</span>   <span class="o">|</span>
+                                <span class="o">+--------------------+</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bộ lọc (filter) trong Action</a><ul>
+<li><a class="reference internal" href="#before-filters">Before filters</a></li>
+<li><a class="reference internal" href="#after-filters">After filters</a></li>
+<li><a class="reference internal" href="#around-filters">Around filters</a></li>
+<li><a class="reference internal" href="#thu-tu-thuc-hien-cua-cac-bo-loc-filter">Thứ tự thực hiện của các bộ lọc (filter)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="upload.html"
+                        title="chương trước ">Tải lên tệp</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="cache.html"
+                        title="chương tiếp">Cache ở server</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/filter.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="cache.html" title="Cache ở server"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="upload.html" title="Tải lên tệp"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Bộ lọc (filter) trong Action</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

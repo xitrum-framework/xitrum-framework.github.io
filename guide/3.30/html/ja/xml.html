@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XML &#8212; Xitrum Scala Web Framework Guide 3.30.0 ドキュメント</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="JavaScript と JSON" href="js.html" />
+    <link rel="prev" title="ポストバック" href="postback.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript と JSON"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="ポストバック"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XML</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="xml">
+<h1>XML<a class="headerlink" href="#xml" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>ScalaではXMLリテラルを記述することが可能です。Xitrumではこの機能をテンプレートエンジンとして利用しています。</p>
+<ul class="simple">
+<li><p>ScalaコンパイラによるXMLシンタックスチェックは、Viewの型安全につながります。</p></li>
+<li><p>ScalaによるXMLの自動的なエスケープは、<a class="reference external" href="http://en.wikipedia.org/wiki/Cross-site_scripting">XSS</a>　攻撃を防ぎます。</p></li>
+</ul>
+<p>いくつかのTipsを示します。</p>
+<div class="section" id="id1">
+<h2>XMLのアンエスケープ<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scala.xml.Unparsed</span></code> を使用する場合:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.xml.Unparsed</span>
+
+<span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="n">Unparsed</span><span class="p">(</span><span class="s2">&quot;if (1 &lt; 2) alert(&#39;Xitrum rocks&#39;);&quot;</span><span class="p">)}</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;xml:unparsed&gt;</span></code> を使用する場合:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">xml</span><span class="p">:</span><span class="n">unparsed</span><span class="o">&gt;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Xitrum rocks&#39;</span><span class="p">);</span>
+  <span class="o">&lt;/</span><span class="n">xml</span><span class="p">:</span><span class="n">unparsed</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;xml:unparsed&gt;</span></code> は実際の出力には含まれません:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">alert</span><span class="p">(</span><span class="s1">&#39;Xitrum rocks&#39;</span><span class="p">);</span>
+<span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>XMLエレメントのグループ化<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;header&quot;</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="k">if</span> <span class="p">(</span><span class="n">loggedIn</span><span class="p">)</span>
+    <span class="o">&lt;</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="p">{</span><span class="n">username</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">b</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">LogoutAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Logout</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span>
+  <span class="k">else</span>
+    <span class="o">&lt;</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">LoginAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Login</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">RegisterAction</span><span class="p">]}</span><span class="o">&gt;</span><span class="n">Register</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">xml</span><span class="p">:</span><span class="n">group</span><span class="o">&gt;</span><span class="p">}</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;xml:group&gt;</span></code> は実際の出力には含まれません。ユーザーがログイン状態の場合、以下のように出力されます:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">div</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;header&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">My</span> <span class="n">username</span><span class="o">&lt;/</span><span class="n">b</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;/login&quot;</span><span class="o">&gt;</span><span class="n">Logout</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="xhtml">
+<h2>XHTMLの描画<a class="headerlink" href="#xhtml" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>XitrumはviewとレイアウトはXHTMLとして出力します。
+レアケースではありますが、もしあなたが直接、出力内容を定義する場合、以下のコードが示す内容に注意してください。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import scala.xml.Xhtml
+
+val br = &lt;br /&gt;
+br.toString            // =&gt; &lt;br&gt;&lt;/br&gt;, この場合ブラウザによってはbrタグが2つあると認識されることがあります。
+Xhtml.toXhtml(&lt;br /&gt;)  // =&gt; &quot;&lt;br /&gt;&quot;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XML</a><ul>
+<li><a class="reference internal" href="#id1">XMLのアンエスケープ</a></li>
+<li><a class="reference internal" href="#id2">XMLエレメントのグループ化</a></li>
+<li><a class="reference internal" href="#xhtml">XHTMLの描画</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="postback.html"
+                        title="前の章へ">ポストバック</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="js.html"
+                        title="次の章へ">JavaScript と JSON</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/xml.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="js.html" title="JavaScript と JSON"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="postback.html" title="ポストバック"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XML</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

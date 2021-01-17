@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clustering với Akka và Hazelcast &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="Netty handler" href="handler.html" />
+    <link rel="prev" title="Triển khai ứng dụng web trên server" href="deploy.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handler"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="Triển khai ứng dụng web trên server"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Clustering với Akka và Hazelcast</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="clustering-voi-akka-va-hazelcast">
+<h1>Clustering với Akka và Hazelcast<a class="headerlink" href="#clustering-voi-akka-va-hazelcast" title="Permalink to this headline">¶</a></h1>
+<p>Xitrum được thiết kế để chạy trong môi trường sản xuất như nhiều instance
+đằng sau một máy chủ proxy hoặc cân bằng tải:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                              <span class="o">/</span> <span class="n">Xitrum</span> <span class="n">instance</span> <span class="mi">1</span>
+<span class="n">Load</span> <span class="n">balancer</span><span class="o">/</span><span class="n">proxy</span> <span class="n">server</span> <span class="o">----</span> <span class="n">Xitrum</span> <span class="n">instance</span> <span class="mi">2</span>
+                              \ <span class="n">Xitrum</span> <span class="n">instance</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Cache, sessions, và SockJS sessions có thể được be clustered bởi tính năng của
+<a class="reference external" href="http://akka.io/">Akka</a> và <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>.</p>
+<p>Với Hazelcast, Xitrum trở thành một in-process memory cache server. Bạn không cần
+sử dụng các máy chủ bổ sung như Memcache.</p>
+<p>Xem thêm <code class="docutils literal notranslate"><span class="pre">config/akka.conf</span></code>, và đọc <a class="reference external" href="http://akka.io/docs/">Akka doc</a> hay
+<a class="reference external" href="http://hazelcast.org/documentation/">Hazelcast doc</a> để biết cách cấu hình
+Akka và Hazelcast cluster.</p>
+<p>Nhớ rằng: Với session, bạn cũng có thể <span class="xref std std-doc">lưu trữ ở client bằng cookie /scopes&gt;</span>.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="deploy.html"
+                        title="chương trước ">Triển khai ứng dụng web trên server</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="handler.html"
+                        title="chương tiếp">Netty handler</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cluster.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handler"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="deploy.html" title="Triển khai ứng dụng web trên server"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Clustering với Akka và Hazelcast</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

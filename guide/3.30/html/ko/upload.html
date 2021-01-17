@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>파일 업로드 &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="액션 필터" href="filter.html" />
+    <link rel="prev" title="검증" href="validation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="filter.html" title="액션 필터"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="validation.html" title="검증"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">파일 업로드</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>파일 업로드<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="scopes.html"><span class="doc">스코프</span></a> 를 참고하세요.</p>
+<p>업로드 폼에서 <code class="docutils literal notranslate"><span class="pre">enctype</span></code> 를 <code class="docutils literal notranslate"><span class="pre">multipart/form-data</span></code> 으로 설정합니다.</p>
+<p>MyUpload.scalate:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">MyUpload</span><span class="p">]}</span> <span class="n">enctype</span><span class="o">=</span><span class="s2">&quot;multipart/form-data&quot;</span><span class="p">)</span>
+  <span class="o">!=</span> <span class="n">antiCsrfInput</span>
+
+  <span class="n">label</span> <span class="n">Please</span> <span class="n">select</span> <span class="n">a</span> <span class="n">file</span><span class="p">:</span>
+  <span class="nb">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;file&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;myFile&quot;</span><span class="p">)</span>
+
+  <span class="n">button</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span><span class="p">)</span> <span class="n">Upload</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">MyUpload</span></code> 액션:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">io.netty.handler.codec.http.multipart.FileUpload</span>
+
+<span class="n">val</span> <span class="n">myFile</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">FileUpload</span><span class="p">](</span><span class="s2">&quot;myFile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">myFile</span></code>  <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/multipart/FileUpload.html">FileUpload</a>
+의 인스턴스 입니다. 이 메소드를 이용하여 파일 이름을 가져오거나 파일의 이동 등을 할 수 있습니다.</p>
+<p>작은 파일(16KB 이하)은 메모리에 저장됩니다. 대용량 파일은 시스템의 임시 폴더에 저장됩니다(혹은 xitrum.conf에 정의된 <code class="docutils literal notranslate"><span class="pre">xitrum.request.tmpUploadDir</span></code>).
+그리고 나서 커넥션이 닫히거나 응답이 전송되면 자동으로 삭제됩니다.</p>
+<div class="section" id="ajax">
+<h2>Ajax 스타일 업로드<a class="headerlink" href="#ajax" title="Permalink to this headline">¶</a></h2>
+<p>많은 자바스크립트 라이브러리는 Ajax 스타일의 업로드를 지원합니다. 숨겨진 iframe이나 플래시등으로 <code class="docutils literal notranslate"><span class="pre">multipart/form-data</span></code> 를 서버로 전송합니다.
+폼의 요청 파라미터가 전송될 때, 어떤 라이브러리를 사용했는지는 Xitrum 억세스 로그를 확인하면 알 수 있습니다.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">파일 업로드</a><ul>
+<li><a class="reference internal" href="#ajax">Ajax 스타일 업로드</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="validation.html"
+                        title="previous chapter">검증</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="filter.html"
+                        title="next chapter">액션 필터</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/upload.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="filter.html" title="액션 필터"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="validation.html" title="검증"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">파일 업로드</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

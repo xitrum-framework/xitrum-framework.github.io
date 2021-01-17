@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Метрики &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="HOWTO" href="howto.html" />
+    <link rel="prev" title="Netty handlers" href="handler.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Метрики</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Метрики<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Xitrum собирает информацию об использовании памяти, CPU и информацию об использовании
+контроллеров каждой ноды вашего Akka кластера. Эти данные публикуются в JSON формате.
+Xitrum так же позволяет публиковать ваши метрики.</p>
+<p>Эти метрики базируются на библиотеке <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a>.</p>
+<div class="section" id="id2">
+<h2>Агрегирование метрик<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="section" id="cpu">
+<h3>Память и CPU<a class="headerlink" href="#cpu" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Информация по памяти и CPU собирается с помощью
+<a class="reference external" href="http://doc.akka.io/api/akka/2.3.0/index.html#akka.cluster.NodeMetrics">NodeMetrics</a>
+системы актров каждой ноды.</p>
+<p>Память:</p>
+<img alt="_images/metrics_heapmemory.png" src="_images/metrics_heapmemory.png" />
+<p>CPU: Количество процессоров и средняя загрузка</p>
+<img alt="_images/metrics_cpu.png" src="_images/metrics_cpu.png" />
+</div>
+<div class="section" id="id3">
+<h3>Метрики контроллера<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Xitrum собирает состояния выполнения каждого контроллера в формате
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#histograms">гистограммы</a>.
+Вы можете узнать сколько раз контроллер запускался, время выполнения для
+не асинхронных запросов.</p>
+<img alt="_images/metrics_action_count.png" src="_images/metrics_action_count.png" />
+<p>Последнее время выполнения конкретного контроллера:</p>
+<img alt="_images/metrics_action_time.png" src="_images/metrics_action_time.png" />
+</div>
+<div class="section" id="id5">
+<h3>Дополнительные метрики<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Дополнительные метрики вы можете собирать самостоятельно. Подробнее про использование читайте
+<a class="reference external" href="http://metrics.dropwizard.io/3.1.0/">Coda Hale Metrics</a> и
+<a class="reference external" href="https://github.com/erikvanoosten/metrics-scala">реализация на Scala</a>. Используйте
+пакет <code class="docutils literal notranslate"><span class="pre">xitru.Metrics</span></code>, в нем <code class="docutils literal notranslate"><span class="pre">gauge</span></code>, <code class="docutils literal notranslate"><span class="pre">counter</span></code>, <code class="docutils literal notranslate"><span class="pre">meter</span></code>, <code class="docutils literal notranslate"><span class="pre">timer</span></code> и <code class="docutils literal notranslate"><span class="pre">histogram</span></code>.</p>
+<p>Пример таймера:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">Metrics</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nb">object</span> <span class="n">MyAction</span> <span class="p">{</span>
+  <span class="n">lazy</span> <span class="n">val</span> <span class="n">myTimer</span> <span class="o">=</span> <span class="n">Metrics</span><span class="o">.</span><span class="n">timer</span><span class="p">(</span><span class="s2">&quot;myTimer&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;my/action&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="kn">import</span> <span class="nn">MyAction._</span>
+
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">myTimer</span><span class="o">.</span><span class="n">time</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">Задача</span> <span class="n">время</span> <span class="n">выполнения</span> <span class="n">которой</span> <span class="n">вы</span> <span class="n">хотите</span> <span class="n">замерить</span>
+      <span class="o">...</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Публикация метрик<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum публикует последние значения метрики в JSON формате через определенный интервал времени.
+Этот интервал имеет не постоянное значение и может меняться.</p>
+<p>Информация о памяти:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;TYPE&quot;</span>      <span class="p">:</span> <span class="s2">&quot;heapMemory&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SYSTEM&quot;</span>    <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+  <span class="s2">&quot;HOST&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+  <span class="s2">&quot;PORT&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+  <span class="s2">&quot;HASH&quot;</span>      <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">hashCode</span><span class="p">,</span>
+  <span class="s2">&quot;TIMESTAMP&quot;</span> <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">NodeMetrics</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span>
+  <span class="s2">&quot;USED&quot;</span>      <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span><span class="p">,</span>
+  <span class="s2">&quot;COMMITTED&quot;</span> <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span><span class="p">,</span>
+  <span class="s2">&quot;MAX&quot;</span>       <span class="p">:</span> <span class="n">Number</span> <span class="k">as</span> <span class="n">byte</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Информация о CPU:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;TYPE&quot;</span>              <span class="p">:</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SYSTEM&quot;</span>            <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">system</span><span class="p">,</span>
+  <span class="s2">&quot;HOST&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+  <span class="s2">&quot;PORT&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+  <span class="s2">&quot;HASH&quot;</span>              <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">Address</span><span class="o">.</span><span class="n">hashCode</span><span class="p">,</span>
+  <span class="s2">&quot;TIMESTAMP&quot;</span>         <span class="p">:</span> <span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">NodeMetrics</span><span class="o">.</span><span class="n">timestamp</span>
+  <span class="s2">&quot;SYSTEMLOADAVERAGE&quot;</span> <span class="p">:</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="s2">&quot;CPUCOMBINED&quot;</span>       <span class="p">:</span> <span class="n">Number</span><span class="p">,</span>
+  <span class="s2">&quot;PROCESSORS&quot;</span>        <span class="p">:</span> <span class="n">Number</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>MetricsRegistry использует <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/manual/json/">metrics-json</a> для разбора
+JSON файла.</p>
+<div class="section" id="xitrum">
+<h3>Просмотр метрик через Xitrum<a class="headerlink" href="#xitrum" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Xitrum предоставляет стандартный способ просмотра метрик по ссылке <code class="docutils literal notranslate"><span class="pre">/xitrum/metrics/viewer?api_key=&lt;смотри</span> <span class="pre">xitrum.conf&gt;</span></code>.
+По этой ссылке доступны графики представленные выше.
+Графики созданы с использованием <a class="reference external" href="http://d3js.org/">D3.js</a>.</p>
+<p>Ссылка может быть сформирована следующим образом:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Config</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.XitrumMetricsViewer</span>
+
+<span class="n">url</span><span class="p">[</span><span class="n">XitrumMetricsViewer</span><span class="p">](</span><span class="s2">&quot;api_key&quot;</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="o">.</span><span class="n">xitrum</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">apiKey</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="jconsole">
+<h3>Jconsole<a class="headerlink" href="#jconsole" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Метрики можно просматривать через <code class="docutils literal notranslate"><span class="pre">jconsole</span></code> используя <a class="reference external" href="http://metrics.dropwizard.io/3.1.0/getting-started/#reporting-via-jmx">JVM Reporter</a>.</p>
+<img alt="_images/metrics_jconsole.png" src="_images/metrics_jconsole.png" />
+<p>Запуск:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">com.codahale.metrics.JmxReporter</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">JmxReporter</span><span class="o">.</span><span class="n">forRegistry</span><span class="p">(</span><span class="n">xitrum</span><span class="o">.</span><span class="n">Metrics</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span><span class="o">.</span><span class="n">build</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Затем используйте <a class="reference external" href="http://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html">jconsole</a>.</p>
+</div>
+<div class="section" id="id9">
+<h3>Просмотр метрик сторонними средствами<a class="headerlink" href="#id9" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Метрики публикуются как ссылка SockJS <code class="docutils literal notranslate"><span class="pre">xitrum/metrics/channel</span></code> в формате JSON.
+<code class="docutils literal notranslate"><span class="pre">jsAddMetricsNameSpace</span></code> - шаблон JavaScript кода который предоставляет Xitrum
+для установки соединения.</p>
+<p>Реализуйте свой собственный JSON обработчик используя метод <code class="docutils literal notranslate"><span class="pre">initMetricsChannel</span></code>.</p>
+<p>Пример контроллера:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.MetricsViewer</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;my/metrics/viewer&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MySubscriber</span> <span class="n">extends</span> <span class="n">MetricsViewer</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">jsAddMetricsNameSpace</span><span class="p">(</span><span class="s2">&quot;window&quot;</span><span class="p">)</span>
+    <span class="n">jsAddToView</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">      function onValue(json) {</span>
+<span class="s2">        console.log(json);</span>
+<span class="s2">      }</span>
+<span class="s2">      function onClose(){</span>
+<span class="s2">        console.log(&quot;channel closed&quot;);</span>
+<span class="s2">      }</span>
+<span class="s2">      window.initMetricsChannel(onValue, onClose);</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id10">
+<h3>Хранения метрик<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h3>
+<p>Для экономии памяти, Xitrum не хранит старые значения метрик. Если вы хотите хранить эти
+значения, вам передается реализовать собственный обработчик.</p>
+<p>Например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">akka.actor.Actor</span>
+<span class="kn">import</span> <span class="nn">xitrum.metrics.PublisherLookUp</span>
+
+<span class="k">class</span> <span class="nc">MySubscriber</span> <span class="n">extends</span> <span class="n">Actor</span> <span class="k">with</span> <span class="n">PublisherLookUp</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">preStart</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">lookUpPublisher</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">receive</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">case</span> <span class="n">_</span> <span class="o">=&gt;</span>
+  <span class="p">}</span>
+
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">doWithPublisher</span><span class="p">(</span><span class="n">globalPublisher</span><span class="p">:</span> <span class="n">ActorRef</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">When</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">multinode</span> <span class="n">environment</span>
+      <span class="n">case</span> <span class="n">multinodeMetrics</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">NodeMetrics</span><span class="p">]</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="o">//</span> <span class="n">When</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">single</span> <span class="n">node</span> <span class="n">environment</span>
+      <span class="n">case</span> <span class="n">nodeMetrics</span><span class="p">:</span> <span class="n">NodeMetrics</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="n">case</span> <span class="n">Publish</span><span class="p">(</span><span class="n">registryAsJson</span><span class="p">)</span> <span class="o">=&gt;</span>
+        <span class="o">//</span> <span class="n">Save</span> <span class="n">to</span> <span class="n">DB</span> <span class="ow">or</span> <span class="n">write</span> <span class="n">to</span> <span class="n">file</span><span class="o">.</span>
+
+      <span class="n">case</span> <span class="n">_</span> <span class="o">=&gt;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Метрики</a><ul>
+<li><a class="reference internal" href="#id2">Агрегирование метрик</a><ul>
+<li><a class="reference internal" href="#cpu">Память и CPU</a></li>
+<li><a class="reference internal" href="#id3">Метрики контроллера</a></li>
+<li><a class="reference internal" href="#id5">Дополнительные метрики</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Публикация метрик</a><ul>
+<li><a class="reference internal" href="#xitrum">Просмотр метрик через Xitrum</a></li>
+<li><a class="reference internal" href="#jconsole">Jconsole</a></li>
+<li><a class="reference internal" href="#id9">Просмотр метрик сторонними средствами</a></li>
+<li><a class="reference internal" href="#id10">Хранения метрик</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="handler.html"
+                        title="предыдущая глава">Netty handlers</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="howto.html"
+                        title="следующая глава">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/metrics.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="handler.html" title="Netty handlers"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Метрики</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

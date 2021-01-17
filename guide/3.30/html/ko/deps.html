@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>의존도 &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="HOWTO" href="howto.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">의존도</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>의존도<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>라이브러리 의존도<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum은 다양한 라이브러리를 포함하고 있습니다. 원한다면 직접 라이브러리를 사용할 수 있습니다.</p>
+<img alt="_images/deps.png" src="_images/deps.png" />
+<p>주요 종속 라이브러리:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.scala-lang.org/">Scala</a>:
+Xitrum은 Scala로 작성되었습니다.</p></li>
+<li><p><a class="reference external" href="https://netty.io/">Netty</a>:
+WebSocket과 제로 복사 파일 전송 등
+Xitrum의 비동기 HTTP(S) 서버의 많은 기능은 Netty의 기능을 바탕으로 구현되었습니다.</p></li>
+<li><p><a class="reference external" href="http://akka.io/">Akka</a>:
+주로 SockJS 위해 Akka는 <a class="reference external" href="https://github.com/typesafehub/config">Typesafe Config</a>
+에 의존하고 있으며 Xitrum 또한 그것을 사용하고 있습니다.</p></li>
+</ul>
+<p>기타 주요 종속 라이브러리 :</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://commons.apache.org/lang/">Commons Lang</a>:
+JSON 데이터의 이스케이프 처리에 사용하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/glokka">Glokka</a>:
+SockJS 액터 클러스터링에 사용하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/json4s/json4s">JSON4S</a>:
+JSON 파싱과 생성을 위해 사용합니다.
+JSON4S은
+<a class="reference external" href="http://paranamer.codehaus.org/">Paranamer</a> 의존 라이브러리로 사용하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://developer.mozilla.org/en-US/docs/Rhino">Rhino</a>:
+Scalate에서 CoffeeScript를 JavaScript로 컴파일하는 데 사용하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/sclasner">Sclasner</a>:
+클래스 파일과 jar 파일에서 HTTP 경로를 검색하는 데 사용하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scaposer">Scaposer</a>:
+국제화를 위해 사용하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/twitter/chill">Twitter Chill</a>:
+쿠키와 세션의 직렬화, 역직렬화에 사용하고 있습니다.
+Chill는 <a class="reference external" href="http://code.google.com/p/kryo/">Kryo</a> 를 바탕으로 하고 있습니다.</p></li>
+<li><p><a class="reference external" href="http://slf4s.org/">SLF4S</a> <a class="reference external" href="http://logback.qos.ch/">Logback</a>:
+로깅에 사용하고 있습니다.</p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum 프로젝트 뼈대</a> 는 다음 도구를 포장하고 있습니다:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scala-xgettext">scala-xgettext</a>:
+컴파일시에 .scala 파일 <a class="reference internal" href="i18n.html"><span class="doc">국제화</span></a> 문자열을 확장합니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package</a>:
+프로덕션 환경에 배포하기 위해 <a class="reference internal" href="deploy.html"><span class="doc">프로젝트를 패키징</span></a> 합니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>:
+Scala 콘솔에서 JVM 프로세스에 연결하여 동적 디버깅을 가능하게 합니다.</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>관련 프로젝트<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>데모:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">xitrum-new</a>:
+신규 Xitrum 프로젝트의 골격.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-demos">xitrum-demos</a>:
+Xitrum 각 기능의 데모 프로젝트.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">xitrum-placeholder</a>:
+Xitrum으로 화상 이미지 응용 프로그램의 데모.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/comy">comy</a>:
+간단한 URL 숏터 앱 데모.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-multimodule-demo">xitrum-multimodule-demo</a>:
+<a class="reference external" href="http://www.scala-sbt.org/">SBT</a> 멀티 모듈 프로젝트의 데모.</p></li>
+</ul>
+<p>플러그인:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-scalate">xitrum-scalate</a>:
+Xitrum의 기본 템플릿 엔진.
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum-new">Xitrum 프로젝트 뼈대</a> 에서 사용하고 있습니다.
+다른 템플릿 엔진을 사용하는 것도 또한 필요가 없으면 프로젝트에서 삭제해 버리는 것도 가능합니다.
+xitrum-scalate은
+<a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> 와
+<a class="reference external" href="https://github.com/chirino/scalamd">Scalamd</a> 에 의존하고 있습니다.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">xitrum-hazelcast</a>:
+캐시와 서버의 세션 클러스터링을 하는 플러그인.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-ko">xitrum-ko</a>:
+<a class="reference external" href="http://knockoutjs.com/">Knockoutjs</a> 를 간편하게 사용할 수 있도록 하는 플러그인.</p></li>
+</ul>
+<p>기타 프로젝트:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-doc">xitrum-doc</a>:
+<a class="reference external" href="http://xitrum-framework.github.io/guide.html">Xitrum Guide</a> 소스 코드.</p></li>
+<li><p><a class="reference external" href="https://github.com/xitrum-framework/xitrum-framework.github.io">xitrum-hp</a>:
+<a class="reference external" href="http://xitrum-framework.github.io/">Xitrum Homepage</a> 소스 코드.</p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">의존도</a><ul>
+<li><a class="reference internal" href="#id2">라이브러리 의존도</a></li>
+<li><a class="reference internal" href="#id3">관련 프로젝트</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="howto.html"
+                        title="previous chapter">HOWTO</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/deps.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="howto.html" title="HOWTO"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">의존도</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

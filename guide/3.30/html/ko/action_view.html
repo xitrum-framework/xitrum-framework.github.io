@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Action 과 view &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RESTful APIs" href="restful.html" />
+    <link rel="prev" title="튜토리얼" href="tutorial.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="튜토리얼"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Action 과 view</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="action-view">
+<h1>Action 과 view<a class="headerlink" href="#action-view" title="Permalink to this headline">¶</a></h1>
+<p>유연함을 위해, Xitrum은 3가지 형태의 Action을 제공합니다.
+보통 <code class="docutils literal notranslate"><span class="pre">Action</span></code>, <code class="docutils literal notranslate"><span class="pre">FutureAction</span></code>, <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code> 입니다.</p>
+<div class="section" id="normal-action">
+<h2>Normal Action<a class="headerlink" href="#normal-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>요청은 Netty의 IO스레드로 직접로 처리되므로 시간이 걸리는 처리(블록처리)를 포함하면 안됩니다.
+Netty의 IO스레드를 오래 사용하게 되면 Netty는 새로운 연결을 할 수 없거나 응답을 회신할 수 없게 되기 때문입니다.</p>
+</div>
+<div class="section" id="futureaction">
+<h2>FutureAction<a class="headerlink" href="#futureaction" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.FutureAction</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">FutureAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondText</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>요청은 Netty의 스레드 풀과는 별개로 다음의 <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code> 과 같은 스레드 풀에서 처리됩니다.</p>
+</div>
+<div class="section" id="actor-action">
+<h2>Actor Action<a class="headerlink" href="#actor-action" title="Permalink to this headline">¶</a></h2>
+<p>Action 을 Akka actor 처럼 정의하려면 <code class="docutils literal notranslate"><span class="pre">ActorAction</span></code> 을 상속하면 됩니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scala.concurrent.duration._</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.ActorAction</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HelloAction</span> <span class="n">extends</span> <span class="n">ActorAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">See</span> <span class="n">Akka</span> <span class="n">doc</span> <span class="n">about</span> <span class="n">scheduler</span>
+    <span class="kn">import</span> <span class="nn">context.dispatcher</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">scheduleOnce</span><span class="p">(</span><span class="mi">3</span> <span class="n">seconds</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">currentTimeMillis</span><span class="p">())</span>
+
+    <span class="o">//</span> <span class="n">See</span> <span class="n">Akka</span> <span class="n">doc</span> <span class="n">about</span> <span class="s2">&quot;become&quot;</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">become</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">pastTime</span> <span class="o">=&gt;</span>
+        <span class="n">respondInlineView</span><span class="p">(</span><span class="n">s</span><span class="s2">&quot;It&#39;s $pastTime Unix ms 3s ago.&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Actor 인스턴스는 요청이 발생할때 생성됩니다. 이 actor 인스턴스는 연결이 끊어지거나
+<code class="docutils literal notranslate"><span class="pre">respondText</span></code>, <code class="docutils literal notranslate"><span class="pre">respondView</span></code> 등의 메소드를 통해 응답을 얻을때 중지됩니다.
+청크응답의 경우 즉시 중지되지 않고 마지막 청크가 전송된 시점에서 중지됩니다.</p>
+<p>요청은 “xitrum”이라고 불리는 Akka actor 시스템 스레드 풀에서 처리됩니다.</p>
+</div>
+<div class="section" id="id1">
+<h2>클라이언트로의 전송<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Action으로 부터 클라이언트로 응답을 전송하려면 다음과 같은 방법을 사용합니다</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">respondView</span></code>: 레이아웃을 포함하거나 포함하지 않고 View 템플릿을 전송합니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code>: 레이아웃을 포함하거나 포함하지 않고 인라인으로 작성된 템플릿을 전송합니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondText(&quot;hello&quot;)</span></code>: 레이아웃 파일을 사용하지 않고 문자열을 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondHtml(&quot;&lt;html&gt;...&lt;/html&gt;&quot;)</span></code>: contentType을 “text/html” 형식으로 문자열을 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJson(List(1,</span> <span class="pre">2,</span> <span class="pre">3))</span></code>: Scala 객체를 JSON으로 변환하여 contentType을 “application/json” 형식으로 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJs(&quot;myFunction([1,</span> <span class="pre">2,</span> <span class="pre">3])&quot;)</span></code> contentType을 “application/javascript”으로 문자열을 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonP(List(1,</span> <span class="pre">2,</span> <span class="pre">3),</span> <span class="pre">&quot;myFunction&quot;)</span></code>: 위 두 가지를 조합하여 JSONP로 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;)</span></code>: contentType을 “application/javascript”으로 문자열을 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondJsonPText(&quot;[1,</span> <span class="pre">2,</span> <span class="pre">3]&quot;,</span> <span class="pre">&quot;myFunction&quot;)</span></code>: <cite>respondJs</cite>, <a href="#id2"><span class="problematic" id="id3">`</span></a>respondJsonText`의 두 가지 조합을 JSONP로 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondBinary</span></code>: 바이트 배열로 보냅니다</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondFile</span></code>: 디스크에서 파일을 직접 보냅니다. <a class="reference external" href="http://www.ibm.com/developerworks/library/j-zerocopy/">zero-copy</a> 를 사용하기 때문에 매우 빠릅니다.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">respondEventSource(&quot;data&quot;,</span> <span class="pre">&quot;event&quot;)</span></code>: 청크응답을 보냅니다</p></li>
+</ul>
+</div>
+<div class="section" id="view">
+<h2>템플릿 View 파일 응답<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
+<p>모든 Action은  <a class="reference external" href="http://scalate.fusesource.org/">Scalate</a> 의 템플릿 View 파일과 연관이 있습니다.
+위의 응답방식을 사용하여 직접 응답을 보내는 대신 별도의 View파일을 사용하여 응답을 보낼 수 있습니다.</p>
+<p>scr/main/scala/mypackage/MyAction.scala:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;myAction&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- import mypackage.MyAction
+
+!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    a(href={url}) Path to the current action
+    p= currentAction.asInstanceOf[MyAction].hello(&quot;World&quot;)
+
+    != jsForView
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xitrumCss</span></code> Xitrum 의 기본 CSS파일입니다. 삭제해도 무방합니다.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code> jQuery, jQuery Validate plugin등을 포함하고 있습니다. &lt;head&gt;안에 명시해야 합니다.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jsForView</span></code> <code class="docutils literal notranslate"><span class="pre">jsAddToView</span></code> 에 의해 추가된 javascript가 출력됩니다. 레이아웃의 끝에 명시해야 합니다.</p></li>
+</ul>
+<p>템플릿 파일에서 <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Action.scala">xitrum.Action</a> 클래스의 모든 파일을 사용할 수 있습니다.
+또한, <code class="docutils literal notranslate"><span class="pre">unescape</span></code> 같은 Scalate 유틸리티도 사용할 수 있습니다. Scalate의 유틸리티는 <a class="reference external" href="http://scalate.fusesource.org/documentation/index.html">Scalate doc</a>　를 참고하세요.</p>
+<p>Scalate 템플릿의 기본 유형은 <a class="reference external" href="http://scalate.fusesource.org/documentation/jade.html">Jade</a> 를 사용하고 있습니다.
+또한 <a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Mustache</a> ,
+<a class="reference external" href="http://scalate.fusesource.org/documentation/scaml-reference.html">Scaml</a> ,
+<a class="reference external" href="http://scalate.fusesource.org/documentation/ssp-reference.html">Ssp</a> 를 선택할 수 있습니다.
+템플릿의 기본 유형을 어플리케이션의 config 디렉토리내의 <cite>xitrum.conf</cite> 에서 설정할 수 있습니다.</p>
+<p><cite>respondView</cite> 메소드의 type 매개변수로 “jade”, “mustache”, “scaml”, “ssp” 중 하나를 지정하여 기본 템플릿 유형을 무시하고 사용할 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">options</span> <span class="o">=</span> <span class="n">Map</span><span class="p">(</span><span class="s2">&quot;type&quot;</span> <span class="o">-&gt;</span><span class="s2">&quot;mustache&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="currentaction">
+<h3>currentAction의 캐스팅<a class="headerlink" href="#currentaction" title="Permalink to this headline">¶</a></h3>
+<p>지금의 Action의 인스턴스를 정확하게 지정하려면 <code class="docutils literal notranslate"><span class="pre">currentAction</span></code> 를 지정한 Action 캐스팅합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>여러 줄로 사용하는 경우에 캐스트 처리를 한 번만 호출합니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">val</span> <span class="n">myAction</span> <span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">];</span> <span class="kn">import</span> <span class="nn">myAction._</span>
+
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Scala&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">hello</span><span class="p">(</span><span class="s2">&quot;Xitrum&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Mustache<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Mustache에 대한 참고자료:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://mustache.github.com/mustache.5.html">Mustache syntax</a></p></li>
+<li><p><a class="reference external" href="http://scalate.fusesource.org/documentation/mustache.html">Scalate implementation</a></p></li>
+</ul>
+<p>Mustach는 구문위반에 강력해서 Jade 에서 할 수 있는 작업중 일부는 사용할 수 없습니다.</p>
+<p>Action 에서 뭔가 값을 전달할 경우에는 <code class="docutils literal notranslate"><span class="pre">at</span></code> 메소드를 사용합니다.</p>
+<p>Action:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">at</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Jack&quot;</span>
+<span class="n">at</span><span class="p">(</span><span class="s2">&quot;xitrumCss&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="n">xitrumCss</span>
+</pre></div>
+</div>
+<p>Mustache template:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">My</span> <span class="n">name</span> <span class="ow">is</span> <span class="p">{{</span><span class="n">name</span><span class="p">}}</span>
+<span class="p">{{</span><span class="n">xitrumCss</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>주의:다음키는 예약어 이므로 <code class="docutils literal notranslate"><span class="pre">at</span></code> 메소드를 통해 Scalate 템플릿에 전달할 수 없습니다.</p>
+<ul class="simple">
+<li><p>“context”: <code class="docutils literal notranslate"><span class="pre">unescape</span></code> 등의 메소드를 포함하여 Scalate 객체</p></li>
+<li><p>“helper”: 현재 Action 객체</p></li>
+</ul>
+</div>
+<div class="section" id="coffeescript">
+<h3>CoffeeScript<a class="headerlink" href="#coffeescript" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://scalate.fusesource.org/documentation/jade-syntax.html#filters">:coffeescript filter</a> 를 사용하여
+CoffeeScript 템플릿에 배포할 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">body</span>
+  <span class="p">:</span><span class="n">coffeescript</span>
+    <span class="n">alert</span> <span class="s2">&quot;Hello, Coffee!&quot;</span>
+</pre></div>
+</div>
+<p>출력결과:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;body&gt;
+  &lt;script type=&#39;text/javascript&#39;&gt;
+    //&lt;![CDATA[
+      (function() {
+        alert(&quot;Hello, Coffee!&quot;);
+      }).call(this);
+    //]]&gt;
+  &lt;/script&gt;
+&lt;/body&gt;
+</pre></div>
+</div>
+<p>주의: 그러나 이 작업은 <a class="reference external" href="http://groups.google.com/group/xitrum-framework/browse_thread/thread/6667a7608f0dc9c7">slow</a> 문제가 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jade</span><span class="o">+</span><span class="n">javascript</span><span class="o">+</span><span class="mi">1</span><span class="n">thread</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">coffesscript</span><span class="o">+</span><span class="mi">1</span><span class="n">thread</span><span class="p">:</span> <span class="mi">40</span><span class="o">-</span><span class="mi">70</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">javascript</span><span class="o">+</span><span class="mi">100</span><span class="n">threads</span><span class="p">:</span> <span class="o">~</span><span class="mi">40</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+<span class="n">jade</span><span class="o">+</span><span class="n">coffesscript</span><span class="o">+</span><span class="mi">100</span><span class="n">threads</span><span class="p">:</span> <span class="mi">400</span><span class="o">-</span><span class="mi">700</span><span class="n">ms</span> <span class="k">for</span> <span class="n">page</span>
+</pre></div>
+</div>
+<p>빠른속도로 동작시키기 위해서는 미리 CoffeeScript에서 Javascript를 생성해야 합니다.</p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>레이아웃<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">respondView</span></code> 또 <code class="docutils literal notranslate"><span class="pre">respondInlineView</span></code> 를 사용하여 View를 보낸 경우
+Xitrum은 결과 문자열을 <code class="docutils literal notranslate"><span class="pre">renderedView</span></code> 변수로 설정합니다.
+그리고 현재 Action의 <code class="docutils literal notranslate"><span class="pre">layout</span></code> 메소드가 실행됩니다.
+브라우저에 전송되는 데이터는 결국 이 메소드의 결과가 표시됩니다.</p>
+<p>기본적으로 <code class="docutils literal notranslate"><span class="pre">layout</span></code> 메소드는 단지 <code class="docutils literal notranslate"><span class="pre">renderedView</span></code> 를 호출합니다.
+만약 이 처리방법에 무언가를 추가하려면 재정의가 필요합니다. 만약 <code class="docutils literal notranslate"><span class="pre">renderedView</span></code> 메소드에 포함하려는 경우에는
+이 View의 레이아웃의 일부로 포함됩니다.</p>
+<p>포인트는 <code class="docutils literal notranslate"><span class="pre">layout</span></code> 현재의 Action View가 실행된 후라는 것입니다.
+여기에서 반환되는 값이 브라우저에 전달이 되는것 입니다.</p>
+<p>이 메커니즘은 매우 간단하고 마법이 없습니다. 간단하게 Xitrum 에는 레이아웃이 존재하지 않는다고 생각할 수 있습니다.
+여기에는 단지 <code class="docutils literal notranslate"><span class="pre">layout</span></code> 메소드가 있을 뿐 모두 이 방법으로 표현할 수 있습니다.</p>
+<p>전형적인 예로 일반적인 레이아웃을 부모 클래스로 사용하는 패턴을 보여줍니다.</p>
+<p>src/main/scala/mypackage/AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">renderViewNoLayout</span><span class="p">[</span><span class="n">AppAction</span><span class="p">]()</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>src/main/scalate/mypackage/AppAction.jade</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!!! 5
+html
+  head
+    != antiCsrfMeta
+    != xitrumCss
+    != jsDefaults
+    title Welcome to Xitrum
+
+  body
+    != renderedView
+    != jsForView
+</pre></div>
+</div>
+<p>src/main/scala/mypackage/MyAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;myAction&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MyAction</span> <span class="n">extends</span> <span class="n">AppAction</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">what</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="o">=</span> <span class="s2">&quot;Hello </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">what</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>scr/main/scalate/mypackage/MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="kn">import</span> <span class="nn">mypackage.MyAction</span>
+
+<span class="n">a</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">})</span> <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">current</span> <span class="n">action</span>
+<span class="n">p</span><span class="o">=</span> <span class="n">currentAction</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span><span class="o">.</span><span class="n">hello</span><span class="p">(</span><span class="s2">&quot;World&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="id6">
+<h3>독립적인 레이아웃 파일을 사용하지 않는 패턴<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>AppAction.scala</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="respondview">
+<h3>respondView 레이아웃을 직접 패스<a class="headerlink" href="#respondview" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">specialLayout</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span>
+  <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+
+<span class="n">respondView</span><span class="p">(</span><span class="n">specialLayout</span> <span class="n">_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="inline-view">
+<h2>Inline view<a class="headerlink" href="#inline-view" title="Permalink to this headline">¶</a></h2>
+<p>일반적인 Scalate 파일에 포함되지만 직접Action에 표기할 수 있습니다.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>import xitrum.Action
+import xitrum.annotation.GET
+
+@GET(&quot;myAction&quot;)
+class MyAction extends Action {
+  def execute() {
+    val s = &quot;World&quot;  // Will be automatically HTML-escaped
+    respondInlineView(
+      &lt;p&gt;Hello &lt;em&gt;{s}&lt;/em&gt;!&lt;/p&gt;
+    )
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="render-fragment">
+<h2>Render fragment<a class="headerlink" href="#render-fragment" title="Permalink to this headline">¶</a></h2>
+<p>MyAction.jade가
+<code class="docutils literal notranslate"><span class="pre">scr/main/scalate/mypackage/MyAction.jade</span></code>
+에 있는 경우 :
+같은 디렉토리에 있는 조각파일을 반환하는 경우:
+<code class="docutils literal notranslate"><span class="pre">scr/main/scalate/mypackage/_MyFragment.jade</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">renderFragment</span><span class="p">[</span><span class="n">MyAction</span><span class="p">](</span><span class="s2">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>현재 Action이 <code class="docutils literal notranslate"><span class="pre">MyAction</span></code> 의 경우에는 다음과 같이 생략이 가능합니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">renderFragment</span><span class="p">(</span><span class="s2">&quot;MyFragment&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>다른 Action의 View를 응답하는 경우<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>다음의 메소드를 사용합니다 <code class="docutils literal notranslate"><span class="pre">respondView[ClassName]()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginFormAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">Respond</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">LoginFormAction</span><span class="o">.</span><span class="n">jade</span>
+    <span class="n">respondView</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DoLoginAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">authenticated</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">authenticated</span><span class="p">)</span>
+      <span class="n">redirectTo</span><span class="p">[</span><span class="n">HomeAction</span><span class="p">]()</span>
+    <span class="k">else</span>
+      <span class="o">//</span> <span class="n">Reuse</span> <span class="n">the</span> <span class="n">view</span> <span class="n">of</span> <span class="n">LoginFormAction</span>
+      <span class="n">respondView</span><span class="p">[</span><span class="n">LoginFormAction</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id8">
+<h3>하나의 Action - 여러 View사용<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span> <span class="n">mypackage</span>
+
+<span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="o">//</span> <span class="n">These</span> <span class="n">are</span> <span class="n">non</span><span class="o">-</span><span class="n">routed</span> <span class="n">actions</span><span class="p">,</span> <span class="k">for</span> <span class="n">mapping</span> <span class="n">to</span> <span class="n">view</span> <span class="n">template</span> <span class="n">files</span><span class="p">:</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_NormalUser</span><span class="o">.</span><span class="n">jade</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_Moderator</span><span class="o">.</span><span class="n">jade</span>
+<span class="o">//</span> <span class="n">scr</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">scalate</span><span class="o">/</span><span class="n">mypackage</span><span class="o">/</span><span class="n">HomeAction_Admin</span><span class="o">.</span><span class="n">jade</span>
+<span class="n">trait</span> <span class="n">HomeAction_NormalUser</span> <span class="n">extends</span> <span class="n">Action</span>
+<span class="n">trait</span> <span class="n">HomeAction_Moderator</span>  <span class="n">extends</span> <span class="n">Action</span>
+<span class="n">trait</span> <span class="n">HomeAction_Admin</span>      <span class="n">extends</span> <span class="n">Action</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">HomeAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">userType</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="n">userType</span> <span class="n">match</span> <span class="p">{</span>
+      <span class="n">case</span> <span class="n">NormalUser</span> <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_NormalUser</span><span class="p">]()</span>
+      <span class="n">case</span> <span class="n">Moderator</span>  <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_Moderator</span><span class="p">]()</span>
+      <span class="n">case</span> <span class="n">Admin</span>      <span class="o">=&gt;</span> <span class="n">respondView</span><span class="p">[</span><span class="n">HomeAction_Admin</span><span class="p">]()</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>위와 같이 라우팅과 상관없는 작업을 설명하는것이 어려워 보일수는 있지만
+이 방법은 프로그램이 형식에 대해 안정성을 유지할 수 있습니다.</p>
+<p><code class="docutils literal notranslate"><span class="pre">String</span></code> 값을 이용하여 템블릿 위치를 지정할 수도 있습니다:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_NormalUser&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_Moderator&quot;</span><span class="p">)</span>
+<span class="n">respondView</span><span class="p">(</span><span class="s2">&quot;mypackage/HomeAction_Admin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="component">
+<h2>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h2>
+<p>여러 View에 통합 할 수 있는 재사용이 가능한 구성요소를 생성 수 있습니다.
+구성 요소의 개념은 액션과 매우 비슷합니다.
+다음과 같은 특징이 있습니다.</p>
+<ul class="simple">
+<li><p>구성요소는 루트가 없습니다. 즉 <code class="docutils literal notranslate"><span class="pre">execute</span></code> 메소드는 필요가 없습니다.</p></li>
+<li><p>구성요소는 전체 응답을 반환하지 않습니다. 단편적인 view를 “render” 하기만 합니다.
+따라서, 구성요소 내부에서 <code class="docutils literal notranslate"><span class="pre">respondXXX</span></code> 대신 <code class="docutils literal notranslate"><span class="pre">renderXXX</span></code> 호출해야 합니다.</p></li>
+<li><p>Action처럼 구성요소는 단일 혹은 여러 View와 연관이 있거나 연관성 없이 사용할 수 있습니다.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>package mypackage
+
+import xitrum.{FutureAction, Component}
+import xitrum.annotation.GET
+
+class CompoWithView extends Component {
+  def render() = {
+    // Render associated view template, e.g. CompoWithView.jade
+    // Note that this is renderView, not respondView!
+    renderView()
+  }
+}
+
+class CompoWithoutView extends Component {
+  def render() = {
+    &quot;Hello World&quot;
+  }
+}
+
+@GET(&quot;foo/bar&quot;)
+class MyAction extends FutureAction {
+  def execute() {
+    respondView()
+  }
+}
+</pre></div>
+</div>
+<p>MyAction.jade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="kn">import</span> <span class="nn">mypackage._</span>
+
+<span class="o">!=</span> <span class="n">newComponent</span><span class="p">[</span><span class="n">CompoWithView</span><span class="p">]()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+<span class="o">!=</span> <span class="n">newComponent</span><span class="p">[</span><span class="n">CompoWithoutView</span><span class="p">]()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Action 과 view</a><ul>
+<li><a class="reference internal" href="#normal-action">Normal Action</a></li>
+<li><a class="reference internal" href="#futureaction">FutureAction</a></li>
+<li><a class="reference internal" href="#actor-action">Actor Action</a></li>
+<li><a class="reference internal" href="#id1">클라이언트로의 전송</a></li>
+<li><a class="reference internal" href="#view">템플릿 View 파일 응답</a><ul>
+<li><a class="reference internal" href="#currentaction">currentAction의 캐스팅</a></li>
+<li><a class="reference internal" href="#id4">Mustache</a></li>
+<li><a class="reference internal" href="#coffeescript">CoffeeScript</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">레이아웃</a><ul>
+<li><a class="reference internal" href="#id6">독립적인 레이아웃 파일을 사용하지 않는 패턴</a></li>
+<li><a class="reference internal" href="#respondview">respondView 레이아웃을 직접 패스</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inline-view">Inline view</a></li>
+<li><a class="reference internal" href="#render-fragment">Render fragment</a></li>
+<li><a class="reference internal" href="#id7">다른 Action의 View를 응답하는 경우</a><ul>
+<li><a class="reference internal" href="#id8">하나의 Action - 여러 View사용</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#component">Component</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">튜토리얼</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="restful.html"
+                        title="next chapter">RESTful APIs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/action_view.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="restful.html" title="RESTful APIs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="튜토리얼"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Action 과 view</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

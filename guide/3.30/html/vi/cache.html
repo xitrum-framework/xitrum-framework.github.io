@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cache ở server &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="I18n" href="i18n.html" />
+    <link rel="prev" title="Bộ lọc (filter) trong Action" href="filter.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Bộ lọc (filter) trong Action"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Cache ở server</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cache-o-server">
+<h1>Cache ở server<a class="headerlink" href="#cache-o-server" title="Permalink to this headline">¶</a></h1>
+<p>Cũng có thể xem phần nói về <a class="reference internal" href="cluster.html"><span class="doc">clustering</span></a>.</p>
+<p>Tối ưu hóa cache cả ở phía máy chủ (server) và máy khách (client) để tăng tốc độ đáp ứng.
+Ở tầng máy chủ web, các tập tin nhỏ được cache vào bộ nhớ, đối với các tập tin lớn thì sử dụng kỹ thuật
+zero copy của NIO. . Các tệp tĩnh trong xitrum được
+cung cấp với tốc độ <a class="reference external" href="https://gist.github.com/3293596">tương đương với Nginx</a>.
+Tại lớp web framework, bạn có thể khai báo cache ở mức page, action và object với
+phong cách <a class="reference external" href="https://github.com/rails/rails">Rails framework</a>.</p>
+<p><a class="reference external" href="http://code.google.com/speed/page-speed/docs/rules_intro.html">Tất cả thủ thuật mà Google khuyên nên dùng để tăng tốc trang web</a>
+như method GET có điều kiện được áp dụng để cache phía client.</p>
+<p>Với các nội dung động (dynamic content), nếu content không đổi sau khi được tạo
+(như một tệp tĩnh), bạn có thể cần đặt header để được lưu trữ một cách chủ động
+ở phía client. Trong trường hợp này, sử dụng <code class="docutils literal notranslate"><span class="pre">setClientCacheAggressively()</span></code> trong
+Action.</p>
+<p>Ngược lại, đôi khi bạn có thể không muốn cache ở phía client, bạn sử dụng method
+<code class="docutils literal notranslate"><span class="pre">setNoClientCache()</span></code> trong action.</p>
+<p>Cache ở phía server sẽ được trình bày chi tiết dưới dây.</p>
+<div class="section" id="cache-o-muc-page-hoac-action">
+<h2>Cache ở mức page hoặc action<a class="headerlink" href="#cache-o-muc-page-hoac-action" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">CacheActionMinute</span><span class="p">,</span> <span class="n">CachePageMinute</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="nd">@CachePageMinute</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="nd">@CacheActionMinute</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Thuật ngữ &quot;page cache&quot; và &quot;action cache&quot; bắt nguồn từ
+<a class="reference external" href="http://guides.rubyonrails.org/caching_with_rails.html">Ruby on Rails</a>.</p>
+<p>Thứ tự thực thi một request được thiết kế như sa:
+(1) request -&gt; (2) các method before filter -&gt; (3) các method thực thi action -&gt; (4) response</p>
+<p>Ở request đầu tiên, Xitrum sẽ cache response trong một thời gian sống xác đinh.
+<code class="docutils literal notranslate"><span class="pre">&#64;CachePageMinute(1)</span></code> hoặc <code class="docutils literal notranslate"><span class="pre">&#64;CacheActionMinute(1)</span></code> đều có nghĩa là cache
+trong 1 phút.
+Xitrum chỉ cache khi response có trạng thái &quot;200 OK&quot;. Ví dụ, response với trạng
+thái &quot;500 Internal Server Error&quot; hoặc &quot;302 Found&quot; (direct) sẽ không được cache.</p>
+<p>Ở các request sau đến cùng một action, nếu response đã được cache vẫn nằm trong thời
+gian sống xác định bên trên, Xitrum sẽ chỉ respond chính response đã được cache.</p>
+<ul class="simple">
+<li><p>Với page cache, thứ tự thực hiện là (1) -&gt; (4).</p></li>
+<li><p>Với action cache, thứ tự thực hiện là (1) -&gt; (2) -&gt; (4), hoặc chỉ là (1) -&gt; (2)
+nếu một trong những before filter trả về &quot;false&quot;.</p></li>
+</ul>
+<p>Sự khác biệt giữa 2 loại cache: với page cache, các before filter sẽ không chạy.</p>
+<p>Thông tường, page cache thường được sử dụng khi các response giống nhau được gửi
+đến tất cả người dùng.
+Action cache được sử dụng khi bạn muốn chạy một before filter để &quot;guard&quot; (bảo vệ)
+response đã được cache, giống như việc kiểm ra người dùng đã đăng nhập hay chưa:</p>
+<ul class="simple">
+<li><p>Nếu người dùng đã đăng nhập, họ có thể sử dụng response đã được cache.</p></li>
+<li><p>Nếu người dùng chưa thực hiện đăng nhập, redirect họ đến trang đăng nhập.</p></li>
+</ul>
+</div>
+<div class="section" id="cache-o-muc-object">
+<h2>Cache ở mức object<a class="headerlink" href="#cache-o-muc-object" title="Permalink to this headline">¶</a></h2>
+<p>Bạn sử dụng method trong <code class="docutils literal notranslate"><span class="pre">xitrum.Config.xitrum.cache</span></code>, nó là một instance của
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.Cache">xitrum.Cache</a>.</p>
+<p>Không có một TTL(time to live - thời gian sống) rõ rõ ràng:</p>
+<ul class="simple">
+<li><p>put(key, value)</p></li>
+</ul>
+<p>Với một TTL(time to live - thời gian sống) rõ rõ ràng:</p>
+<ul class="simple">
+<li><p>putSecond(key, value, seconds)</p></li>
+<li><p>putMinute(key, value, minutes)</p></li>
+<li><p>putHour(key, value, hours)</p></li>
+<li><p>putDay(key, value, days)</p></li>
+</ul>
+<p>Only if absent:</p>
+<ul class="simple">
+<li><p>putIfAbsent(key, value)</p></li>
+<li><p>putIfAbsentSecond(key, value, seconds)</p></li>
+<li><p>putIfAbsentMinute(key, value, minutes)</p></li>
+<li><p>putIfAbsentHour(key, value, hours)</p></li>
+<li><p>putIfAbsentDay(key, value, days)</p></li>
+</ul>
+</div>
+<div class="section" id="xoa-cache">
+<h2>Xóa cache<a class="headerlink" href="#xoa-cache" title="Permalink to this headline">¶</a></h2>
+<p>Xóa &quot;page cache&quot; và &quot;action cache&quot;:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">removeAction</span><span class="p">[</span><span class="n">MyAction</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Xóa &quot;object cache&quot;:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Xóa tất cả các khóa bắt đầu với một prefix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">removePrefix</span><span class="p">(</span><span class="n">keyPrefix</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Với <code class="docutils literal notranslate"><span class="pre">removePrefix</span></code>, bạn có thể kế thừa form cache trong prefix.
+Ví dụ bạn muốn cache những thứ liên quan đến một article, sau khi article thay đổi,
+bạn muốn xóa tất cả những thứ đó.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Config.xitrum.cache</span>
+
+<span class="o">//</span> <span class="n">Cache</span> <span class="n">với</span> <span class="n">một</span> <span class="n">prefix</span>
+<span class="n">val</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;articles/&quot;</span> <span class="o">+</span> <span class="n">article</span><span class="o">.</span><span class="n">id</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;/likes&quot;</span><span class="p">,</span> <span class="n">likes</span><span class="p">)</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;/comments&quot;</span><span class="p">,</span> <span class="n">comments</span><span class="p">)</span>
+
+<span class="o">//</span> <span class="n">Sau</span> <span class="n">đó</span><span class="p">,</span> <span class="n">khi</span> <span class="n">xảy</span> <span class="n">ra</span> <span class="mi">1</span> <span class="n">sự</span> <span class="n">kiện</span> <span class="n">nào</span> <span class="n">đó</span><span class="p">,</span> <span class="n">và</span> <span class="n">bạn</span> <span class="n">muốn</span> <span class="n">xóa</span> <span class="n">tất</span> <span class="n">cả</span> <span class="n">các</span> <span class="n">cache</span> <span class="n">liên</span>
+<span class="o">//</span><span class="n">quan</span> <span class="n">đến</span> <span class="n">artical</span>
+<span class="n">cache</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>Tính năng cache trong Xitrum được cung cấp bởi các cache engine. Bạn có thể chọn
+engine phù hợp với yếu cầu của bạn.</p>
+<p>Trong <a class="reference external" href="https://github.com/xitrum-framework/xitrum-new/blob/master/config/xitrum.conf">config/xitrum.conf</a>,
+bạn có thể cấu hình cache engine tại 1 trong 2 form sau, phụ thuộc vào engine bạn
+chọn:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="o">=</span> <span class="n">my</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">EngineClassName</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="p">{</span>
+  <span class="s2">&quot;my.cache.EngineClassName&quot;</span> <span class="p">{</span>
+    <span class="n">option1</span> <span class="o">=</span> <span class="n">value1</span>
+    <span class="n">option2</span> <span class="o">=</span> <span class="n">value2</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Xitrum cung cấp:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cache</span> <span class="p">{</span>
+  <span class="c1"># Simple in-memory cache</span>
+  <span class="s2">&quot;xitrum.local.LruCache&quot;</span> <span class="p">{</span>
+    <span class="n">maxElems</span> <span class="o">=</span> <span class="mi">10000</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Nếu bạn có một cụm máy chủ, bạn có thể sử dụng <a class="reference external" href="https://github.com/xitrum-framework/xitrum-hazelcast">Hazelcast</a>.</p>
+<p>Nếu bạn muốn tạo cache engine cho riêng bạn, implement
+<a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/Cache.scala">interface</a>
+<code class="docutils literal notranslate"><span class="pre">xitrum.Cache</span></code>.</p>
+</div>
+<div class="section" id="cache-hoat-dong-nhu-the-nao">
+<h2>Cache hoạt động như thế nào<a class="headerlink" href="#cache-hoat-dong-nhu-the-nao" title="Permalink to this headline">¶</a></h2>
+<p>Inbound:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               action response nên được
+               cache và cache đã tồn tại
+request        trước đó?
+-------------------------+---------------NO---------------&gt;
+                         |
+&lt;---------YES------------+
+  respond từ cache
+</pre></div>
+</div>
+<p>Outbound:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>               action response nên được
+               cache và cache chưa tồn tại
+               trước đó?                           response
+&lt;---------NO-------------+---------------------------------
+                         |
+&lt;---------YES------------+
+  lưu response vào cache
+</pre></div>
+</div>
+</div>
+<div class="section" id="xitrum-util-locallrucache">
+<h2>xitrum.util.LocalLruCache<a class="headerlink" href="#xitrum-util-locallrucache" title="Permalink to this headline">¶</a></h2>
+<p>Cache trên đây là cache chia sẻ bởi toàn bộ hệ thống. Nếu bạn muốn cache ở trong
+một phạm vi nhỏ, bạn có thể sử dụng <code class="docutils literal notranslate"><span class="pre">xitrum.util.LocalLruCache</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.util.LocalLruCache</span>
+
+<span class="o">//</span> <span class="n">LRU</span> <span class="p">(</span><span class="n">Least</span> <span class="n">Recently</span> <span class="n">Used</span><span class="p">)</span> <span class="n">cache</span> <span class="n">that</span> <span class="n">can</span> <span class="n">contain</span> <span class="mi">1000</span> <span class="n">elements</span><span class="o">.</span>
+<span class="o">//</span> <span class="n">Keys</span> <span class="ow">and</span> <span class="n">values</span> <span class="n">are</span> <span class="n">both</span> <span class="n">of</span> <span class="nb">type</span> <span class="n">String</span><span class="o">.</span>
+<span class="n">val</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">LocalLruCache</span><span class="p">[</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">](</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cache</span></code> đã được trả về là một <a class="reference external" href="http://docs.oracle.com/javase/6/docs/api/java/util/LinkedHashMap.html">java.util.LinkedHashMap</a>.
+Bạn có thể sử dụng method <code class="docutils literal notranslate"><span class="pre">LinkedHashMap</span></code> từ nó.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cache ở server</a><ul>
+<li><a class="reference internal" href="#cache-o-muc-page-hoac-action">Cache ở mức page hoặc action</a></li>
+<li><a class="reference internal" href="#cache-o-muc-object">Cache ở mức object</a></li>
+<li><a class="reference internal" href="#xoa-cache">Xóa cache</a></li>
+<li><a class="reference internal" href="#config">Config</a></li>
+<li><a class="reference internal" href="#cache-hoat-dong-nhu-the-nao">Cache hoạt động như thế nào</a></li>
+<li><a class="reference internal" href="#xitrum-util-locallrucache">xitrum.util.LocalLruCache</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="filter.html"
+                        title="chương trước ">Bộ lọc (filter) trong Action</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="chương tiếp">I18n</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/cache.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="I18n"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="filter.html" title="Bộ lọc (filter) trong Action"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Cache ở server</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

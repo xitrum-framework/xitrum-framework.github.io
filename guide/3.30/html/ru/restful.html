@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RESTful APIs &#8212; документация Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Шаблонизация" href="template_engines.html" />
+    <link rel="prev" title="Контроллеры и представления" href="action_view.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Контроллеры и представления"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RESTful APIs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="restful-apis">
+<h1>RESTful APIs<a class="headerlink" href="#restful-apis" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Разработка RESTful APIs с использованием Xitrum.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.GET</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Подобным образом описываются POST, PUT, PATCH, DELETE, и OPTIONS запросы.
+Xitrum автоматически обрабатывает HEAD запросы как GET с пустым ответом.</p>
+<p>Для HTTP клиентов не поддерживающих PUT и DELETE (например, обычные браузеры), используется метод POST c параметрами <code class="docutils literal notranslate"><span class="pre">_method=put</span></code> или <code class="docutils literal notranslate"><span class="pre">_method=delete</span></code> внутри тела запроса.</p>
+<p>При старте веб приложения, Xitrum сканирует аннотации, создает таблицу маршрутизации
+и печатает ее в лог. Из лога понятно какое API приложение поддерживает на данный момент:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Routes</span><span class="p">:</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">articles</span>     <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ArticlesIndex</span>
+<span class="n">GET</span> <span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="p">:</span><span class="nb">id</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">ArticlesShow</span>
+</pre></div>
+</div>
+<p>Маршруты (routes) автоматически строятся в духе JAX-RS и Rails. Нет необходимости
+объявлять все маршруты в одном месте. Допускается включать одно приложение в другое.
+Например, движок блога можно упаковать в JAR файл и подключить его в другое приложение,
+после этого у приложения появятся все возможности блога. Маршрутизация осуществляется
+в два направления, можно генерировать URL по контроллеру (обратная маршрутизация).
+Автоматическое документирование ваших маршрутов можно выполнить используя
+<a class="reference external" href="http://swagger.wordnik.com/">Swagger Doc</a>.</p>
+<div class="section" id="id1">
+<h2>Кэш маршрутов<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для более быстро скорости запуска, маршруты кэшируются в файл <code class="docutils literal notranslate"><span class="pre">routes.cache</span></code>.
+В режиме разработчика, этот файл не используется. В случае изменения зависимостей
+содержащих маршруты, необходимо удалить <code class="docutils literal notranslate"><span class="pre">routes.cache</span></code>. Этот файл не должен попасть
+в ваши систему контроля версий.</p>
+</div>
+<div class="section" id="id2">
+<h2>Очередность маршрутов<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Возможно вам потребуется организовать маршруты в определенном порядке.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="p">:</span><span class="nb">id</span> <span class="o">--&gt;</span> <span class="n">ArticlesShow</span>
+<span class="o">/</span><span class="n">articles</span><span class="o">/</span><span class="n">new</span> <span class="o">--&gt;</span> <span class="n">ArticlesNew</span>
+</pre></div>
+</div>
+<p>В данном случае необходимо что бы второй маршрут был проверен первым.
+Для этих целей нужно использовать аннотацию <code class="docutils literal notranslate"><span class="pre">First</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">First</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@First</span>  <span class="o">//</span> <span class="n">This</span> <span class="n">route</span> <span class="n">has</span> <span class="n">higher</span> <span class="n">priority</span> <span class="n">than</span> <span class="s2">&quot;ArticlesShow&quot;</span> <span class="n">above</span>
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/new&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesNew</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Last</span></code> работает помещает маршрут на обработку последним.</p>
+</div>
+<div class="section" id="id3">
+<h2>Несколько маршрутов для одного контроллера<a class="headerlink" href="#id3" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;image/:format&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Image</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">format</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Точка в маршруте<a class="headerlink" href="#id4" title="Ссылка на этот заголовок">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&quot;</span><span class="p">,</span> <span class="s2">&quot;articles/:id.:format&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesShow</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="nb">id</span>     <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="nb">format</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>Регулярные выражения в маршруте<a class="headerlink" href="#id5" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Регулярные выражения могут быть использованы для задания ограничений в маршруте:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span><span class="p">(</span><span class="s2">&quot;articles/:id&lt;[0-9]+&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>Обработка не стандартных маршрутов<a class="headerlink" href="#id6" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Использование символа <code class="docutils literal notranslate"><span class="pre">/</span></code> не допускается в именах параметров. Если есть необходимость в его
+использовании вы можете определить маршрут следующим образом:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GET</span><span class="p">(</span><span class="s2">&quot;service/:id/proxy/:*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Например, данный маршрут будет обрабатывать запросы:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">service</span><span class="o">/</span><span class="mi">123</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">foo</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bar</span>
+</pre></div>
+</div>
+<p>Извлечение значение из части <code class="docutils literal notranslate"><span class="pre">:*</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">url</span> <span class="o">=</span> <span class="n">param</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>  <span class="o">//</span> <span class="n">Будет</span> <span class="s2">&quot;http://foo.com/bar&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Ссылка на контроллер<a class="headerlink" href="#id7" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum пытается быть достаточно безопасным. Не пишите ссылки самостоятельно (в явном виде).
+Используйте генератор ссылок:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">ArticlesShow</span><span class="p">](</span><span class="s2">&quot;id&quot;</span> <span class="o">-&gt;</span> <span class="n">myArticle</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span><span class="o">&gt;</span><span class="p">{</span><span class="n">myArticle</span><span class="o">.</span><span class="n">title</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>Редирект на контроллер<a class="headerlink" href="#id8" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Читайте подробнее про <a class="reference external" href="http://en.wikipedia.org/wiki/URL_redirection">редирект</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LoginInput</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">DoLogin</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="o">//</span> <span class="n">After</span> <span class="n">login</span> <span class="n">success</span>
+    <span class="n">redirectTo</span><span class="p">[</span><span class="n">AdminIndex</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">GET</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AdminIndex</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="o">//</span> <span class="n">Check</span> <span class="k">if</span> <span class="n">the</span> <span class="n">user</span> <span class="n">has</span> <span class="ow">not</span> <span class="n">logged</span> <span class="ow">in</span><span class="p">,</span> <span class="n">redirect</span> <span class="n">him</span> <span class="n">to</span> <span class="n">the</span> <span class="n">login</span> <span class="n">page</span>
+    <span class="n">redirectTo</span><span class="p">[</span><span class="n">LoginInput</span><span class="p">]()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Допускается делать редирект на тот же самый контроллер с помощью метода <code class="docutils literal notranslate"><span class="pre">redirecToThis()</span></code>.</p>
+</div>
+<div class="section" id="id10">
+<h2>Форвардинг (перенаправление) на контроллер<a class="headerlink" href="#id10" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Используйте <code class="docutils literal notranslate"><span class="pre">forwardTo[AnotherAction]()</span></code>. <code class="docutils literal notranslate"><span class="pre">redirectTo</span></code> заставляет браузер делать новый запрос, в то
+время как <code class="docutils literal notranslate"><span class="pre">forwardTo</span></code> работает в рамках одного запроса.</p>
+</div>
+<div class="section" id="ajax">
+<h2>Определение Ajax запроса<a class="headerlink" href="#ajax" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Используйте <code class="docutils literal notranslate"><span class="pre">isAjax</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">В</span> <span class="n">контроллере</span>
+<span class="n">val</span> <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A message&quot;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">isAjax</span><span class="p">)</span>
+  <span class="n">jsRender</span><span class="p">(</span><span class="s2">&quot;alert(&quot;</span> <span class="o">+</span> <span class="n">jsEscape</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+<span class="k">else</span>
+  <span class="n">respondText</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="anti-csrf">
+<h2>Anti-CSRF<a class="headerlink" href="#anti-csrf" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для запросов отличных от GET Xitrum автоматически защищает приложение от
+<a class="reference external" href="http://en.wikipedia.org/wiki/CSRF">Cross-site request forgery</a>  атаки.</p>
+<p>Включите в шаблон <code class="docutils literal notranslate"><span class="pre">antiCsrfMeta</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Action</span>
+<span class="kn">import</span> <span class="nn">xitrum.view.DocType</span>
+
+<span class="n">trait</span> <span class="n">AppAction</span> <span class="n">extends</span> <span class="n">Action</span> <span class="p">{</span>
+  <span class="n">override</span> <span class="k">def</span> <span class="nf">layout</span> <span class="o">=</span> <span class="n">DocType</span><span class="o">.</span><span class="n">html5</span><span class="p">(</span>
+    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">antiCsrfMeta</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">xitrumCss</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsDefaults</span><span class="p">}</span>
+        <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">Xitrum</span><span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="n">renderedView</span><span class="p">}</span>
+        <span class="p">{</span><span class="n">jsForView</span><span class="p">}</span>
+      <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Тогда секция <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code> будет включать в себя csrf-token:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    ...
+    &lt;meta name=&quot;csrf-token&quot; content=&quot;5402330e-9916-40d8-a3f4-16b271d583be&quot; /&gt;
+    ...
+  &lt;/head&gt;
+  ...
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>Этот токен будет автоматически включен во все Ajax запросы jQuery как заголовок
+<code class="docutils literal notranslate"><span class="pre">X-CSRF-Token</span></code> если вы подключите <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/js.scala">xitrum.js</a>. xitrum.js  подключается вызовом <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code>. Если вы не хотите
+использовать <code class="docutils literal notranslate"><span class="pre">jsDefaults</span></code>, вы можете подключить xitrum.js следующим образом (или посылать токен самостоятельно):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="n">src</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">xitrum</span><span class="o">.</span><span class="n">js</span><span class="p">]}</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="anticsrfinput-anticsrftoken">
+<h2>antiCsrfInput и antiCsrfToken<a class="headerlink" href="#anticsrfinput-anticsrftoken" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum использует CSRF токен из заголовка запроса с именем <code class="docutils literal notranslate"><span class="pre">X-CSRF-Token</span></code>. Если заголовок
+не установлен, Xitrum берет значение из параметра <code class="docutils literal notranslate"><span class="pre">csrf-token</span></code> переданного в теле запроса
+(не из URL).</p>
+<p>Если вы вручную создаете формы, и не используйте мета тэг и xitrum.js как сказано выше,
+то вам нужно использовать методы контроллера <code class="docutils literal notranslate"><span class="pre">antiCsrfInput</span></code> или <code class="docutils literal notranslate"><span class="pre">antiCsrfToken</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">AdminAddGroup</span><span class="p">]})</span>
+  <span class="o">!=</span> <span class="n">antiCsrfInput</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span> <span class="n">action</span><span class="o">=</span><span class="p">{</span><span class="n">url</span><span class="p">[</span><span class="n">AdminAddGroup</span><span class="p">]})</span>
+  <span class="nb">input</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;csrf-token&quot;</span> <span class="n">value</span><span class="o">=</span><span class="p">{</span><span class="n">antiCsrfToken</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="skipcsrfcheck">
+<h2>SkipCsrfCheck<a class="headerlink" href="#skipcsrfcheck" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для некоторые API не требуется защита от CSRF атак, в этом случае проще всего
+пропустить эту проверку. Для этого дополнительно наследуйте свой контроллер
+от трейта xitrum.SkipCsrfCheck:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SkipCsrfCheck</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.POST</span>
+
+<span class="n">trait</span> <span class="n">Api</span> <span class="n">extends</span> <span class="n">Action</span> <span class="k">with</span> <span class="n">SkipCsrfCheck</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;api/positions&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">LogPositionAPI</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@POST</span><span class="p">(</span><span class="s2">&quot;api/todos&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CreateTodoAPI</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span><span class="p">()</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h2>Управление маршрутами<a class="headerlink" href="#id11" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Xitrum автоматически собирает маршруты при запуске.
+Для управления этими маршрутами используйте
+<a class="reference external" href="http://xitrum-framework.github.io/api/3.17/index.html#xitrum.routing.RouteCollection">xitrum.Config.routes</a>.</p>
+<p>Например:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Config</span><span class="p">,</span> <span class="n">Server</span><span class="p">}</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="o">//</span> <span class="n">Вы</span> <span class="n">можете</span> <span class="n">поправить</span> <span class="n">маршруты</span> <span class="n">до</span> <span class="n">запуска</span> <span class="n">сервера</span>
+    <span class="n">val</span> <span class="n">routes</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">routes</span>
+
+    <span class="o">//</span> <span class="n">Удаление</span> <span class="n">маршрутов</span> <span class="n">относящихся</span> <span class="n">к</span> <span class="n">конкретному</span> <span class="n">классу</span>
+    <span class="n">routes</span><span class="o">.</span><span class="n">removeByClass</span><span class="p">[</span><span class="n">MyClass</span><span class="p">]()</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">demoVersion</span><span class="p">)</span> <span class="p">{</span>
+      <span class="o">//</span> <span class="n">Удаление</span> <span class="n">маршрутов</span> <span class="n">начинающихся</span> <span class="n">с</span> <span class="n">префикса</span>
+      <span class="n">routes</span><span class="o">.</span><span class="n">removeByPrefix</span><span class="p">(</span><span class="s2">&quot;premium/features&quot;</span><span class="p">)</span>
+
+      <span class="o">//</span> <span class="n">Допустимый</span> <span class="n">вариант</span>
+      <span class="n">routes</span><span class="o">.</span><span class="n">removeByPrefix</span><span class="p">(</span><span class="s2">&quot;/premium/features&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="o">...</span>
+
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id12">
+<h2>Получение полных (сырых) данных запроса<a class="headerlink" href="#id12" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Обычно когда mime тип запроса не соответствует <code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code>,
+предполагается что содержимое запроса будет обработано в ручном режиме.</p>
+<p>Получение тела запроса в виде строки:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">body</span> <span class="o">=</span> <span class="n">requestContentString</span>
+</pre></div>
+</div>
+<p>JSON:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">val</span> <span class="n">myJValue</span> <span class="o">=</span> <span class="n">requestContentJValue</span>  <span class="o">//</span> <span class="o">=&gt;</span> <span class="n">JSON4S</span> <span class="p">(</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">json4s</span><span class="o">.</span><span class="n">org</span><span class="p">)</span> <span class="n">JValue</span>
+<span class="n">val</span> <span class="n">myMap</span> <span class="o">=</span> <span class="n">xitrum</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">SeriDeseri</span><span class="o">.</span><span class="n">fromJValue</span><span class="p">[</span><span class="n">Map</span><span class="p">[</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">]](</span><span class="n">myJValue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Если вам нужно получить полный доступ к запросу, используйте <a class="reference external" href="http://netty.io/4.0/api/io/netty/handler/codec/http/FullHttpRequest.html">request.getContent</a>. Он возвращает <a class="reference external" href="http://netty.io/4.0/api/io/netty/buffer/ByteBuf.html">ByteBuf</a>.</p>
+</div>
+<div class="section" id="api">
+<h2>Документирование API<a class="headerlink" href="#api" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Из коробки вы можете документировать API и использованием <a class="reference external" href="https://developers.helloreverb.com/swagger/">Swagger</a>.
+Добавьте аннотацию <code class="docutils literal notranslate"><span class="pre">&#64;Swagger</span></code> к контроллеру который нужно задокументировать
+Xitrum генерирует <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/API-Declaration">/xitrum/swagger.json</a>.
+Этот файл может быть использован в <a class="reference external" href="https://github.com/wordnik/swagger-ui">Swagger UI</a>
+для генерации интерактивной документации.</p>
+<p>Xitrum включает Swagger UI, по пути <code class="docutils literal notranslate"><span class="pre">/xitrum/swagger-ui</span></code>,
+например <a class="reference external" href="http://localhost:8000/xitrum/swagger-ui">http://localhost:8000/xitrum/swagger-ui</a>.</p>
+<img alt="_images/swagger.png" src="_images/swagger.png" />
+<p>Рассмотрим <a class="reference external" href="https://github.com/xitrum-framework/xitrum-placeholder">пример</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.</span><span class="p">{</span><span class="n">Action</span><span class="p">,</span> <span class="n">SkipCsrfCheck</span><span class="p">}</span>
+<span class="kn">import</span> <span class="nn">xitrum.annotation.</span><span class="p">{</span><span class="n">GET</span><span class="p">,</span> <span class="n">Swagger</span><span class="p">}</span>
+
+<span class="nd">@Swagger</span><span class="p">(</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Tags</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;APIs to create images&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Description</span><span class="p">(</span><span class="s2">&quot;Dimensions should not be bigger than 2000 x 2000&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">OptStringQuery</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;Text to render on the image, default: Placeholder&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Produces</span><span class="p">(</span><span class="s2">&quot;image/png&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="s2">&quot;PNG image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="s2">&quot;Width or height is invalid or too big&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">trait</span> <span class="n">ImageApi</span> <span class="n">extends</span> <span class="n">Action</span> <span class="k">with</span> <span class="n">SkipCsrfCheck</span> <span class="p">{</span>
+  <span class="n">lazy</span> <span class="n">val</span> <span class="n">text</span> <span class="o">=</span> <span class="n">paramo</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrElse</span><span class="p">(</span><span class="s2">&quot;Placeholder&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image/:width/:height&quot;</span><span class="p">)</span>
+<span class="nd">@Swagger</span><span class="p">(</span>  <span class="o">//</span> <span class="o">&lt;--</span> <span class="n">Inherits</span> <span class="n">other</span> <span class="n">info</span> <span class="kn">from</span> <span class="nn">ImageApi</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Generate rectangle image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">RectImageApi</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">width</span>  <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="n">height</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nd">@GET</span><span class="p">(</span><span class="s2">&quot;image/:width&quot;</span><span class="p">)</span>
+<span class="nd">@Swagger</span><span class="p">(</span>  <span class="o">//</span> <span class="o">&lt;--</span> <span class="n">Inherits</span> <span class="n">other</span> <span class="n">info</span> <span class="kn">from</span> <span class="nn">ImageApi</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Generate square image&quot;</span><span class="p">),</span>
+  <span class="n">Swagger</span><span class="o">.</span><span class="n">IntPath</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">class</span> <span class="nc">SquareImageApi</span> <span class="n">extends</span> <span class="n">Api</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">execute</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">width</span>  <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="n">Int</span><span class="p">](</span><span class="s2">&quot;width&quot;</span><span class="p">)</span>
+    <span class="o">//</span> <span class="o">...</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md">JSON для Swagger</a>
+будет генерироваться при доступе <code class="docutils literal notranslate"><span class="pre">/xitrum/swagger</span></code>.</p>
+<p>Swagger UI использует эту информацию для генерации интерактивной документации к API.</p>
+<p>Возможные параметры на подобии Swagger.IntPath определяются шаблоном:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;Тип</span> <span class="pre">переменной&gt;&lt;Тип</span> <span class="pre">параметра&gt;</span></code> (обязательный параметр)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Opt&lt;Тип</span> <span class="pre">переменной&gt;&lt;Тип</span> <span class="pre">параметра&gt;</span></code> (опциональный параметр)</p></li>
+</ul>
+<p>Типы переменных: Byte, Int, Int32, Int64, Long, Number, Float, Double, String, Boolean, Date, DateTime</p>
+<p>Типы параметров: Path, Query, Body, Header, Form</p>
+<p>Подробнее о <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Datatypes">типах переменных</a>
+и <a class="reference external" href="https://github.com/wordnik/swagger-core/wiki/Parameters">типах параметров</a>.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Оглавление</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RESTful APIs</a><ul>
+<li><a class="reference internal" href="#id1">Кэш маршрутов</a></li>
+<li><a class="reference internal" href="#id2">Очередность маршрутов</a></li>
+<li><a class="reference internal" href="#id3">Несколько маршрутов для одного контроллера</a></li>
+<li><a class="reference internal" href="#id4">Точка в маршруте</a></li>
+<li><a class="reference internal" href="#id5">Регулярные выражения в маршруте</a></li>
+<li><a class="reference internal" href="#id6">Обработка не стандартных маршрутов</a></li>
+<li><a class="reference internal" href="#id7">Ссылка на контроллер</a></li>
+<li><a class="reference internal" href="#id8">Редирект на контроллер</a></li>
+<li><a class="reference internal" href="#id10">Форвардинг (перенаправление) на контроллер</a></li>
+<li><a class="reference internal" href="#ajax">Определение Ajax запроса</a></li>
+<li><a class="reference internal" href="#anti-csrf">Anti-CSRF</a></li>
+<li><a class="reference internal" href="#anticsrfinput-anticsrftoken">antiCsrfInput и antiCsrfToken</a></li>
+<li><a class="reference internal" href="#skipcsrfcheck">SkipCsrfCheck</a></li>
+<li><a class="reference internal" href="#id11">Управление маршрутами</a></li>
+<li><a class="reference internal" href="#id12">Получение полных (сырых) данных запроса</a></li>
+<li><a class="reference internal" href="#api">Документирование API</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="action_view.html"
+                        title="предыдущая глава">Контроллеры и представления</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="template_engines.html"
+                        title="следующая глава">Шаблонизация</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/restful.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="template_engines.html" title="Шаблонизация"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="action_view.html" title="Контроллеры и представления"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RESTful APIs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

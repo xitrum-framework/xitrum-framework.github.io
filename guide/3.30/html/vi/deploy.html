@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Triển khai ứng dụng web trên server &#8212; Tài liệu Xitrum Scala Web Framework Guide 3.30.0</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Tìm Kiếm" href="search.html" />
+    <link rel="next" title="Clustering với Akka và Hazelcast" href="cluster.html" />
+    <link rel="prev" title="Log" href="log.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             accesskey="I">chỉ mục</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering với Akka và Hazelcast"
+             accesskey="N">xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             accesskey="P">xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Triển khai ứng dụng web trên server</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="trien-khai-ung-dung-web-tren-server">
+<h1>Triển khai ứng dụng web trên server<a class="headerlink" href="#trien-khai-ung-dung-web-tren-server" title="Permalink to this headline">¶</a></h1>
+<p>Bạn có thể chạy trực tiếp Xitrum:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Browser</span> <span class="o">------</span> <span class="n">Xitrum</span> <span class="n">instance</span>
+</pre></div>
+</div>
+<p>Hoăc behind a load balancer như HAProxy, hoặc reverse proxy như Apache hay Nginx:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Browser</span> <span class="o">------</span> <span class="n">Load</span> <span class="n">balancer</span><span class="o">/</span><span class="n">Reverse</span> <span class="n">proxy</span> <span class="o">-+----</span> <span class="n">Xitrum</span> <span class="n">instance1</span>
+                                            <span class="o">+----</span> <span class="n">Xitrum</span> <span class="n">instance2</span>
+</pre></div>
+</div>
+<div class="section" id="dong-goi-thu-muc">
+<h2>Đóng gói thư mục<a class="headerlink" href="#dong-goi-thu-muc" title="Permalink to this headline">¶</a></h2>
+<p>Chạy <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">xitrumPackage</span></code> để chuẩn bị cho thư mục <code class="docutils literal notranslate"><span class="pre">target/xitrum</span></code> sẵn sàng
+triển khai tại server sản phẩm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">target</span><span class="o">/</span><span class="n">xitrum</span>
+  <span class="n">config</span>
+    <span class="p">[</span><span class="n">config</span> <span class="n">files</span><span class="p">]</span>
+  <span class="n">public</span>
+    <span class="p">[</span><span class="n">static</span> <span class="n">public</span> <span class="n">files</span><span class="p">]</span>
+  <span class="n">lib</span>
+    <span class="p">[</span><span class="n">dependencies</span> <span class="ow">and</span> <span class="n">packaged</span> <span class="n">project</span> <span class="n">file</span><span class="p">]</span>
+  <span class="n">script</span>
+    <span class="n">runner</span>
+    <span class="n">runner</span><span class="o">.</span><span class="n">bat</span>
+    <span class="n">scalive</span>
+    <span class="n">scalive</span><span class="o">.</span><span class="n">jar</span>
+    <span class="n">scalive</span><span class="o">.</span><span class="n">bat</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="customize-xitrum-package">
+<h2>Customize xitrum-package<a class="headerlink" href="#customize-xitrum-package" title="Permalink to this headline">¶</a></h2>
+<p>Mặc định câu lệnh <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">xitrumPackage</span></code> được cấu hình để sao chép các thư mục
+<code class="docutils literal notranslate"><span class="pre">config</span></code>, <code class="docutils literal notranslate"><span class="pre">public</span></code>, và <code class="docutils literal notranslate"><span class="pre">script</span></code> đến <code class="docutils literal notranslate"><span class="pre">target/xitrum</span></code>. Nếu bạn muốn câu lệnh
+đó sao chép các thư mục hoặc tệp khác sửa tệp <code class="docutils literal notranslate"><span class="pre">build.sbt</span></code> như sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">XitrumPackage</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;public, &quot;</span><span class="n">script</span><span class="s2">&quot;, &quot;</span><span class="n">doc</span><span class="o">/</span><span class="n">README</span><span class="o">.</span><span class="n">txt</span><span class="s2">&quot;, &quot;</span><span class="n">etc</span><span class="o">.</span><span class="s2">&quot;)</span>
+</pre></div>
+</div>
+<p>Xem <a class="reference external" href="https://github.com/xitrum-framework/xitrum-package">xitrum-package homepage</a>
+để biết thêm chi tiết.</p>
+</div>
+<div class="section" id="ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay">
+<h2>Kết nối Scala console đến một tiến trình JVM đang chạy<a class="headerlink" href="#ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay" title="Permalink to this headline">¶</a></h2>
+<p>Trong môi trường sản phẩm (production environment), nếu không có khởi tạo, bạn có
+thể sử dụng <a class="reference external" href="https://github.com/xitrum-framework/scalive">Scalive</a>
+để kết nối một Scala console đến một tiến trình JVM đang chạy để gỡ lỗi trực tiếp.</p>
+<p>Chạy <code class="docutils literal notranslate"><span class="pre">scalive</span></code> trong thư mục script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span>
+  <span class="n">runner</span>
+  <span class="n">runner</span><span class="o">.</span><span class="n">bat</span>
+  <span class="n">scalive</span>
+  <span class="n">scalive</span><span class="o">.</span><span class="n">jar</span>
+  <span class="n">scalive</span><span class="o">.</span><span class="n">bat</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cai-dat-oracle-jdk-tren-centos-hoac-ubuntu">
+<h2>Cài đặt Oracle JDK trên CentOS hoặc Ubuntu<a class="headerlink" href="#cai-dat-oracle-jdk-tren-centos-hoac-ubuntu" title="Permalink to this headline">¶</a></h2>
+<p>Dưới đây là hướng dẫn một cách đơn giản để cài đặt Java.Bạn có thể
+cài đặt Java bằng cách sử dụng trình quản lý gói.</p>
+<p>Kiểm tra các phiên bản Java đã được cài đặt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="nb">list</span> <span class="n">java</span>
+</pre></div>
+</div>
+<p>Ví dụ output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_15</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>
+<span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_25</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>
+</pre></div>
+</div>
+<p>Kiểm tra môi trường (32 bit hay 64 bit):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span>
+</pre></div>
+</div>
+<p>Ví dụ output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">init</span><span class="p">:</span> <span class="n">ELF</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">LSB</span> <span class="n">shared</span> <span class="nb">object</span><span class="p">,</span> <span class="n">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">,</span> <span class="n">version</span> <span class="mi">1</span> <span class="p">(</span><span class="n">SYSV</span><span class="p">),</span> <span class="n">dynamically</span> <span class="n">linked</span> <span class="p">(</span><span class="n">uses</span> <span class="n">shared</span> <span class="n">libs</span><span class="p">),</span> <span class="k">for</span> <span class="n">GNU</span><span class="o">/</span><span class="n">Linux</span> <span class="mf">2.6</span><span class="o">.</span><span class="mi">24</span><span class="p">,</span> <span class="n">BuildID</span><span class="p">[</span><span class="n">sha1</span><span class="p">]</span><span class="o">=</span><span class="mh">0x4efe732752ed9f8cc491de1c8a271eb7f4144a5c</span><span class="p">,</span> <span class="n">stripped</span>
+</pre></div>
+</div>
+<p>Tải JDK từ <a class="reference external" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html">Oracle</a>.
+Đây là một <a class="reference external" href="http://stackoverflow.com/questions/10268583/how-to-automate-download-and-instalation-of-java-jdk-on-linux">thủ thuật</a>
+để tải jdk mà không dùng trình duyệt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cookies</span> <span class="o">--</span><span class="n">header</span> <span class="s2">&quot;Cookie: gpw_e24=http%3A</span><span class="si">%2F%2F</span><span class="s2">www.oracle.com&quot;</span> <span class="s2">&quot;http://download.oracle.com/otn-pub/java/jdk/7u45-b18/jdk-7u45-linux-x64.tar.gz&quot;</span>
+</pre></div>
+</div>
+<p>Giải nén và di chuyển thư mục</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzvf</span> <span class="n">jdk</span><span class="o">-</span><span class="mi">7</span><span class="n">u45</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">sudo</span> <span class="n">mv</span> <span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span>
+</pre></div>
+</div>
+<p>Cài đặt java:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/java&quot;</span> <span class="s2">&quot;java&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/java&quot;</span> <span class="mi">1</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/javac&quot;</span> <span class="s2">&quot;javac&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/javac&quot;</span> <span class="mi">1</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/javap&quot;</span> <span class="s2">&quot;javap&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/javap&quot;</span> <span class="mi">1</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">install</span> <span class="s2">&quot;/usr/bin/javaws&quot;</span> <span class="s2">&quot;javaws&quot;</span> <span class="s2">&quot;/usr/lib/jvm/jdk1.7.0_45/bin/javaws&quot;</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Chọn đường dẫn đến phiên bản Java</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">java</span>
+</pre></div>
+</div>
+<p>Ví dụ output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">There</span> <span class="n">are</span> <span class="mi">3</span> <span class="n">choices</span> <span class="k">for</span> <span class="n">the</span> <span class="n">alternative</span> <span class="n">java</span> <span class="p">(</span><span class="n">providing</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span><span class="p">)</span><span class="o">.</span>
+
+  <span class="n">Selection</span>    <span class="n">Path</span>                               <span class="n">Priority</span>   <span class="n">Status</span>
+<span class="o">------------------------------------------------------------</span>
+<span class="o">*</span> <span class="mi">0</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_25</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">50001</span>     <span class="n">auto</span> <span class="n">mode</span>
+  <span class="mi">1</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_15</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">50000</span>     <span class="n">manual</span> <span class="n">mode</span>
+  <span class="mi">2</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_25</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">50001</span>     <span class="n">manual</span> <span class="n">mode</span>
+  <span class="mi">3</span>            <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span>   <span class="mi">1</span>         <span class="n">manual</span> <span class="n">mode</span>
+
+<span class="n">Press</span> <span class="n">enter</span> <span class="n">to</span> <span class="n">keep</span> <span class="n">the</span> <span class="n">current</span> <span class="n">choice</span><span class="p">[</span><span class="o">*</span><span class="p">],</span> <span class="ow">or</span> <span class="nb">type</span> <span class="n">selection</span> <span class="n">number</span><span class="p">:</span> <span class="mi">3</span>
+<span class="n">update</span><span class="o">-</span><span class="n">alternatives</span><span class="p">:</span> <span class="n">using</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">jvm</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0_45</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span> <span class="n">to</span> <span class="n">provide</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">java</span> <span class="p">(</span><span class="n">java</span><span class="p">)</span> <span class="ow">in</span> <span class="n">manual</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>Kiểm tra phiên bản Java:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="o">-</span><span class="n">version</span>
+</pre></div>
+</div>
+<p>Ví dụ output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="n">version</span> <span class="s2">&quot;1.7.0_45&quot;</span>
+<span class="n">Java</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="n">SE</span> <span class="n">Runtime</span> <span class="n">Environment</span> <span class="p">(</span><span class="n">build</span> <span class="mf">1.7</span><span class="o">.</span><span class="mi">0_45</span><span class="o">-</span><span class="n">b18</span><span class="p">)</span>
+<span class="n">Java</span> <span class="n">HotSpot</span><span class="p">(</span><span class="n">TM</span><span class="p">)</span> <span class="mi">64</span><span class="o">-</span><span class="n">Bit</span> <span class="n">Server</span> <span class="n">VM</span> <span class="p">(</span><span class="n">build</span> <span class="mf">24.45</span><span class="o">-</span><span class="n">b08</span><span class="p">,</span> <span class="n">mixed</span> <span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Tương tự với javac, javap, javaws:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">javac</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">javap</span>
+<span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">alternatives</span> <span class="o">--</span><span class="n">config</span> <span class="n">javaws</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-dong">
+<h2>Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi động<a class="headerlink" href="#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-dong" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">script/runner</span></code> (cho các hệ thông Unix-like) và <code class="docutils literal notranslate"><span class="pre">script/runner.bat</span></code> (cho Windows) là các đoạn script
+để chạy bất cứ đối tượng nào có method <code class="docutils literal notranslate"><span class="pre">main</span></code>. Sử dụng chúng để khởi động web server trong môi trường
+sản phẩm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">script</span><span class="o">/</span><span class="n">runner</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">Boot</span>
+</pre></div>
+</div>
+<p>Bạn có thể sửa <code class="docutils literal notranslate"><span class="pre">runner</span></code> (hoặc <code class="docutils literal notranslate"><span class="pre">runner.bat</span></code>) để chỉnh
+<a class="reference external" href="http://www.oracle.com/technetwork/java/hotspotfaq-138619.html">JVM settings</a>.
+Xem thêm <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code>.</p>
+<p>Để khởi động Xitrum ẩn trên Linux khi khởi động hệ thống, cách đơn giản là thêm dòng
+sau vào <code class="docutils literal notranslate"><span class="pre">/etc/rc.local</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">su</span> <span class="o">-</span> <span class="n">user_foo_bar</span> <span class="o">-</span><span class="n">c</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">the</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">script</span><span class="o">/</span><span class="n">above</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://cr.yp.to/daemontools.html">daemontools</a> là một giải pháp khác, để cài đặt trên Centos
+xem <a class="reference external" href="http://whomwah.com/2008/11/04/installing-daemontools-on-centos5-x86_64/">hướng dẫn</a>.</p>
+<p>Hoặc sử dụng <a class="reference external" href="http://supervisord.org/">Supervisord</a>.
+Ví dụ <code class="docutils literal notranslate"><span class="pre">/etc/supervisord.conf</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">program</span><span class="p">:</span><span class="n">my_app</span><span class="p">]</span>
+<span class="n">directory</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_app</span>
+<span class="n">command</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_app</span><span class="o">/</span><span class="n">script</span><span class="o">/</span><span class="n">runner</span> <span class="n">quickstart</span><span class="o">.</span><span class="n">Boot</span>
+<span class="n">autostart</span><span class="o">=</span><span class="n">true</span>
+<span class="n">autorestart</span><span class="o">=</span><span class="n">true</span>
+<span class="n">startsecs</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">user</span><span class="o">=</span><span class="n">my_user</span>
+<span class="n">redirect_stderr</span><span class="o">=</span><span class="n">true</span>
+<span class="n">stdout_logfile</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my_app</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">stdout</span><span class="o">.</span><span class="n">log</span>
+<span class="n">stdout_logfile_maxbytes</span><span class="o">=</span><span class="mi">10</span><span class="n">MB</span>
+<span class="n">stdout_logfile_backups</span><span class="o">=</span><span class="mi">7</span>
+<span class="n">stdout_capture_maxbytes</span><span class="o">=</span><span class="mi">1</span><span class="n">MB</span>
+<span class="n">stdout_events_enabled</span><span class="o">=</span><span class="n">false</span>
+<span class="n">environment</span><span class="o">=</span><span class="n">PATH</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">sbin</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">aws</span><span class="o">/</span><span class="nb">bin</span><span class="p">:</span><span class="o">~/</span><span class="nb">bin</span>
+</pre></div>
+</div>
+<p>Các giải pháp khác:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://smarden.org/runit/">runit</a></p></li>
+<li><p><a class="reference external" href="http://upstart.ubuntu.com/">upstart</a></p></li>
+</ul>
+</div>
+<div class="section" id="thiet-lap-cong-chuyen-tiep">
+<h2>Thiết lập cổng chuyển tiếp<a class="headerlink" href="#thiet-lap-cong-chuyen-tiep" title="Permalink to this headline">¶</a></h2>
+<p>Xitrum mặc định giao tiếp trên cổng 8000 và 4430.
+Bạn có thể đổi cổng trong <code class="docutils literal notranslate"><span class="pre">config/xitrum.conf</span></code>.</p>
+<p>Bạn có thể thay đổi <code class="docutils literal notranslate"><span class="pre">/etc/sysconfig/iptables</span></code> với các lệnh sau để chuyển tiếp cổng
+80 sang 8000 và 443 sang 4430:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">su</span> <span class="o">-</span> <span class="n">root</span>
+<span class="n">chmod</span> <span class="mi">700</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+<span class="n">iptables</span><span class="o">-</span><span class="n">restore</span> <span class="o">&lt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="n">PREROUTING</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">i</span> <span class="n">eth0</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">80</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">port</span> <span class="mi">8000</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">A</span> <span class="n">PREROUTING</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">i</span> <span class="n">eth0</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">443</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">port</span> <span class="mi">4430</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">I</span> <span class="n">OUTPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">d</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">80</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">ports</span> <span class="mi">8000</span>
+<span class="n">iptables</span> <span class="o">-</span><span class="n">t</span> <span class="n">nat</span> <span class="o">-</span><span class="n">I</span> <span class="n">OUTPUT</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">-</span><span class="n">d</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">443</span> <span class="o">-</span><span class="n">j</span> <span class="n">REDIRECT</span> <span class="o">--</span><span class="n">to</span><span class="o">-</span><span class="n">ports</span> <span class="mi">4430</span>
+<span class="n">iptables</span><span class="o">-</span><span class="n">save</span> <span class="o">-</span><span class="n">c</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+<span class="n">chmod</span> <span class="mi">644</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">sysconfig</span><span class="o">/</span><span class="n">iptables</span>
+</pre></div>
+</div>
+<p>Tất nhiên nếu Apache sử dụng cổng 80 và 443, bạn sẽ cần phải dùng Apache:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">httpd</span> <span class="n">stop</span>
+<span class="n">sudo</span> <span class="n">chkconfig</span> <span class="n">httpd</span> <span class="n">off</span>
+</pre></div>
+</div>
+<p>Tham khao:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.frozentux.net/iptables-tutorial/chunkyhtml/">Iptables tutorial</a></p></li>
+</ul>
+</div>
+<div class="section" id="cau-hinh-linux-de-ket-noi-hang-loat">
+<h2>Cấu hình Linux để kết nối hàng loạt<a class="headerlink" href="#cau-hinh-linux-de-ket-noi-hang-loat" title="Permalink to this headline">¶</a></h2>
+<p>Nhớ rằng trên MacOS,
+<a class="reference external" href="https://groups.google.com/forum/#!topic/spray-user/S-SNR2m0BWU">JDK có vấn đề nghiêm trọng với tốc độ IO (NIO)</a>.</p>
+<p>Tham khảo:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/linux/">Linux Performance Tuning (Riak)</a></p></li>
+<li><p><a class="reference external" href="http://docs.basho.com/riak/latest/ops/tuning/aws/">AWS Performance Tuning (Riak)</a></p></li>
+<li><p><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/">Ipsysctl tutorial</a></p></li>
+<li><p><a class="reference external" href="http://www.frozentux.net/ipsysctl-tutorial/chunkyhtml/tcpvariables.html">TCP variables</a></p></li>
+</ul>
+<div class="section" id="tang-so-luong-cac-tep-duoc-mo">
+<h3>Tăng số lượng các tệp được mở<a class="headerlink" href="#tang-so-luong-cac-tep-duoc-mo" title="Permalink to this headline">¶</a></h3>
+<p>Mỗi connection với Linux là một tệp được mở.
+Mặc định số lượng tối đa các tệp được mở là 1024.
+Để tăng giới hạn, sửa tệp <code class="docutils literal notranslate"><span class="pre">/etc/security/limits.conf</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span>  <span class="n">soft</span>  <span class="n">nofile</span>  <span class="mi">1024000</span>
+<span class="o">*</span>  <span class="n">hard</span>  <span class="n">nofile</span>  <span class="mi">1024000</span>
+</pre></div>
+</div>
+<p>Bạn cần đăng xuất và đăng nhập lại hệ thống để kết thúc việc sửa đổi.
+Để xác nhận chạy <code class="docutils literal notranslate"><span class="pre">ulimit</span> <span class="pre">-n</span></code>.</p>
+</div>
+<div class="section" id="dieu-chinh-kernel">
+<h3>Điều chỉnh kernel<a class="headerlink" href="#dieu-chinh-kernel" title="Permalink to this headline">¶</a></h3>
+<p>Như được dẫn trong
+<a class="reference external" href="http://www.metabrew.com/article/a-million-user-comet-application-with-mochiweb-part-1">A Million-user Comet Application with Mochiweb</a>,
+sửa tệp /etc/sysctl.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># General gigabit tuning</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">rmem_max</span> <span class="o">=</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wmem_max</span> <span class="o">=</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_rmem</span> <span class="o">=</span> <span class="mi">4096</span> <span class="mi">87380</span> <span class="mi">16777216</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_wmem</span> <span class="o">=</span> <span class="mi">4096</span> <span class="mi">65536</span> <span class="mi">16777216</span>
+
+<span class="c1"># This gives the kernel more memory for TCP</span>
+<span class="c1"># which you need with many (100k+) open socket connections</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_mem</span> <span class="o">=</span> <span class="mi">50576</span> <span class="mi">64768</span> <span class="mi">98152</span>
+
+<span class="c1"># Backlog</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">netdev_max_backlog</span> <span class="o">=</span> <span class="mi">2048</span>
+<span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">somaxconn</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_max_syn_backlog</span> <span class="o">=</span> <span class="mi">2048</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_syncookies</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># If you run clients</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">ip_local_port_range</span> <span class="o">=</span> <span class="mi">1024</span> <span class="mi">65535</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_tw_recycle</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_tw_reuse</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">net</span><span class="o">.</span><span class="n">ipv4</span><span class="o">.</span><span class="n">tcp_fin_timeout</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>Chạy <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">sysctl</span> <span class="pre">-p</span></code> để áp dụng các thay đổi.
+Không cần khởi động lại hệ thống, kernel đã có khả năng xử lý nhiều kết nối hơn.</p>
+</div>
+<div class="section" id="luu-y-ve-backlog">
+<h3>Lưu ý về backlog<a class="headerlink" href="#luu-y-ve-backlog" title="Permalink to this headline">¶</a></h3>
+<p>TCP thực hiện bắt tay 3 bước để thiết lập kết nối.
+Khi một client từ xa kết nối đến máy chủ, client sẽ gửi một gói tin SYN.
+Và hệ điều hành của phía máy chủ sẽ gửi lại các gói tin SYN-ACK.
+Sau đó, khách hàng từ xa thiết lập một kết nối bằng cách gửi một gói tin ACK lại.
+Xitrum sẽ nhận được nó khi kết nối được thiết lập đầy đủ.</p>
+<p>Theo như
+<a class="reference external" href="https://sites.google.com/site/beingroot/articles/apache/socket-backlog-tuning-for-apache">Socket backlog tuning for Apache</a>,
+connection timeout xảy ra khi gói tin SYN bị mất bởi backlog queue của web server bị
+lấp đầy bởi các kết nối gửi SYN-ACK đến các client chậm.</p>
+<p>Theo như
+<a class="reference external" href="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/configtuning-kernel-limits.html">FreeBSD Handbook</a>,
+giá trị mặc định của là 128 thường quá thấp để xử lý các kết nối mới trong một server
+có tải lớn. Đối với các máy chủ như vậy, nên tăng giá trị này thành 1024 hoặc hơn.
+Listen queue lớn hơn cũng là cách tốt để chống lại việc tấn công từ chối dịch vụ (Denial of Service - DoS)</p>
+<p>Backlog size của Xitrum được đặt thành 1024 (memcached cũng dùng giá trị này),
+nhưng bạn cũng cần chỉnh kernel như trên.
+The backlog size of Xitrum is set to 1024 (memcached also uses this value),</p>
+<p>Kiểm tra cấu hình backlog:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">net</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">somaxconn</span>
+</pre></div>
+</div>
+<p>hoặc:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sysctl</span> <span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">somaxconn</span>
+</pre></div>
+</div>
+<p>Để điều chỉnh tạm thời, bạn có thể làm như sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">sysctl</span> <span class="o">-</span><span class="n">w</span> <span class="n">net</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">somaxconn</span><span class="o">=</span><span class="mi">1024</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="haproxy-tip">
+<h2>HAProxy tip<a class="headerlink" href="#haproxy-tip" title="Permalink to this headline">¶</a></h2>
+<p>Để cấu hình HAProxy cho SockJS, xem <a class="reference external" href="https://github.com/sockjs/sockjs-node/blob/master/examples/haproxy.cfg">ví dụ</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">defaults</span>
+    <span class="n">mode</span> <span class="n">http</span>
+    <span class="n">timeout</span> <span class="n">connect</span> <span class="mi">10</span><span class="n">s</span>
+    <span class="n">timeout</span> <span class="n">client</span>  <span class="mi">10</span><span class="n">h</span>  <span class="c1"># Set to long time to avoid WebSocket connections being closed when there&#39;s no network activity</span>
+    <span class="n">timeout</span> <span class="n">server</span>  <span class="mi">10</span><span class="n">h</span>  <span class="c1"># Set to long time to avoid ERR_INCOMPLETE_CHUNKED_ENCODING on Chrome</span>
+
+<span class="n">frontend</span> <span class="n">xitrum_with_discourse</span>
+    <span class="n">bind</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">80</span>
+
+    <span class="n">option</span> <span class="n">forwardfor</span>
+
+    <span class="n">acl</span> <span class="n">is_discourse</span> <span class="n">path_beg</span> <span class="o">/</span><span class="n">forum</span>
+    <span class="n">use_backend</span> <span class="n">discourse</span> <span class="k">if</span> <span class="n">is_discourse</span>
+    <span class="n">default_backend</span> <span class="n">xitrum</span>
+
+<span class="n">backend</span> <span class="n">xitrum</span>
+    <span class="n">server</span> <span class="n">srv_xitrum</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8000</span>
+
+<span class="n">backend</span> <span class="n">discourse</span>
+    <span class="n">server</span> <span class="n">srv_discourse</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">3000</span>
+</pre></div>
+</div>
+<p>Để HAProxy tải lại tệp cấu hình mà không cần khởi động lại, xem <a class="reference external" href="http://serverfault.com/questions/165883/is-there-a-way-to-add-more-backend-server-to-haproxy-without-restarting-haproxy">cuộc thảo luận</a>.</p>
+<p>HAProxy thì dễ sử dụng hơn Nginx. Nó phù hợp với Xitrum bởi như được đề cập đến trong
+<a class="reference internal" href="cache.html"><span class="doc">the section about caching</span></a>, Các tệp tĩnh trong Xitrum thì
+<a class="reference external" href="https://gist.github.com/3293596">very fast</a>. Bạn không cần sử dụng các tệp tĩnh
+để phục vụ các tĩnh năng của Nginx.</p>
+</div>
+<div class="section" id="nginx-tip">
+<h2>Nginx tip<a class="headerlink" href="#nginx-tip" title="Permalink to this headline">¶</a></h2>
+<p>Nếu bạn sửu dụng tính năng WebSocket hoặc SockJS trong Xitrum và muốn chạy Xitrum ẩn sau
+Nginx 1.2, bạn phải cài đặt thêm module như
+<a class="reference external" href="https://github.com/yaoweibin/nginx_tcp_proxy_module">nginx_tcp_proxy_module</a>.
+Nginx 1.3+ hỗ trợ WebSocket.</p>
+<p>Mặc định Nginx sử dụng giao thức HTTP 1.0 để reverse proxy. Nếu backend server trả về
+chunked response, bạn cần báo Nginx sử dụng HTTP 1.1 như sau:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
+  <span class="n">proxy_http_version</span> <span class="mf">1.1</span><span class="p">;</span>
+  <span class="n">proxy_set_header</span> <span class="n">Connection</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+  <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">8000</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive">Tài liệu này</a> chỉ ra rằng để http keepalive, bạn cũng
+nên đặt proxy_set_header Connection &quot;&quot;;</p>
+</div>
+<div class="section" id="trien-khai-tren-heroku">
+<h2>Triển khai trên Heroku<a class="headerlink" href="#trien-khai-tren-heroku" title="Permalink to this headline">¶</a></h2>
+<p>Bạn cũng có thẻ chạy Xitrum trên <a class="reference external" href="https://www.heroku.com/">Heroku</a>.</p>
+<div class="section" id="dang-ky-va-tao-repository">
+<h3>Đăng ký và tạo repository<a class="headerlink" href="#dang-ky-va-tao-repository" title="Permalink to this headline">¶</a></h3>
+<p>Làm theo <a class="reference external" href="https://devcenter.heroku.com/articles/quickstart">Official Document</a>,
+để đăng ký và tạo repository.</p>
+</div>
+<div class="section" id="tao-procfile">
+<h3>Tạo Procfile<a class="headerlink" href="#tao-procfile" title="Permalink to this headline">¶</a></h3>
+<p>Tạo Procfile và lưu tại thư mục gốc của project. Heroku đọc tệp này thực thi khi khởi động.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">web</span><span class="p">:</span> <span class="n">target</span><span class="o">/</span><span class="n">xitrum</span><span class="o">/</span><span class="n">script</span><span class="o">/</span><span class="n">runner</span> <span class="o">&lt;</span><span class="n">YOUR_PACKAGE</span><span class="o">.</span><span class="n">YOUR_MAIN_CLASS</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="thay-doi-thiet-lap-cong">
+<h3>Thay đổi thiết lập cổng<a class="headerlink" href="#thay-doi-thiet-lap-cong" title="Permalink to this headline">¶</a></h3>
+<p>Vì Heroku sử dụng cổng một cách tự động, bạn cần làm như sau:</p>
+<p>config/xitrum.conf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>port {
+  http              = ${PORT}
+  # https             = 4430
+  # flashSocketPolicy = 8430  # flash_socket_policy.xml will be returned
+}
+</pre></div>
+</div>
+<p>Nếu bạn muốn sử dụng SSL, bạn cần <a class="reference external" href="https://addons.heroku.com/ssl">add on</a>.</p>
+</div>
+<div class="section" id="xem-log-level">
+<h3>Xem log level<a class="headerlink" href="#xem-log-level" title="Permalink to this headline">¶</a></h3>
+<p>config/logback.xml:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">root</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">appender</span><span class="o">-</span><span class="n">ref</span> <span class="n">ref</span><span class="o">=</span><span class="s2">&quot;CONSOLE&quot;</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">root</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Tail log từ Heroku command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">heroku</span> <span class="n">logs</span> <span class="o">-</span><span class="n">tail</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tao-alias-cho-xitrum-package">
+<h3>Tạo alias cho <code class="docutils literal notranslate"><span class="pre">xitrum-package</span></code><a class="headerlink" href="#tao-alias-cho-xitrum-package" title="Permalink to this headline">¶</a></h3>
+<p>Tại thời điểm triển khai, Heroku chạy <code class="docutils literal notranslate"><span class="pre">sbt/sbt</span> <span class="pre">clean</span> <span class="pre">compile</span> <span class="pre">stage</span></code>. Vì vậy bạn cần thêm
+alias cho <code class="docutils literal notranslate"><span class="pre">xitrum-package</span></code>.</p>
+<p>build.sbt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">addCommandAlias</span><span class="p">(</span><span class="s2">&quot;stage&quot;</span><span class="p">,</span> <span class="s2">&quot;;xitrum-package&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="push-len-heroku">
+<h3>Push lên Heroku<a class="headerlink" href="#push-len-heroku" title="Permalink to this headline">¶</a></h3>
+<p>Quá trình triển khai được nối bởi git push.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">heroku</span> <span class="n">master</span>
+</pre></div>
+</div>
+<p>Xem thêm <a class="reference external" href="https://devcenter.heroku.com/articles/getting-started-with-scala">Official document cho Scala</a>.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Triển khai ứng dụng web trên server</a><ul>
+<li><a class="reference internal" href="#dong-goi-thu-muc">Đóng gói thư mục</a></li>
+<li><a class="reference internal" href="#customize-xitrum-package">Customize xitrum-package</a></li>
+<li><a class="reference internal" href="#ket-noi-scala-console-den-mot-tien-trinh-jvm-dang-chay">Kết nối Scala console đến một tiến trình JVM đang chạy</a></li>
+<li><a class="reference internal" href="#cai-dat-oracle-jdk-tren-centos-hoac-ubuntu">Cài đặt Oracle JDK trên CentOS hoặc Ubuntu</a></li>
+<li><a class="reference internal" href="#chay-xitrum-o-che-do-san-pham-khi-he-thong-khoi-dong">Chạy Xitrum ở chế độ sản phẩm khi hệ thống khởi động</a></li>
+<li><a class="reference internal" href="#thiet-lap-cong-chuyen-tiep">Thiết lập cổng chuyển tiếp</a></li>
+<li><a class="reference internal" href="#cau-hinh-linux-de-ket-noi-hang-loat">Cấu hình Linux để kết nối hàng loạt</a><ul>
+<li><a class="reference internal" href="#tang-so-luong-cac-tep-duoc-mo">Tăng số lượng các tệp được mở</a></li>
+<li><a class="reference internal" href="#dieu-chinh-kernel">Điều chỉnh kernel</a></li>
+<li><a class="reference internal" href="#luu-y-ve-backlog">Lưu ý về backlog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#haproxy-tip">HAProxy tip</a></li>
+<li><a class="reference internal" href="#nginx-tip">Nginx tip</a></li>
+<li><a class="reference internal" href="#trien-khai-tren-heroku">Triển khai trên Heroku</a><ul>
+<li><a class="reference internal" href="#dang-ky-va-tao-repository">Đăng ký và tạo repository</a></li>
+<li><a class="reference internal" href="#tao-procfile">Tạo Procfile</a></li>
+<li><a class="reference internal" href="#thay-doi-thiet-lap-cong">Thay đổi thiết lập cổng</a></li>
+<li><a class="reference internal" href="#xem-log-level">Xem log level</a></li>
+<li><a class="reference internal" href="#tao-alias-cho-xitrum-package">Tạo alias cho <code class="docutils literal notranslate"><span class="pre">xitrum-package</span></code></a></li>
+<li><a class="reference internal" href="#push-len-heroku">Push lên Heroku</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Chủ đề trước</h4>
+  <p class="topless"><a href="log.html"
+                        title="chương trước ">Log</a></p>
+  <h4>Chủ đề tiếp</h4>
+  <p class="topless"><a href="cluster.html"
+                        title="chương tiếp">Clustering với Akka và Hazelcast</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/deploy.rst.txt"
+            rel="nofollow">Hiển thị mã nguồn</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Thực hiện" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Điều hướng</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Chỉ mục chung"
+             >chỉ mục</a></li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering với Akka và Hazelcast"
+             >xem tiếp</a> |</li>
+        <li class="right" >
+          <a href="log.html" title="Log"
+             >xem lại</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tài liệu Xitrum Scala Web Framework Guide 3.30.0</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Triển khai ứng dụng web trên server</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>

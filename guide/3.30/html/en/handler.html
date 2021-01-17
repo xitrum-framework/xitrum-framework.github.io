@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Netty handlers &#8212; Xitrum Scala Web Framework Guide 3.30.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Metrics" href="metrics.html" />
+    <link rel="prev" title="Clustering with Akka and Hazelcast" href="cluster.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="metrics.html" title="Metrics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering with Akka and Hazelcast"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Netty handlers</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="netty-handlers">
+<h1>Netty handlers<a class="headerlink" href="#netty-handlers" title="Permalink to this headline">¶</a></h1>
+<p>This chapter is advanced, you don’t have to know to use Xitrum normally. To
+understand, you must have knowlege about <a class="reference external" href="http://netty.io/">Netty</a>.</p>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/Rack_(Web_server_interface)">Rack</a>,
+<a class="reference external" href="http://en.wikipedia.org/wiki/Web_Server_Gateway_Interface">WSGI</a>, and
+<a class="reference external" href="http://en.wikipedia.org/wiki/PSGI">PSGI</a> have middleware architecture.
+Xitrum is based on <a class="reference external" href="http://netty.io/">Netty</a> which has the same thing called
+handlers. You can create additional handlers and customize the channel pipeline
+of handlers. Doing this, you can maximize server performance for your specific
+use case.</p>
+<p>This chaper describes:</p>
+<ul class="simple">
+<li><p>Netty handler architecture</p></li>
+<li><p>Handlers that Xitrum provides and their default order</p></li>
+<li><p>How to create and use custom handler</p></li>
+</ul>
+<div class="section" id="netty-handler-architecture">
+<h2>Netty handler architecture<a class="headerlink" href="#netty-handler-architecture" title="Permalink to this headline">¶</a></h2>
+<p>For each connection, there is a channel pipeline to handle the IO data.
+A channel pipeline is a series of handlers. There are 2 types of handlers:</p>
+<ul class="simple">
+<li><p>Inbound: the request direction client -&gt; server</p></li>
+<li><p>Outbound: the response direction server -&gt; client</p></li>
+</ul>
+<p>Please see the doc of <a class="reference external" href="http://netty.io/4.0/api/io/netty/channel/ChannelPipeline.html">ChannelPipeline</a>
+for more information.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                                               <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">Request</span>
+                                          <span class="n">via</span> <span class="n">Channel</span> <span class="ow">or</span>
+                                      <span class="n">ChannelHandlerContext</span>
+                                                    <span class="o">|</span>
+<span class="o">+---------------------------------------------------+---------------+</span>
+<span class="o">|</span>                           <span class="n">ChannelPipeline</span>         <span class="o">|</span>               <span class="o">|</span>
+<span class="o">|</span>                                                  \<span class="o">|/</span>              <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+---------------------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">|</span> <span class="n">Inbound</span> <span class="n">Handler</span>  <span class="n">N</span>  <span class="o">|</span>            <span class="o">|</span> <span class="n">Outbound</span> <span class="n">Handler</span>  <span class="mi">1</span>  <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>              <span class="o">/|</span>\                                  <span class="o">|</span>               <span class="o">|</span>
+<span class="o">|</span>               <span class="o">|</span>                                  \<span class="o">|/</span>              <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">|</span> <span class="n">Inbound</span> <span class="n">Handler</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span> <span class="o">|</span>            <span class="o">|</span> <span class="n">Outbound</span> <span class="n">Handler</span>  <span class="mi">2</span>  <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>              <span class="o">/|</span>\                                  <span class="o">.</span>               <span class="o">|</span>
+<span class="o">|</span>               <span class="o">.</span>                                   <span class="o">.</span>               <span class="o">|</span>
+<span class="o">|</span> <span class="n">ChannelHandlerContext</span><span class="o">.</span><span class="n">fireIN_EVT</span><span class="p">()</span> <span class="n">ChannelHandlerContext</span><span class="o">.</span><span class="n">OUT_EVT</span><span class="p">()</span><span class="o">|</span>
+<span class="o">|</span>        <span class="p">[</span> <span class="n">method</span> <span class="n">call</span><span class="p">]</span>                       <span class="p">[</span><span class="n">method</span> <span class="n">call</span><span class="p">]</span>         <span class="o">|</span>
+<span class="o">|</span>               <span class="o">.</span>                                   <span class="o">.</span>               <span class="o">|</span>
+<span class="o">|</span>               <span class="o">.</span>                                  \<span class="o">|/</span>              <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">|</span> <span class="n">Inbound</span> <span class="n">Handler</span>  <span class="mi">2</span>  <span class="o">|</span>            <span class="o">|</span> <span class="n">Outbound</span> <span class="n">Handler</span> <span class="n">M</span><span class="o">-</span><span class="mi">1</span> <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>              <span class="o">/|</span>\                                  <span class="o">|</span>               <span class="o">|</span>
+<span class="o">|</span>               <span class="o">|</span>                                  \<span class="o">|/</span>              <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">|</span> <span class="n">Inbound</span> <span class="n">Handler</span>  <span class="mi">1</span>  <span class="o">|</span>            <span class="o">|</span> <span class="n">Outbound</span> <span class="n">Handler</span>  <span class="n">M</span>  <span class="o">|</span>    <span class="o">|</span>
+<span class="o">|</span>    <span class="o">+----------+----------+</span>            <span class="o">+-----------+----------+</span>    <span class="o">|</span>
+<span class="o">|</span>              <span class="o">/|</span>\                                  <span class="o">|</span>               <span class="o">|</span>
+<span class="o">+---------------+-----------------------------------+---------------+</span>
+                <span class="o">|</span>                                  \<span class="o">|/</span>
+<span class="o">+---------------+-----------------------------------+---------------+</span>
+<span class="o">|</span>               <span class="o">|</span>                                   <span class="o">|</span>               <span class="o">|</span>
+<span class="o">|</span>       <span class="p">[</span> <span class="n">Socket</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="p">]</span>                    <span class="p">[</span> <span class="n">Socket</span><span class="o">.</span><span class="n">write</span><span class="p">()</span> <span class="p">]</span>     <span class="o">|</span>
+<span class="o">|</span>                                                                   <span class="o">|</span>
+<span class="o">|</span>  <span class="n">Netty</span> <span class="n">Internal</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">Threads</span> <span class="p">(</span><span class="n">Transport</span> <span class="n">Implementation</span><span class="p">)</span>            <span class="o">|</span>
+<span class="o">+-------------------------------------------------------------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-handlers">
+<h2>Custom handlers<a class="headerlink" href="#custom-handlers" title="Permalink to this headline">¶</a></h2>
+<p>When starting Xitrum server, you can pass in your own
+<a class="reference external" href="http://netty.io/4.0/api/io/netty/channel/ChannelInitializer.html">ChannelInitializer</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xitrum.Server</span>
+
+<span class="nb">object</span> <span class="n">Boot</span> <span class="p">{</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">[</span><span class="n">String</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">Server</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">myChannelInitializer</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For HTTPS server, Xitrum will automatically prepend SSL handler to the pipeline.
+You can reuse Xitrum handlers in your pipeline.</p>
+</div>
+<div class="section" id="xitrum-default-handlers">
+<h2>Xitrum default handlers<a class="headerlink" href="#xitrum-default-handlers" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://github.com/xitrum-framework/xitrum/blob/master/src/main/scala/xitrum/handler/DefaultHttpChannelInitializer.scala">xitrum.handler.DefaultHttpChannelInitializer</a>.</p>
+<p>Sharable handlers (same instances are shared among many connections) are put in
+<code class="docutils literal notranslate"><span class="pre">DefaultHttpChannelInitializer</span></code> object above so that they can be easily picked
+up by apps that want to use custom pipeline. Those apps may only want a subset
+of default handlers.</p>
+<p>For example, when an app uses its own dispatcher (not Xitrum’s routing/dispatcher)
+and only needs Xitrum’s fast static file serving, it may use only these handlers:</p>
+<p>Inbound:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HttpRequestDecoder</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PublicFileServer</span></code></p></li>
+<li><p>Its own dispatcher</p></li>
+</ul>
+<p>Outbound:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HttpResponseEncoder</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ChunkedWriteHandler</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">XSendFile</span></code></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Netty handlers</a><ul>
+<li><a class="reference internal" href="#netty-handler-architecture">Netty handler architecture</a></li>
+<li><a class="reference internal" href="#custom-handlers">Custom handlers</a></li>
+<li><a class="reference internal" href="#xitrum-default-handlers">Xitrum default handlers</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cluster.html"
+                        title="previous chapter">Clustering with Akka and Hazelcast</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="metrics.html"
+                        title="next chapter">Metrics</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/handler.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="metrics.html" title="Metrics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cluster.html" title="Clustering with Akka and Hazelcast"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Xitrum Scala Web Framework Guide 3.30.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Netty handlers</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Ngoc Dao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+    </div>
+  </body>
+</html>
